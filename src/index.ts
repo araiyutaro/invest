@@ -11,7 +11,7 @@ import { runMeeting } from "./meeting/runner.js";
 import { saveReports } from "./report/generator.js";
 import type { MarketIndex, SectorPerformance } from "./data/market.js";
 
-const REPORTS_DIR = join(import.meta.dirname, "../reports");
+const REPORTS_DIR = join(import.meta.dirname, "../docs");
 
 function formatMarketDataSummary(
   indices: ReadonlyArray<MarketIndex>,

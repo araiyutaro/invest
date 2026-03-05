@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, basename } from "node:path";
 import type { MeetingRecord } from "../agents/index.js";
 
-const REPORTS_DIR = join(import.meta.dirname, "../../reports");
+const REPORTS_DIR = join(import.meta.dirname, "../../docs");
 
 function escapeHtml(text: string): string {
   return text
