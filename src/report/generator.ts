@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, basename } from "node:path";
 import type { MeetingRecord } from "../agents/index.js";
 
@@ -269,5 +269,36 @@ export async function saveReports(
     writeFile(reportPath, reportContent, "utf-8"),
   ]);
 
+  await updateIndex(record.date);
+
   return { minutesPath, reportPath };
+}
+
+async function updateIndex(date: string): Promise<void> {
+  const indexPath = join(REPORTS_DIR, "index.html");
+
+  try {
+    const html = await readFile(indexPath, "utf-8");
+
+    const entryHtml = `<li class="report-item">
+        <div class="report-date">${date}</div>
+        <div class="report-links">
+          <a href="${date}/daily-report.html">Daily Report</a>
+          <a href="${date}/meeting-minutes.html">Meeting Minutes</a>
+        </div>
+      </li>`;
+
+    if (html.includes(`>${date}<`)) {
+      return;
+    }
+
+    const updated = html.replace(
+      "<!-- REPORT_ENTRIES -->",
+      `<!-- REPORT_ENTRIES -->\n      ${entryHtml}`,
+    );
+
+    await writeFile(indexPath, updated, "utf-8");
+  } catch {
+    console.error("Failed to update index.html");
+  }
 }
