@@ -162,7 +162,7 @@ ${meetingContent}
 export async function runMeeting(
   context: MarketDataContext,
 ): Promise<MeetingRecord> {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
   const marketContext = buildMarketContext(context);
 
   console.log("Round 1: 各エージェントが分析を発表中...");

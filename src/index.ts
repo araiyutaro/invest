@@ -65,7 +65,7 @@ async function main() {
   console.log("  -> 市場データ取得完了");
 
   console.log("Step 2/5: チャート生成中 (NanoBanana)...");
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
   const dateDir = join(REPORTS_DIR, today);
   await mkdir(dateDir, { recursive: true });
 
