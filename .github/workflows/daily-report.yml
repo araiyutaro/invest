@@ -27,6 +27,7 @@ jobs:
       - name: Generate daily report
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
           TZ: Asia/Tokyo
         run: npx tsx src/index.ts
 
