@@ -46,7 +46,7 @@ function buildAnalysisConfigs(
     {
       key: "japanMarket",
       prompt: `以下の実際のニュース記事に基づいて、日本株式市場の最新動向をまとめてください。日経平均・TOPIXの動き、注目銘柄、為替の影響、海外投資家の動向を含めてください。`,
-      articles: japanNews,
+      articles: japanNews.slice(0, 30),
     },
     {
       key: "macro",
