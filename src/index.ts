@@ -9,6 +9,10 @@ import {
 } from "./data/charts.js";
 import { runMeeting } from "./meeting/runner.js";
 import { saveReports } from "./report/generator.js";
+import { PORTFOLIO_HOLDINGS } from "./portfolio/holdings.js";
+import { fetchPortfolioData, formatPortfolioSummary } from "./portfolio/data.js";
+import { runPortfolioMeeting } from "./portfolio/runner.js";
+import { savePortfolioReport } from "./report/portfolio-generator.js";
 import type { MarketIndex, SectorPerformance } from "./data/market.js";
 
 const REPORTS_DIR = join(import.meta.dirname, "../docs");
@@ -52,10 +56,11 @@ async function main() {
   );
   console.log("");
 
-  console.log("Step 1/5: 市場データを取得中...");
-  const [marketData, news] = await Promise.all([
+  console.log("Step 1/7: 市場データを取得中...");
+  const [marketData, news, portfolioStocks] = await Promise.all([
     fetchAllMarketData(),
     fetchMarketNews(),
+    fetchPortfolioData(PORTFOLIO_HOLDINGS),
   ]);
 
   const marketDataSummary = formatMarketDataSummary(
@@ -64,7 +69,10 @@ async function main() {
   );
   console.log("  -> 市場データ取得完了");
 
-  console.log("Step 2/5: チャート生成中 (NanoBanana)...");
+  const portfolioSummary = formatPortfolioSummary(portfolioStocks);
+  console.log(`  -> ポートフォリオ: ${portfolioStocks.length}銘柄取得完了`);
+
+  console.log("Step 2/7: チャート生成中 (NanoBanana)...");
   const today = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
   const dateDir = join(REPORTS_DIR, today);
   await mkdir(dateDir, { recursive: true });
@@ -78,11 +86,11 @@ async function main() {
   );
   console.log(`  -> ${chartImages.length}枚のチャート生成完了`);
 
-  console.log("Step 3/5: ミーティング開始...");
+  console.log("Step 3/7: ミーティング開始...");
   const meetingRecord = await runMeeting({ marketDataSummary, news });
   console.log("  -> ミーティング完了");
 
-  console.log("Step 4/5: レポート保存中...");
+  console.log("Step 4/7: レポート保存中...");
   const { minutesPath, reportPath } = await saveReports(
     meetingRecord,
     chartImages,
@@ -90,9 +98,27 @@ async function main() {
   console.log(`  -> 議事録: ${minutesPath}`);
   console.log(`  -> レポート: ${reportPath}`);
 
+  console.log("Step 5/7: ポートフォリオミーティング開始...");
+  try {
+    const portfolioReport = await runPortfolioMeeting({
+      portfolioSummary,
+      marketDataSummary,
+      news,
+      stocks: portfolioStocks,
+    });
+    console.log("  -> ポートフォリオミーティング完了");
+
+    console.log("Step 6/7: ポートフォリオレポート保存中...");
+    const portfolioPath = await savePortfolioReport(portfolioReport);
+    console.log(`  -> ポートフォリオレポート: ${portfolioPath}`);
+  } catch (error) {
+    console.error("Portfolio report generation failed:", error);
+    console.log("  -> ポートフォリオレポートの生成に失敗しましたが、デイリーレポートは保存済みです");
+  }
+
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log("");
-  console.log(`Step 5/5: 完了 (${elapsed}秒)`);
+  console.log(`Step 7/7: 完了 (${elapsed}秒)`);
 }
 
 main().catch((error) => {
