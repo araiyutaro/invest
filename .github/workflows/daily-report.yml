@@ -2,8 +2,8 @@ name: Daily Investment Report
 
 on:
   schedule:
-    # 8:00 JST = 23:00 UTC (previous day)
-    - cron: "0 23 * * *"
+    # 7:00 JST = 22:00 UTC (previous day)
+    - cron: "0 22 * * *"
   workflow_dispatch:
 
 permissions:
