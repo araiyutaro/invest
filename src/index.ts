@@ -105,6 +105,7 @@ async function main() {
       marketDataSummary,
       news,
       stocks: portfolioStocks,
+      dailyReportSummary: meetingRecord.finalSummary,
     });
     console.log("  -> ポートフォリオミーティング完了");
 

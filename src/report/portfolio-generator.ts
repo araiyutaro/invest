@@ -153,6 +153,7 @@ function formatPortfolioReportHtml(report: PortfolioReport): string {
   });
 
   const portfolioDataHtml = markdownToHtml(report.portfolioSummary);
+  const candidatesHtml = markdownToHtml(report.candidateRecommendations);
   const reportBody = markdownToHtml(report.finalReport);
 
   let agentsHtml = "";
@@ -186,6 +187,9 @@ function formatPortfolioReportHtml(report: PortfolioReport): string {
     <hr>
     <h2>Portfolio Holdings</h2>
     ${portfolioDataHtml}
+    <hr>
+    <h2>新規組み入れ候補（デイリーレポート由来）</h2>
+    ${candidatesHtml}
     <hr>
     <h2>Final Report</h2>
     ${reportBody}
