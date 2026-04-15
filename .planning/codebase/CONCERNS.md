@@ -1,194 +1,194 @@
-# Codebase Concerns
+# コードベースの懸念事項
 
-**Analysis Date:** 2026-04-08
+**分析日:** 2026-04-08
 
-## Tech Debt
+## 技術的負債
 
-**Unsafe Type Casting in Market Data Fetching:**
-- Issue: Type casting with `as unknown as Record<string, unknown>` in `src/data/market.ts:60` bypasses TypeScript's type system for API responses
-- Files: `src/data/market.ts:60`, `src/data/news/analyzer.ts:101`
-- Impact: Breaking changes in yahoo-finance2 API structure are not caught by TypeScript at compile time. Downstream code receives data with missing or unexpected fields, causing silent data loss (null values propagated)
-- Fix approach: Implement proper type guards using Zod schemas for API responses from yahoo-finance2 and Finnhub APIs instead of broad `unknown` casts
+**市場データ取得における安全でない型キャスト:**
+- 問題: `src/data/market.ts:60` で `as unknown as Record<string, unknown>` による型キャストがTypeScriptの型システムをバイパス
+- ファイル: `src/data/market.ts:60`, `src/data/news/analyzer.ts:101`
+- 影響: yahoo-finance2 APIの構造変更がコンパイル時に検出されない。下流コードが欠落・予期しないフィールドのデータを受け取り、サイレントなデータ損失（null値の伝播）を引き起こす
+- 修正アプローチ: 広範な `unknown` キャストの代わりに、yahoo-finance2やFinnhub APIレスポンスにZodスキーマによる適切な型ガードを実装
 
-**Inconsistent Error Handling in Report Generation:**
-- Issue: Silent failures in `src/report/generator.ts:301` and `src/report/portfolio-generator.ts:241` with bare `catch` blocks that only log errors
-- Files: `src/report/generator.ts:301-303`, `src/report/portfolio-generator.ts:241-243`
-- Impact: If index.html or portfolio.html updates fail, the system silently continues, leaving indices out of sync with actual reports. Users won't discover this until checking the docs directory manually
-- Fix approach: Re-throw errors with context or track index update failures; consider validation pass before file writes
+**レポート生成における不整合なエラーハンドリング:**
+- 問題: `src/report/generator.ts:301` と `src/report/portfolio-generator.ts:241` でエラーをログ出力するだけのbare `catch` ブロックによるサイレント失敗
+- ファイル: `src/report/generator.ts:301-303`, `src/report/portfolio-generator.ts:241-243`
+- 影響: index.htmlやportfolio.htmlの更新が失敗した場合、システムはサイレントに続行し、インデックスが実際のレポートと不整合になる。docsディレクトリを手動で確認するまで発見されない
+- 修正アプローチ: コンテキスト付きエラーの再throw、またはインデックス更新失敗の追跡; ファイル書き込み前のバリデーションパスを検討
 
-**Unvalidated News Article Parsing:**
-- Issue: Complex XML parsing in `src/data/news/google-news.ts` and `src/data/news/rss-sources.ts` with minimal validation of RSS/XML structure
-- Files: `src/data/news/google-news.ts:65-71`, `src/data/news/rss-sources.ts:60-80`
-- Impact: Malformed feeds, missing fields, or structural changes silently degrade to partial data (e.g., empty title, missing publishedAt defaults to now())
-- Fix approach: Add Zod validation schemas for RssItem and parsed XML structures before type conversion
+**未バリデーションのニュース記事パース:**
+- 問題: `src/data/news/google-news.ts` と `src/data/news/rss-sources.ts` での複雑なXMLパースにRSS/XML構造の最小限のバリデーション
+- ファイル: `src/data/news/google-news.ts:65-71`, `src/data/news/rss-sources.ts:60-80`
+- 影響: 不正なフィード、欠落フィールド、構造変更が部分データにサイレントにデグレード（例: 空タイトル、欠落publishedAtがnow()にデフォルト）
+- 修正アプローチ: 型変換前にRssItemとパース済みXML構造にZodバリデーションスキーマを追加
 
-## Performance Bottlenecks
+## パフォーマンスボトルネック
 
-**Serial API Calls in News Fetching:**
-- Issue: While individual news source fetches run in parallel (`src/data/news.ts:14-18`), the analysis phase serializes all analyses through Gemini API in `src/data/news/analyzer.ts:84-96` with no rate limiting consideration
-- Files: `src/data/news/analyzer.ts:78-102`
-- Impact: Analysis generation is the slowest phase. With 5 analysis configs, if Gemini API rate limit is hit mid-run, entire job fails. No retry mechanism or circuit breaker
-- Improvement path: Add exponential backoff retry logic; consider batching analyses by priority; cache recent analyses to avoid regenerating identical content
+**ニュース取得における逐次API呼び出し:**
+- 問題: 個別のニュースソース取得は並列実行（`src/data/news.ts:14-18`）だが、分析フェーズは `src/data/news/analyzer.ts:84-96` でレート制限を考慮せずGemini APIを通じて全分析を直列化
+- ファイル: `src/data/news/analyzer.ts:78-102`
+- 影響: 分析生成が最も遅いフェーズ。5つの分析設定で、実行中にGemini APIレート制限に達するとジョブ全体が失敗。リトライメカニズムやサーキットブレーカーなし
+- 改善方針: 指数バックオフリトライロジックの追加; 優先度別の分析バッチ処理を検討; 同一コンテンツの再生成を避けるため最近の分析をキャッシュ
 
-**Unoptimized Markdown-to-HTML Conversion:**
-- Issue: Multiple sequential regex passes in `src/report/generator.ts:14-52` with no early exit or memoization for repeated markdown conversions
-- Files: `src/report/generator.ts:14-52`
-- Impact: Every report generation runs ~50+ regex operations on potentially large markdown strings. No caching of converted sections
-- Improvement path: Cache inline conversions; consider lazy evaluation for conditionally-rendered sections; profile actual performance first
+**最適化されていないMarkdown→HTML変換:**
+- 問題: `src/report/generator.ts:14-52` での複数の逐次正規表現パスに、繰り返しのMarkdown変換に対するアーリーイグジットやメモ化なし
+- ファイル: `src/report/generator.ts:14-52`
+- 影響: レポート生成のたびに潜在的に大きなMarkdown文字列に対して50以上の正規表現操作が実行される。変換済みセクションのキャッシュなし
+- 改善方針: インライン変換のキャッシュ; 条件付きレンダリングセクションの遅延評価を検討; まず実際のパフォーマンスをプロファイリング
 
-**No Parallel Chart Generation with API Call Limits:**
-- Issue: `generateSectorChart` and `generateMarketOverviewChart` in `src/data/charts.ts` run concurrently but share the same API quota
-- Files: `src/index.ts:80-83`, `src/data/charts.ts`
-- Impact: If chart generation fails for one, both fail. Concurrent requests may hit NanoBanana rate limits without backoff strategy
-- Improvement path: Add rate-limiting queue; implement graceful degradation (skip charts if generation fails, not fatal)
+**API呼び出し制限のない並列チャート生成:**
+- 問題: `src/data/charts.ts` の `generateSectorChart` と `generateMarketOverviewChart` は同時実行されるが、同一のAPIクォータを共有
+- ファイル: `src/index.ts:80-83`, `src/data/charts.ts`
+- 影響: 一方のチャート生成が失敗すると両方失敗。同時リクエストがバックオフ戦略なしでNanoBananaレート制限に達する可能性
+- 改善方針: レート制限キューの追加; グレースフルデグラデーションの実装（生成失敗時はチャートをスキップ、致命的にしない）
 
-## Fragile Areas
+## 脆弱な領域
 
-**Portfolio Report Generation Has No Fallback:**
-- Issue: Main flow in `src/index.ts:102-117` wraps portfolio meeting in try-catch that only logs error, but portfolio failure blocks progression to final summary step
-- Files: `src/index.ts:102-117`
-- Why fragile: If any single portfolio stock fails to fetch (bad ticker, market closed, API throttle), entire `fetchPortfolioData` returns fewer stocks, which changes agent analysis quality. No minimum data threshold enforced
-- Safe modification: Add retry for individual stock fetches; require minimum 70% success rate before proceeding; validate holdings against valid symbol list
-- Test coverage: No tests cover portfolio fetch failure paths; missing coverage for partial stock data scenarios
+**ポートフォリオレポート生成にフォールバックなし:**
+- 問題: `src/index.ts:102-117` のメインフローでポートフォリオミーティングをtry-catchでラップしているが、エラーログ出力のみで、ポートフォリオ失敗が最終サマリーステップへの進行をブロック
+- ファイル: `src/index.ts:102-117`
+- 脆弱な理由: 単一のポートフォリオ銘柄の取得失敗（不正ティッカー、市場閉鎖、APIスロットリング）で `fetchPortfolioData` 全体が少ない銘柄を返却し、エージェント分析品質が変化。最小データ閾値未設定
+- 安全な修正: 個別銘柄取得のリトライ追加; 進行前に最低70%成功率を要求; 有効シンボルリストに対する保有銘柄のバリデーション
+- テストカバレッジ: ポートフォリオ取得失敗パスのテストなし; 部分的な株式データシナリオのカバレッジ欠落
 
-**Markdown-to-HTML Renderer Not RFC-Compliant:**
-- Issue: Custom regex-based markdown parser in `src/report/generator.ts:14-52` and duplicated in `src/report/portfolio-generator.ts:14-52` does not properly escape generated HTML
-- Files: `src/report/generator.ts:14-52`, `src/report/portfolio-generator.ts:14-52`
-- Why fragile: Agent outputs containing `<script>`, `&lt;` entities, or special regex characters can break HTML rendering or be misescaped. Example: `**<img src=x onerror=alert(1)>**` becomes `<strong><img src=x onerror=alert(1)></strong>` (not escaped)
-- Safe modification: Use a proper markdown parser library (marked, showdown) instead of regex; validate all HTML output
-- Test coverage: No tests for XSS vectors in agent-generated content
+**RFC非準拠のMarkdown→HTMLレンダラー:**
+- 問題: `src/report/generator.ts:14-52` のカスタム正規表現ベースMarkdownパーサーが `src/report/portfolio-generator.ts:14-52` にも重複しており、生成HTMLを適切にエスケープしない
+- ファイル: `src/report/generator.ts:14-52`, `src/report/portfolio-generator.ts:14-52`
+- 脆弱な理由: `<script>`、`&lt;` エンティティ、特殊正規表現文字を含むエージェント出力がHTMLレンダリングを破壊するか、誤エスケープされる可能性。例: `**<img src=x onerror=alert(1)>**` が `<strong><img src=x onerror=alert(1)></strong>` に変換（エスケープされない）
+- 安全な修正: 正規表現の代わりに適切なMarkdownパーサーライブラリ（marked, showdown）を使用; 全HTML出力のバリデーション
+- テストカバレッジ: エージェント生成コンテンツのXSSベクターテストなし
 
-**Gemini Model Version Lock without Fallback:**
-- Issue: Hard-coded `gemini-3.1-pro-preview` in `src/gemini.ts:21` and `gemini-2.5-flash-image` in `src/data/charts.ts:20`
-- Files: `src/gemini.ts:15-27`, `src/data/charts.ts:14-42`
-- Why fragile: "Preview" models are unstable and may be deprecated without notice. No fallback to stable model. If API deprecates `gemini-3.1-pro-preview`, entire agent system stops working
-- Safe modification: Add model availability checking on startup; implement graceful downgrade to `gemini-2.5-pro` (stable); add configuration for model selection
-- Test coverage: No tests for API unavailability or model version mismatch
+**フォールバックなしのGeminiモデルバージョンロック:**
+- 問題: `src/gemini.ts:21` にハードコードされた `gemini-3.1-pro-preview` と `src/data/charts.ts:20` の `gemini-2.5-flash-image`
+- ファイル: `src/gemini.ts:15-27`, `src/data/charts.ts:14-42`
+- 脆弱な理由: "Preview"モデルは不安定で予告なく非推奨になる可能性。安定モデルへのフォールバックなし。APIが `gemini-3.1-pro-preview` を非推奨にするとエージェントシステム全体が停止
+- 安全な修正: 起動時のモデル可用性チェック追加; `gemini-2.5-pro`（安定版）へのグレースフルダウングレード実装; モデル選択の設定化
+- テストカバレッジ: API不可用やモデルバージョン不一致のテストなし
 
-**News Analyzer Fabricates Data on Missing Articles:**
-- Issue: `src/data/news/analyzer.ts:17` returns fallback string encouraging LLM to use "latest knowledge" when no articles found
-- Files: `src/data/news/analyzer.ts:13-18`
-- Why fragile: When RSS feeds are empty or API fails silently, analyzer prompt explicitly instructs Gemini to hallucinate based on training data, producing outdated/false information presented as current analysis
-- Safe modification: Return explicit "Data unavailable" marker; skip analysis if insufficient articles (no fallback to hallucination); require minimum article count
-- Test coverage: No tests verify behavior when feeds return empty results
+**記事不足時にニュースアナライザーがデータを捏造:**
+- 問題: `src/data/news/analyzer.ts:17` で記事が見つからない場合、LLMに「最新の知識」を使うよう促すフォールバック文字列を返却
+- ファイル: `src/data/news/analyzer.ts:13-18`
+- 脆弱な理由: RSSフィードが空またはAPIがサイレント失敗した場合、アナライザープロンプトがGeminiに学習データに基づく幻覚を明示的に指示し、古い/虚偽の情報を現在の分析として提示
+- 安全な修正: 明示的な「データ利用不可」マーカーを返却; 記事不足時は分析をスキップ（幻覚へのフォールバックなし）; 最小記事数を要求
+- テストカバレッジ: フィードが空結果を返す場合の動作テストなし
 
-## Known Issues
+## 既知の問題
 
-**Silent Null Propagation in Stock Quote Fields:**
-- Symptoms: Stock analysis may show "N/A" for PER, market cap if API returns missing fields
-- Files: `src/data/market.ts:75-78`, `src/portfolio/data.ts:36-41`
-- Trigger: yahoo-finance2 returns null/undefined for discontinued stocks, delisted symbols, or market closure
-- Workaround: Add fallback values in display layer; add stock validation pass before analysis
+**株式クオートフィールドのサイレントnull伝播:**
+- 症状: APIが欠落フィールドを返す場合、株式分析がPER、時価総額に"N/A"を表示する可能性
+- ファイル: `src/data/market.ts:75-78`, `src/portfolio/data.ts:36-41`
+- トリガー: yahoo-finance2が上場廃止銘柄、廃止シンボル、市場閉鎖時にnull/undefinedを返却
+- 回避策: 表示レイヤーにフォールバック値を追加; 分析前に銘柄バリデーションパスを追加
 
-**Console Logging Pollutes Logs:**
-- Symptoms: Console includes both progress logs and error logs mixed; no structured logging
-- Files: `src/index.ts` (13 console calls), `src/meeting/runner.ts` (3 console calls), `src/portfolio/runner.ts` (3 console calls), `src/data/news.ts`, `src/data/market.ts:62`, `src/data/charts.ts:39`, `src/data/news/analyzer.ts:92`, `src/report/generator.ts:302`, `src/report/portfolio-generator.ts:242`
-- Trigger: Every run; automated execution via launchd makes logs difficult to parse for failures
-- Workaround: Pipe to structured logging (e.g., Winston, Pino); separate stderr for errors
+**コンソールログによるログ汚染:**
+- 症状: コンソールに進捗ログとエラーログが混在; 構造化ログなし
+- ファイル: `src/index.ts`（13回のconsole呼び出し）、`src/meeting/runner.ts`（3回）、`src/portfolio/runner.ts`（3回）、`src/data/news.ts`、`src/data/market.ts:62`、`src/data/charts.ts:39`、`src/data/news/analyzer.ts:92`、`src/report/generator.ts:302`、`src/report/portfolio-generator.ts:242`
+- トリガー: 毎回の実行; launchd経由の自動実行でログからの障害解析が困難
+- 回避策: 構造化ログへのパイプ（例: Winston, Pino）; エラー用にstderrを分離
 
-**Index HTML Update Race Condition:**
-- Symptoms: If multiple concurrent meeting runs execute, duplicate index entries possible or index corruption
-- Files: `src/report/generator.ts:277-303`, `src/report/portfolio-generator.ts:218-243`
-- Trigger: Multiple cronjobs or manual runs of `src/index.ts` within same day
-- Workaround: Add file locking; use atomic read-modify-write with temp file; validation before write
+**インデックスHTML更新の競合状態:**
+- 症状: 複数の同時ミーティング実行でインデックスエントリの重複やインデックス破損の可能性
+- ファイル: `src/report/generator.ts:277-303`, `src/report/portfolio-generator.ts:218-243`
+- トリガー: 同日中の複数のcronジョブまたは `src/index.ts` の手動実行
+- 回避策: ファイルロックの追加; 一時ファイルによるアトミックな読み取り-変更-書き込み; 書き込み前のバリデーション
 
-## Security Considerations
+## セキュリティ考慮事項
 
-**API Keys Hardcoded in Model Names (Low Risk):**
-- Risk: Models like "gemini-3.1-pro-preview" are public, but token exposure would be critical
-- Files: `src/gemini.ts:15-27` uses `process.env.GEMINI_API_KEY` (safe), `src/data/news/finnhub.ts:50` uses `process.env.FINNHUB_API_KEY` (safe)
-- Current mitigation: Environment variables not committed (`.env` in `.gitignore`)
-- Recommendations: Add .env validation at startup; add logging for missing credentials; rotate keys periodically
+**モデル名にハードコードされたAPIキー（低リスク）:**
+- リスク: "gemini-3.1-pro-preview"のようなモデル名は公開だが、トークン露出は重大
+- ファイル: `src/gemini.ts:15-27` は `process.env.GEMINI_API_KEY` を使用（安全）、`src/data/news/finnhub.ts:50` は `process.env.FINNHUB_API_KEY` を使用（安全）
+- 現在の緩和策: 環境変数はコミットされない（`.gitignore` に `.env`）
+- 推奨: 起動時の.envバリデーション追加; 資格情報欠落のログ出力; キーの定期ローテーション
 
-**HTML Injection from Agent-Generated Content:**
-- Risk: LLM outputs embedded directly into HTML without escaping in agent card sections
-- Files: `src/report/generator.ts:210-211`, `src/report/portfolio-generator.ts:161`
-- Current mitigation: `escapeHtml` function used before `markdownToHtml`, but markdown parser output is not re-escaped
-- Recommendations: Use markdown library with HTML sanitization; validate all LLM outputs against whitelist patterns
+**エージェント生成コンテンツからのHTMLインジェクション:**
+- リスク: LLM出力がエージェントカードセクションでエスケープなしにHTMLに直接埋め込み
+- ファイル: `src/report/generator.ts:210-211`, `src/report/portfolio-generator.ts:161`
+- 現在の緩和策: `markdownToHtml` の前に `escapeHtml` 関数を使用、ただしMarkdownパーサー出力は再エスケープされない
+- 推奨: HTMLサニタイズ付きMarkdownライブラリの使用; 全LLM出力のホワイトリストパターンに対するバリデーション
 
-**No Input Validation on Stock Symbols:**
-- Risk: Arbitrary symbols passed to yahoo-finance2 could be exploited for DoS or information leakage
-- Files: `src/portfolio/holdings.ts:8-16` hardcoded (safe), but `src/data/market.ts` uses constant symbols (safe)
-- Current mitigation: Only predefined symbols used; static holdings config
-- Recommendations: Add symbol validation regex; prevent shell injection in any dynamic symbol addition
+**株式シンボルの入力バリデーションなし:**
+- リスク: yahoo-finance2に渡される任意のシンボルがDoSや情報漏洩に悪用される可能性
+- ファイル: `src/portfolio/holdings.ts:8-16` ハードコード（安全）、`src/data/market.ts` は定数シンボル使用（安全）
+- 現在の緩和策: 定義済みシンボルのみ使用; 静的な保有銘柄設定
+- 推奨: シンボルバリデーション正規表現の追加; 動的シンボル追加時のシェルインジェクション防止
 
-## Scaling Limits
+## スケーリング限界
 
-**News Analysis Not Batched by LLM Token Usage:**
-- Current capacity: ~5 analyses per run, each ~500-1000 tokens of articles
-- Limit: If expanding to 50+ articles per analysis, prompt token cost explodes, hitting Gemini API limits
-- Scaling path: Implement prompt truncation; batch articles into priority cohorts; cache recurring analyses
+**LLMトークン使用量によるニュース分析の非バッチ化:**
+- 現在の容量: 実行あたり約5分析、各約500-1000トークンの記事
+- 制限: 分析あたり50以上の記事に拡張する場合、プロンプトトークンコストが爆発しGemini API制限に達する
+- スケーリングパス: プロンプト切り詰めの実装; 優先度コホートへの記事バッチ処理; 繰り返し分析のキャッシュ
 
-**Portfolio Size Hardcoded to 7 Holdings:**
-- Current capacity: 7 stocks as per `src/portfolio/holdings.ts`
-- Limit: If expanding to 50+ holdings, portfolio analysis prompt balloons, API response may exceed context limits
-- Scaling path: Paginate portfolio analysis (5 stocks per round); use hierarchical summary (sector > individual stock)
+**7銘柄にハードコードされたポートフォリオサイズ:**
+- 現在の容量: `src/portfolio/holdings.ts` に従い7銘柄
+- 制限: 50以上の保有銘柄に拡張する場合、ポートフォリオ分析プロンプトが膨張し、APIレスポンスがコンテキスト制限を超える可能性
+- スケーリングパス: ポートフォリオ分析のページネーション（ラウンドあたり5銘柄）; 階層的サマリーの使用（セクター > 個別銘柄）
 
-**Chart Generation Sequential on Two Endpoints:**
-- Current capacity: 2 concurrent chart requests
-- Limit: If expanding to sector breakdown + technical patterns, API quota may be exceeded
-- Scaling path: Queue chart requests; implement fallback to text-based charts
+**2エンドポイントでの逐次チャート生成:**
+- 現在の容量: 2つの同時チャートリクエスト
+- 制限: セクター内訳やテクニカルパターンに拡張する場合、APIクォータを超過する可能性
+- スケーリングパス: チャートリクエストのキュー化; テキストベースチャートへのフォールバック実装
 
-## Dependencies at Risk
+## リスクのある依存関係
 
-**@google/generative-ai v0.24.1 on Deprecated gemini-3.1-pro-preview:**
-- Risk: Google Cloud marks preview models as unstable; gemini-3.1-pro-preview may be deprecated
-- Impact: All agent analysis stops working without code change
-- Migration plan: Add model fallback chain (3.1-pro → 2.5-pro → 2.5-flash); upgrade package to latest version monthly
+**非推奨gemini-3.1-pro-previewを使用する@google/generative-ai v0.24.1:**
+- リスク: Google Cloudがプレビューモデルを不安定としてマーク; gemini-3.1-pro-previewが非推奨になる可能性
+- 影響: コード変更なしに全エージェント分析が停止
+- 移行計画: モデルフォールバックチェーン追加（3.1-pro → 2.5-pro → 2.5-flash）; パッケージを毎月最新バージョンに更新
 
-**yahoo-finance2 v3.13.2 with Unstable API:**
-- Risk: Stock quote API structure changed multiple times; no stable SemVer guarantee
-- Impact: Market data fetching fails silently due to type casting bypass
-- Migration plan: Implement Zod schema validation; consider alternative provider (Alpha Vantage, Twelve Data); add API schema versioning
+**不安定なAPIを持つyahoo-finance2 v3.13.2:**
+- リスク: 株式クオートAPI構造が複数回変更; 安定したSemVer保証なし
+- 影響: 型キャストバイパスにより市場データ取得がサイレント失敗
+- 移行計画: Zodスキーマバリデーション実装; 代替プロバイダー検討（Alpha Vantage, Twelve Data）; APIスキーマバージョニング追加
 
-**fast-xml-parser v5.5.6 with Complex Nested Parsing:**
-- Risk: RSS feed structure changes break XML parsing without warning
-- Impact: News analysis falls back to hallucination mode
-- Migration plan: Use well-tested XML library (xml2js); validate against XSD schemas
+**複雑なネストパースを持つfast-xml-parser v5.5.6:**
+- リスク: RSSフィード構造の変更がXMLパースを警告なしに破壊
+- 影響: ニュース分析が幻覚モードにフォールバック
+- 移行計画: 実績あるXMLライブラリ（xml2js）の使用; XSDスキーマに対するバリデーション
 
-## Missing Critical Features
+## 欠落している重要機能
 
-**No Data Persistence Between Runs:**
-- Problem: Each run is stateless; no tracking of historical analyses, no ability to compare day-over-day changes
-- Blocks: Trend detection, anomaly alerts, historical performance audit
-- Solution priority: Medium (useful for retrospective analysis)
+**実行間のデータ永続化なし:**
+- 問題: 各実行はステートレス; 過去の分析の追跡、日次変化の比較ができない
+- ブロッカー: トレンド検出、異常アラート、過去のパフォーマンス監査
+- 解決優先度: 中（回顧分析に有用）
 
-**No Testing Framework Configured:**
-- Problem: `package.json` includes vitest but no test files exist in `src/`
-- Blocks: Regression detection, confidence in refactoring, CI/CD validation
-- Solution priority: High (critical for reducing bugs introduced by changes)
+**テストフレームワーク未設定:**
+- 問題: `package.json` にvitestを含むがテストファイルが `src/` に存在しない
+- ブロッカー: リグレッション検出、リファクタリングへの信頼、CI/CDバリデーション
+- 解決優先度: 高（変更によるバグ削減に重要）
 
-**No Rate Limiting or Retry Logic:**
-- Problem: If Finnhub or Gemini APIs throttle, entire job fails without backoff
-- Blocks: Resilience to API hiccups, graceful degradation
-- Solution priority: High (reliability issue)
+**レート制限・リトライロジックなし:**
+- 問題: FinnhubまたはGemini APIがスロットリングするとジョブ全体がバックオフなしに失敗
+- ブロッカー: APIの一時的障害への耐性、グレースフルデグラデーション
+- 解決優先度: 高（信頼性の問題）
 
-## Test Coverage Gaps
+## テストカバレッジギャップ
 
-**No Unit Tests for Core Data Fetching:**
-- What's not tested: `src/data/market.ts`, `src/data/news.ts`, `src/portfolio/data.ts` - all API integration points
-- Files: `src/data/market.ts`, `src/data/news/finnh ub.ts`, `src/data/news/google-news.ts`, `src/data/news/analyzer.ts`
-- Risk: Silent API failures, data mutation bugs, null propagation go undetected
-- Priority: High - these are most likely to fail in production
+**コアデータ取得のユニットテストなし:**
+- 未テスト: `src/data/market.ts`, `src/data/news.ts`, `src/portfolio/data.ts` - 全API連携ポイント
+- ファイル: `src/data/market.ts`, `src/data/news/finnhub.ts`, `src/data/news/google-news.ts`, `src/data/news/analyzer.ts`
+- リスク: サイレントAPI障害、データ変更バグ、null伝播が検出されない
+- 優先度: 高 - 本番で最も失敗しやすい
 
-**No Tests for Report Generation:**
-- What's not tested: HTML generation, markdown parsing, index updates in `src/report/generator.ts` and `src/report/portfolio-generator.ts`
-- Files: `src/report/generator.ts`, `src/report/portfolio-generator.ts`
-- Risk: HTML injection, index corruption, malformed reports sent to users
-- Priority: High - user-facing deliverable
+**レポート生成のテストなし:**
+- 未テスト: `src/report/generator.ts` と `src/report/portfolio-generator.ts` のHTML生成、Markdownパース、インデックス更新
+- ファイル: `src/report/generator.ts`, `src/report/portfolio-generator.ts`
+- リスク: HTMLインジェクション、インデックス破損、不正なレポートがユーザーに送信
+- 優先度: 高 - ユーザー向け成果物
 
-**No Tests for Agent Orchestration:**
-- What's not tested: Meeting flow, prompt construction, error handling in `src/meeting/runner.ts`, `src/portfolio/runner.ts`
-- Files: `src/meeting/runner.ts`, `src/portfolio/runner.ts`
-- Risk: Agent coordination bugs, cascading failures when one agent times out
-- Priority: Medium - complex logic but less likely to fail
+**エージェントオーケストレーションのテストなし:**
+- 未テスト: `src/meeting/runner.ts`, `src/portfolio/runner.ts` のミーティングフロー、プロンプト構築、エラーハンドリング
+- ファイル: `src/meeting/runner.ts`, `src/portfolio/runner.ts`
+- リスク: エージェント調整バグ、1エージェントのタイムアウト時のカスケード障害
+- 優先度: 中 - 複雑なロジックだが失敗しにくい
 
-**No Integration Tests:**
-- What's not tested: Full flow from data fetch to report save, with mock APIs
-- Files: All files in sequence (`src/index.ts` orchestration)
-- Risk: Configuration bugs, environment variable issues, file system permission errors discovered only at deploy time
-- Priority: Medium - would catch integration issues early
+**統合テストなし:**
+- 未テスト: データ取得からレポート保存までの全フロー、モックAPI使用
+- ファイル: 全ファイルの連携（`src/index.ts` オーケストレーション）
+- リスク: 設定バグ、環境変数の問題、ファイルシステム権限エラーがデプロイ時にのみ発覚
+- 優先度: 中 - 統合問題を早期に発見可能
 
 ---
 
-*Concerns audit: 2026-04-08*
+*懸念事項分析: 2026-04-08*

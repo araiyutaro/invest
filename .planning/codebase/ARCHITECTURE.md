@@ -1,177 +1,177 @@
-# Architecture
+# アーキテクチャ
 
-**Analysis Date:** 2026-04-08
+**分析日:** 2026-04-08
 
-## Pattern Overview
+## パターン概要
 
-**Overall:** Multi-agent system with sequential pipeline architecture
+**全体:** マルチエージェントシステムによる逐次パイプラインアーキテクチャ
 
-**Key Characteristics:**
-- Independent specialized agents (6 profiles) providing domain-specific analysis
-- Data collection layer feeding market and portfolio information
-- Central meeting orchestrator coordinating agent interactions
-- Report generation as final output layer
-- Immutable data structures throughout (readonly types)
-- LLM-based reasoning via Gemini API for all analysis
+**主な特徴:**
+- 独立した専門エージェント（6プロファイル）がドメイン固有の分析を提供
+- 市場・ポートフォリオ情報を供給するデータ収集レイヤー
+- エージェントの対話を調整する中央ミーティングオーケストレーター
+- 最終出力レイヤーとしてのレポート生成
+- 全体を通じたイミュータブルデータ構造（readonlyタイプ）
+- 全分析にGemini API経由のLLMベース推論
 
-## Layers
+## レイヤー
 
-**Data Collection Layer:**
-- Purpose: Fetch and normalize real-time market data from external sources
-- Location: `src/data/`
-- Contains: Market indices, sector performance, news aggregation, chart generation
-- Depends on: Yahoo Finance API, Finnhub API, Google News, RSS feeds, Gemini image generation
-- Used by: Meeting orchestrator, portfolio analyzer
+**データ収集レイヤー:**
+- 目的: 外部ソースからリアルタイム市場データを取得・正規化
+- 配置: `src/data/`
+- 内容: 市場指数、セクターパフォーマンス、ニュース集約、チャート生成
+- 依存先: Yahoo Finance API, Finnhub API, Google News, RSSフィード, Gemini画像生成
+- 使用元: ミーティングオーケストレーター、ポートフォリオアナライザー
 
-**Agent Layer:**
-- Purpose: Provide specialized investment analysis from different perspectives
-- Location: `src/agents/`
-- Contains: 6 agent profiles (Fundamentals, TenBagger, Macro, Technical, Risk Manager, Moderator)
-- Depends on: Gemini API for text generation, market context provided by orchestrator
-- Used by: Meeting runner to collect analyses
+**エージェントレイヤー:**
+- 目的: 異なる視点から専門的な投資分析を提供
+- 配置: `src/agents/`
+- 内容: 6つのエージェントプロファイル（ファンダメンタルズ、テンバガー、マクロ、テクニカル、リスクマネージャー、モデレーター）
+- 依存先: テキスト生成用Gemini API、オーケストレーターが提供する市場コンテキスト
+- 使用元: 分析収集のためのミーティングランナー
 
-**Meeting Orchestration Layer:**
-- Purpose: Coordinate agent interactions, manage discussion rounds, synthesize final report
-- Location: `src/meeting/runner.ts` and `src/portfolio/runner.ts`
-- Contains: Agent execution sequencing, context building, multi-round discussion logic
-- Depends on: Agent layer, Gemini API, data collection layer
-- Used by: Main entry point
+**ミーティングオーケストレーションレイヤー:**
+- 目的: エージェント対話の調整、ディスカッションラウンド管理、最終レポート統合
+- 配置: `src/meeting/runner.ts` および `src/portfolio/runner.ts`
+- 内容: エージェント実行順序制御、コンテキスト構築、マルチラウンドディスカッションロジック
+- 依存先: エージェントレイヤー、Gemini API、データ収集レイヤー
+- 使用元: メインエントリーポイント
 
-**Portfolio Analysis Layer:**
-- Purpose: Provide portfolio-specific analysis parallel to market analysis
-- Location: `src/portfolio/`
-- Contains: Holdings registry, portfolio data fetching, portfolio-specific meetings
-- Depends on: Yahoo Finance, data collection, agent layer
-- Used by: Main entry point
+**ポートフォリオ分析レイヤー:**
+- 目的: 市場分析と並行してポートフォリオ固有の分析を提供
+- 配置: `src/portfolio/`
+- 内容: 保有銘柄レジストリ、ポートフォリオデータ取得、ポートフォリオ専用ミーティング
+- 依存先: Yahoo Finance、データ収集、エージェントレイヤー
+- 使用元: メインエントリーポイント
 
-**Report Generation Layer:**
-- Purpose: Transform meeting outcomes into HTML reports with embedded charts
-- Location: `src/report/`
-- Contains: Markdown-to-HTML conversion, styling, chart embedding, file I/O
-- Depends on: Meeting records, generated chart images
-- Used by: Main entry point
+**レポート生成レイヤー:**
+- 目的: ミーティング結果をチャート埋め込みHTMLレポートに変換
+- 配置: `src/report/`
+- 内容: Markdown→HTML変換、スタイリング、チャート埋め込み、ファイルI/O
+- 依存先: ミーティングレコード、生成済みチャート画像
+- 使用元: メインエントリーポイント
 
-**Gemini Integration Layer:**
-- Purpose: Unified LLM interface for all text and image generation
-- Location: `src/gemini.ts` and `src/data/charts.ts`
-- Contains: Text generation wrapper, chat history management, image generation
-- Depends on: Google Generative AI SDK, Google GenAI SDK (separate packages)
-- Used by: Agent system, chart generator, news analyzer
+**Gemini連携レイヤー:**
+- 目的: 全テキスト・画像生成のための統一LLMインターフェース
+- 配置: `src/gemini.ts` および `src/data/charts.ts`
+- 内容: テキスト生成ラッパー、チャット履歴管理、画像生成
+- 依存先: Google Generative AI SDK, Google GenAI SDK（別パッケージ）
+- 使用元: エージェントシステム、チャートジェネレーター、ニュースアナライザー
 
-## Data Flow
+## データフロー
 
-**Daily Report Generation Flow:**
+**デイリーレポート生成フロー:**
 
-1. **Data Collection Phase** (Parallel):
-   - Fetch market indices (S&P 500, NASDAQ, Dow, Nikkei, TOPIX, VIX) via `fetchMarketIndices()`
-   - Fetch sector ETF performance via `fetchSectorPerformance()`
-   - Aggregate news from Finnhub (US market, mergers), Google News (Japan), RSS feeds via `fetchMarketNews()`
-   - Generate market overview and sector performance charts via Gemini image model
+1. **データ収集フェーズ**（並列）:
+   - `fetchMarketIndices()` で市場指数（S&P 500, NASDAQ, ダウ, 日経, TOPIX, VIX）を取得
+   - `fetchSectorPerformance()` でセクターETFパフォーマンスを取得
+   - `fetchMarketNews()` でFinnhub（米国市場、M&A）、Google News（日本）、RSSフィードからニュースを集約
+   - Gemini画像モデルで市場概要・セクターパフォーマンスチャートを生成
 
-2. **Meeting Phase** (Sequential rounds):
-   - **Round 1 - Presentations**: Each agent (Fundamentals, TenBagger, Macro, Technical, Risk Manager) receives market context and generates independent analysis in parallel via `getAgentAnalysis()`
-   - **Round 2 - Discussion**: Each agent comments on others' analyses in parallel via `getDiscussionComments()`
-   - **Synthesis**: Moderator generates final summary from all presentations and discussion via `generateFinalSummary()`
+2. **ミーティングフェーズ**（逐次ラウンド）:
+   - **ラウンド1 - プレゼンテーション**: 各エージェント（ファンダメンタルズ、テンバガー、マクロ、テクニカル、リスクマネージャー）が市場コンテキストを受け取り、`getAgentAnalysis()` で独立した分析を並列生成
+   - **ラウンド2 - ディスカッション**: 各エージェントが `getDiscussionComments()` で他エージェントの分析にコメントを並列生成
+   - **統合**: モデレーターが `generateFinalSummary()` で全プレゼンテーションとディスカッションから最終サマリーを生成
 
-3. **Report Generation Phase**:
-   - Convert meeting minutes (markdown) to HTML with dark Bloomberg-style theme via `markdownToHtml()`
-   - Embed generated sector and market overview chart images
-   - Save HTML report and meeting minutes to `docs/YYYY-MM-DD/` directory
+3. **レポート生成フェーズ**:
+   - `markdownToHtml()` でミーティング議事録（Markdown）をBloomberg風ダークテーマHTMLに変換
+   - 生成済みセクター・市場概要チャート画像を埋め込み
+   - HTMLレポートとミーティング議事録を `docs/YYYY-MM-DD/` ディレクトリに保存
 
-**Portfolio Analysis Flow:**
+**ポートフォリオ分析フロー:**
 
-1. Parallel to daily report, fetch portfolio holdings data (7 stocks) via `fetchPortfolioData()`
-2. Build portfolio context combining holdings, market data, and news
-3. Run portfolio-specific agent meeting via `runPortfolioMeeting()`
-4. Generate portfolio analysis report and save to `docs/YYYY-MM-DD/portfolio-report.html`
+1. デイリーレポートと並行して、`fetchPortfolioData()` でポートフォリオ保有銘柄データ（7銘柄）を取得
+2. 保有銘柄、市場データ、ニュースを組み合わせてポートフォリオコンテキストを構築
+3. `runPortfolioMeeting()` でポートフォリオ専用エージェントミーティングを実行
+4. ポートフォリオ分析レポートを生成し `docs/YYYY-MM-DD/portfolio-report.html` に保存
 
-**State Management:**
-- No persistent state between runs - all data is transient
-- Immutable data structures enforced via `readonly` types throughout
-- Market context passed as immutable snapshots to agents
-- Error handling: Portfolio report failure doesn't block daily report (graceful degradation)
+**状態管理:**
+- 実行間の永続的状態なし - 全データは一時的
+- `readonly` 型によりイミュータブルデータ構造を強制
+- 市場コンテキストはイミュータブルスナップショットとしてエージェントに渡される
+- エラーハンドリング: ポートフォリオレポートの失敗はデイリーレポートをブロックしない（グレースフルデグラデーション）
 
-## Key Abstractions
+## 主要な抽象化
 
 **AgentProfile:**
-- Purpose: Represents a specialized investment analyst with unique perspective
-- Examples: `src/agents/fundamentals.ts`, `src/agents/tenbagger.ts`, `src/agents/macro.ts`
-- Pattern: Immutable data structure with id, name, role, and system prompt for LLM
+- 目的: 独自の視点を持つ専門投資アナリストを表現
+- 例: `src/agents/fundamentals.ts`, `src/agents/tenbagger.ts`, `src/agents/macro.ts`
+- パターン: id、名前、役割、LLM用システムプロンプトを持つイミュータブルデータ構造
 
 **MeetingRecord:**
-- Purpose: Captures complete meeting output (date, context, discussion rounds, synthesis)
-- Examples: Used in `src/meeting/runner.ts`, `src/report/generator.ts`
-- Pattern: Immutable nested structure with readonly arrays of presentations and comments
+- 目的: ミーティング出力全体を記録（日付、コンテキスト、ディスカッションラウンド、統合）
+- 例: `src/meeting/runner.ts`, `src/report/generator.ts` で使用
+- パターン: プレゼンテーションとコメントのreadonly配列を持つイミュータブルネスト構造
 
 **MarketNews:**
-- Purpose: Categorized market information aggregated from multiple sources
-- Examples: `src/data/news/types.ts`, produced by `fetchMarketNews()`
-- Pattern: Five categories (usMarket, japanMarket, macro, sectors, earnings) as analyzed summaries
+- 目的: 複数ソースから集約されたカテゴリ別市場情報
+- 例: `src/data/news/types.ts`、`fetchMarketNews()` が生成
+- パターン: 5カテゴリ（米国市場、日本市場、マクロ、セクター、決算）の分析サマリー
 
 **StockData & MarketIndex:**
-- Purpose: Normalized market data from Yahoo Finance, ready for agent consumption
-- Examples: `src/data/market.ts`, `src/portfolio/data.ts`
-- Pattern: Immutable snapshots with null-safe optional fields (peRatio | null)
+- 目的: Yahoo Financeから正規化された市場データ、エージェント消費準備済み
+- 例: `src/data/market.ts`, `src/portfolio/data.ts`
+- パターン: null安全なオプショナルフィールド（peRatio | null）を持つイミュータブルスナップショット
 
-## Entry Points
+## エントリーポイント
 
-**Main Entry (`src/index.ts`):**
-- Location: `src/index.ts`
-- Triggers: Invoked by `npm start` or launchd scheduler (daily 8 AM)
-- Responsibilities: 
-  - Orchestrate 7-step process (data fetch → chart generation → meetings → report save)
-  - Format market data summary for agent context
-  - Handle portfolio report failure gracefully
-  - Report progress and timing to console
+**メインエントリー (`src/index.ts`):**
+- 配置: `src/index.ts`
+- トリガー: `npm start` またはlaunchdスケジューラ（毎日8時）で起動
+- 責務:
+  - 7ステッププロセスのオーケストレーション（データ取得 → チャート生成 → ミーティング → レポート保存）
+  - エージェントコンテキスト用の市場データサマリーフォーマット
+  - ポートフォリオレポート失敗のグレースフルハンドリング
+  - コンソールへの進捗・所要時間レポート
 
-**Meeting Runner Entry (`src/meeting/runner.ts`):**
-- Location: `src/meeting/runner.ts`
-- Triggers: Called from `src/index.ts` with market context
-- Responsibilities:
-  - Execute two-round meeting (presentations + discussion)
-  - Build market context string combining indices, sectors, news by category
-  - Parallel agent execution for presentations and discussion comments
+**ミーティングランナーエントリー (`src/meeting/runner.ts`):**
+- 配置: `src/meeting/runner.ts`
+- トリガー: `src/index.ts` から市場コンテキストとともに呼び出し
+- 責務:
+  - 2ラウンドミーティング実行（プレゼンテーション + ディスカッション）
+  - 指数、セクター、カテゴリ別ニュースを組み合わせた市場コンテキスト文字列の構築
+  - プレゼンテーションとディスカッションコメントの並列エージェント実行
 
-**Portfolio Meeting Entry (`src/portfolio/runner.ts`):**
-- Location: `src/portfolio/runner.ts`
-- Triggers: Called from `src/index.ts` with portfolio context
-- Responsibilities:
-  - Portfolio-specific agent analysis of holdings
-  - Agent discussion on portfolio positioning and changes
-  - Moderator synthesis for portfolio recommendations
+**ポートフォリオミーティングエントリー (`src/portfolio/runner.ts`):**
+- 配置: `src/portfolio/runner.ts`
+- トリガー: `src/index.ts` からポートフォリオコンテキストとともに呼び出し
+- 責務:
+  - 保有銘柄のポートフォリオ固有エージェント分析
+  - ポートフォリオのポジショニングと変更に関するエージェントディスカッション
+  - ポートフォリオ推奨のモデレーター統合
 
-## Error Handling
+## エラーハンドリング
 
-**Strategy:** Graceful degradation - partial failures don't block full execution
+**戦略:** グレースフルデグラデーション - 部分的な失敗は全体の実行をブロックしない
 
-**Patterns:**
-- `fetchQuoteSafe()`: Wraps API calls in try-catch, returns null on failure, filtered from results
-- Portfolio report wrapped in try-catch: Failure logs error and continues with daily report already saved
-- Missing chart images: Filtered out but don't halt pipeline (chartImages.filter(c => c !== null))
-- API response validation: Unsafe type casts with nullish coalescing (quote.field ?? 0)
+**パターン:**
+- `fetchQuoteSafe()`: API呼び出しをtry-catchでラップ、失敗時はnullを返却、結果からフィルタ除外
+- ポートフォリオレポートをtry-catchでラップ: 失敗時はエラーをログ出力し、保存済みデイリーレポートで続行
+- チャート画像欠落: フィルタ除外されるがパイプラインは停止しない（chartImages.filter(c => c !== null)）
+- APIレスポンスバリデーション: nullish coalescingによる安全でない型キャスト（quote.field ?? 0）
 
-## Cross-Cutting Concerns
+## 横断的関心事
 
-**Logging:** 
-- Console logging for progress tracking (Step 1/7 format)
-- Error logging via console.error() on API failures and fatal errors
-- No structured logging framework - simple console output
+**ログ:**
+- 進捗追跡用コンソールログ（Step 1/7 形式）
+- API失敗・致命的エラーの `console.error()` によるエラーログ
+- 構造化ログフレームワークなし - シンプルなコンソール出力
 
-**Validation:**
-- No input validation framework (no Zod usage despite being in dependencies)
-- Type safety via TypeScript strict mode
-- Runtime checks on Yahoo Finance responses (nullish coalescing)
+**バリデーション:**
+- 入力バリデーションフレームワークなし（依存関係にZodがあるが未使用）
+- TypeScript strictモードによる型安全性
+- Yahoo Financeレスポンスへのランタイムチェック（nullish coalescing）
 
-**Authentication:**
-- GEMINI_API_KEY via environment variable (required, throws on missing)
-- No other authentication layers (Yahoo Finance and Finnhub are unauthenticated public APIs)
-- No rate limiting or quota management
+**認証:**
+- 環境変数経由の `GEMINI_API_KEY`（必須、未設定時にthrow）
+- その他の認証レイヤーなし（Yahoo FinanceとFinnhubは認証不要のパブリックAPI）
+- レート制限やクォータ管理なし
 
-**Async Coordination:**
-- Promise.all() for parallel operations (data fetch, agent analyses, chart generation)
-- Sequential rounds enforced in meeting (presentations must complete before discussion)
-- No concurrency control or queue system
+**非同期協調:**
+- 並列操作に `Promise.all()`（データ取得、エージェント分析、チャート生成）
+- ミーティング内の逐次ラウンド強制（プレゼンテーション完了後にディスカッション）
+- 同時実行制御やキューシステムなし
 
 ---
 
-*Architecture analysis: 2026-04-08*
+*アーキテクチャ分析: 2026-04-08*

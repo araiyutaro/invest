@@ -1,188 +1,188 @@
-# External Integrations
+# 外部連携
 
-**Analysis Date:** 2026-04-08
+**分析日:** 2026-04-08
 
-## APIs & External Services
+## API & 外部サービス
 
 **AI/LLM:**
-- Google Gemini API - Agent reasoning and analysis
-  - SDK/Client: `@google/generative-ai` 0.24.1
-  - Auth: Environment variable `GEMINI_API_KEY`
-  - Used in: `src/gemini.ts`, `src/agents/` (all 6 agent implementations)
-  - Models: `gemini-3.1-pro-preview` for text analysis
-- Google Generative AI (Image) - Chart image generation
-  - SDK/Client: `@google/genai` 1.44.0
-  - Auth: Same `GEMINI_API_KEY`
-  - Used in: `src/data/charts.ts`
-  - Model: `gemini-2.5-flash-image` for chart visualization
+- Google Gemini API - エージェント推論・分析
+  - SDK/クライアント: `@google/generative-ai` 0.24.1
+  - 認証: 環境変数 `GEMINI_API_KEY`
+  - 使用箇所: `src/gemini.ts`, `src/agents/`（全6エージェント実装）
+  - モデル: テキスト分析用 `gemini-3.1-pro-preview`
+- Google Generative AI（画像） - チャート画像生成
+  - SDK/クライアント: `@google/genai` 1.44.0
+  - 認証: 同一の `GEMINI_API_KEY`
+  - 使用箇所: `src/data/charts.ts`
+  - モデル: チャート可視化用 `gemini-2.5-flash-image`
 
-**Market Data:**
-- Yahoo Finance API - Real-time stock and index data
-  - SDK/Client: `yahoo-finance2` 3.13.2
-  - Auth: None required (public API)
-  - Used in: `src/data/market.ts`, `src/portfolio/data.ts`
-  - Data fetched:
-    - Major indices: S&P 500, NASDAQ, Dow Jones, Nikkei 225, TOPIX, VIX
-    - Sector ETFs: 11 XL* sector trackers (XLK, XLV, XLF, XLY, XLI, XLE, XLU, XLRE, XLB, XLC, XLP)
-    - Stock quotes: Portfolio holdings (MRNA, JOBY, HII, POWL, CLS, FLNC, MOD)
-    - Fields: Price, change, change percent, volume, market cap, P/E ratio, 52-week high/low
+**市場データ:**
+- Yahoo Finance API - リアルタイム株式・指数データ
+  - SDK/クライアント: `yahoo-finance2` 3.13.2
+  - 認証: 不要（パブリックAPI）
+  - 使用箇所: `src/data/market.ts`, `src/portfolio/data.ts`
+  - 取得データ:
+    - 主要指数: S&P 500, NASDAQ, ダウ平均, 日経225, TOPIX, VIX
+    - セクターETF: 11種のXL*セクタートラッカー（XLK, XLV, XLF, XLY, XLI, XLE, XLU, XLRE, XLB, XLC, XLP）
+    - 個別株: ポートフォリオ保有銘柄（MRNA, JOBY, HII, POWL, CLS, FLNC, MOD）
+    - フィールド: 株価、変動額、変動率、出来高、時価総額、PER、52週高値/安値
 
-**News:**
-- Finnhub API - US market news and merger/acquisition news
-  - SDK/Client: Direct HTTP via `fetch()`
-  - Auth: Environment variable `FINNHUB_API_KEY`
-  - Location: `src/data/news/finnhub.ts`
-  - Endpoint: `https://finnhub.io/api/v1/news`
-  - Categories: "general", "merger"
-  - Fallback: If API key missing, gracefully returns empty arrays
-  - Filter: Only articles from past 24 hours
+**ニュース:**
+- Finnhub API - 米国市場ニュースおよびM&Aニュース
+  - SDK/クライアント: `fetch()` による直接HTTP通信
+  - 認証: 環境変数 `FINNHUB_API_KEY`
+  - 配置: `src/data/news/finnhub.ts`
+  - エンドポイント: `https://finnhub.io/api/v1/news`
+  - カテゴリ: "general", "merger"
+  - フォールバック: APIキー未設定時は空配列をグレースフルに返却
+  - フィルタ: 過去24時間の記事のみ
 
-**News (RSS Feeds):**
-- Google News - Japan market news
-  - SDK/Client: Direct HTTP via `fetch()` + XML parsing with `fast-xml-parser`
-  - Auth: None required
-  - Location: `src/data/news/google-news.ts`
-  - Feeds: 2 Google News RSS feeds searching for Nikkei, stock market, earnings
-  - Parser: XMLParser with attribute normalization
-  - Return limit: 20 articles, sorted by date
+**ニュース（RSSフィード）:**
+- Google News - 日本市場ニュース
+  - SDK/クライアント: `fetch()` による直接HTTP通信 + `fast-xml-parser` でXML解析
+  - 認証: 不要
+  - 配置: `src/data/news/google-news.ts`
+  - フィード: 日経、株式市場、決算を検索する2つのGoogle News RSSフィード
+  - パーサー: 属性正規化付きXMLParser
+  - 取得上限: 日付順で20記事
 
-- Investing.com - Japan market RSS
-  - Location: `src/data/news/rss-sources.ts`
-  - Feeds: 3 RSS feeds (news general, overviews)
-  - Return limit: 20 articles
+- Investing.com - 日本市場RSS
+  - 配置: `src/data/news/rss-sources.ts`
+  - フィード: 3つのRSSフィード（ニュース全般、概要）
+  - 取得上限: 20記事
 
-- Yahoo! ニュース - Japan business and stock news
-  - Location: `src/data/news/rss-sources.ts`
-  - Feeds: 2 RSS feeds (business, stock market section)
-  - Return limit: 15 articles
+- Yahoo!ニュース - 日本のビジネス・株式ニュース
+  - 配置: `src/data/news/rss-sources.ts`
+  - フィード: 2つのRSSフィード（ビジネス、株式市場セクション）
+  - 取得上限: 15記事
 
-- 東洋経済オンライン - Japanese business publication
-  - Location: `src/data/news/rss-sources.ts`
-  - Feed: 1 RSS feed
-  - Return limit: 10 articles
+- 東洋経済オンライン - 日本のビジネス誌
+  - 配置: `src/data/news/rss-sources.ts`
+  - フィード: 1つのRSSフィード
+  - 取得上限: 10記事
 
-- 日経ビジネス - Nikkei Business publication
-  - Location: `src/data/news/rss-sources.ts`
-  - Feed: 1 RSS feed (RDF format)
-  - Return limit: 10 articles
+- 日経ビジネス - 日経ビジネス誌
+  - 配置: `src/data/news/rss-sources.ts`
+  - フィード: 1つのRSSフィード（RDFフォーマット）
+  - 取得上限: 10記事
 
-- NHK経済 - NHK economics/business news
-  - Location: `src/data/news/rss-sources.ts`
-  - Feed: 1 RSS feed
-  - Return limit: 10 articles
+- NHK経済 - NHK経済・ビジネスニュース
+  - 配置: `src/data/news/rss-sources.ts`
+  - フィード: 1つのRSSフィード
+  - 取得上限: 10記事
 
-## Data Storage
+## データストレージ
 
-**Databases:**
-- None - No database integration
+**データベース:**
+- なし - データベース連携なし
 
-**File Storage:**
-- Local filesystem only
-  - Reports output: `docs/YYYY-MM-DD/` directory
-  - Files: HTML reports (`daily-report.html`, `meeting-minutes.html`, `portfolio-report.html`)
-  - Files: PNG chart images (`sector-performance.png`, `market-overview.png`)
+**ファイルストレージ:**
+- ローカルファイルシステムのみ
+  - レポート出力先: `docs/YYYY-MM-DD/` ディレクトリ
+  - ファイル: HTMLレポート（`daily-report.html`, `meeting-minutes.html`, `portfolio-report.html`）
+  - ファイル: PNGチャート画像（`sector-performance.png`, `market-overview.png`）
 
-**Caching:**
-- None - No explicit caching layer
+**キャッシュ:**
+- なし - 明示的なキャッシュレイヤーなし
 
-## Authentication & Identity
+## 認証 & アイデンティティ
 
-**Auth Provider:**
-- None - No user authentication system
-- API authentication via environment variables:
-  - `GEMINI_API_KEY` - Required for Google Gemini API calls
-  - `FINNHUB_API_KEY` - Optional, gracefully skipped if missing
+**認証プロバイダ:**
+- なし - ユーザー認証システムなし
+- API認証は環境変数経由:
+  - `GEMINI_API_KEY` - Google Gemini API呼び出しに必須
+  - `FINNHUB_API_KEY` - オプション、未設定時はグレースフルにスキップ
 
-## Monitoring & Observability
+## 監視 & 可観測性
 
-**Error Tracking:**
-- None detected - No error tracking service integrated
+**エラートラッキング:**
+- 検出なし - エラートラッキングサービス未連携
 
-**Logs:**
-- Console logging only
-  - Uses `console.error()` and `console.log()`
-  - Logged to stdout/stderr
-  - Timestamps managed by launchd scheduler
+**ログ:**
+- コンソールログのみ
+  - `console.error()` と `console.log()` を使用
+  - stdout/stderrに出力
+  - タイムスタンプはlaunchdスケジューラが管理
 
-## CI/CD & Deployment
+## CI/CD & デプロイ
 
-**Hosting:**
-- macOS localhost - Single machine execution
-- Scheduler: launchd (macOS native scheduling)
-- Config: `com.arai.invest-agent.plist`
-- Frequency: Daily at 8 AM (Asia/Tokyo timezone)
+**ホスティング:**
+- macOS ローカルホスト - 単一マシン実行
+- スケジューラ: launchd（macOSネイティブスケジューリング）
+- 設定: `com.arai.invest-agent.plist`
+- 頻度: 毎日8時（Asia/Tokyoタイムゾーン）
 
-**CI Pipeline:**
-- None detected - No CI/CD service configured
-- Manual execution: `npm start` or scheduled via launchd
+**CIパイプライン:**
+- 検出なし - CI/CDサービス未設定
+- 手動実行: `npm start` またはlaunchd経由のスケジュール実行
 
-## Environment Configuration
+## 環境設定
 
-**Required env vars:**
-- `GEMINI_API_KEY` - Google Gemini API key (required)
+**必須環境変数:**
+- `GEMINI_API_KEY` - Google Gemini APIキー（必須）
 
-**Optional env vars:**
-- `FINNHUB_API_KEY` - Finnhub API key (optional, gracefully skipped if missing)
+**オプション環境変数:**
+- `FINNHUB_API_KEY` - Finnhub APIキー（オプション、未設定時はグレースフルにスキップ）
 
-**Secrets location:**
-- `.env` file in project root
-- Not committed to git (listed in `.gitignore`)
-- Must be created locally per `package.json`
+**シークレット配置:**
+- プロジェクトルートの `.env` ファイル
+- gitにコミットされない（`.gitignore` に記載）
+- `package.json` に従いローカルで作成が必要
 
-## Webhooks & Callbacks
+## Webhook & コールバック
 
-**Incoming:**
-- None - No webhook endpoints exposed
+**受信:**
+- なし - Webhookエンドポイント未公開
 
-**Outgoing:**
-- None - No webhooks to external services
+**送信:**
+- なし - 外部サービスへのWebhookなし
 
-## Data Flow
+## データフロー
 
-**Daily Meeting Pipeline:**
+**デイリーミーティングパイプライン:**
 
-1. **Market Data Collection** (parallel):
-   - `fetchMarketIndices()` → Yahoo Finance API for 6 major indices
-   - `fetchSectorPerformance()` → Yahoo Finance API for 11 sector ETFs
-   - Result: Price, change, change % for all instruments
+1. **市場データ収集**（並列）:
+   - `fetchMarketIndices()` → Yahoo Finance APIで主要6指数を取得
+   - `fetchSectorPerformance()` → Yahoo Finance APIで11セクターETFを取得
+   - 結果: 全銘柄の株価、変動額、変動率
 
-2. **News Collection** (parallel):
-   - `fetchAllFinnhubNews()` → Finnhub API (general + merger categories)
-   - `fetchGoogleNewsJapan()` → Google News RSS feeds
-   - `fetchAllRssNews()` → 5 Japanese financial news RSS sources
-   - Processing: Deduplication by title, sorting by date, limiting by count
+2. **ニュース収集**（並列）:
+   - `fetchAllFinnhubNews()` → Finnhub API（general + mergerカテゴリ）
+   - `fetchGoogleNewsJapan()` → Google News RSSフィード
+   - `fetchAllRssNews()` → 5つの日本金融ニュースRSSソース
+   - 処理: タイトルによる重複排除、日付順ソート、件数制限
 
-3. **News Analysis** (AI):
+3. **ニュース分析**（AI）:
    - `generateAllAnalyses()` → Google Gemini API
-   - Input: All collected news articles
-   - Output: Structured analysis (usMarket, japanMarket, macro, sectors, earnings)
+   - 入力: 収集した全ニュース記事
+   - 出力: 構造化分析（米国市場、日本市場、マクロ、セクター、決算）
 
-4. **Chart Generation** (parallel):
+4. **チャート生成**（並列）:
    - `generateSectorChart()` → Google Gemini API (gemini-2.5-flash-image)
    - `generateMarketOverviewChart()` → Google Gemini API (gemini-2.5-flash-image)
-   - Prompts describe data with Bloomberg-style dark theme requirements
-   - Output: PNG files saved to disk
+   - プロンプトがBloomberg風ダークテーマ要件とともにデータを記述
+   - 出力: ディスクに保存されるPNGファイル
 
-5. **Agent Meeting** (sequential):
-   - 5 analysts process market context:
-     - Fundamentals Analyst
-     - Ten-Bagger Hunter
-     - Macro Economist
-     - Technical Strategist
-     - Risk Manager
-   - Each calls `generateText()` → Google Gemini API
-   - Moderator synthesizes via `generateChat()` (multi-turn conversation)
+5. **エージェントミーティング**（逐次）:
+   - 5名のアナリストが市場コンテキストを処理:
+     - ファンダメンタルズアナリスト
+     - テンバガーハンター
+     - マクロエコノミスト
+     - テクニカルストラテジスト
+     - リスクマネージャー
+   - 各自が `generateText()` → Google Gemini API を呼び出し
+   - モデレーターが `generateChat()`（マルチターン会話）で統合
 
-6. **Portfolio Analysis** (optional):
-   - `fetchPortfolioData()` → Yahoo Finance API for 7 holdings
-   - Portfolio agents analyze holdings performance
-   - Synthesized into portfolio report
+6. **ポートフォリオ分析**（オプション）:
+   - `fetchPortfolioData()` → Yahoo Finance APIで7銘柄を取得
+   - ポートフォリオエージェントが保有銘柄パフォーマンスを分析
+   - ポートフォリオレポートに統合
 
-7. **Report Generation**:
-   - HTML output saved to `docs/YYYY-MM-DD/`
-   - Markdown → HTML conversion in `src/report/generator.ts`
-   - Images embedded as file paths or base64
+7. **レポート生成**:
+   - HTML出力を `docs/YYYY-MM-DD/` に保存
+   - `src/report/generator.ts` でMarkdown → HTML変換
+   - 画像はファイルパスまたはbase64で埋め込み
 
 ---
 
-*Integration audit: 2026-04-08*
+*連携分析: 2026-04-08*

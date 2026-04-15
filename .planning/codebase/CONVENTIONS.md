@@ -1,52 +1,52 @@
-# Coding Conventions
+# コーディング規約
 
-**Analysis Date:** 2026-04-08
+**分析日:** 2026-04-08
 
-## Naming Patterns
+## 命名パターン
 
-**Files:**
-- kebab-case for file names: `fundamentals.ts`, `risk-manager.ts`, `market-overview.ts`
-- Index files use `index.ts` for barrel exports
-- Utility files named by function: `analyzer.ts`, `generator.ts`, `runner.ts`
+**ファイル:**
+- ファイル名はkebab-case: `fundamentals.ts`, `risk-manager.ts`, `market-overview.ts`
+- バレルエクスポートには `index.ts` を使用
+- ユーティリティファイルは機能名: `analyzer.ts`, `generator.ts`, `runner.ts`
 
-**Functions:**
-- camelCase for function names: `fetchMarketIndices()`, `generateChartImage()`, `formatMarketDataSummary()`
-- Prefix helper functions with their purpose: `fetchQuoteSafe()`, `buildMarketContext()`, `formatArticlesForPrompt()`
-- Async functions clearly return Promise types
+**関数:**
+- 関数名はcamelCase: `fetchMarketIndices()`, `generateChartImage()`, `formatMarketDataSummary()`
+- ヘルパー関数は目的をプレフィックス: `fetchQuoteSafe()`, `buildMarketContext()`, `formatArticlesForPrompt()`
+- 非同期関数はPromise型を明示的に返却
 
-**Variables:**
-- camelCase for constants and variables: `yahooFinance`, `REPORTS_DIR`, `analysisAgents`
-- ALL_CAPS_WITH_UNDERSCORES for constants: `MAJOR_INDICES`, `SECTOR_ETFS`, `PORTFOLIO_HOLDINGS`, `SYSTEM_PROMPT`
-- Const arrays use `ReadonlyArray` type annotation consistently
+**変数:**
+- 定数・変数はcamelCase: `yahooFinance`, `REPORTS_DIR`, `analysisAgents`
+- 定数はALL_CAPS_WITH_UNDERSCORES: `MAJOR_INDICES`, `SECTOR_ETFS`, `PORTFOLIO_HOLDINGS`, `SYSTEM_PROMPT`
+- const配列は一貫して `ReadonlyArray` 型アノテーションを使用
 
-**Types:**
-- PascalCase for interfaces and types: `AgentProfile`, `MarketNews`, `MeetingRecord`, `StockQuote`
-- Interface properties use `readonly` keyword: `readonly id: string`, `readonly marketCap: number | null`
-- Union types for optional values use `| null` rather than `| undefined`
+**型:**
+- インターフェース・型はPascalCase: `AgentProfile`, `MarketNews`, `MeetingRecord`, `StockQuote`
+- インターフェースプロパティは `readonly` キーワード使用: `readonly id: string`, `readonly marketCap: number | null`
+- オプショナル値のユニオン型は `| undefined` ではなく `| null` を使用
 
-## Code Style
+## コードスタイル
 
-**Formatting:**
-- No explicit linter/formatter config detected in repo
-- Consistent 2-space indentation used throughout
-- Lines typically 80-100 characters, no hard limit enforced
-- One blank line between logical sections
+**フォーマット:**
+- リポジトリに明示的なリンター/フォーマッター設定なし
+- 全体を通じて一貫した2スペースインデント
+- 行は通常80-100文字、ハードリミットなし
+- 論理セクション間に空行1行
 
-**Imports:**
-- Node.js native imports first: `import { mkdir } from "node:fs/promises"`
-- Third-party imports second: `import YahooFinance from "yahoo-finance2"`
-- Local imports last, using `.js` extensions in ES modules: `import { fundamentalsAgent } from "./fundamentals.js"`
-- Type imports separated: `import type { MarketNews } from "../data/news.js"`
+**インポート:**
+- Node.jsネイティブインポートが先: `import { mkdir } from "node:fs/promises"`
+- サードパーティインポートが次: `import YahooFinance from "yahoo-finance2"`
+- ローカルインポートが最後、ESモジュールでは `.js` 拡張子使用: `import { fundamentalsAgent } from "./fundamentals.js"`
+- 型インポートは分離: `import type { MarketNews } from "../data/news.js"`
 
-## Error Handling
+## エラーハンドリング
 
-**Patterns:**
-- Errors thrown during initialization: `if (!apiKey) { throw new Error("...") }`
-- Try/catch for external API calls with console.error logging
-- Null return pattern for graceful degradation: `Promise<string | null>` returns null on error
-- Promise.all().filter() pattern to remove null results and maintain type safety
+**パターン:**
+- 初期化時のエラーthrow: `if (!apiKey) { throw new Error("...") }`
+- 外部API呼び出しにtry-catchとconsole.errorログ
+- グレースフルデグラデーション用のnull返却パターン: `Promise<string | null>` で失敗時にnullを返却
+- null結果を除去し型安全性を維持する `Promise.all().filter()` パターン
 
-Example from `src/data/market.ts`:
+`src/data/market.ts` の例:
 ```typescript
 async function fetchQuoteSafe(symbol: string): Promise<Record<string, unknown> | null> {
   try {
@@ -58,79 +58,79 @@ async function fetchQuoteSafe(symbol: string): Promise<Record<string, unknown> |
   }
 }
 
-// Caller filters nulls using type guard
+// 呼び出し元が型ガードでnullをフィルタ
 return results.filter((r): r is MarketIndex => r !== null);
 ```
 
-**Async Error Handling:**
-- Fatal errors in main: `main().catch((error) => { console.error("Fatal error:", error); process.exit(1); })`
-- Non-fatal errors in sub-processes: logged but execution continues (e.g., portfolio report generation in `src/index.ts` line 114-117)
+**非同期エラーハンドリング:**
+- main内の致命的エラー: `main().catch((error) => { console.error("Fatal error:", error); process.exit(1); })`
+- サブプロセス内の非致命的エラー: ログ出力後に実行続行（例: `src/index.ts` 114-117行のポートフォリオレポート生成）
 
-## Logging
+## ログ
 
-**Framework:** console methods (console.log, console.error)
+**フレームワーク:** consoleメソッド（console.log, console.error）
 
-**Patterns:**
-- Progress indicators in main flow: `console.log("Step 1/7: 市場データを取得中...")`
-- Arrow indicators for progress: `console.log("  -> 市場データ取得完了")`
-- Error logging with context: `console.error(\`Failed to fetch quote for ${symbol}:\`, error)`
-- Silent failures for non-critical operations (e.g., chart generation returning null vs throwing)
+**パターン:**
+- メインフロー内の進捗表示: `console.log("Step 1/7: 市場データを取得中...")`
+- 矢印による進捗表示: `console.log("  -> 市場データ取得完了")`
+- コンテキスト付きエラーログ: `console.error(\`Failed to fetch quote for ${symbol}:\`, error)`
+- 非重要操作のサイレント失敗（例: チャート生成がthrowせずnullを返却）
 
-No centralized logger - direct console usage throughout.
+集中ロガーなし - 全体を通じて直接的なconsole使用。
 
-## Comments
+## コメント
 
-**When to Comment:**
-- System prompts are documented as long strings with section headers
-- Complex prompt construction documented inline
-- API integration notes (e.g., "suppressNotices" for yahoo-finance2 in `src/data/market.ts`)
-- Section comments use markdown headers in strings: `## 本日の市場データ`
+**コメントするタイミング:**
+- システムプロンプトはセクションヘッダー付きの長い文字列として文書化
+- 複雑なプロンプト構築はインラインで文書化
+- API連携メモ（例: `src/data/market.ts` の yahoo-finance2 "suppressNotices"）
+- セクションコメントは文字列内でMarkdownヘッダー使用: `## 本日の市場データ`
 
 **JSDoc/TSDoc:**
-- Not used in this codebase
-- Function purposes inferred from names and usage
+- このコードベースでは未使用
+- 関数の目的は名前と使用方法から推測
 
-## Function Design
+## 関数設計
 
-**Size:** 20-60 lines typical, longest function is `markdownToHtml()` at 53 lines
+**サイズ:** 通常20-60行、最長関数は `markdownToHtml()` の53行
 
-**Parameters:** 
-- Single object parameter with readonly properties preferred for complex data
-- Use `ReadonlyArray<T>` for collection parameters
-- Avoid mutable inputs - arrays spread/copied when needed
+**パラメータ:**
+- 複雑なデータにはreadonlyプロパティを持つ単一オブジェクトパラメータを優先
+- コレクションパラメータには `ReadonlyArray<T>` を使用
+- ミュータブルな入力を避ける - 必要に応じて配列をspread/コピー
 
-Example from `src/index.ts`:
+`src/index.ts` の例:
 ```typescript
 function formatMarketDataSummary(
   indices: ReadonlyArray<MarketIndex>,
   sectors: ReadonlyArray<SectorPerformance>,
 ): string {
-  // ... uses [...sectors].sort() to create new array, never mutates input
+  // ... [...sectors].sort() で新しい配列を作成、入力を変更しない
 }
 ```
 
-**Return Values:**
-- Promise<T | null> for operations that may fail gracefully
-- Promise<T> with error throwing for critical paths
-- Const/readonly return types: `return { indices, sectors } as const;`
+**戻り値:**
+- グレースフルに失敗する可能性のある操作には `Promise<T | null>`
+- クリティカルパスにはエラーthrow付きの `Promise<T>`
+- Const/readonly戻り値型: `return { indices, sectors } as const;`
 
-## Immutability
+## イミュータビリティ
 
-**Critical Pattern - Always Used:**
-- Spreads and copies arrays/objects: `[...sectors].sort()`, `{ ...user, name }`
-- Readonly properties on all interfaces
-- ReadonlyArray<T> type annotations prevent accidental mutation
+**重要パターン - 常に使用:**
+- 配列/オブジェクトのspreadとコピー: `[...sectors].sort()`, `{ ...user, name }`
+- 全インターフェースにreadonlyプロパティ
+- `ReadonlyArray<T>` 型アノテーションで意図しない変更を防止
 
-Never mutates function parameters or external state.
+関数パラメータや外部状態を決して変更しない。
 
-## Module Design
+## モジュール設計
 
-**Exports:**
-- Barrel files re-export typed APIs: `src/agents/index.ts` exports both values and types
-- Types exported separately with `export type { ... }`
-- Value exports named: `export const PORTFOLIO_HOLDINGS = [...]`
+**エクスポート:**
+- バレルファイルが型付きAPIを再エクスポート: `src/agents/index.ts` が値と型の両方をエクスポート
+- 型は `export type { ... }` で個別エクスポート
+- 名前付き値エクスポート: `export const PORTFOLIO_HOLDINGS = [...]`
 
-Example from `src/agents/index.ts`:
+`src/agents/index.ts` の例:
 ```typescript
 export { fundamentalsAgent } from "./fundamentals.js";
 export type {
@@ -140,15 +140,15 @@ export type {
 } from "./types.js";
 ```
 
-**File Organization:**
-- Types in dedicated files: `types.ts` for shared interfaces
-- Data files handle fetching and transformation
-- Generator files handle output (HTML, reports)
-- Runner files orchestrate workflows
+**ファイル構成:**
+- 共有インターフェース用の専用型ファイル: `types.ts`
+- データファイルが取得と変換を処理
+- ジェネレーターファイルが出力（HTML、レポート）を処理
+- ランナーファイルがワークフローをオーケストレーション
 
-## Specific Patterns
+## 固有パターン
 
-**Readonly Records for Constants:**
+**定数用のReadonlyレコード:**
 ```typescript
 const MAJOR_INDICES = [
   { name: "S&P 500", symbol: "^GSPC" },
@@ -156,17 +156,17 @@ const MAJOR_INDICES = [
 ] as const;
 ```
 
-**Filter with Type Guard:**
+**型ガード付きフィルタ:**
 ```typescript
 return results.filter((r): r is MarketIndex => r !== null);
 ```
 
-**Safe External API Calls:**
+**安全な外部API呼び出し:**
 ```typescript
 async function fetchQuoteSafe(symbol: string): Promise<...> {
   try {
     const result = await yahooFinance.quote(symbol);
-    return /* transformation */;
+    return /* 変換 */;
   } catch (error) {
     console.error(`Failed to fetch...`, error);
     return null;
@@ -174,7 +174,7 @@ async function fetchQuoteSafe(symbol: string): Promise<...> {
 }
 ```
 
-**Promise.all for Parallel Operations:**
+**並列操作用のPromise.all:**
 ```typescript
 const [result1, result2, result3] = await Promise.all([
   operation1(),
@@ -185,4 +185,4 @@ const [result1, result2, result3] = await Promise.all([
 
 ---
 
-*Convention analysis: 2026-04-08*
+*規約分析: 2026-04-08*

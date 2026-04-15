@@ -5,7 +5,20 @@
       "Bash(npx tsx src/index.ts)",
       "Bash(echo $GEMINI_API_KEY)",
       "WebSearch",
-      "Bash(npx tsx /Users/arai/invest/scripts/list-models.ts)"
+      "Bash(npx tsx /Users/arai/invest/scripts/list-models.ts)",
+      "Bash(git pull origin master)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "WebFetch(domain:www.investing.com)",
+      "WebFetch(domain:toyokeizai.net)",
+      "WebFetch(domain:support.yahoo-net.jp)",
+      "WebFetch(domain:newsapi.org)",
+      "WebFetch(domain:jpx-jquants.com)",
+      "WebFetch(domain:news.yahoo.co.jp)",
+      "WebFetch(domain:jp.investing.com)",
+      "WebFetch(domain:okumuralab.org)",
+      "WebFetch(domain:business.nikkei.com)",
+      "Bash(npx tsx:*)"
     ]
   }
 }

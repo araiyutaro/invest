@@ -1,112 +1,112 @@
-# Testing Patterns
+# テストパターン
 
-**Analysis Date:** 2026-04-08
+**分析日:** 2026-04-08
 
-## Test Framework
+## テストフレームワーク
 
-**Runner:**
+**ランナー:**
 - Vitest 4.0.18
-- Config: Not present - uses Vitest defaults
-- No custom configuration file detected
+- 設定: 未作成 - Vitestデフォルトを使用
+- カスタム設定ファイルなし
 
-**Assertion Library:**
-- Not detected - Vitest's built-in assertions would be used
+**アサーションライブラリ:**
+- 検出なし - Vitest組み込みアサーションを使用予定
 
-**Run Commands:**
+**実行コマンド:**
 ```bash
-npm test                # Run all tests (vitest run)
-npm run test:watch     # Watch mode
+npm test                # 全テスト実行（vitest run）
+npm run test:watch     # ウォッチモード
 ```
 
-## Test File Organization
+## テストファイル構成
 
-**Current Status:**
-- No test files exist in `src/`
-- No unit tests, integration tests, or E2E tests present
-- Only devDependency is Vitest (no other testing utilities)
+**現状:**
+- `src/` 内にテストファイルなし
+- ユニットテスト、統合テスト、E2Eテストいずれも未実装
+- devDependencyはVitestのみ（他のテストユーティリティなし）
 
-**Recommended Location Pattern:**
-- Co-locate tests with implementation: `src/agents/fundamentals.test.ts` next to `src/agents/fundamentals.ts`
-- Or use `src/__tests__/` directory for integration tests
-- End-to-end test files in `e2e/` or similar
+**推奨配置パターン:**
+- テストを実装と同じ場所に配置: `src/agents/fundamentals.test.ts` を `src/agents/fundamentals.ts` の隣に
+- または統合テスト用に `src/__tests__/` ディレクトリを使用
+- E2Eテストファイルは `e2e/` または類似ディレクトリに
 
-**Recommended Naming:**
-- Unit tests: `*.test.ts` or `*.spec.ts` 
-- Integration tests: `*.integration.test.ts`
-- E2E tests: `*.e2e.test.ts` or in `e2e/` directory
+**推奨命名:**
+- ユニットテスト: `*.test.ts` または `*.spec.ts`
+- 統合テスト: `*.integration.test.ts`
+- E2Eテスト: `*.e2e.test.ts` または `e2e/` ディレクトリ内
 
-## Priority Testing Areas
+## 優先テスト領域
 
-Based on codebase analysis, these areas should be tested first:
+コードベース分析に基づき、以下の領域を優先的にテストすべき:
 
-**Critical Path (High Priority):**
-- `src/gemini.ts` - External API wrapper
-  - Test token validation: error when GEMINI_API_KEY missing
-  - Mock generateText() and generateChat() responses
-  
-- `src/data/market.ts` - Market data fetching
-  - Test fetchQuoteSafe() error handling with network failures
-  - Test filter pattern removes null entries correctly
-  - Test readonly array contracts
+**クリティカルパス（高優先度）:**
+- `src/gemini.ts` - 外部APIラッパー
+  - トークンバリデーションテスト: GEMINI_API_KEY未設定時のエラー
+  - generateText() と generateChat() のレスポンスモック
 
-- `src/meeting/runner.ts` - Core business logic
-  - Test buildMarketContext() formats strings correctly
-  - Test getAgentAnalysis() and getDiscussionComments() call order
-  - Test Promise.all parallelization works
-  - Mock generateText() to control outputs
+- `src/data/market.ts` - 市場データ取得
+  - fetchQuoteSafe() のネットワーク障害時のエラーハンドリングテスト
+  - フィルタパターンがnullエントリを正しく除去するテスト
+  - readonly配列の契約テスト
 
-**Secondary (Medium Priority):**
-- `src/data/news/analyzer.ts` - News analysis coordination
-  - Test buildAnalysisConfigs() creates correct prompts
-  - Test generateAllAnalyses() transforms Promise results to MarketNews
-  - Test error recovery in Promise.all map
-  
-- `src/report/generator.ts` - HTML generation
-  - Test escapeHtml() prevents XSS
-  - Test markdownToHtml() regex transformations
-  - Test saveReports() creates files with correct paths
-  - Test updateIndex() doesn't duplicate entries
+- `src/meeting/runner.ts` - コアビジネスロジック
+  - buildMarketContext() の文字列フォーマットテスト
+  - getAgentAnalysis() と getDiscussionComments() の呼び出し順序テスト
+  - Promise.all並列化の動作テスト
+  - generateText() のモックによる出力制御
 
-- `src/portfolio/data.ts` - Portfolio data fetching
-  - Test fetchStockSafe() error handling
-  - Test formatPortfolioSummary() table generation
+**セカンダリ（中優先度）:**
+- `src/data/news/analyzer.ts` - ニュース分析調整
+  - buildAnalysisConfigs() が正しいプロンプトを生成するテスト
+  - generateAllAnalyses() がPromise結果をMarketNewsに変換するテスト
+  - Promise.all mapでのエラー回復テスト
 
-**Tertiary (Low Priority):**
-- Agent profile definitions (`src/agents/*.ts`)
-  - Just verify exports exist
-  
-- Type definitions
-  - Use TypeScript compiler for validation
+- `src/report/generator.ts` - HTML生成
+  - escapeHtml() のXSS防止テスト
+  - markdownToHtml() の正規表現変換テスト
+  - saveReports() の正しいパスでのファイル作成テスト
+  - updateIndex() のエントリ重複防止テスト
 
-## Test Structure Pattern
+- `src/portfolio/data.ts` - ポートフォリオデータ取得
+  - fetchStockSafe() のエラーハンドリングテスト
+  - formatPortfolioSummary() のテーブル生成テスト
 
-For this codebase, recommended test structure:
+**ターシャリ（低優先度）:**
+- エージェントプロファイル定義（`src/agents/*.ts`）
+  - エクスポートの存在確認のみ
+
+- 型定義
+  - TypeScriptコンパイラでバリデーション
+
+## テスト構造パターン
+
+このコードベースの推奨テスト構造:
 
 ```typescript
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
 describe('MarketDataFetcher', () => {
   beforeEach(() => {
-    // Setup mocks, clear state
+    // モックセットアップ、状態クリア
   })
 
   afterEach(() => {
-    // Cleanup
+    // クリーンアップ
   })
 
-  it('should fetch market indices successfully', async () => {
-    // Arrange: setup test data
+  it('市場指数を正常に取得できること', async () => {
+    // Arrange: テストデータセットアップ
     const mockIndices = [{ name: 'S&P 500', symbol: '^GSPC', ... }]
     
-    // Act: call function
+    // Act: 関数呼び出し
     const result = await fetchMarketIndices()
     
-    // Assert: verify result
+    // Assert: 結果検証
     expect(result).toEqual(mockIndices)
   })
 
-  it('should handle network errors gracefully', async () => {
-    // Mock network failure
+  it('ネットワークエラーをグレースフルに処理すること', async () => {
+    // ネットワーク障害をモック
     vi.mock('yahoo-finance2', () => ({
       quote: vi.fn().mockRejectedValue(new Error('Network'))
     }))
@@ -117,23 +117,23 @@ describe('MarketDataFetcher', () => {
 })
 ```
 
-## Mocking Strategy
+## モック戦略
 
-**Framework:** Vitest's `vi` module (native)
+**フレームワーク:** Vitestの `vi` モジュール（ネイティブ）
 
-**What to Mock:**
-- External API calls: `yahoo-finance2.quote()`, `GoogleGenerativeAI.generateContent()`
-- File I/O: `fs/promises` read/write operations
-- Time-based operations: `Date.now()`, `setTimeout()`
-- Environment variables (setup in test)
+**モック対象:**
+- 外部API呼び出し: `yahoo-finance2.quote()`, `GoogleGenerativeAI.generateContent()`
+- ファイルI/O: `fs/promises` の読み書き操作
+- 時間ベース操作: `Date.now()`, `setTimeout()`
+- 環境変数（テスト内でセットアップ）
 
-**What NOT to Mock:**
-- Type transformations and calculations
-- String formatting (escapeHtml, markdownToHtml)
-- Data structure operations (filter, map, reduce)
-- Pure helper functions
+**モック非対象:**
+- 型変換と計算
+- 文字列フォーマット（escapeHtml, markdownToHtml）
+- データ構造操作（filter, map, reduce）
+- 純粋ヘルパー関数
 
-**Mocking Pattern for Gemini API:**
+**Gemini APIのモックパターン:**
 
 ```typescript
 import { vi } from 'vitest'
@@ -143,14 +143,14 @@ vi.mock('@google/generative-ai', () => ({
   GoogleGenerativeAI: vi.fn(() => ({
     getGenerativeModel: vi.fn(() => ({
       generateContent: vi.fn().mockResolvedValue({
-        response: { text: vi.fn().mockReturnValue('Mock analysis text') }
+        response: { text: vi.fn().mockReturnValue('モック分析テキスト') }
       })
     }))
   }))
 }))
 ```
 
-**Mocking Pattern for File I/O:**
+**ファイルI/Oのモックパターン:**
 
 ```typescript
 import { writeFile, mkdir } from 'node:fs/promises'
@@ -162,13 +162,13 @@ vi.mock('node:fs/promises', () => ({
 }))
 ```
 
-## Fixtures and Test Data
+## フィクスチャとテストデータ
 
-**Recommended Location:**
-- `src/__fixtures__/` or `src/__test__/fixtures/`
-- Factory functions in `src/__test__/factories/`
+**推奨配置:**
+- `src/__fixtures__/` または `src/__test__/fixtures/`
+- ファクトリ関数は `src/__test__/factories/`
 
-**Factory Pattern Example:**
+**ファクトリパターン例:**
 
 ```typescript
 // src/__test__/factories/market-data.ts
@@ -190,23 +190,23 @@ export function createMockMarketIndices(count = 5): ReadonlyArray<MarketIndex> {
 }
 ```
 
-## Coverage
+## カバレッジ
 
-**Requirements:** None currently enforced
+**要件:** 現在は未設定
 
-**Recommended Target:** 80%+ for critical paths
-- Core business logic: 90%+
-- API wrappers: 85%+
-- Data transformations: 80%+
-- HTML generation: 70%+
+**推奨目標:** クリティカルパスで80%以上
+- コアビジネスロジック: 90%以上
+- APIラッパー: 85%以上
+- データ変換: 80%以上
+- HTML生成: 70%以上
 
-**View Coverage:**
+**カバレッジ確認:**
 ```bash
-# Configure vitest.config.ts with coverage
+# vitest.config.ts にカバレッジを設定
 npm test -- --coverage
 ```
 
-**Recommended Config:**
+**推奨設定:**
 ```typescript
 // vitest.config.ts
 import { defineConfig } from 'vitest/config'
@@ -231,51 +231,51 @@ export default defineConfig({
 })
 ```
 
-## Test Types
+## テスト種別
 
-**Unit Tests:**
-- Scope: Single function or module
-- Approach: Test pure functions with various inputs, mock dependencies
-- Examples:
-  - `escapeHtml()` with special characters
-  - `buildMarketContext()` with different data shapes
-  - `formatArticlesForPrompt()` with empty/full articles array
+**ユニットテスト:**
+- スコープ: 単一関数またはモジュール
+- アプローチ: 純粋関数を様々な入力でテスト、依存関係をモック
+- 例:
+  - 特殊文字を含む `escapeHtml()`
+  - 異なるデータ形状での `buildMarketContext()`
+  - 空/フル記事配列での `formatArticlesForPrompt()`
 
-**Integration Tests:**
-- Scope: Multiple modules working together
-- Approach: Integration of real modules with mocked external APIs
-- Examples:
-  - `runMeeting()` with mocked Gemini API and market data
-  - `fetchMarketNews()` with mocked API sources
-  - `saveReports()` with mocked file system
+**統合テスト:**
+- スコープ: 複数モジュールの連携
+- アプローチ: 実モジュールの統合、外部APIはモック
+- 例:
+  - モックGemini APIと市場データでの `runMeeting()`
+  - モックAPIソースでの `fetchMarketNews()`
+  - モックファイルシステムでの `saveReports()`
 
-**E2E Tests:**
-- Current Status: Not implemented
-- Recommended: Use Playwright for critical user flows
-  - Daily report generation end-to-end
-  - Portfolio analysis meeting workflow
-  - Report file output verification
+**E2Eテスト:**
+- 現状: 未実装
+- 推奨: クリティカルユーザーフローにPlaywrightを使用
+  - デイリーレポート生成のエンドツーエンド
+  - ポートフォリオ分析ミーティングワークフロー
+  - レポートファイル出力検証
 
-## Async Testing
+## 非同期テスト
 
-**Pattern:**
+**パターン:**
 ```typescript
 import { describe, it, expect } from 'vitest'
 
-describe('Async Operations', () => {
-  it('should fetch data asynchronously', async () => {
+describe('非同期操作', () => {
+  it('データを非同期に取得できること', async () => {
     const result = await fetchMarketIndices()
     expect(result).toBeDefined()
     expect(result.length).toBeGreaterThan(0)
   })
 
-  it('should handle async errors', async () => {
+  it('非同期エラーを処理できること', async () => {
     await expect(
-      fetchMarketIndices() // or use vi.mock to inject error
+      fetchMarketIndices() // またはvi.mockでエラーを注入
     ).rejects.toThrow()
   })
 
-  it('should handle Promise.all correctly', async () => {
+  it('Promise.allを正しく処理できること', async () => {
     const [data1, data2] = await Promise.all([
       fetchMarketIndices(),
       fetchSectorPerformance()
@@ -286,12 +286,12 @@ describe('Async Operations', () => {
 })
 ```
 
-## Error Handling Testing
+## エラーハンドリングテスト
 
-**Pattern:**
+**パターン:**
 ```typescript
-describe('Error Handling', () => {
-  it('should return null on API failure', async () => {
+describe('エラーハンドリング', () => {
+  it('API失敗時にnullを返すこと', async () => {
     vi.mock('yahoo-finance2', () => ({
       quote: vi.fn().mockRejectedValue(new Error('API Error'))
     }))
@@ -300,10 +300,10 @@ describe('Error Handling', () => {
     expect(result).toBeNull()
   })
 
-  it('should log errors to console', async () => {
+  it('コンソールにエラーをログ出力すること', async () => {
     const errorSpy = vi.spyOn(console, 'error')
     
-    // trigger error condition
+    // エラー条件をトリガー
     
     expect(errorSpy).toHaveBeenCalledWith(
       expect.stringContaining('Failed to fetch'),
@@ -311,38 +311,38 @@ describe('Error Handling', () => {
     )
   })
 
-  it('should exit process on fatal error', async () => {
+  it('致命的エラー時にプロセスを終了すること', async () => {
     const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {})
     
-    // trigger main() error
+    // main() エラーをトリガー
     
     expect(exitSpy).toHaveBeenCalledWith(1)
   })
 })
 ```
 
-## Test Execution Strategy
+## テスト実行戦略
 
-**Phase 1 - Foundation (Week 1):**
-- Write tests for `src/gemini.ts` (API wrapper validation)
-- Write tests for `src/data/market.ts` (error handling, type guards)
-- Set up mocking infrastructure for Gemini and yahoo-finance2
+**フェーズ1 - 基盤（第1週）:**
+- `src/gemini.ts` のテスト作成（APIラッパーバリデーション）
+- `src/data/market.ts` のテスト作成（エラーハンドリング、型ガード）
+- GeminiとYahoo Finance用モックインフラの構築
 
-**Phase 2 - Business Logic (Week 2):**
-- Write tests for `src/meeting/runner.ts` (orchestration)
-- Write tests for `src/data/news/analyzer.ts` (prompt building)
-- Write tests for `src/report/generator.ts` (HTML generation)
+**フェーズ2 - ビジネスロジック（第2週）:**
+- `src/meeting/runner.ts` のテスト作成（オーケストレーション）
+- `src/data/news/analyzer.ts` のテスト作成（プロンプト構築）
+- `src/report/generator.ts` のテスト作成（HTML生成）
 
-**Phase 3 - Integration (Week 3):**
-- Write integration tests for `runMeeting()`
-- Write integration tests for `saveReports()`
-- Add E2E tests with Playwright if needed
+**フェーズ3 - 統合（第3週）:**
+- `runMeeting()` の統合テスト作成
+- `saveReports()` の統合テスト作成
+- 必要に応じてPlaywright E2Eテスト追加
 
-**Phase 4 - Polish (Week 4):**
-- Reach 80%+ coverage on critical paths
-- Document test patterns in this file
-- Add performance benchmarks if needed
+**フェーズ4 - 仕上げ（第4週）:**
+- クリティカルパスで80%以上のカバレッジ達成
+- このファイルにテストパターンを文書化
+- 必要に応じてパフォーマンスベンチマーク追加
 
 ---
 
-*Testing analysis: 2026-04-08*
+*テスト分析: 2026-04-08*
