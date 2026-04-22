@@ -12,6 +12,4 @@ export const PORTFOLIO_HOLDINGS: ReadonlyArray<PortfolioHolding> = [
   { symbol: "POWL", name: "Powell Industries", nameJa: "パウエル・インダストリーズ", sector: "Industrials" },
   { symbol: "FLNC", name: "Fluence Energy", nameJa: "フルエンス・エナジー", sector: "Energy" },
   { symbol: "EE", name: "Excelerate Energy", nameJa: "エクセラレート・エナジー", sector: "Energy" },
-  { symbol: "HIMS", name: "Hims & Hers Health", nameJa: "ヒムズ＆ハーズ・ヘルス", sector: "Healthcare" },
-  { symbol: "CALX", name: "Calix", nameJa: "カリックス", sector: "Technology" },
 ] as const;
