@@ -172,6 +172,22 @@ function formatPortfolioReportHtml(report: PortfolioReport): string {
       </div>`;
   }
 
+  let researchHtml = "";
+  for (const r of report.researchResults) {
+    researchHtml += `<div class="agent-card" style="border-left-color: #10b981;">
+        <h4>${escapeHtml(r.ticker)}</h4>
+        ${markdownToHtml(r.research)}
+      </div>`;
+  }
+
+  let postResearchHtml = "";
+  for (const r of report.postResearchReviews) {
+    postResearchHtml += `<div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>${escapeHtml(r.agentName)}</h4>
+        ${markdownToHtml(r.comment)}
+      </div>`;
+  }
+
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -199,6 +215,8 @@ function formatPortfolioReportHtml(report: PortfolioReport): string {
     <hr>
     <h2>Discussion</h2>
     ${discussionHtml}
+    ${researchHtml.length > 0 ? `<hr><h2>Web Research Results（保有銘柄の最新情報）</h2><p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">各保有銘柄についてGoogle検索で取得した最新の事実情報です。</p>${researchHtml}` : ""}
+    ${postResearchHtml.length > 0 ? `<hr><h2>Post-Research Review（Web調査後の再評価）</h2><p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">Web調査結果を踏まえ、各エージェントが判断を再評価した結果です。</p>${postResearchHtml}` : ""}
   </div>
 </body>
 </html>`;

@@ -10,4 +10,7 @@ export type {
   MeetingComment,
   MeetingRound,
   MeetingRecord,
+  StockScoring,
+  StockScoreSummary,
+  AgentStockScore,
 } from "./types.js";

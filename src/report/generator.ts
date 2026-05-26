@@ -158,6 +158,57 @@ const HTML_STYLES = `
   </style>
 `;
 
+function formatScoringHtml(record: MeetingRecord): string {
+  if (record.scoreSummaries.length === 0) {
+    return "";
+  }
+
+  const verdictColor = (verdict: string): string => {
+    switch (verdict) {
+      case "強気": return "#10b981";
+      case "弱気": return "#ef4444";
+      default: return "#f59e0b";
+    }
+  };
+
+  const scoreColor = (score: number): string => {
+    if (score >= 8) return "#10b981";
+    if (score >= 6) return "#60a5fa";
+    if (score >= 4) return "#f59e0b";
+    return "#ef4444";
+  };
+
+  const rows = record.scoreSummaries.map((s) => {
+    const agentCells = s.agentScores
+      .map((a) => `<td style="text-align:center;color:${scoreColor(a.score)}"><strong>${a.score}</strong><br><span style="font-size:0.75rem;color:#888;">${escapeHtml(a.reason)}</span></td>`)
+      .join("");
+
+    return `<tr>
+      <td><strong>${escapeHtml(s.ticker)}</strong></td>
+      ${agentCells}
+      <td style="text-align:center;"><strong style="color:${scoreColor(s.averageScore)}">${s.averageScore}</strong></td>
+      <td style="text-align:center;"><span style="color:${verdictColor(s.verdict)};font-weight:bold;">${s.verdict}</span></td>
+    </tr>`;
+  }).join("\n");
+
+  const agentHeaders = record.scoreSummaries[0]?.agentScores
+    .map((a) => `<td style="text-align:center;font-size:0.8rem;">${escapeHtml(a.agentRole)}</td>`)
+    .join("") ?? "";
+
+  return `<hr>
+    <h2>Agent Scoring Matrix（Web調査後の合議評価）</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">各エージェントがWeb調査結果を踏まえて独立に10段階評価した結果です。平均7以上=強気、4〜6.9=中立、4未満=弱気。</p>
+    <table>
+      <tr>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;">銘柄</td>
+        ${agentHeaders.replace(/(<td)/g, '$1 style="background:#2a2a3e;font-weight:bold;color:#93c5fd;"')}
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">平均</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">判定</td>
+      </tr>
+      ${rows}
+    </table>`;
+}
+
 function formatDailyReportHtml(
   record: MeetingRecord,
   chartImages: ReadonlyArray<string>,
@@ -172,6 +223,8 @@ function formatDailyReportHtml(
       : "";
 
   const reportBody = markdownToHtml(record.finalSummary);
+  const scoringSection = formatScoringHtml(record);
+  const researchSection = formatResearchHtml(record);
 
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -188,9 +241,32 @@ function formatDailyReportHtml(
     ${chartHtml}
     <hr>
     ${reportBody}
+    ${scoringSection}
+    ${researchSection}
   </div>
 </body>
 </html>`;
+}
+
+function formatResearchHtml(
+  record: MeetingRecord,
+): string {
+  if (record.researchResults.length === 0) {
+    return "";
+  }
+
+  let researchHtml = "";
+  for (const r of record.researchResults) {
+    researchHtml += `<div class="agent-card" style="border-left-color: #10b981;">
+      <h4>${escapeHtml(r.ticker)}</h4>
+      ${markdownToHtml(r.research)}
+    </div>`;
+  }
+
+  return `<hr>
+    <h2>Web Research Results (Google Search Grounding)</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">エージェントが推奨した中小型株について、Google検索で最新情報を調査した結果です。</p>
+    ${researchHtml}`;
 }
 
 function formatMeetingMinutesHtml(
@@ -202,6 +278,7 @@ function formatMeetingMinutesHtml(
 
   let agentsHtml = "";
   let discussionHtml = "";
+  let postResearchReviewHtml = "";
 
   const firstRound = record.rounds[0];
   if (firstRound) {
@@ -220,7 +297,16 @@ function formatMeetingMinutesHtml(
     }
   }
 
+  for (const r of record.postResearchReviews) {
+    postResearchReviewHtml += `<div class="agent-card" style="border-left-color: #f59e0b;">
+      <h4>${escapeHtml(r.agentName)}</h4>
+      ${markdownToHtml(r.comment)}
+    </div>`;
+  }
+
   const marketDataHtml = markdownToHtml(record.marketDataSummary);
+  const researchSection = formatResearchHtml(record);
+  const scoringSection = formatScoringHtml(record);
 
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -235,14 +321,14 @@ function formatMeetingMinutesHtml(
     <h1>Investment Team Meeting Minutes - ${record.date}</h1>
     <p class="timestamp">Generated: ${timestamp}</p>
     <hr>
-    <h2>Market Data Summary</h2>
-    ${marketDataHtml}
-    <hr>
-    <h2>Agent Analysis</h2>
+    <h2>Round 1: Agent Analysis</h2>
     ${agentsHtml}
     <hr>
-    <h2>Discussion</h2>
+    <h2>Round 2: Discussion</h2>
     ${discussionHtml}
+    ${researchSection}
+    ${postResearchReviewHtml.length > 0 ? `<hr><h2>Post-Research Review (Web調査後の再評価)</h2><p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">Web調査結果を踏まえ、各エージェントが推奨を再評価した結果です。</p>${postResearchReviewHtml}` : ""}
+    ${scoringSection}
   </div>
 </body>
 </html>`;

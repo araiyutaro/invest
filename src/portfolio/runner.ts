@@ -10,6 +10,7 @@ import {
 import type { AgentProfile, AgentAnalysis, MeetingComment } from "../agents/index.js";
 import type { MarketNews } from "../data/news.js";
 import type { StockData } from "./data.js";
+import { researchStock, type StockResearch } from "../data/research.js";
 
 const analysisAgents: ReadonlyArray<AgentProfile> = [
   fundamentalsAgent,
@@ -25,6 +26,8 @@ export interface PortfolioReport {
   readonly candidateRecommendations: string;
   readonly analyses: ReadonlyArray<AgentAnalysis>;
   readonly discussion: ReadonlyArray<MeetingComment>;
+  readonly researchResults: ReadonlyArray<StockResearch>;
+  readonly postResearchReviews: ReadonlyArray<MeetingComment>;
   readonly finalReport: string;
 }
 
@@ -167,11 +170,64 @@ ${otherAnalyses}
   };
 }
 
+function buildPortfolioResearchContext(
+  researchResults: ReadonlyArray<StockResearch>,
+): string {
+  if (researchResults.length === 0) {
+    return "";
+  }
+
+  const researchSection = researchResults
+    .map((r) => `### ${r.ticker}\n${r.research}`)
+    .join("\n\n");
+
+  return `\n\n## Web調査結果（Google検索による最新情報）
+以下は保有銘柄・新規候補についてWeb検索で取得した最新の事実情報です。
+
+${researchSection}`;
+}
+
+async function getPostResearchPortfolioReview(
+  agent: AgentProfile,
+  researchResults: ReadonlyArray<StockResearch>,
+  context: string,
+  ownAnalysis: AgentAnalysis,
+): Promise<MeetingComment> {
+  const researchContext = buildPortfolioResearchContext(researchResults);
+
+  const prompt = `あなたは先ほどポートフォリオの分析を行いました。
+その後、保有銘柄と新規候補について最新のWeb検索調査が行われました。
+
+調査結果を精読し、あなたの専門的視点から以下を回答してください：
+
+1. 調査で判明した重要な新情報（好材料・悪材料）を銘柄ごとに整理
+2. 先ほどの判断（買い増し/保持/売却）を変更すべき銘柄はあるか？
+3. 特に緊急性の高い情報（決算ミス、訴訟、規制変更、大型契約など）があれば指摘
+
+## ポートフォリオデータ
+${context}
+
+## あなたの先ほどの分析
+${ownAnalysis.analysis}
+${researchContext}
+
+簡潔に（600文字以内）、最も重要なポイントに絞って回答してください。`;
+
+  const comment = await generateText(agent.systemPrompt, prompt);
+  return {
+    agentId: agent.id,
+    agentName: agent.name,
+    comment,
+  };
+}
+
 async function generatePortfolioFinalReport(
   analyses: ReadonlyArray<AgentAnalysis>,
   discussion: ReadonlyArray<MeetingComment>,
   context: string,
   candidateRecommendations: string,
+  researchResults: ReadonlyArray<StockResearch>,
+  postResearchReviews: ReadonlyArray<MeetingComment>,
 ): Promise<string> {
   const analysisContent = analyses
     .map((a) => `### ${a.agentRole}（${a.agentName}）\n${a.analysis}`)
@@ -181,11 +237,20 @@ async function generatePortfolioFinalReport(
     .map((d) => `**${d.agentName}**: ${d.comment}`)
     .join("\n\n");
 
+  const researchContext = buildPortfolioResearchContext(researchResults);
+
+  const postResearchContent = postResearchReviews.length > 0
+    ? `\n\n## Web調査後の再評価\n${postResearchReviews.map((r) => `**${r.agentName}**: ${r.comment}`).join("\n\n")}`
+    : "";
+
   const prompt = `以下は保有ポートフォリオに対する各専門家の分析とディスカッションです。
 これらを統合し、投資家向けの最終ポートフォリオレポートを作成してください。
 
+重要: Web調査結果と再評価が提供されています。最新のニュースや材料を必ず最終判断に反映してください。
+
 ## ポートフォリオデータ
 ${context}
+${researchContext}
 
 ## 本日のデイリーレポートからの新規組み入れ候補
 ${candidateRecommendations}
@@ -195,6 +260,7 @@ ${analysisContent}
 
 ## ディスカッション
 ${discussionContent}
+${postResearchContent}
 
 以下の構成で最終レポートを作成してください。
 重要: テーブルは使わないでください。箇条書きリスト形式で記述してください。
@@ -238,15 +304,29 @@ export async function runPortfolioMeeting(
     ctx.stocks,
   );
 
-  console.log("  Portfolio Round 1: 各エージェントがポートフォリオを分析中...");
+  // Web調査を最初に実施: 保有銘柄すべての最新情報を取得
+  console.log("  Portfolio Research: 保有銘柄のWeb調査中...");
+  const holdingTickers = ctx.stocks.map((s) => s.symbol);
+  const researchResults = await Promise.all(
+    holdingTickers.map((ticker) => researchStock(ticker)),
+  );
+  console.log(`  -> ${researchResults.length}件の銘柄調査完了`);
+
+  // Web調査結果を含むコンテキストを構築
+  const researchContext = buildPortfolioResearchContext(researchResults);
+  const contextWithResearch = `${context}${researchContext}`;
+
+  // Round 1: Web調査結果を踏まえた上で分析
+  console.log("  Portfolio Round 1: 各エージェントがポートフォリオを分析中（Web調査結果込み）...");
   const analyses = await Promise.all(
-    analysisAgents.map((agent) => getPortfolioAnalysis(agent, context)),
+    analysisAgents.map((agent) => getPortfolioAnalysis(agent, contextWithResearch)),
   );
 
+  // Round 2: ディスカッション
   console.log("  Portfolio Round 2: ディスカッション中...");
   const discussion = await Promise.all(
     analysisAgents.map((agent) =>
-      getPortfolioDiscussion(agent, analyses, context),
+      getPortfolioDiscussion(agent, analyses, contextWithResearch),
     ),
   );
 
@@ -254,8 +334,10 @@ export async function runPortfolioMeeting(
   const finalReport = await generatePortfolioFinalReport(
     analyses,
     discussion,
-    context,
+    contextWithResearch,
     candidateRecommendations,
+    researchResults,
+    [],
   );
 
   return {
@@ -264,6 +346,8 @@ export async function runPortfolioMeeting(
     candidateRecommendations,
     analyses,
     discussion,
+    researchResults,
+    postResearchReviews: [],
     finalReport,
   };
 }
