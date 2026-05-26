@@ -18,7 +18,7 @@ export async function generateText(
   userMessage: string,
 ): Promise<string> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-3.1-pro-preview",
+    model: "gemini-3.5-flash",
     systemInstruction: systemPrompt,
   });
 
@@ -32,7 +32,7 @@ export async function generateChat(
   userMessage: string,
 ): Promise<string> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-3.1-pro-preview",
+    model: "gemini-3.5-flash",
     systemInstruction: systemPrompt,
   });
 
