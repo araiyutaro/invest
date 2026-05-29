@@ -1,4 +1,4 @@
-import { generateText } from "../gemini.js";
+import { generateText, generateTextLight } from "../gemini.js";
 import {
   fundamentalsAgent,
   tenbaggerAgent,
@@ -76,7 +76,7 @@ ${dailyReportSummary}
 
 該当する候補が無い場合は「本日は新規組み入れ候補なし」とその理由を記述してください。`;
 
-  return generateText(moderatorAgent.systemPrompt, prompt);
+  return generateTextLight(moderatorAgent.systemPrompt, prompt);
 }
 
 function buildPortfolioContext(ctx: PortfolioContext): string {

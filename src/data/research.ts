@@ -48,7 +48,7 @@ export async function extractAndResearchStocks(
   analyses: ReadonlyArray<string>,
 ): Promise<ReadonlyArray<StockResearch>> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-flash-lite",
   });
 
   const combinedAnalyses = analyses.join("\n\n---\n\n");

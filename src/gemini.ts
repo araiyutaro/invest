@@ -8,6 +8,11 @@ if (!apiKey) {
 
 const genAI = new GoogleGenerativeAI(apiKey);
 
+// Heavy analysis: agent analysis, final reports, discussion
+const MODEL_HEAVY = "gemini-3.5-flash";
+// Light tasks: extraction, scoring, news summarization
+const MODEL_LIGHT = "gemini-2.5-flash-lite";
+
 export interface ChatMessage {
   readonly role: "user" | "model";
   readonly parts: ReadonlyArray<{ readonly text: string }>;
@@ -18,7 +23,20 @@ export async function generateText(
   userMessage: string,
 ): Promise<string> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-3.5-flash",
+    model: MODEL_HEAVY,
+    systemInstruction: systemPrompt,
+  });
+
+  const result = await model.generateContent(userMessage);
+  return result.response.text();
+}
+
+export async function generateTextLight(
+  systemPrompt: string,
+  userMessage: string,
+): Promise<string> {
+  const model = genAI.getGenerativeModel({
+    model: MODEL_LIGHT,
     systemInstruction: systemPrompt,
   });
 
@@ -32,7 +50,7 @@ export async function generateChat(
   userMessage: string,
 ): Promise<string> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-3.5-flash",
+    model: MODEL_HEAVY,
     systemInstruction: systemPrompt,
   });
 

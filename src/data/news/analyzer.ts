@@ -1,4 +1,4 @@
-import { generateText } from "../../gemini.js";
+import { generateTextLight } from "../../gemini.js";
 import type { RawNewsArticle, MarketNews } from "./types.js";
 import type { FinnhubNews } from "./finnhub.js";
 
@@ -86,7 +86,7 @@ export async function generateAllAnalyses(
       try {
         const articleText = formatArticlesForPrompt(articles);
         const fullPrompt = `${prompt}\n\n--- 以下がニュース記事です ---\n\n${articleText}`;
-        const analysis = await generateText(SYSTEM_PROMPT, fullPrompt);
+        const analysis = await generateTextLight(SYSTEM_PROMPT, fullPrompt);
         return { key, analysis };
       } catch (error) {
         console.error(`Failed to analyze ${key}:`, error);

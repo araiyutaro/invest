@@ -1,4 +1,4 @@
-import { generateText } from "../gemini.js";
+import { generateText, generateTextLight } from "../gemini.js";
 import {
   fundamentalsAgent,
   tenbaggerAgent,
@@ -200,7 +200,7 @@ TICKER|スコア(1-10の整数)|理由(30文字以内)
 AAPL|6|好決算だがバリュエーション高め
 7203.T|8|EV戦略転換と円安で業績上振れ期待`;
 
-  const result = await generateText(agent.systemPrompt, prompt);
+  const result = await generateTextLight(agent.systemPrompt, prompt);
 
   const scores: AgentStockScore[] = result
     .split("\n")
