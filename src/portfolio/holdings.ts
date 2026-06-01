@@ -15,4 +15,6 @@ export const PORTFOLIO_HOLDINGS: ReadonlyArray<PortfolioHolding> = [
   { symbol: "8522.T", name: "The Bank of Nagoya", nameJa: "名古屋銀行", sector: "Financials" },
   { symbol: "5885.T", name: "GDEP Advance", nameJa: "ジーデップ・アドバンス", sector: "Technology" },
   { symbol: "5576.T", name: "O.B.System", nameJa: "オービーシステム", sector: "Technology" },
+  { symbol: "7711.T", name: "Sukagawa Electric", nameJa: "助川電気工業", sector: "Industrials" },
+  { symbol: "NXT", name: "Nextracker", nameJa: "ネクストラッカー", sector: "Energy" },
 ] as const;
