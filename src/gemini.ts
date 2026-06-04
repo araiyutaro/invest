@@ -9,7 +9,7 @@ if (!apiKey) {
 const genAI = new GoogleGenerativeAI(apiKey);
 
 // Heavy analysis: agent analysis, final reports, discussion
-const MODEL_HEAVY = "gemini-3.5-flash";
+const MODEL_HEAVY = "gemini-3.1-flash-lite";
 // Light tasks: extraction, scoring, news summarization
 const MODEL_LIGHT = "gemini-2.5-flash-lite";
 
