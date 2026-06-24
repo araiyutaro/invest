@@ -2,11 +2,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import type { MeetingResult, WebSearchResult, ReevaluationOutput } from "../meeting/types.js";
 
 vi.mock("node:fs/promises", () => ({
-  readFile: vi.fn(),
+  readFile: vi.fn().mockRejectedValue(new Error("ENOENT")),
   writeFile: vi.fn().mockResolvedValue(undefined),
   mkdir: vi.fn().mockResolvedValue(undefined),
-  readdir: vi.fn(),
+  readdir: vi.fn().mockResolvedValue([]),
 }));
+
+vi.spyOn(process, "exit").mockImplementation((() => {}) as never);
 
 const validMeetingResult: MeetingResult = {
   date: "2026-06-24",
