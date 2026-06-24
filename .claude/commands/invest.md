@@ -899,12 +899,306 @@ try {
 
 ---
 
-## Step 3: レポート生成（Phase 3 で実装予定）
+## Step 3: WebSearch リサーチ & レポート生成
 
-<!-- Phase 3 で実装予定:
-- モデレーターが5アナリストの分析結果を統合
-- Bloomberg風HTMLダークテーマレポートを生成
-- reports/YYYY-MM-DD/ に出力
--->
+---
 
-現在 Phase 1 のため、レポート生成は未実装です。Phase 3 完了後に有効化されます。
+### Step 3.0: 準備
+
+「Step 3: WebSearchリサーチ & レポート生成を開始します...」とユーザーに表示してください。
+
+まず中間ファイル用のディレクトリを作成してください:
+
+```bash
+mkdir -p /Users/arai/invest/tmp/websearch /Users/arai/invest/tmp/reeval
+```
+
+次に、以下のファイルを Read ツールで読み込んでください:
+
+- `/Users/arai/invest/tmp/meeting-result.json` — `highlightedStocks` 配列を取得
+
+`highlightedStocks` 配列が0件の場合は「注目銘柄が0件のためWebSearchリサーチをスキップします。」と表示し、Step 3c へジャンプしてください。
+
+---
+
+### Step 3a: WebSearch リサーチ（銘柄ごと並列 Agent）
+
+「WebSearchリサーチ: N銘柄を調査中...」（N は highlightedStocks の件数）とユーザーに表示してください。
+
+`highlightedStocks` の各銘柄に対して、**以下の Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
+
+各銘柄について以下の設定で Agent を呼び出してください:
+- name: `websearch-{ticker}`（例: websearch-AAPL、ティッカーの `/` は `-` に置換。例: BRK/B → websearch-BRK-B）
+- model: `sonnet`
+- 以下の prompt を使用:
+
+```
+以下の銘柄について、最新の定性情報をリサーチしてください。
+
+## 調査対象銘柄
+ティッカー: {ticker}
+モデレーター評価: {verdict}（スコア: {averageScore}/10）
+推薦理由: {summary}
+
+## 調査手順
+1. WebSearch ツールで以下のクエリを2-3回実行してください:
+   - "{ticker} latest news 2026"
+   - "{ticker} earnings growth outlook"
+   - "{ticker} risk concerns 2026"
+2. 重要な記事を2-3件選択し、WebFetch ツールで詳細内容を取得してください
+3. 定性情報のみを抽出してください（株価・財務数値等の定量データはリサーチ対象外です。Yahoo Finance APIで別途取得済みのため不要）
+
+## 出力形式（JSONのみ出力、コードブロック不要）
+{
+  "ticker": "{ticker}",
+  "researchSummary": "200文字以内の総合評価",
+  "positiveFindings": ["ポジティブな発見1", "ポジティブな発見2"],
+  "negativeFindings": ["ネガティブな発見1", "ネガティブな発見2"],
+  "keyArticles": [
+    {"title": "記事タイトル", "summary": "記事要約（100文字以内）"}
+  ],
+  "researchedAt": "ISO8601タイムスタンプ（例: 2026-06-24T08:00:00Z）"
+}
+```
+
+各 Agent の結果を以下のファイルに保存してください（ティッカーの `/` は `-` に置換）:
+- `websearch-{ticker}` の出力 → `/Users/arai/invest/tmp/websearch/{ticker}.json`
+
+出力が有効なJSONでない場合は、以下のフォールバックJSONを保存してください:
+```json
+{"ticker": "...", "researchSummary": "リサーチ失敗", "positiveFindings": [], "negativeFindings": [], "keyArticles": [], "researchedAt": "..."}
+```
+
+「WebSearch完了: N/{total}銘柄リサーチ成功」とユーザーに表示してください。
+
+---
+
+### Step 3b: 再評価ラウンド（5アナリスト並列 Agent）
+
+「再評価ラウンド: 5アナリストがWebリサーチ結果を評価中...」とユーザーに表示してください。
+
+まず以下のファイルを Read ツールで読み込んでください:
+- `/Users/arai/invest/tmp/websearch/` 配下の全JSONファイル（WebSearch結果）
+- `/Users/arai/invest/tmp/round-3/fundamentals.json`
+- `/Users/arai/invest/tmp/round-3/tenbagger.json`
+- `/Users/arai/invest/tmp/round-3/macro.json`
+- `/Users/arai/invest/tmp/round-3/technical.json`
+- `/Users/arai/invest/tmp/round-3/risk-manager.json`
+
+Step 2.0 で読み込んだ各エージェントの systemPrompt を再利用してください（再読み込み不要）。
+
+**以下5つの Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
+
+**Agent 1: ファンダメンタルズアナリスト 再評価**
+- name: `fundamentals-reeval`
+- model: `sonnet`
+- prompt:
+  - `src/agents/fundamentals.ts` から取得した `systemPrompt` の全文
+  - 以下の指示:
+    ```
+    WebSearchリサーチ結果を踏まえて、各銘柄の評価を再提出してください。
+
+    ## WebSearch リサーチ結果
+    [tmp/websearch/ の全JSONファイルの内容]
+
+    ## あなたのRound 3 スコア（参考）
+    [tmp/round-3/fundamentals.json の scores フィールドの内容]
+
+    見解が変わった場合はその理由を明記してください。変化がない場合は「変化なし」と記載してください。
+
+    以下のJSONフォーマットのみを出力してください（コードブロック不要）:
+    {
+      "agentId": "fundamentals",
+      "agentRole": "ファンダメンタルズアナリスト",
+      "reevaluations": [
+        {
+          "ticker": "AAPL",
+          "originalScore": 7,
+          "revisedScore": 8,
+          "comment": "WebSearch結果を踏まえたコメント（100文字以内）",
+          "changed": true
+        }
+      ]
+    }
+    ```
+
+**Agent 2: テンバガーハンター 再評価**
+- name: `tenbagger-reeval`
+- model: `sonnet`
+- prompt:
+  - `src/agents/tenbagger.ts` から取得した `systemPrompt` の全文
+  - 以下の指示:
+    ```
+    WebSearchリサーチ結果を踏まえて、各銘柄の評価を再提出してください。
+
+    ## WebSearch リサーチ結果
+    [tmp/websearch/ の全JSONファイルの内容]
+
+    ## あなたのRound 3 スコア（参考）
+    [tmp/round-3/tenbagger.json の scores フィールドの内容]
+
+    見解が変わった場合はその理由を明記してください。変化がない場合は「変化なし」と記載してください。
+
+    以下のJSONフォーマットのみを出力してください（コードブロック不要）:
+    {
+      "agentId": "tenbagger",
+      "agentRole": "テンバガーハンター",
+      "reevaluations": [
+        {
+          "ticker": "AAPL",
+          "originalScore": 7,
+          "revisedScore": 8,
+          "comment": "WebSearch結果を踏まえたコメント（100文字以内）",
+          "changed": true
+        }
+      ]
+    }
+    ```
+
+**Agent 3: マクロエコノミスト 再評価**
+- name: `macro-reeval`
+- model: `sonnet`
+- prompt:
+  - `src/agents/macro.ts` から取得した `systemPrompt` の全文
+  - 以下の指示:
+    ```
+    WebSearchリサーチ結果を踏まえて、各銘柄の評価を再提出してください。
+
+    ## WebSearch リサーチ結果
+    [tmp/websearch/ の全JSONファイルの内容]
+
+    ## あなたのRound 3 スコア（参考）
+    [tmp/round-3/macro.json の scores フィールドの内容]
+
+    見解が変わった場合はその理由を明記してください。変化がない場合は「変化なし」と記載してください。
+
+    以下のJSONフォーマットのみを出力してください（コードブロック不要）:
+    {
+      "agentId": "macro",
+      "agentRole": "マクロエコノミスト",
+      "reevaluations": [
+        {
+          "ticker": "AAPL",
+          "originalScore": 7,
+          "revisedScore": 8,
+          "comment": "WebSearch結果を踏まえたコメント（100文字以内）",
+          "changed": true
+        }
+      ]
+    }
+    ```
+
+**Agent 4: テクニカルストラテジスト 再評価**
+- name: `technical-reeval`
+- model: `sonnet`
+- prompt:
+  - `src/agents/technical.ts` から取得した `systemPrompt` の全文
+  - 以下の指示:
+    ```
+    WebSearchリサーチ結果を踏まえて、各銘柄の評価を再提出してください。
+
+    ## WebSearch リサーチ結果
+    [tmp/websearch/ の全JSONファイルの内容]
+
+    ## あなたのRound 3 スコア（参考）
+    [tmp/round-3/technical.json の scores フィールドの内容]
+
+    見解が変わった場合はその理由を明記してください。変化がない場合は「変化なし」と記載してください。
+
+    以下のJSONフォーマットのみを出力してください（コードブロック不要）:
+    {
+      "agentId": "technical",
+      "agentRole": "テクニカルストラテジスト",
+      "reevaluations": [
+        {
+          "ticker": "AAPL",
+          "originalScore": 7,
+          "revisedScore": 8,
+          "comment": "WebSearch結果を踏まえたコメント（100文字以内）",
+          "changed": true
+        }
+      ]
+    }
+    ```
+
+**Agent 5: リスクマネージャー 再評価**
+- name: `risk-manager-reeval`
+- model: `sonnet`
+- prompt:
+  - `src/agents/risk-manager.ts` から取得した `systemPrompt` の全文
+  - 以下の指示:
+    ```
+    WebSearchリサーチ結果を踏まえて、各銘柄の評価を再提出してください。
+
+    ## WebSearch リサーチ結果
+    [tmp/websearch/ の全JSONファイルの内容]
+
+    ## あなたのRound 3 スコア（参考）
+    [tmp/round-3/risk-manager.json の scores フィールドの内容]
+
+    見解が変わった場合はその理由を明記してください。変化がない場合は「変化なし」と記載してください。
+
+    以下のJSONフォーマットのみを出力してください（コードブロック不要）:
+    {
+      "agentId": "risk-manager",
+      "agentRole": "リスクマネージャー",
+      "reevaluations": [
+        {
+          "ticker": "AAPL",
+          "originalScore": 7,
+          "revisedScore": 8,
+          "comment": "WebSearch結果を踏まえたコメント（100文字以内）",
+          "changed": true
+        }
+      ]
+    }
+    ```
+
+各 Agent の結果を以下のファイルに保存してください:
+- `fundamentals-reeval` の出力 → `/Users/arai/invest/tmp/reeval/fundamentals.json`
+- `tenbagger-reeval` の出力 → `/Users/arai/invest/tmp/reeval/tenbagger.json`
+- `macro-reeval` の出力 → `/Users/arai/invest/tmp/reeval/macro.json`
+- `technical-reeval` の出力 → `/Users/arai/invest/tmp/reeval/technical.json`
+- `risk-manager-reeval` の出力 → `/Users/arai/invest/tmp/reeval/risk-manager.json`
+
+出力が有効なJSONでない場合は、以下のフォールバックJSONを保存してください:
+```json
+{"agentId": "...", "agentRole": "...", "reevaluations": []}
+```
+
+「再評価完了: N/5 アナリスト成功」とユーザーに表示してください。
+
+---
+
+### Step 3c: HTMLレポート生成
+
+「Bloomberg風HTMLレポートを生成中...」とユーザーに表示してください。
+
+以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/generate-report.ts
+```
+
+完了後、以下のコマンドで生成結果を確認してユーザーに表示してください:
+
+```bash
+cd /Users/arai/invest && node -e "
+const fs = require('fs');
+try {
+  const result = JSON.parse(fs.readFileSync('tmp/meeting-result.json', 'utf-8'));
+  const date = result.date;
+  const reportPath = 'reports/' + date + '/daily-report.html';
+  const minutesPath = 'reports/' + date + '/meeting-minutes.html';
+  console.log('レポート生成完了:');
+  console.log('  日付:', date);
+  console.log('  Daily Report:', fs.existsSync(reportPath) ? reportPath + ' ✓' : reportPath + ' (未生成)');
+  console.log('  Meeting Minutes:', fs.existsSync(minutesPath) ? minutesPath + ' ✓' : minutesPath + ' (未生成)');
+  console.log('  注目銘柄数:', result.highlightedStocks?.length ?? 0);
+} catch(e) {
+  console.log('確認エラー:', e.message);
+}
+"
+```
+
+「レポート生成完了: reports/{date}/daily-report.html」とユーザーに表示してください。
