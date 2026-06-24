@@ -23,7 +23,11 @@
   3. 各アナリストには自分の役割に必要なデータのみが絞り込まれて渡される
   4. パイプラインの各ステップ（データ収集完了、分析開始等）の進捗がユーザーに表示される
   5. データ収集完了を確認してからサブエージェントがスポーンされる（実行順序が保証される）
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — collect-data.ts TDD実装 (DATA-01, DATA-02, SKILL-03)
+- [ ] 01-02-PLAN.md — /invest スキルコマンド作成 (SKILL-01, SKILL-02, SKILL-03, DATA-02)
 
 ### Phase 2: Analyst Subagents
 **Goal**: 5アナリストが並列で実行され、それぞれ定義されたJSONスキーマに従った分析結果を返し、モデレーターが統合する
@@ -63,7 +67,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Data Layer + Skill Foundation | 0/0 | Not started | - |
+| 1. Data Layer + Skill Foundation | 0/2 | Not started | - |
 | 2. Analyst Subagents | 0/0 | Not started | - |
 | 3. Report Builder + WebSearch Research | 0/0 | Not started | - |
 | 4. Gemini Cleanup | 0/0 | Not started | - |
