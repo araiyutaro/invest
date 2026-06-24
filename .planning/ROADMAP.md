@@ -35,7 +35,7 @@ Plans:
 **Requirements**: AGENT-01, AGENT-02, AGENT-03, AGENT-04, AGENT-05, AGENT-06, AGENT-07, AGENT-08
 **Success Criteria** (what must be TRUE):
   1. ファンダメンタルズ・テンバガー・マクロ・テクニカル・リスクの5アナリストが並行して実行される
-  2. 各アナリストが決められたJSONスキーマに従った構造化出力を返す（パースエラーが発生しない）
+  2. 各アナリストが決められたJSONスキーマに従った構造化出力を返す（パースエラーなし）
   3. モデレーターが5つの分析を統合し `tmp/meeting-result.json` を生成する
   4. 5アナリストの並列実行により逐次実行より分析時間が短縮される
 **Plans**: 2 plans
@@ -68,7 +68,10 @@ Plans:
   2. `src/data/charts.ts`、`src/data/research.ts`、`src/meeting/runner.ts` 等のGemini依存ファイルが削除されている
   3. `GEMINI_API_KEY` 環境変数への参照がコードベース全体から存在しない
   4. `npm install` + `/invest` 実行が完全にGemini APIなしで成功する
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 04-01-PLAN.md — Gemini依存ファイル削除・パッケージ除去・検証 (CLN-01, CLN-02, CLN-03)
 
 ## Progress
 
@@ -77,7 +80,7 @@ Plans:
 | 1. Data Layer + Skill Foundation | 2/2 | Complete   | 2026-06-24 |
 | 2. Analyst Subagents | 2/2 | Complete   | 2026-06-24 |
 | 3. Report Builder + WebSearch Research | 2/2 | Complete   | 2026-06-25 |
-| 4. Gemini Cleanup | 0/0 | Not started | - |
+| 4. Gemini Cleanup | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-06-24*
