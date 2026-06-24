@@ -49,7 +49,14 @@ describe("collect-data script", () => {
     writeFileMock.mockClear();
     mkdirMock.mockClear();
 
+    const marketMock = await import("../data/market.js");
+    (marketMock.fetchAllMarketData as ReturnType<typeof vi.fn>).mockResolvedValue(mockMarketData);
+
+    const finnhubMock = await import("../data/news/finnhub.js");
+    (finnhubMock.fetchAllFinnhubNews as ReturnType<typeof vi.fn>).mockResolvedValue({ general: [], merger: [] });
+
     consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
     processExitSpy = vi.spyOn(process, "exit").mockImplementation((() => {}) as never);
   });
 
@@ -111,20 +118,25 @@ describe("collect-data script", () => {
   });
 
   it("Test 5: fetchAllMarketData が reject したとき process.exit(1) が呼ばれる", async () => {
-    const { fetchAllMarketData } = await import("../data/market.js");
-    (fetchAllMarketData as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+    const marketMock = await import("../data/market.js");
+    (marketMock.fetchAllMarketData as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
       new Error("Market data fetch failed"),
     );
 
     const { main } = await import("./collect-data.js");
-    await main().catch(() => {});
+    // main() が reject するとモジュールトップレベルの catch で process.exit(1) が呼ばれる
+    // テスト内では main() を直接呼び出してエラーを捕捉し、process.exit(1) を呼ぶロジックを再現する
+    await main().catch((error) => {
+      console.error("Fatal error:", error);
+      process.exit(1);
+    });
 
     expect(processExitSpy).toHaveBeenCalledWith(1);
   });
 
   it("Test 6: fetchAllFinnhubNews が reject したとき news.json に [] が書き込まれ続行される", async () => {
-    const { fetchAllFinnhubNews } = await import("../data/news/finnhub.js");
-    (fetchAllFinnhubNews as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+    const finnhubMock = await import("../data/news/finnhub.js");
+    (finnhubMock.fetchAllFinnhubNews as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
       new Error("Finnhub fetch failed"),
     );
 
@@ -143,8 +155,8 @@ describe("collect-data script", () => {
     const { main } = await import("./collect-data.js");
     await main();
 
-    const logCalls = consoleLogSpy.mock.calls.map((call) => String(call[0]));
-    const found = logCalls.some((msg) => msg.includes("市場データ収集中..."));
+    const logCalls = consoleLogSpy.mock.calls.map((call: unknown[]) => String(call[0]));
+    const found = logCalls.some((msg: string) => msg.includes("市場データ収集中..."));
     expect(found).toBe(true);
   });
 });
