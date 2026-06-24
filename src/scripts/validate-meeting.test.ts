@@ -1,7 +1,26 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 
+const validMeetingResultJson = JSON.stringify({
+  date: "2026-06-24",
+  generatedAt: "2026-06-24T08:00:00.000Z",
+  marketOverview: {
+    summary: "市場は上昇基調",
+    trend: "上昇",
+    keyIndices: [{ name: "S&P 500", changePercent: 0.5 }],
+  },
+  sectorRecommendations: [
+    { rank: 1, sector: "テクノロジー", rationale: "AI需要拡大", outlook: "強気" },
+  ],
+  highlightedStocks: [],
+  riskWarnings: [],
+  actionItems: [],
+  weeklyEvents: [],
+  indexInvestorAdvice: "積立継続推奨",
+  roundSummary: { round1Count: 5, round2Count: 5, round3Count: 5, scoredTickers: [] },
+});
+
 vi.mock("node:fs/promises", () => ({
-  readFile: vi.fn(),
+  readFile: vi.fn().mockResolvedValue(validMeetingResultJson),
 }));
 
 const validMeetingResult = {
