@@ -53,7 +53,11 @@ Plans:
   2. レポートに5アナリストの分析とモデレーターの統合見解が含まれている
   3. 注目銘柄に対してWebSearchで最新ニュース・定性情報が取得され分析に反映される
   4. WebFetchで詳細記事が取得でき、ティッカーシンボルの定量データ（株価等）はYahoo Finance APIを使用する
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — WebSearch/再評価スキーマ + invest.md Step 3 オーケストレーション (RSRCH-01, RSRCH-02)
+- [ ] 03-02-PLAN.md — Bloomberg風HTMLレポートジェネレータ TDD実装 (RPT-01, RPT-02)
 
 ### Phase 4: Gemini Cleanup
 **Goal**: Gemini APIに関連するコード・パッケージ・環境変数がコードベースから完全に除去される
@@ -72,7 +76,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Data Layer + Skill Foundation | 2/2 | Complete   | 2026-06-24 |
 | 2. Analyst Subagents | 2/2 | Complete   | 2026-06-24 |
-| 3. Report Builder + WebSearch Research | 0/0 | Not started | - |
+| 3. Report Builder + WebSearch Research | 0/2 | Planning complete | - |
 | 4. Gemini Cleanup | 0/0 | Not started | - |
 
 ---
