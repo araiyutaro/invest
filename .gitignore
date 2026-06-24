@@ -23,3 +23,6 @@ Thumbs.db
 
 # launchd (machine-specific)
 *.plist
+
+# Temporary data files (portfolio data must not be tracked — T-01-01)
+tmp/
