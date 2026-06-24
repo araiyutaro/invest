@@ -7,7 +7,7 @@
 ## Phases
 
 - [x] **Phase 1: Data Layer + Skill Foundation** - データ収集スクリプト整備とスキルオーケストレーター構築 (completed 2026-06-24)
-- [ ] **Phase 2: Analyst Subagents** - 5アナリスト+モデレーターのClaude Codeサブエージェント実装
+- [x] **Phase 2: Analyst Subagents** - 5アナリスト+モデレーターのClaude Codeサブエージェント実装 (completed 2026-06-24)
 - [ ] **Phase 3: Report Builder + WebSearch Research** - レポート生成統合とWebSearchリサーチ機能追加
 - [ ] **Phase 4: Gemini Cleanup** - Gemini API依存の完全除去とコードベース整理
 
@@ -42,7 +42,7 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — ミーティング出力スキーマ + Zodバリデーション (AGENT-07)
-- [ ] 02-02-PLAN.md — invest.md Step 2 3ラウンド制ミーティング実装 (AGENT-01〜08)
+- [x] 02-02-PLAN.md — invest.md Step 2 3ラウンド制ミーティング実装 (AGENT-01〜08)
 
 ### Phase 3: Report Builder + WebSearch Research
 **Goal**: 全パイプラインが `/invest` 一発で完結し、HTMLレポートが生成され、注目銘柄の最新情報がWebSearchで補完される
@@ -71,7 +71,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Data Layer + Skill Foundation | 2/2 | Complete   | 2026-06-24 |
-| 2. Analyst Subagents | 1/2 | In Progress|  |
+| 2. Analyst Subagents | 2/2 | Complete   | 2026-06-24 |
 | 3. Report Builder + WebSearch Research | 0/0 | Not started | - |
 | 4. Gemini Cleanup | 0/0 | Not started | - |
 
