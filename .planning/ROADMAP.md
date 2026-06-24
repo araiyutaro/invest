@@ -6,7 +6,7 @@
 
 ## Phases
 
-- [ ] **Phase 1: Data Layer + Skill Foundation** - データ収集スクリプト整備とスキルオーケストレーター構築
+- [x] **Phase 1: Data Layer + Skill Foundation** - データ収集スクリプト整備とスキルオーケストレーター構築 (completed 2026-06-24)
 - [ ] **Phase 2: Analyst Subagents** - 5アナリスト+モデレーターのClaude Codeサブエージェント実装
 - [ ] **Phase 3: Report Builder + WebSearch Research** - レポート生成統合とWebSearchリサーチ機能追加
 - [ ] **Phase 4: Gemini Cleanup** - Gemini API依存の完全除去とコードベース整理
@@ -26,8 +26,8 @@
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — collect-data.ts TDD実装 (DATA-01, DATA-02, SKILL-03)
-- [ ] 01-02-PLAN.md — /invest スキルコマンド作成 (SKILL-01, SKILL-02, SKILL-03, DATA-02)
+- [x] 01-01-PLAN.md — collect-data.ts TDD実装 (DATA-01, DATA-02, SKILL-03)
+- [x] 01-02-PLAN.md — /invest スキルコマンド作成 (SKILL-01, SKILL-02, SKILL-03, DATA-02)
 
 ### Phase 2: Analyst Subagents
 **Goal**: 5アナリストが並列で実行され、それぞれ定義されたJSONスキーマに従った分析結果を返し、モデレーターが統合する
@@ -67,7 +67,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Data Layer + Skill Foundation | 0/2 | Not started | - |
+| 1. Data Layer + Skill Foundation | 2/2 | Complete   | 2026-06-24 |
 | 2. Analyst Subagents | 0/0 | Not started | - |
 | 3. Report Builder + WebSearch Research | 0/0 | Not started | - |
 | 4. Gemini Cleanup | 0/0 | Not started | - |
