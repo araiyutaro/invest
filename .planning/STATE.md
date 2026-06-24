@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Claude Code Migration
 status: executing
-last_updated: "2026-06-24T09:00:00.000Z"
-last_activity: 2026-06-24 -- Phase 03 Plan 01 executed (types + schemas + orchestration)
+last_updated: "2026-06-24T09:45:00.000Z"
+last_activity: 2026-06-24 -- Phase 03 Plan 02 executed (Bloomberg-style HTML report generator TDD)
 progress:
   total_phases: 4
-  completed_phases: 2
-  total_plans: 6
-  completed_plans: 5
-  percent: 58
+  completed_phases: 3
+  total_plans: 7
+  completed_plans: 7
+  percent: 83
 ---
 
 # Project State
@@ -18,9 +18,9 @@ progress:
 ## Current Position
 
 Phase: 3
-Plan: 01 complete, 02 next
+Plan: 02 complete, Phase 03 all plans done
 Status: Executing
-Last activity: 2026-06-24 -- Phase 03 Plan 01 executed (types + schemas + orchestration)
+Last activity: 2026-06-24 -- Phase 03 Plan 02 executed (Bloomberg-style HTML report generator TDD)
 
 ## Progress Bar
 
@@ -50,6 +50,9 @@ Phase 4: Gemini Cleanup
 - **WebSearch Agent**: 銘柄ごとに並列 sonnet Agent でスポーン（D-06）
 - **再評価ラウンド**: 5アナリスト並列 sonnet Agent（D-07）、再評価スコアは tmp/reeval/ にのみ保存
 - **ティッカーサニタイズ**: ファイル名で / を - に置換（BRK/B → BRK-B）
+- **generateHtml独立スクリプト**: v1.0 generator.ts を import せず独立スクリプト化（D-08）
+- **reports/ 出力先**: docs/ から reports/YYYY-MM-DD/ に変更（D-09）
+- **escapeHtml全適用**: XSS防止のため全テキストコンテンツをescapeHtml経由で出力（T-03-06 mitigate）
 
 ### Pitfalls to Avoid
 
@@ -63,4 +66,4 @@ None
 
 ## Session Continuity
 
-Next action: `/gsd-execute-phase 3 02` to execute Phase 3 Plan 02 (Bloomberg風HTMLレポートジェネレータ TDD実装)
+Next action: `/gsd-execute-phase 4` to execute Phase 4 (Gemini Cleanup)

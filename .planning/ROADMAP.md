@@ -57,7 +57,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — WebSearch/再評価スキーマ + invest.md Step 3 オーケストレーション (RSRCH-01, RSRCH-02)
-- [ ] 03-02-PLAN.md — Bloomberg風HTMLレポートジェネレータ TDD実装 (RPT-01, RPT-02)
+- [x] 03-02-PLAN.md — Bloomberg風HTMLレポートジェネレータ TDD実装 (RPT-01, RPT-02)
 
 ### Phase 4: Gemini Cleanup
 **Goal**: Gemini APIに関連するコード・パッケージ・環境変数がコードベースから完全に除去される
