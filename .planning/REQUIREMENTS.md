@@ -70,32 +70,32 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SKILL-01 | — | Pending |
-| SKILL-02 | — | Pending |
-| SKILL-03 | — | Pending |
-| AGENT-01 | — | Pending |
-| AGENT-02 | — | Pending |
-| AGENT-03 | — | Pending |
-| AGENT-04 | — | Pending |
-| AGENT-05 | — | Pending |
-| AGENT-06 | — | Pending |
-| AGENT-07 | — | Pending |
-| AGENT-08 | — | Pending |
-| DATA-01 | — | Pending |
-| DATA-02 | — | Pending |
-| RSRCH-01 | — | Pending |
-| RSRCH-02 | — | Pending |
-| RPT-01 | — | Pending |
-| RPT-02 | — | Pending |
-| CLN-01 | — | Pending |
-| CLN-02 | — | Pending |
-| CLN-03 | — | Pending |
+| SKILL-01 | Phase 1 | Pending |
+| SKILL-02 | Phase 1 | Pending |
+| SKILL-03 | Phase 1 | Pending |
+| AGENT-01 | Phase 2 | Pending |
+| AGENT-02 | Phase 2 | Pending |
+| AGENT-03 | Phase 2 | Pending |
+| AGENT-04 | Phase 2 | Pending |
+| AGENT-05 | Phase 2 | Pending |
+| AGENT-06 | Phase 2 | Pending |
+| AGENT-07 | Phase 2 | Pending |
+| AGENT-08 | Phase 2 | Pending |
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| RSRCH-01 | Phase 3 | Pending |
+| RSRCH-02 | Phase 3 | Pending |
+| RPT-01 | Phase 3 | Pending |
+| RPT-02 | Phase 3 | Pending |
+| CLN-01 | Phase 4 | Pending |
+| CLN-02 | Phase 4 | Pending |
+| CLN-03 | Phase 4 | Pending |
 
 **Coverage:**
 - v2.0 requirements: 20 total
-- Mapped to phases: 0
-- Unmapped: 20 ⚠️
+- Mapped to phases: 20
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-06-24*
-*Last updated: 2026-06-24 after initial definition*
+*Last updated: 2026-06-24 — Phase mappings added after roadmap creation*
