@@ -406,15 +406,15 @@ function formatWebResearchHtml(researchResults: WebResearchResult[]): string {
 
 ## Open Questions
 
-1. **再評価スコアのHTMLレポートへの反映方法**
+1. **再評価スコアのHTMLレポートへの反映方法** (RESOLVED)
    - What we know: `meeting-result.json` にはRound 3の `agentScores` が入っている。再評価後スコアは `tmp/reeval/` に保存予定
-   - What's unclear: HTMLレポートで表示するスコアをRound 3のもので固定するか、再評価後に更新するか（Claude's Discretion）
-   - Recommendation: Round 3スコアをベースライン、再評価スコアを「Web調査後の変化」として2テーブルで表示する。変更がない銘柄は1テーブルのみ
+   - Resolution: Round 3スコアリングマトリクスと、再評価ラウンド結果を別セクションで表示する。再評価セクションでは changed === true の銘柄のみ originalScore → revisedScore の変化を表示する（Plan 02 formatReevalHtml で実装）
 
-2. **highlightedStocks が0件の場合の動作**
+2. **highlightedStocks が0件の場合の動作** (RESOLVED)
    - What we know: D-02で「全件対象」だが、ミーティングで銘柄が0件の可能性はある
-   - What's unclear: 0件時にWebSearch/再評価ラウンドをスキップするか
-   - Recommendation: Phase 2のRound 3と同様、0件を検知してスキップメッセージを表示してHTMLレポートのみ生成する
+   - Resolution: 0件を検知してWebSearch/再評価ラウンドをスキップし、HTMLレポートのみ生成する（Plan 01 Task 2 Step 3.0 で実装）
+
+**Note:** RESEARCH.md Pattern 2 のスキーマ案（searchQueries, sentimentSignal, catalysts）は planning 段階で精緻化され、PATTERNS.md・Plan の最終スキーマ（positiveFindings, negativeFindings, keyArticles, researchedAt）が正式版。投資分析のコンテキストに適した構造に改善された。
 
 ## Sources
 

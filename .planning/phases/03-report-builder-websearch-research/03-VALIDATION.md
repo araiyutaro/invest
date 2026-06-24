@@ -38,7 +38,7 @@ created: 2026-06-24
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 03-01-01 | 01 | 1 | RSRCH-01, RSRCH-02 | unit | `npx vitest run src/meeting/schemas.test.ts` | ❌ W0 | ⬜ pending |
+| 03-01-01 | 01 | 1 | RSRCH-01, RSRCH-02 | unit | `npx tsc --noEmit` | ✅ | ⬜ pending |
 | 03-01-02 | 01 | 1 | RPT-01 | unit | `npx vitest run src/scripts/generate-report.test.ts` | ❌ W0 | ⬜ pending |
 | 03-01-03 | 01 | 1 | RPT-02 | integration | `npx vitest run src/scripts/generate-report.test.ts` | ❌ W0 | ⬜ pending |
 | 03-02-01 | 02 | 2 | RSRCH-01, RSRCH-02, RPT-01, RPT-02 | integration | `npx vitest run` | ❌ W0 | ⬜ pending |
@@ -49,8 +49,9 @@ created: 2026-06-24
 
 ## Wave 0 Requirements
 
-- [ ] `src/scripts/generate-report.test.ts` — レポートジェネレータのユニットテスト (RPT-01, RPT-02)
-- [ ] `src/meeting/schemas.test.ts` への追加 — WebSearchResult, ReevalOutput スキーマバリデーションテスト (RSRCH-01, RSRCH-02)
+- [ ] `src/scripts/generate-report.test.ts` — レポートジェネレータのユニットテスト (RPT-01, RPT-02, RSRCH-01, RSRCH-02)
+
+*Schema validation (WebSearchResult, ReevaluationOutput) は generate-report.test.ts 内で統合テスト。separate schemas.test.ts は不要 — Plan 01 の verify は `npx tsc --noEmit` で型整合性を担保。*
 
 *Existing vitest infrastructure covers test framework — no additional install needed.*
 
