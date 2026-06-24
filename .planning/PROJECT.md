@@ -37,7 +37,7 @@
 
 ### Active
 
-- [ ] Claude Codeエージェントへの分析機能移行
+- [x] Claude Codeエージェントへの分析機能移行 — Validated in Phase 2: Analyst Subagents (5アナリスト並列3ラウンド+モデレーター統合)
 - [x] スキルコマンド（/invest）による実行 — Validated in Phase 1: Data Layer + Skill Foundation
 - [ ] Gemini API依存の除去
 
@@ -91,4 +91,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-24 after Phase 1 (Data Layer + Skill Foundation) completion*
+*Last updated: 2026-06-24 after Phase 2 (Analyst Subagents) completion*
