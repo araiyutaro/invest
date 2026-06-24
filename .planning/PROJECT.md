@@ -39,6 +39,7 @@
 
 - [x] Claude Codeエージェントへの分析機能移行 — Validated in Phase 2: Analyst Subagents (5アナリスト並列3ラウンド+モデレーター統合)
 - [x] スキルコマンド（/invest）による実行 — Validated in Phase 1: Data Layer + Skill Foundation
+- [x] WebSearchリサーチ + Bloomberg風HTMLレポート生成 — Validated in Phase 3: Report Builder + WebSearch Research
 - [ ] Gemini API依存の除去
 
 ### Out of Scope
@@ -91,4 +92,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-24 after Phase 2 (Analyst Subagents) completion*
+*Last updated: 2026-06-25 after Phase 3 (Report Builder + WebSearch Research) completion*
