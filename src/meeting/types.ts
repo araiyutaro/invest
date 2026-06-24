@@ -80,3 +80,27 @@ export interface MeetingResult {
     readonly scoredTickers: ReadonlyArray<string>;
   };
 }
+
+export interface WebSearchResult {
+  readonly ticker: string;
+  readonly researchSummary: string;
+  readonly positiveFindings: ReadonlyArray<string>;
+  readonly negativeFindings: ReadonlyArray<string>;
+  readonly keyArticles: ReadonlyArray<{
+    readonly title: string;
+    readonly summary: string;
+  }>;
+  readonly researchedAt: string;
+}
+
+export interface ReevaluationOutput {
+  readonly agentId: string;
+  readonly agentRole: string;
+  readonly reevaluations: ReadonlyArray<{
+    readonly ticker: string;
+    readonly originalScore: number;
+    readonly revisedScore: number;
+    readonly comment: string;
+    readonly changed: boolean;
+  }>;
+}

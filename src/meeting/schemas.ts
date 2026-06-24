@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { MeetingResult } from "./types.js";
+import type { MeetingResult, WebSearchResult, ReevaluationOutput } from "./types.js";
 
 export const stockPickSchema = z.object({
   ticker: z.string(),
@@ -98,4 +98,40 @@ export const meetingResultSchema = z.object({
 
 export function validateMeetingResult(data: unknown): MeetingResult {
   return meetingResultSchema.parse(data) as MeetingResult;
+}
+
+export const webSearchResultSchema = z.object({
+  ticker: z.string(),
+  researchSummary: z.string(),
+  positiveFindings: z.array(z.string()),
+  negativeFindings: z.array(z.string()),
+  keyArticles: z.array(
+    z.object({
+      title: z.string(),
+      summary: z.string(),
+    }),
+  ),
+  researchedAt: z.string(),
+});
+
+export const reevaluationOutputSchema = z.object({
+  agentId: z.string(),
+  agentRole: z.string(),
+  reevaluations: z.array(
+    z.object({
+      ticker: z.string(),
+      originalScore: z.number().int().min(1).max(10),
+      revisedScore: z.number().int().min(1).max(10),
+      comment: z.string(),
+      changed: z.boolean(),
+    }),
+  ),
+});
+
+export function validateWebSearchResult(data: unknown): WebSearchResult {
+  return webSearchResultSchema.parse(data) as WebSearchResult;
+}
+
+export function validateReevaluationOutput(data: unknown): ReevaluationOutput {
+  return reevaluationOutputSchema.parse(data) as ReevaluationOutput;
 }
