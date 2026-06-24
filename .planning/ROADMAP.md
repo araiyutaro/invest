@@ -56,7 +56,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — WebSearch/再評価スキーマ + invest.md Step 3 オーケストレーション (RSRCH-01, RSRCH-02)
+- [x] 03-01-PLAN.md — WebSearch/再評価スキーマ + invest.md Step 3 オーケストレーション (RSRCH-01, RSRCH-02)
 - [ ] 03-02-PLAN.md — Bloomberg風HTMLレポートジェネレータ TDD実装 (RPT-01, RPT-02)
 
 ### Phase 4: Gemini Cleanup
@@ -76,7 +76,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Data Layer + Skill Foundation | 2/2 | Complete   | 2026-06-24 |
 | 2. Analyst Subagents | 2/2 | Complete   | 2026-06-24 |
-| 3. Report Builder + WebSearch Research | 0/2 | Planning complete | - |
+| 3. Report Builder + WebSearch Research | 1/2 | Executing | - |
 | 4. Gemini Cleanup | 0/0 | Not started | - |
 
 ---

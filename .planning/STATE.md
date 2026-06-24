@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Claude Code Migration
 status: executing
-last_updated: "2026-06-24T08:30:36.704Z"
-last_activity: 2026-06-24 -- Phase 03 planning complete
+last_updated: "2026-06-24T09:00:00.000Z"
+last_activity: 2026-06-24 -- Phase 03 Plan 01 executed (types + schemas + orchestration)
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 6
-  completed_plans: 4
-  percent: 50
+  completed_plans: 5
+  percent: 58
 ---
 
 # Project State
@@ -18,9 +18,9 @@ progress:
 ## Current Position
 
 Phase: 3
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-06-24 -- Phase 03 planning complete
+Plan: 01 complete, 02 next
+Status: Executing
+Last activity: 2026-06-24 -- Phase 03 Plan 01 executed (types + schemas + orchestration)
 
 ## Progress Bar
 
@@ -47,6 +47,9 @@ Phase 4: Gemini Cleanup
 - **tmp/ JSON境界**: TSとClaudeのハンドオフはすべて `tmp/*.json` ファイル経由
 - **データスコーピング**: トークンコスト爆発防止のため、各アナリストには役割に必要なデータのみ渡す
 - **WebSearch制限**: 定量データ（株価・財務数値）はYahoo Finance API必須; WebSearchは定性情報のみ
+- **WebSearch Agent**: 銘柄ごとに並列 sonnet Agent でスポーン（D-06）
+- **再評価ラウンド**: 5アナリスト並列 sonnet Agent（D-07）、再評価スコアは tmp/reeval/ にのみ保存
+- **ティッカーサニタイズ**: ファイル名で / を - に置換（BRK/B → BRK-B）
 
 ### Pitfalls to Avoid
 
@@ -60,4 +63,4 @@ None
 
 ## Session Continuity
 
-Next action: `/gsd:plan-phase 1` to plan Phase 1 (Data Layer + Skill Foundation)
+Next action: `/gsd-execute-phase 3 02` to execute Phase 3 Plan 02 (Bloomberg風HTMLレポートジェネレータ TDD実装)
