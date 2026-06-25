@@ -23,6 +23,7 @@ export interface AnalystRound1Output {
 
 export interface AnalystRound2Output {
   readonly agentId: string;
+  readonly discussion: string;     // 他アナリストへの明示的相互参照を含む散文（800〜1500文字）
   readonly comment: string;
   readonly agreements: ReadonlyArray<string>;
   readonly disagreements: ReadonlyArray<string>;
