@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Report Quality & Pipeline Overhaul
-status: roadmap_ready
-last_updated: "2026-06-25T02:30:00.000Z"
-last_activity: 2026-06-25
+status: planning
+last_updated: "2026-06-25T03:38:16.474Z"
+last_activity: 2026-06-25 — v2.1 roadmap created (3 phases, 6 plans)
 progress:
   total_phases: 3
   completed_phases: 0
