@@ -1276,6 +1276,12 @@ try {
 
 ## Step 4: 自動デプロイ（GitHub Pages）
 
+「インデックスページを更新中...」とユーザーに表示してから、以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/update-index.ts
+```
+
 「デプロイを開始します...」とユーザーに表示してから、以下のBashコマンドを実行してください:
 
 ```bash
