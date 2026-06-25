@@ -25,7 +25,7 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 
 **Milestone Goal:** v1.0品質の3レポート構成を復元し、新規銘柄発掘とポートフォリオ管理を分離、GitHub Pagesへの自動デプロイを実現する。
 
-- [ ] **Phase 5: Analysis Engine Overhaul** - アナリストが独立した銘柄発掘と詳細散文分析を行う能力を確立する
+- [x] **Phase 5: Analysis Engine Overhaul** - アナリストが独立した銘柄発掘と詳細散文分析を行う能力を確立する
 - [ ] **Phase 6: 3-Report Structure** - generate-report.tsが Daily Report / Meeting Minutes / Portfolio Report の3ファイルを docs/ に出力する
 - [ ] **Phase 7: Portfolio Integration & Deployment** - ポートフォリオ評価、Daily Reportとの統合、自動git pushによるGitHub Pagesデプロイを完成させる
 
@@ -44,7 +44,7 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 
 Plans:
 - [x] 05-01: ANL-01/02 — 新規銘柄発掘ロジックと詳細散文分析プロンプトの実装
-- [ ] 05-02: ANL-03/04 — Round 2実質ディスカッションとスコアリングマトリクスの実装
+- [x] 05-02: ANL-03/04 — Round 2実質ディスカッションとスコアリングマトリクスの実装
 
 ### Phase 6: 3-Report Structure
 **Goal**: generate-report.tsが3つの独立したHTMLファイルを docs/YYYY-MM-DD/ に生成し、Daily Report と Meeting Minutes が完全な内容で出力される
@@ -87,7 +87,7 @@ Plans:
 | 2. Analyst Subagents | v2.0 | 2/2 | Complete | 2026-06-24 |
 | 3. Report Builder + WebSearch Research | v2.0 | 2/2 | Complete | 2026-06-25 |
 | 4. Gemini Cleanup | v2.0 | 1/1 | Complete | 2026-06-25 |
-| 5. Analysis Engine Overhaul | v2.1 | 1/2 | In Progress|  |
+| 5. Analysis Engine Overhaul | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 6. 3-Report Structure | v2.1 | 0/2 | Not started | - |
 | 7. Portfolio Integration & Deployment | v2.1 | 0/2 | Not started | - |
 

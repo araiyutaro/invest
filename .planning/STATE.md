@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Report Quality & Pipeline Overhaul
 status: executing
-last_updated: "2026-06-25T04:00:06.835Z"
-last_activity: 2026-06-25 — Plan 05-01 complete (7/7 tasks)
+last_updated: "2026-06-25T04:06:30Z"
+last_activity: 2026-06-25 — Plan 05-02 complete (6/6 tasks)
 progress:
   total_phases: 3
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
-  percent: 0
+  completed_plans: 2
+  percent: 33
 ---
 
 # Project State
@@ -18,9 +18,9 @@ progress:
 ## Current Position
 
 Phase: Phase 5 — Analysis Engine Overhaul
-Plan: 05-02 (next to execute)
+Plan: 05-02 (complete) — Phase 5 complete, next: Phase 6
 Status: Executing
-Last activity: 2026-06-25 — Plan 05-01 complete (7/7 tasks)
+Last activity: 2026-06-25 — Plan 05-02 complete (6/6 tasks)
 
 ## Progress Bar
 
@@ -57,6 +57,9 @@ Phase 7: Portfolio Integration & Deployment
 - **analysisフィールドハイブリッド方式**: Round 1にanalysis（4セクション詳細散文）を追加しつつsummary/highlights等の構造化フィールドを維持（05-01決定）
 - **Round 1データスコープ確定**: market.json + news.json（最新50件）のみ、portfolio.json除外（05-01決定）
 - **picks銘柄数制限**: 1〜3銘柄（macroは0〜2）、ニュース・市況からの新規発掘のみ（05-01決定）
+- **Round 2 discussion フィールド**: agentId直後・comment前に追加、800〜1500文字の[アナリスト名]明示参照（05-02決定）
+- **Round 2 model opus**: ディスカッション品質向上のため sonnet → opus に変更（05-02決定）
+- **Round 3 reason 100字ガイド**: Zod制約なし、プロンプトのみで管理（30字→100字、05-02決定）
 
 ### Pitfalls to Avoid
 
@@ -92,4 +95,4 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 
 ## Session Continuity
 
-Next action: `/gsd-execute-phase 5` to execute Phase 5 Plan 05-02 (Round 2 Discussion & Round 3 Scoring Enhancement)
+Next action: `/gsd-execute-phase 6` to execute Phase 6 (3-Report Structure)
