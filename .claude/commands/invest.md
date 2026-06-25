@@ -1271,3 +1271,61 @@ try {
 ```
 
 「レポート生成完了: docs/{date}/ (3ファイル)」とユーザーに表示してください。
+
+---
+
+## Step 4: 自動デプロイ（GitHub Pages）
+
+「デプロイを開始します...」とユーザーに表示してから、以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && node -e "
+const { execSync } = require('child_process');
+const fs = require('fs');
+
+// 日付を取得
+const result = JSON.parse(fs.readFileSync('tmp/meeting-result.json', 'utf-8'));
+const date = result.date;
+
+// docs/ をステージング
+execSync('git add docs/', { stdio: 'inherit' });
+
+// 変更なしチェック
+let hasChanges = false;
+try {
+  execSync('git diff --staged --quiet');
+  // 終了コード 0 = 変更なし
+  console.log('変更なし: docs/ は既に最新です');
+  process.exit(0);
+} catch (e) {
+  // 終了コード 1 = 変更あり -> commit へ進む
+  hasChanges = true;
+}
+
+// コミット & プッシュ
+try {
+  execSync('git commit -m \"report: ' + date + ' daily update\"', { stdio: 'inherit' });
+  execSync('git push origin master', { stdio: 'inherit' });
+} catch (commitErr) {
+  console.error('デプロイエラー: ' + commitErr.message);
+  process.exit(1);
+}
+"
+```
+
+結果に応じてユーザーに表示してください:
+- 成功（プッシュ完了）: 「デプロイ完了」
+- 変更なし（スキップ）: 「docs/ に変更がないためスキップしました」
+- 失敗: エラー内容をユーザーに表示して終了
+
+---
+
+## パイプライン完了
+
+「投資分析パイプライン完了」とユーザーに表示してください。
+
+以下のサマリーをユーザーに表示してください:
+- Step 1: データ収集 -- 完了
+- Step 2: アナリストミーティング (3ラウンド) -- 完了
+- Step 3: WebSearch + 再評価 + ポートフォリオ分析 + レポート生成 -- 完了
+- Step 4: GitHub Pages デプロイ -- 完了
