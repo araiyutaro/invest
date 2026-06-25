@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
+import { analystRound1OutputSchema } from "../meeting/schemas.js";
 
 const validMeetingResultJson = JSON.stringify({
   date: "2026-06-24",
@@ -109,6 +110,42 @@ describe("validate-meeting schemas", () => {
     expect(() => validateMeetingResult(dataWithEmptyStocks)).not.toThrow();
     const result = validateMeetingResult(dataWithEmptyStocks);
     expect(result.highlightedStocks).toEqual([]);
+  });
+});
+
+describe("analystRound1OutputSchema", () => {
+  const validRound1 = {
+    agentId: "fundamentals",
+    agentRole: "ファンダメンタルズアナリスト",
+    analysis:
+      "## 市場認識\n市場は上昇基調...\n\n## 専門領域からの洞察\nPER水準は...\n\n## 注目銘柄の詳細分析\nXYZ社は...\n\n## リスクと懸念\n金利上昇リスクが...",
+    summary: "全体サマリー",
+    highlights: ["ポイント1", "ポイント2"],
+    risks: ["リスク1"],
+    picks: [{ ticker: "AAPL", direction: "強気", rationale: "割安で成長余地あり" }],
+    sectorView: "テクノロジーセクターは強気",
+  };
+
+  it("valid Round 1 output passes validation", () => {
+    expect(() => analystRound1OutputSchema.parse(validRound1)).not.toThrow();
+  });
+
+  it("analysis field is required", () => {
+    const { analysis: _analysis, ...without } = validRound1;
+    expect(() => analystRound1OutputSchema.parse(without)).toThrow();
+  });
+
+  it("picks direction must be 強気|中立|弱気", () => {
+    const invalid = {
+      ...validRound1,
+      picks: [{ ticker: "AAPL", direction: "BUY", rationale: "理由" }],
+    };
+    expect(() => analystRound1OutputSchema.parse(invalid)).toThrow();
+  });
+
+  it("empty analysis string is allowed (fallback case)", () => {
+    const fallback = { ...validRound1, analysis: "" };
+    expect(() => analystRound1OutputSchema.parse(fallback)).not.toThrow();
   });
 });
 
