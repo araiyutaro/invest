@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Report Quality & Pipeline Overhaul
 status: completed
-last_updated: "2026-06-25T08:13:00Z"
-last_activity: 2026-06-25 — Phase 7 Plan 01 complete (Portfolio Report generation logic implemented)
+last_updated: "2026-06-25T08:16:58Z"
+last_activity: 2026-06-25 — Auto git push deployment added to /invest pipeline (Step 4 complete)
 progress:
   total_phases: 3
-  completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
-  percent: 66
+  completed_phases: 3
+  total_plans: 6
+  completed_plans: 6
+  percent: 100
 ---
 
 # Project State
@@ -18,19 +18,19 @@ progress:
 ## Current Position
 
 Phase: Phase 7 — Portfolio Integration & Deployment
-Plan: 07-01 (completed)
-Status: Phase 7 Plan 01 complete
-Last activity: 2026-06-25 — Portfolio Report generation logic fully implemented (TDD GREEN, 58/58 tests pass)
+Plan: 07-02 (completed)
+Status: Phase 7 complete — all plans done
+Last activity: 2026-06-25 — Auto git push deployment added to /invest pipeline (Step 4 complete)
 
 ## Progress Bar
 
 ```
-[==========================              ] 66% (2/3 phases)
+[========================================] 100% (3/3 phases)
 ```
 
 Phase 5: Analysis Engine Overhaul ✓
 Phase 6: 3-Report Structure ✓
-Phase 7: Portfolio Integration & Deployment ← IN PROGRESS (Plan 01 done)
+Phase 7: Portfolio Integration & Deployment ✓
 
 ## Performance Metrics
 
@@ -57,6 +57,9 @@ Phase 7: Portfolio Integration & Deployment ← IN PROGRESS (Plan 01 done)
 - **D-01 Portfolio Analysis**: 単一 opus エージェントが全保有銘柄の評価・リバランス提案を一括生成（07-01決定）
 - **D-04 新規組入候補転載**: highlightedStocks を追加AI分析なしで Portfolio Report に転載（07-01決定）
 - **Null fallback**: portfolio-analysis.json 未生成時はフォールバック HTML + 新規組入候補のみ表示（07-01決定）
+- **D-06 Step 4 末尾追加**: invest.md の末尾に Step 4 を追加（07-02決定）
+- **D-07 自動push**: push前のユーザー確認なし（完全自動）（07-02決定）
+- **D-08 コミットメッセージ**: `report: YYYY-MM-DD daily update` 形式、push先 origin master（07-02決定）
 - **analysisフィールドハイブリッド方式**: Round 1にanalysis（4セクション詳細散文）を追加しつつsummary/highlights等の構造化フィールドを維持（05-01決定）
 - **Round 1データスコープ確定**: market.json + news.json（最新50件）のみ、portfolio.json除外（05-01決定）
 - **picks銘柄数制限**: 1〜3銘柄（macroは0〜2）、ニュース・市況からの新規発掘のみ（05-01決定）
@@ -98,4 +101,4 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 
 ## Session Continuity
 
-Next action: Execute Phase 7 Plan 02 (if exists) or verify portfolio pipeline end-to-end
+Next action: v2.1 milestone complete — all phases done. Next: E2E pipeline run to verify full /invest command flow.
