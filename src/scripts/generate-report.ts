@@ -1,11 +1,11 @@
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { validateMeetingResult, validateWebSearchResult, validateReevaluationOutput } from "../meeting/schemas.js";
-import type { MeetingResult, WebSearchResult, ReevaluationOutput } from "../meeting/types.js";
+import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnalysis } from "../meeting/types.js";
 import { generateDailyReportHtml } from "./generate-daily-report.js";
 import { generateMeetingMinutesHtml } from "./generate-meeting-minutes.js";
 import { generatePortfolioReportHtml } from "./generate-portfolio-report.js";
-import { loadRound1Results, loadRound2Results, loadRound3Results } from "./report-data-loaders.js";
+import { loadRound1Results, loadRound2Results, loadRound3Results, loadPortfolioAnalysis } from "./report-data-loaders.js";
 
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
 const DOCS_DIR = join(import.meta.dirname, "../../docs");
@@ -68,12 +68,13 @@ export async function main(): Promise<void> {
   const raw = await readFile(join(TMP_DIR, "meeting-result.json"), "utf-8");
   const meetingResult = validateMeetingResult(JSON.parse(raw) as unknown);
 
-  const [webSearchResults, reevalResults, round1Results, round2Results, round3Results] = await Promise.all([
+  const [webSearchResults, reevalResults, round1Results, round2Results, round3Results, portfolioAnalysis] = await Promise.all([
     loadWebSearchResults(),
     loadReevalResults(),
     loadRound1Results(),
     loadRound2Results(),
     loadRound3Results(),
+    loadPortfolioAnalysis(),
   ]);
 
   const dateDir = join(DOCS_DIR, meetingResult.date);
@@ -81,7 +82,7 @@ export async function main(): Promise<void> {
 
   const dailyHtml = generateDailyReportHtml(meetingResult, webSearchResults, reevalResults);
   const minutesHtml = generateMeetingMinutesHtml(meetingResult, round1Results, round2Results, round3Results);
-  const portfolioHtml = generatePortfolioReportHtml(meetingResult);
+  const portfolioHtml = generatePortfolioReportHtml(meetingResult, portfolioAnalysis);
 
   await Promise.all([
     writeFile(join(dateDir, "daily-report.html"), dailyHtml, "utf-8"),
