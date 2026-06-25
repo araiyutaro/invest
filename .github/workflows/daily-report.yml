@@ -26,22 +26,8 @@ jobs:
 
       - name: Generate daily report
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
           TZ: Asia/Tokyo
-        run: npx tsx src/index.ts
-
-      - name: Commit and push reports
-        env:
-          TZ: Asia/Tokyo
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-          TODAY=$(date +%Y-%m-%d)
-          git commit -m "report: daily investment report $TODAY"
-          git push
+          echo "v2.0: Daily reports are generated via /invest skill command in Claude Code."
+          echo "This workflow is retained for future v2.0 CI integration."
