@@ -338,203 +338,213 @@ console.log(tickers.join(', '));
 
 まず `/Users/arai/invest/tmp/round-1/` の各ファイルを Read ツールで読み込んでください。
 
-各エージェントへの入力として、他4人のRound 1 結果の `highlights` と `picks` のみを抽出します（入力サイズ制御のため `summary` の詳細は除外）。
+各エージェントへの入力として、他4人のRound 1 結果の `analysis` 全文と `picks` を共有します。各アナリストは他メンバーの分析を読み込んで、名前を指定した明示的な相互参照を含む `discussion` を記述してください。
 
 **以下5つの Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
 
 **Agent 1: ファンダメンタルズアナリスト（Round 2）**
 - name: `fundamentals-r2`
-- model: `sonnet`
+- model: `opus`
 - prompt: 以下の内容を含めてください
   - `src/agents/fundamentals.ts` から取得した `systemPrompt` の全文
   - 以下のディスカッション指示:
     ```
-    以下は他のチームメンバーの分析（highlights と picks のみ）です。あなたの専門的視点から、同意する点、異議がある点、補足したい点をコメントしてください。
+    以下は他のチームメンバーのRound 1 分析（analysis 全文と picks）です。あなたの専門的視点から、各アナリストの主張に対して「[アナリスト名] の〇〇という主張について...」という形式で名前を指定した明示的なコメントを記述してください。
 
-    ## 他メンバーの分析サマリー
+    ## 他メンバーのRound 1 分析
     ### テンバガーハンター
-    highlights: [tmp/round-1/tenbagger.json の highlights フィールド]
+    analysis: [tmp/round-1/tenbagger.json の analysis フィールド全文]
     picks: [tmp/round-1/tenbagger.json の picks フィールド]
 
     ### マクロエコノミスト
-    highlights: [tmp/round-1/macro.json の highlights フィールド]
+    analysis: [tmp/round-1/macro.json の analysis フィールド全文]
     picks: [tmp/round-1/macro.json の picks フィールド]
 
     ### テクニカルストラテジスト
-    highlights: [tmp/round-1/technical.json の highlights フィールド]
+    analysis: [tmp/round-1/technical.json の analysis フィールド全文]
     picks: [tmp/round-1/technical.json の picks フィールド]
 
     ### リスクマネージャー
-    highlights: [tmp/round-1/risk-manager.json の highlights フィールド]
+    analysis: [tmp/round-1/risk-manager.json の analysis フィールド全文]
     picks: [tmp/round-1/risk-manager.json の picks フィールド]
-
-    簡潔に（500文字以内）、最も重要なポイントに絞ってコメントしてください。
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
 
     {
       "agentId": "fundamentals",
-      "comment": "500文字以内のディスカッションコメント",
+      "discussion": "[テンバガーハンター] の〇〇という主張については...という観点から同意/異議があります。[マクロエコノミスト] の...については...（800〜1500文字、複数段落可）",
+      "comment": "500文字以内のディスカッションサマリー",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
+
+    注意: discussion フィールドは必ず他のアナリスト名（[テンバガーハンター] 等）を指定した具体的な相互参照を含めてください。
+    discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
 **Agent 2: テンバガーハンター（Round 2）**
 - name: `tenbagger-r2`
-- model: `sonnet`
+- model: `opus`
 - prompt: 以下の内容を含めてください
   - `src/agents/tenbagger.ts` から取得した `systemPrompt` の全文
   - 以下のディスカッション指示:
     ```
-    以下は他のチームメンバーの分析（highlights と picks のみ）です。あなたの専門的視点から、同意する点、異議がある点、補足したい点をコメントしてください。
+    以下は他のチームメンバーのRound 1 分析（analysis 全文と picks）です。あなたの専門的視点から、各アナリストの主張に対して「[アナリスト名] の〇〇という主張について...」という形式で名前を指定した明示的なコメントを記述してください。
 
-    ## 他メンバーの分析サマリー
+    ## 他メンバーのRound 1 分析
     ### ファンダメンタルズアナリスト
-    highlights: [tmp/round-1/fundamentals.json の highlights フィールド]
+    analysis: [tmp/round-1/fundamentals.json の analysis フィールド全文]
     picks: [tmp/round-1/fundamentals.json の picks フィールド]
 
     ### マクロエコノミスト
-    highlights: [tmp/round-1/macro.json の highlights フィールド]
+    analysis: [tmp/round-1/macro.json の analysis フィールド全文]
     picks: [tmp/round-1/macro.json の picks フィールド]
 
     ### テクニカルストラテジスト
-    highlights: [tmp/round-1/technical.json の highlights フィールド]
+    analysis: [tmp/round-1/technical.json の analysis フィールド全文]
     picks: [tmp/round-1/technical.json の picks フィールド]
 
     ### リスクマネージャー
-    highlights: [tmp/round-1/risk-manager.json の highlights フィールド]
+    analysis: [tmp/round-1/risk-manager.json の analysis フィールド全文]
     picks: [tmp/round-1/risk-manager.json の picks フィールド]
-
-    簡潔に（500文字以内）、最も重要なポイントに絞ってコメントしてください。
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
 
     {
       "agentId": "tenbagger",
-      "comment": "500文字以内のディスカッションコメント",
+      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[マクロエコノミスト] の...については...（800〜1500文字、複数段落可）",
+      "comment": "500文字以内のディスカッションサマリー",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
+
+    注意: discussion フィールドは必ず他のアナリスト名（[ファンダメンタルズアナリスト] 等）を指定した具体的な相互参照を含めてください。
+    discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
 **Agent 3: マクロエコノミスト（Round 2）**
 - name: `macro-r2`
-- model: `sonnet`
+- model: `opus`
 - prompt: 以下の内容を含めてください
   - `src/agents/macro.ts` から取得した `systemPrompt` の全文
   - 以下のディスカッション指示:
     ```
-    以下は他のチームメンバーの分析（highlights と picks のみ）です。あなたの専門的視点から、同意する点、異議がある点、補足したい点をコメントしてください。
+    以下は他のチームメンバーのRound 1 分析（analysis 全文と picks）です。あなたの専門的視点から、各アナリストの主張に対して「[アナリスト名] の〇〇という主張について...」という形式で名前を指定した明示的なコメントを記述してください。
 
-    ## 他メンバーの分析サマリー
+    ## 他メンバーのRound 1 分析
     ### ファンダメンタルズアナリスト
-    highlights: [tmp/round-1/fundamentals.json の highlights フィールド]
+    analysis: [tmp/round-1/fundamentals.json の analysis フィールド全文]
     picks: [tmp/round-1/fundamentals.json の picks フィールド]
 
     ### テンバガーハンター
-    highlights: [tmp/round-1/tenbagger.json の highlights フィールド]
+    analysis: [tmp/round-1/tenbagger.json の analysis フィールド全文]
     picks: [tmp/round-1/tenbagger.json の picks フィールド]
 
     ### テクニカルストラテジスト
-    highlights: [tmp/round-1/technical.json の highlights フィールド]
+    analysis: [tmp/round-1/technical.json の analysis フィールド全文]
     picks: [tmp/round-1/technical.json の picks フィールド]
 
     ### リスクマネージャー
-    highlights: [tmp/round-1/risk-manager.json の highlights フィールド]
+    analysis: [tmp/round-1/risk-manager.json の analysis フィールド全文]
     picks: [tmp/round-1/risk-manager.json の picks フィールド]
-
-    簡潔に（500文字以内）、最も重要なポイントに絞ってコメントしてください。
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
 
     {
       "agentId": "macro",
-      "comment": "500文字以内のディスカッションコメント",
+      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（800〜1500文字、複数段落可）",
+      "comment": "500文字以内のディスカッションサマリー",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
+
+    注意: discussion フィールドは必ず他のアナリスト名（[ファンダメンタルズアナリスト] 等）を指定した具体的な相互参照を含めてください。
+    discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
 **Agent 4: テクニカルストラテジスト（Round 2）**
 - name: `technical-r2`
-- model: `sonnet`
+- model: `opus`
 - prompt: 以下の内容を含めてください
   - `src/agents/technical.ts` から取得した `systemPrompt` の全文
   - 以下のディスカッション指示:
     ```
-    以下は他のチームメンバーの分析（highlights と picks のみ）です。あなたの専門的視点から、同意する点、異議がある点、補足したい点をコメントしてください。
+    以下は他のチームメンバーのRound 1 分析（analysis 全文と picks）です。あなたの専門的視点から、各アナリストの主張に対して「[アナリスト名] の〇〇という主張について...」という形式で名前を指定した明示的なコメントを記述してください。
 
-    ## 他メンバーの分析サマリー
+    ## 他メンバーのRound 1 分析
     ### ファンダメンタルズアナリスト
-    highlights: [tmp/round-1/fundamentals.json の highlights フィールド]
+    analysis: [tmp/round-1/fundamentals.json の analysis フィールド全文]
     picks: [tmp/round-1/fundamentals.json の picks フィールド]
 
     ### テンバガーハンター
-    highlights: [tmp/round-1/tenbagger.json の highlights フィールド]
+    analysis: [tmp/round-1/tenbagger.json の analysis フィールド全文]
     picks: [tmp/round-1/tenbagger.json の picks フィールド]
 
     ### マクロエコノミスト
-    highlights: [tmp/round-1/macro.json の highlights フィールド]
+    analysis: [tmp/round-1/macro.json の analysis フィールド全文]
     picks: [tmp/round-1/macro.json の picks フィールド]
 
     ### リスクマネージャー
-    highlights: [tmp/round-1/risk-manager.json の highlights フィールド]
+    analysis: [tmp/round-1/risk-manager.json の analysis フィールド全文]
     picks: [tmp/round-1/risk-manager.json の picks フィールド]
-
-    簡潔に（500文字以内）、最も重要なポイントに絞ってコメントしてください。
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
 
     {
       "agentId": "technical",
-      "comment": "500文字以内のディスカッションコメント",
+      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（800〜1500文字、複数段落可）",
+      "comment": "500文字以内のディスカッションサマリー",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
+
+    注意: discussion フィールドは必ず他のアナリスト名（[ファンダメンタルズアナリスト] 等）を指定した具体的な相互参照を含めてください。
+    discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
 **Agent 5: リスクマネージャー（Round 2）**
 - name: `risk-manager-r2`
-- model: `sonnet`
+- model: `opus`
 - prompt: 以下の内容を含めてください
   - `src/agents/risk-manager.ts` から取得した `systemPrompt` の全文
   - 以下のディスカッション指示:
     ```
-    以下は他のチームメンバーの分析（highlights と picks のみ）です。あなたの専門的視点から、同意する点、異議がある点、補足したい点をコメントしてください。
+    以下は他のチームメンバーのRound 1 分析（analysis 全文と picks）です。あなたの専門的視点から、各アナリストの主張に対して「[アナリスト名] の〇〇という主張について...」という形式で名前を指定した明示的なコメントを記述してください。
 
-    ## 他メンバーの分析サマリー
+    ## 他メンバーのRound 1 分析
     ### ファンダメンタルズアナリスト
-    highlights: [tmp/round-1/fundamentals.json の highlights フィールド]
+    analysis: [tmp/round-1/fundamentals.json の analysis フィールド全文]
     picks: [tmp/round-1/fundamentals.json の picks フィールド]
 
     ### テンバガーハンター
-    highlights: [tmp/round-1/tenbagger.json の highlights フィールド]
+    analysis: [tmp/round-1/tenbagger.json の analysis フィールド全文]
     picks: [tmp/round-1/tenbagger.json の picks フィールド]
 
     ### マクロエコノミスト
-    highlights: [tmp/round-1/macro.json の highlights フィールド]
+    analysis: [tmp/round-1/macro.json の analysis フィールド全文]
     picks: [tmp/round-1/macro.json の picks フィールド]
 
     ### テクニカルストラテジスト
-    highlights: [tmp/round-1/technical.json の highlights フィールド]
+    analysis: [tmp/round-1/technical.json の analysis フィールド全文]
     picks: [tmp/round-1/technical.json の picks フィールド]
-
-    簡潔に（500文字以内）、最も重要なポイントに絞ってコメントしてください。
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
 
     {
       "agentId": "risk-manager",
-      "comment": "500文字以内のディスカッションコメント",
+      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（800〜1500文字、複数段落可）",
+      "comment": "500文字以内のディスカッションサマリー",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
+
+    注意: discussion フィールドは必ず他のアナリスト名（[ファンダメンタルズアナリスト] 等）を指定した具体的な相互参照を含めてください。
+    discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
 **Round 2 完了後の処理:**
