@@ -556,7 +556,7 @@ console.log(tickers.join(', '));
 - `technical-r2` の出力 → `/Users/arai/invest/tmp/round-2/technical.json`
 - `risk-manager-r2` の出力 → `/Users/arai/invest/tmp/round-2/risk-manager.json`
 
-出力が有効なJSONでない場合は、`{"agentId": "...", "comment": "", "agreements": [], "disagreements": []}` を保存してください。
+出力が有効なJSONでない場合は、`{"agentId": "...", "discussion": "", "comment": "", "agreements": [], "disagreements": []}` を保存してください。
 
 「Round 2 完了: N/5 アナリスト成功」とユーザーに表示してください。
 
