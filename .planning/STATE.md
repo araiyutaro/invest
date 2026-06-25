@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Report Quality & Pipeline Overhaul
-status: planning
-last_updated: "2026-06-25T03:38:16.474Z"
-last_activity: 2026-06-25 — v2.1 roadmap created (3 phases, 6 plans)
+status: executing
+last_updated: "2026-06-25T04:00:06.835Z"
+last_activity: 2026-06-25 — Plan 05-01 complete (7/7 tasks)
 progress:
   total_phases: 3
   completed_phases: 0
-  total_plans: 6
-  completed_plans: 0
+  total_plans: 2
+  completed_plans: 1
   percent: 0
 ---
 
@@ -17,10 +17,10 @@ progress:
 
 ## Current Position
 
-Phase: Phase 5 — Analysis Engine Overhaul (NEXT)
-Plan: —
-Status: Roadmap approved, ready to plan
-Last activity: 2026-06-25 — v2.1 roadmap created (3 phases, 6 plans)
+Phase: Phase 5 — Analysis Engine Overhaul
+Plan: 05-02 (next to execute)
+Status: Executing
+Last activity: 2026-06-25 — Plan 05-01 complete (7/7 tasks)
 
 ## Progress Bar
 
@@ -54,6 +54,9 @@ Phase 7: Portfolio Integration & Deployment
 - **escapeHtml全適用**: XSS防止のため全テキストコンテンツをescapeHtml経由で出力（T-03-06 mitigate）
 - **3レポート分離**: Daily Report / Meeting Minutes / Portfolio Report を別HTMLファイルに分離（v2.1新規）
 - **ポートフォリオ非依存分析**: Phase 5でアナリストの銘柄発掘をポートフォリオから切り離す（v2.1新規）
+- **analysisフィールドハイブリッド方式**: Round 1にanalysis（4セクション詳細散文）を追加しつつsummary/highlights等の構造化フィールドを維持（05-01決定）
+- **Round 1データスコープ確定**: market.json + news.json（最新50件）のみ、portfolio.json除外（05-01決定）
+- **picks銘柄数制限**: 1〜3銘柄（macroは0〜2）、ニュース・市況からの新規発掘のみ（05-01決定）
 
 ### Pitfalls to Avoid
 
@@ -89,4 +92,4 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 
 ## Session Continuity
 
-Next action: `/gsd-plan-phase 5` to plan Phase 5 (Analysis Engine Overhaul)
+Next action: `/gsd-execute-phase 5` to execute Phase 5 Plan 05-02 (Round 2 Discussion & Round 3 Scoring Enhancement)

@@ -43,7 +43,7 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: ANL-01/02 — 新規銘柄発掘ロジックと詳細散文分析プロンプトの実装
+- [x] 05-01: ANL-01/02 — 新規銘柄発掘ロジックと詳細散文分析プロンプトの実装
 - [ ] 05-02: ANL-03/04 — Round 2実質ディスカッションとスコアリングマトリクスの実装
 
 ### Phase 6: 3-Report Structure
@@ -87,7 +87,7 @@ Plans:
 | 2. Analyst Subagents | v2.0 | 2/2 | Complete | 2026-06-24 |
 | 3. Report Builder + WebSearch Research | v2.0 | 2/2 | Complete | 2026-06-25 |
 | 4. Gemini Cleanup | v2.0 | 1/1 | Complete | 2026-06-25 |
-| 5. Analysis Engine Overhaul | v2.1 | 0/2 | Not started | - |
+| 5. Analysis Engine Overhaul | v2.1 | 1/2 | In Progress|  |
 | 6. 3-Report Structure | v2.1 | 0/2 | Not started | - |
 | 7. Portfolio Integration & Deployment | v2.1 | 0/2 | Not started | - |
 
