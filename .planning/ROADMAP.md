@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v2.0 Claude Code Migration** — Phases 1-4 (shipped 2026-06-25)
-- 🚧 **v2.1 Report Quality & Pipeline Overhaul** — Phases 5-7 (in progress)
+- ✅ **v2.1 Report Quality & Pipeline Overhaul** — Phases 5-7 (shipped 2026-06-25)
 
 ## Phases
 
@@ -21,13 +21,13 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 
 </details>
 
-### 🚧 v2.1 Report Quality & Pipeline Overhaul (In Progress)
+### ✅ v2.1 Report Quality & Pipeline Overhaul (Shipped 2026-06-25)
 
 **Milestone Goal:** v1.0品質の3レポート構成を復元し、新規銘柄発掘とポートフォリオ管理を分離、GitHub Pagesへの自動デプロイを実現する。
 
 - [x] **Phase 5: Analysis Engine Overhaul** - アナリストが独立した銘柄発掘と詳細散文分析を行う能力を確立する
 - [x] **Phase 6: 3-Report Structure** - generate-report.tsが Daily Report / Meeting Minutes / Portfolio Report の3ファイルを docs/ に出力する
-- [ ] **Phase 7: Portfolio Integration & Deployment** - ポートフォリオ評価、Daily Reportとの統合、自動git pushによるGitHub Pagesデプロイを完成させる
+- [x] **Phase 7: Portfolio Integration & Deployment** - ポートフォリオ評価、Daily Reportとの統合、自動git pushによるGitHub Pagesデプロイを完成させる
 
 ## Phase Details
 
@@ -75,8 +75,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 07-01: PORT-01/02/03/RPT-03 — Portfolio Report生成ロジックとHTMLテンプレートの実装
-- [ ] 07-02: PIPE-01/02 — 自動git push統合と /invest コマンド最終調整
+- [x] 07-01: PORT-01/02/03/RPT-03 — Portfolio Report生成ロジックとHTMLテンプレートの実装
+- [x] 07-02: PIPE-01/02 — 自動git push統合と /invest コマンド最終調整
 **UI hint**: yes
 
 ## Progress
@@ -89,7 +89,7 @@ Plans:
 | 4. Gemini Cleanup | v2.0 | 1/1 | Complete | 2026-06-25 |
 | 5. Analysis Engine Overhaul | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 6. 3-Report Structure | v2.1 | 2/2 | Complete | 2026-06-25 |
-| 7. Portfolio Integration & Deployment | v2.1 | 0/2 | Not started | - |
+| 7. Portfolio Integration & Deployment | v2.1 | 2/2 | Complete | 2026-06-25 |
 
 ---
 *Roadmap created: 2026-06-24*
