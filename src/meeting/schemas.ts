@@ -16,6 +16,7 @@ export const stockScoreSchema = z.object({
 export const analystRound1OutputSchema = z.object({
   agentId: z.string(),
   agentRole: z.string(),
+  analysis: z.string(),
   summary: z.string(),
   highlights: z.array(z.string()),
   risks: z.array(z.string()),
