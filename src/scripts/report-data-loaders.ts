@@ -1,7 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { analystRound1OutputSchema, analystRound2OutputSchema, analystRound3OutputSchema } from "../meeting/schemas.js";
-import type { AnalystRound1Output, AnalystRound2Output, AnalystRound3Output } from "../meeting/types.js";
+import { analystRound1OutputSchema, analystRound2OutputSchema, analystRound3OutputSchema, portfolioAnalysisSchema } from "../meeting/schemas.js";
+import type { AnalystRound1Output, AnalystRound2Output, AnalystRound3Output, PortfolioAnalysis } from "../meeting/types.js";
 
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
 
@@ -68,5 +68,14 @@ export async function loadRound3Results(): Promise<ReadonlyArray<AnalystRound3Ou
     return results.filter((r): r is AnalystRound3Output => r !== null);
   } catch {
     return [];
+  }
+}
+
+export async function loadPortfolioAnalysis(): Promise<PortfolioAnalysis | null> {
+  try {
+    const raw = await readFile(join(TMP_DIR, "portfolio-analysis.json"), "utf-8");
+    return portfolioAnalysisSchema.parse(JSON.parse(raw) as unknown) as PortfolioAnalysis;
+  } catch {
+    return null;
   }
 }
