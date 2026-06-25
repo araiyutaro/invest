@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { analystRound1OutputSchema, analystRound2OutputSchema } from "../meeting/schemas.js";
+import { analystRound1OutputSchema, analystRound2OutputSchema, portfolioAnalysisSchema } from "../meeting/schemas.js";
 
 const validMeetingResultJson = JSON.stringify({
   date: "2026-06-24",
@@ -177,6 +177,52 @@ describe("analystRound2OutputSchema", () => {
   it("empty comment string is allowed", () => {
     const fallback = { ...validRound2, comment: "" };
     expect(() => analystRound2OutputSchema.parse(fallback)).not.toThrow();
+  });
+});
+
+describe("portfolioAnalysisSchema", () => {
+  const validAnalysis = {
+    date: "2026-06-25",
+    generatedAt: "2026-06-25T09:30:00Z",
+    overallComment: "ポートフォリオ全体への総括コメント",
+    holdings: [
+      {
+        symbol: "MRNA",
+        nameJa: "モデルナ",
+        decision: "保持",
+        rationale: "現状維持が最善",
+        riskNote: "mRNAパイプラインリスク",
+      },
+    ],
+    rebalanceActions: ["HIIを買増し", "POWLを一部売却"],
+  };
+
+  it("valid PortfolioAnalysis passes validation", () => {
+    expect(() => portfolioAnalysisSchema.parse(validAnalysis)).not.toThrow();
+  });
+
+  it("decision must be one of 保持/買増/一部売却/全売却", () => {
+    const invalid = {
+      ...validAnalysis,
+      holdings: [{ ...validAnalysis.holdings[0], decision: "ホールド" }],
+    };
+    expect(() => portfolioAnalysisSchema.parse(invalid)).toThrow();
+  });
+
+  it("riskNote is optional", () => {
+    const { riskNote, ...withoutRisk } = validAnalysis.holdings[0];
+    const noRisk = { ...validAnalysis, holdings: [withoutRisk] };
+    expect(() => portfolioAnalysisSchema.parse(noRisk)).not.toThrow();
+  });
+
+  it("empty holdings array is allowed", () => {
+    const empty = { ...validAnalysis, holdings: [] };
+    expect(() => portfolioAnalysisSchema.parse(empty)).not.toThrow();
+  });
+
+  it("rebalanceActions can be empty", () => {
+    const noActions = { ...validAnalysis, rebalanceActions: [] };
+    expect(() => portfolioAnalysisSchema.parse(noActions)).not.toThrow();
   });
 });
 

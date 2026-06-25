@@ -256,11 +256,97 @@ describe("Meeting Minutes HTML", () => {
   });
 });
 
+const validPortfolioAnalysis = {
+  date: "2026-06-24",
+  generatedAt: "2026-06-24T09:30:00Z",
+  overallComment: "ポートフォリオ全体は安定。防衛セクター偏重に注意。",
+  holdings: [
+    {
+      symbol: "MRNA",
+      nameJa: "モデルナ",
+      decision: "保持" as const,
+      rationale: "mRNAパイプライン評価待ち",
+      riskNote: "競合リスク",
+    },
+    {
+      symbol: "HII",
+      nameJa: "ハンティントン・インガルス",
+      decision: "買増" as const,
+      rationale: "防衛予算増額で安定成長",
+    },
+    {
+      symbol: "POWL",
+      nameJa: "パウエル・インダストリーズ",
+      decision: "一部売却" as const,
+      rationale: "バリュエーション割高",
+      riskNote: "PE56倍は持続不可能",
+    },
+  ],
+  rebalanceActions: [
+    "HIIを買増し。防衛予算増額と割安バリュエーション",
+    "POWLを一部売却し利益確定",
+  ],
+};
+
 describe("Portfolio Report", () => {
   it("Test 25: Portfolio Report に緑系アクセントカラー（#10b981）が含まれる", async () => {
     const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
-    const html = generatePortfolioReportHtml(validMeetingResult);
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
     expect(html).toContain("#10b981");
+  });
+
+  it("Test 26: generatePortfolioReportHtml が portfolioAnalysis を受け取り保有銘柄の decision を含む HTML を返す", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html).toContain("保持");
+    expect(html).toContain("買増");
+    expect(html).toContain("一部売却");
+  });
+
+  it("Test 27: HTML に各 holding の symbol と nameJa が含まれる", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html).toContain("MRNA");
+    expect(html).toContain("モデルナ");
+    expect(html).toContain("HII");
+    expect(html).toContain("ハンティントン・インガルス");
+  });
+
+  it("Test 28: HTML に overallComment が含まれる", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html).toContain("ポートフォリオ全体は安定");
+  });
+
+  it("Test 29: HTML に rebalanceActions が含まれる", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html).toContain("HIIを買増し");
+    expect(html).toContain("POWLを一部売却し利益確定");
+  });
+
+  it("Test 30: HTML に highlightedStocks の新規組入候補セクションが含まれる (PORT-01)", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html).toContain("新規組入候補");
+    expect(html).toContain("PLTR");
+    expect(html).toContain("8.2");
+  });
+
+  it("Test 31: portfolioAnalysis が null の場合フォールバック HTML を返す", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, null);
+    expect(html).toContain("<!DOCTYPE html>");
+    expect(html).toContain("Portfolio Report");
+    expect(html).not.toContain("保有銘柄 個別評価");
+  });
+
+  it("Test 32: decision バッジに正しい色が使われる", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html).toContain("#10b981"); // 保持 = green
+    expect(html).toContain("#3b82f6"); // 買増 = blue
+    expect(html).toContain("#f59e0b"); // 一部売却 = amber
   });
 });
 
