@@ -1160,6 +1160,83 @@ Step 2.0 で読み込んだ各エージェントの systemPrompt を再利用し
 
 ---
 
+### Step 3d: ポートフォリオ分析（Portfolio Analysis）
+
+「ポートフォリオ分析を実行中...」とユーザーに表示してください。
+
+まず以下のファイルを Read ツールで読み込んでください:
+
+- `/Users/arai/invest/tmp/portfolio.json` -- 全内容（12銘柄の株価データ）
+- `/Users/arai/invest/tmp/meeting-result.json` -- 全内容（ミーティング統合結果）
+- `/Users/arai/invest/src/portfolio/holdings.ts` -- PORTFOLIO_HOLDINGS 定数を取得
+
+**1つの Agent ツールを呼び出してください:**
+
+- name: `portfolio-analyst`
+- model: `opus`
+- prompt: 以下の内容を含めてください
+
+    あなたはシニアポートフォリオマネージャーです。以下の保有ポートフォリオデータと本日のミーティング結果を参照して、保有銘柄への判断とリバランス提案を日本語で出力してください。
+
+    ## 保有銘柄データ (tmp/portfolio.json)
+    [portfolio.json の全内容]
+
+    ## 本日のミーティング結果 (tmp/meeting-result.json)
+    - 市場概況: [marketOverview の全内容]
+    - 注目銘柄: [highlightedStocks 配列の全内容]
+    - リスク警告: [riskWarnings 配列の全内容]
+    - アクションアイテム: [actionItems 配列の全内容]
+
+    ## 保有銘柄一覧（全12銘柄、必ず全銘柄を評価すること）
+    [PORTFOLIO_HOLDINGS の全12銘柄: symbol, name, nameJa, sector]
+
+    ## 判断基準
+    - 保持: 現状維持が最善
+    - 買増: ポジションを増やすことを推奨
+    - 一部売却: ポジションの一部削減を推奨
+    - 全売却: 全ポジション解消を推奨
+
+    保有比率データはありません。定性的な判断（「買増しを検討」「ポジション縮小を推奨」等）で判断してください。
+
+    以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
+    マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
+
+    {
+      "date": "YYYY-MM-DD（今日の日付）",
+      "generatedAt": "ISO 8601タイムスタンプ",
+      "overallComment": "ポートフォリオ全体への総括（3-5文、200-400文字）",
+      "holdings": [
+        {
+          "symbol": "MRNA",
+          "nameJa": "モデルナ",
+          "decision": "保持",
+          "rationale": "判断根拠（200文字以内）",
+          "riskNote": "注意点（100文字以内、省略可）"
+        }
+      ],
+      "rebalanceActions": [
+        "具体的なアクション1（銘柄名と方向を明示）",
+        "具体的なアクション2"
+      ]
+    }
+
+    注意:
+    - decision は「保持」「買増」「一部売却」「全売却」の4択のみ使用すること。他の表現（ホールド、買い増し、売却等）は使用しないこと
+    - holdings は全12銘柄を含めること（抜け漏れ禁止）
+    - rebalanceActions は具体的なアクション（銘柄名と方向を明示）を2-5項目
+    - overallComment はポートフォリオ全体の状況を俯瞰したコメント
+
+**Step 3d 完了後の処理:**
+
+エージェントの応答を JSON としてパースし、以下のファイルに保存してください:
+- `portfolio-analyst` の出力 -> `/Users/arai/invest/tmp/portfolio-analysis.json`
+
+出力が有効な JSON でない場合は、エージェントを1回リトライしてください。2回目も失敗した場合は「警告: ポートフォリオ分析の生成に失敗しました。フォールバック表示で続行します。」とユーザーに表示して続行してください（portfolio-analysis.json を作成しない）。
+
+「ポートフォリオ分析完了」とユーザーに表示してください。
+
+---
+
 ### Step 3c: HTMLレポート生成
 
 「Bloomberg風HTMLレポートを生成中...」とユーザーに表示してください。
