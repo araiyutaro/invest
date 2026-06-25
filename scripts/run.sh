@@ -14,17 +14,6 @@ if [ -f .env ]; then
   set +a
 fi
 
-npx tsx src/index.ts >> "$PROJECT_DIR/logs/invest.log" 2>&1
-
-TODAY=$(date +%Y-%m-%d)
-
-if git -C "$PROJECT_DIR" diff --quiet docs/ && \
-   git -C "$PROJECT_DIR" diff --cached --quiet docs/ && \
-   [ -z "$(git -C "$PROJECT_DIR" ls-files --others --exclude-standard docs/)" ]; then
-  echo "[$TODAY] No new report files to commit" >> "$PROJECT_DIR/logs/invest.log"
-  exit 0
-fi
-
-git -C "$PROJECT_DIR" add docs/
-git -C "$PROJECT_DIR" commit -m "report: daily investment report $TODAY"
-git -C "$PROJECT_DIR" push origin master
+# v2.0: /invest skill command is the entry point; automated execution removed.
+# Phase 4 cleanup: v1.0 entry point and docs/ git commit/push logic removed.
+echo "v2.0: Use /invest skill command to run investment analysis."
