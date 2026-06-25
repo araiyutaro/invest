@@ -13,6 +13,7 @@ export interface StockScore {
 export interface AnalystRound1Output {
   readonly agentId: string;
   readonly agentRole: string;
+  readonly analysis: string;       // 4セクション構成の詳細散文（各セクション200〜400文字）
   readonly summary: string;
   readonly highlights: ReadonlyArray<string>;
   readonly risks: ReadonlyArray<string>;
