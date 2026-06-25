@@ -2,26 +2,25 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Claude Code Migration
-status: milestone_complete
-last_updated: 2026-06-25T00:13:44.835Z
-last_activity: 2026-06-24 -- Phase 04 execution started
+status: Awaiting next milestone
+last_updated: "2026-06-25T00:31:48.481Z"
+last_activity: 2026-06-25 — Milestone v2.0 completed and archived
 progress:
   total_phases: 4
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 7
   completed_plans: 7
-  percent: 75
-stopped_at: Milestone complete (Phase 04 was final phase)
+  percent: 100
 ---
 
 # Project State
 
 ## Current Position
 
-Phase: 04
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-06-25
+Phase: Milestone v2.0 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-06-25 — Milestone v2.0 completed and archived
 
 ## Progress Bar
 
@@ -65,6 +64,27 @@ Phase 4: Gemini Cleanup
 
 None
 
+## Deferred Items
+
+Items acknowledged and deferred at milestone close on 2026-06-25:
+
+| Category | Item | Status |
+|----------|------|--------|
+| uat_gaps | Phase 01 01-HUMAN-UAT.md | partial (2 pending scenarios) |
+| uat_gaps | Phase 02 02-HUMAN-UAT.md | partial (3 pending scenarios) |
+| uat_gaps | Phase 03 03-HUMAN-UAT.md | passed |
+| verification_gaps | Phase 01 01-VERIFICATION.md | human_needed |
+| verification_gaps | Phase 02 02-VERIFICATION.md | human_needed |
+
+Note: Phase 3 UAT で全パイプラインの E2E 動作が確認済みのため、Phase 1/2 の個別 UAT は実質カバー済み。
+
+## Project Reference
+
+See: .planning/PROJECT.md (updated 2026-06-25)
+
+**Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
+**Current focus:** Planning next milestone
+
 ## Session Continuity
 
-Next action: `/gsd-discuss-phase 4` to discuss Phase 4 (Gemini Cleanup) before planning
+Next action: `/gsd-new-milestone` to start the next milestone
