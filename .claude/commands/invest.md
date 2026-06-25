@@ -268,7 +268,7 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
 - `technical-r1` の出力 → `/Users/arai/invest/tmp/round-1/technical.json`
 - `risk-manager-r1` の出力 → `/Users/arai/invest/tmp/round-1/risk-manager.json`
 
-出力が有効なJSONでない場合は、`{"agentId": "...", "agentRole": "...", "analysis": "", "error": "invalid JSON", "picks": []}` を保存してください。
+出力が有効なJSONでない場合は、`{"agentId": "...", "agentRole": "...", "analysis": "", "summary": "", "highlights": [], "risks": [], "picks": [], "sectorView": "", "error": "invalid JSON"}` を保存してください。
 
 **失敗カウント:** 保存に失敗したエージェントをカウントし、3人以上失敗した場合は「エラー: Round 1 で3人以上のアナリストが失敗しました。ミーティングを中止します。」とユーザーに表示してパイプラインを停止してください。
 
