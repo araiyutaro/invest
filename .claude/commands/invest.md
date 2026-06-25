@@ -70,7 +70,6 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
 - `/Users/arai/invest/src/agents/moderator.ts` — `systemPrompt` フィールドの値を取得
 - `/Users/arai/invest/tmp/market.json` — 全内容
 - `/Users/arai/invest/tmp/news.json` — 全内容（最新50件に絞って使用）
-- `/Users/arai/invest/tmp/portfolio.json` — 全内容
 
 ---
 
