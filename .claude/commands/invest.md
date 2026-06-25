@@ -321,9 +321,11 @@ for (const agent of agents) {
   }
 }
 
-const tickers = Array.from(tickerSet);
+// ポートフォリオ保有銘柄を除外（デイリーミーティングはポートフォリオと独立した分析）
+const portfolioSymbols = new Set(['MRNA','JOBY','HII','POWL','FLNC','EE','8522.T','5885.T','5576.T','7711.T','NXT','BWMX']);
+const tickers = Array.from(tickerSet).filter(t => !portfolioSymbols.has(t));
 fs.writeFileSync('/Users/arai/invest/tmp/moderator-tickers.json', JSON.stringify({ tickers }, null, 2));
-console.log('ティッカー抽出: ' + tickers.length + '銘柄を特定');
+console.log('ティッカー抽出: ' + tickers.length + '銘柄を特定（ポートフォリオ保有銘柄は除外済み）');
 console.log(tickers.join(', '));
 "
 ```
@@ -379,7 +381,7 @@ console.log(tickers.join(', '));
       "disagreements": ["異議点1"]
     }
 
-    注意: discussion フィールドは必ず他のアナリスト名（[テンバガーハンター] 等）を指定した具体的な相互参照を含めてください。
+    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[テンバガーハンター] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -420,7 +422,7 @@ console.log(tickers.join(', '));
       "disagreements": ["異議点1"]
     }
 
-    注意: discussion フィールドは必ず他のアナリスト名（[ファンダメンタルズアナリスト] 等）を指定した具体的な相互参照を含めてください。
+    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[ファンダメンタルズアナリスト] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -461,7 +463,7 @@ console.log(tickers.join(', '));
       "disagreements": ["異議点1"]
     }
 
-    注意: discussion フィールドは必ず他のアナリスト名（[ファンダメンタルズアナリスト] 等）を指定した具体的な相互参照を含めてください。
+    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[ファンダメンタルズアナリスト] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -502,7 +504,7 @@ console.log(tickers.join(', '));
       "disagreements": ["異議点1"]
     }
 
-    注意: discussion フィールドは必ず他のアナリスト名（[ファンダメンタルズアナリスト] 等）を指定した具体的な相互参照を含めてください。
+    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[ファンダメンタルズアナリスト] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -543,7 +545,7 @@ console.log(tickers.join(', '));
       "disagreements": ["異議点1"]
     }
 
-    注意: discussion フィールドは必ず他のアナリスト名（[ファンダメンタルズアナリスト] 等）を指定した具体的な相互参照を含めてください。
+    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[ファンダメンタルズアナリスト] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -557,6 +559,8 @@ console.log(tickers.join(', '));
 - `risk-manager-r2` の出力 → `/Users/arai/invest/tmp/round-2/risk-manager.json`
 
 出力が有効なJSONでない場合は、`{"agentId": "...", "discussion": "", "comment": "", "agreements": [], "disagreements": []}` を保存してください。
+
+**Round 2 バリデーション:** 保存した各JSONファイルの `discussion` フィールドの文字数を確認してください。400文字未満のものがある場合は「警告: {agentId} の discussion が短すぎます ({n}文字)。Round 2 の品質が低い可能性があります。」とユーザーに表示してください。
 
 「Round 2 完了: N/5 アナリスト成功」とユーザーに表示してください。
 
@@ -789,6 +793,8 @@ picks: [tmp/round-1/{agentId}.json の picks フィールド]
     - 平均スコア 4未満 → 弱気
 
     ## 重要な注意事項
+    - highlightedStocks には Round 3 でスコアリングされた銘柄（tmp/moderator-tickers.json のリスト）のみを含めること
+    - ポートフォリオ保有銘柄（MRNA, JOBY, HII, POWL, FLNC, EE, 8522.T, 5885.T, 5576.T, 7711.T, NXT, BWMX）は highlightedStocks に絶対に含めないこと。デイリーミーティングはポートフォリオとは独立した市場分析である
     - 注目銘柄は中小型株を優先（NVIDIA、Apple、Microsoft、Google等の大型株は避ける）
     - 各銘柄の verdict は必ずスコア計算結果に基づく
     - レポート内容は日本語で記述
