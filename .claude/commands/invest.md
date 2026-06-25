@@ -672,8 +672,8 @@ picks: [tmp/round-1/{agentId}.json の picks フィールド]
   "agentId": "[エージェントID]",
   "agentRole": "[エージェントロール名]",
   "scores": [
-    {"ticker": "AAPL", "score": 7, "reason": "30文字以内の理由"},
-    {"ticker": "7203.T", "score": 8, "reason": "30文字以内の理由"}
+    {"ticker": "AAPL", "score": 7, "reason": "100文字以内の理由（スコアの根拠を具体的に）"},
+    {"ticker": "7203.T", "score": 8, "reason": "100文字以内の理由（スコアの根拠を具体的に）"}
   ]
 }
 
