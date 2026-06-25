@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { analystRound1OutputSchema } from "../meeting/schemas.js";
+import { analystRound1OutputSchema, analystRound2OutputSchema } from "../meeting/schemas.js";
 
 const validMeetingResultJson = JSON.stringify({
   date: "2026-06-24",
@@ -146,6 +146,37 @@ describe("analystRound1OutputSchema", () => {
   it("empty analysis string is allowed (fallback case)", () => {
     const fallback = { ...validRound1, analysis: "" };
     expect(() => analystRound1OutputSchema.parse(fallback)).not.toThrow();
+  });
+});
+
+// --- analystRound2OutputSchema ---
+
+describe("analystRound2OutputSchema", () => {
+  const validRound2 = {
+    agentId: "fundamentals",
+    discussion: "[テンバガーハンター] のXYZ社推奨について、ファンダメンタルズ面では...\n\n[マクロエコノミスト] の金利上昇リスクについては...",
+    comment: "各アナリストの主張を踏まえ、テクノロジーセクターは引き続き強気維持。ただし金利動向に注視が必要。",
+    agreements: ["テクノロジーセクター強気の共通認識", "金利リスクへの警戒"],
+    disagreements: ["中小型株への配分比率で見解が分かれる"]
+  };
+
+  it("valid Round 2 output passes validation", () => {
+    expect(() => analystRound2OutputSchema.parse(validRound2)).not.toThrow();
+  });
+
+  it("discussion field is required", () => {
+    const { discussion, ...without } = validRound2;
+    expect(() => analystRound2OutputSchema.parse(without)).toThrow();
+  });
+
+  it("empty discussion string is allowed (fallback case)", () => {
+    const fallback = { ...validRound2, discussion: "" };
+    expect(() => analystRound2OutputSchema.parse(fallback)).not.toThrow();
+  });
+
+  it("empty comment string is allowed", () => {
+    const fallback = { ...validRound2, comment: "" };
+    expect(() => analystRound2OutputSchema.parse(fallback)).not.toThrow();
   });
 });
 
