@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import type { MeetingResult, WebSearchResult, ReevaluationOutput } from "../meeting/types.js";
+import type { MeetingResult, WebSearchResult, ReevaluationOutput, AnalystRound1Output, AnalystRound2Output, AnalystRound3Output } from "../meeting/types.js";
 
 vi.mock("node:fs/promises", () => ({
   readFile: vi.fn().mockRejectedValue(new Error("ENOENT")),
@@ -88,19 +88,58 @@ const validReevalResults: ReadonlyArray<ReevaluationOutput> = [
   },
 ];
 
-describe("generate-report", () => {
-  beforeEach(async () => {
-    const fsMock = await import("node:fs/promises");
-    (fsMock.writeFile as ReturnType<typeof vi.fn>).mockClear();
-    (fsMock.mkdir as ReturnType<typeof vi.fn>).mockClear();
-    (fsMock.readFile as ReturnType<typeof vi.fn>).mockClear();
-    (fsMock.readdir as ReturnType<typeof vi.fn>).mockClear();
+const validRound1Results: ReadonlyArray<AnalystRound1Output> = [
+  {
+    agentId: "fundamentals",
+    agentRole: "ファンダメンタルズアナリスト",
+    analysis: "## 市場認識\n米国株式市場はAI需要主導で上昇基調。\n\n## 専門領域からの洞察\nPER水準は適正範囲内。\n\n## 注目銘柄の詳細分析\nPLTR社は政府向け契約が拡大。\n\n## リスクと懸念\n金利上昇リスクに注意。",
+    summary: "市場は堅調、AI関連に注目",
+    highlights: ["AI需要拡大", "小型株に妙味"],
+    risks: ["金利上昇リスク"],
+    picks: [{ ticker: "PLTR", direction: "強気" as const, rationale: "政府契約拡大で成長期待" }],
+    sectorView: "テクノロジーセクター強気継続",
+  },
+];
+
+const validRound2Results: ReadonlyArray<AnalystRound2Output> = [
+  {
+    agentId: "fundamentals",
+    discussion: "[テンバガーハンター] のPLTR推奨については、ファンダメンタルズ面からも支持できる。PER水準は...",
+    comment: "PLTR推奨に同意、ただし金利リスクに注意",
+    agreements: ["PLTR強気"],
+    disagreements: ["中小型株配分"],
+  },
+];
+
+const validRound3Results: ReadonlyArray<AnalystRound3Output> = [
+  {
+    agentId: "fundamentals",
+    agentRole: "ファンダメンタルズアナリスト",
+    scores: [{ ticker: "PLTR", score: 8, reason: "成長率高い" }],
+  },
+];
+
+describe("report-utils", () => {
+  it("Test 10: escapeHtml が HTML 特殊文字 (&, <, >) をエスケープする", async () => {
+    const { escapeHtml } = await import("./report-utils.js");
+    expect(escapeHtml("a & b")).toBe("a &amp; b");
+    expect(escapeHtml("<script>")).toBe("&lt;script&gt;");
+    expect(escapeHtml("x > y")).toBe("x &gt; y");
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  it("Test 15: escapeHtml が report-utils からインポートできる", async () => {
+    const { escapeHtml } = await import("./report-utils.js");
+    expect(escapeHtml("a & b")).toBe("a &amp; b");
   });
 
+  it("Test 16: markdownToHtml が report-utils からインポートできる", async () => {
+    const { markdownToHtml } = await import("./report-utils.js");
+    const html = markdownToHtml("**bold**");
+    expect(html).toContain("<strong>bold</strong>");
+  });
+});
+
+describe("Daily Report", () => {
   it("Test 1: generateHtml が MeetingResult + WebSearchResult[] + ReevaluationOutput[] を受け取り HTML 文字列を返す", async () => {
     const { generateHtml } = await import("./generate-report.js");
     const html = generateHtml(validMeetingResult, validWebSearchResults, validReevalResults);
@@ -157,7 +196,88 @@ describe("generate-report", () => {
     expect(html).toContain("<!DOCTYPE html>");
   });
 
-  it("Test 9: main() が reports/YYYY-MM-DD/daily-report.html にファイルを書き出す（fs mock 経由で確認）", async () => {
+  it("Test 24: Daily Report に青系アクセントカラー（#3b82f6）が含まれる", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const html = generateDailyReportHtml(validMeetingResult, validWebSearchResults, validReevalResults);
+    expect(html).toContain("#3b82f6");
+  });
+});
+
+describe("Meeting Minutes HTML", () => {
+  it("Test 17: generateMeetingMinutesHtml が有効な HTML を返す", async () => {
+    const { generateMeetingMinutesHtml } = await import("./generate-meeting-minutes.js");
+    const html = generateMeetingMinutesHtml(validMeetingResult, validRound1Results, validRound2Results, validRound3Results);
+    expect(html).toContain("<!DOCTYPE html>");
+    expect(html).toContain("</html>");
+    expect(html).toContain("Meeting Minutes");
+  });
+
+  it("Test 18: Meeting Minutes に Round 1 の analysis 全文が含まれる", async () => {
+    const { generateMeetingMinutesHtml } = await import("./generate-meeting-minutes.js");
+    const html = generateMeetingMinutesHtml(validMeetingResult, validRound1Results, validRound2Results, validRound3Results);
+    expect(html).toContain("米国株式市場はAI需要主導で上昇基調");
+    expect(html).toContain("PER水準は適正範囲内");
+  });
+
+  it("Test 19: Meeting Minutes に Round 1 の全フィールド（summary, highlights, risks, picks, sectorView）が含まれる", async () => {
+    const { generateMeetingMinutesHtml } = await import("./generate-meeting-minutes.js");
+    const html = generateMeetingMinutesHtml(validMeetingResult, validRound1Results, validRound2Results, validRound3Results);
+    expect(html).toContain("市場は堅調、AI関連に注目");
+    expect(html).toContain("AI需要拡大");
+    expect(html).toContain("金利上昇リスク");
+    expect(html).toContain("PLTR");
+    expect(html).toContain("テクノロジーセクター強気継続");
+  });
+
+  it("Test 20: Meeting Minutes に Round 2 の discussion 全文が含まれる", async () => {
+    const { generateMeetingMinutesHtml } = await import("./generate-meeting-minutes.js");
+    const html = generateMeetingMinutesHtml(validMeetingResult, validRound1Results, validRound2Results, validRound3Results);
+    expect(html).toContain("テンバガーハンター");
+    expect(html).toContain("ファンダメンタルズ面からも支持できる");
+  });
+
+  it("Test 21: Meeting Minutes に Round 2 の agreements/disagreements が含まれる", async () => {
+    const { generateMeetingMinutesHtml } = await import("./generate-meeting-minutes.js");
+    const html = generateMeetingMinutesHtml(validMeetingResult, validRound1Results, validRound2Results, validRound3Results);
+    expect(html).toContain("PLTR強気");
+    expect(html).toContain("中小型株配分");
+  });
+
+  it("Test 22: Meeting Minutes にオレンジ系アクセントカラー（#f59e0b）が含まれる", async () => {
+    const { generateMeetingMinutesHtml } = await import("./generate-meeting-minutes.js");
+    const html = generateMeetingMinutesHtml(validMeetingResult, validRound1Results, validRound2Results, validRound3Results);
+    expect(html).toContain("#f59e0b");
+  });
+
+  it("Test 23: Meeting Minutes が Round データが空でも正常に生成される", async () => {
+    const { generateMeetingMinutesHtml } = await import("./generate-meeting-minutes.js");
+    const html = generateMeetingMinutesHtml(validMeetingResult, [], [], []);
+    expect(html).toContain("<!DOCTYPE html>");
+  });
+});
+
+describe("Portfolio Report", () => {
+  it("Test 25: Portfolio Report に緑系アクセントカラー（#10b981）が含まれる", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult);
+    expect(html).toContain("#10b981");
+  });
+});
+
+describe("3-report output", () => {
+  beforeEach(async () => {
+    const fsMock = await import("node:fs/promises");
+    (fsMock.writeFile as ReturnType<typeof vi.fn>).mockClear();
+    (fsMock.mkdir as ReturnType<typeof vi.fn>).mockClear();
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockClear();
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockClear();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("Test 9: main() が docs/YYYY-MM-DD/daily-report.html にファイルを書き出す（fs mock 経由で確認）", async () => {
     const fsMock = await import("node:fs/promises");
 
     const meetingResultJson = JSON.stringify(validMeetingResult);
@@ -178,12 +298,97 @@ describe("generate-report", () => {
     );
     expect(reportCall).toBeDefined();
     expect(String(reportCall![0])).toContain("2026-06-24");
+    expect(String(reportCall![0])).toContain("docs");
   });
 
-  it("Test 10: escapeHtml が HTML 特殊文字 (&, <, >) をエスケープする", async () => {
-    const { escapeHtml } = await import("./generate-report.js");
-    expect(escapeHtml("a & b")).toBe("a &amp; b");
-    expect(escapeHtml("<script>")).toBe("&lt;script&gt;");
-    expect(escapeHtml("x > y")).toBe("x &gt; y");
+  it("Test 11: main() が docs/YYYY-MM-DD/ に daily-report.html を書き出す", async () => {
+    const fsMock = await import("node:fs/promises");
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    const writeCalls = (fsMock.writeFile as ReturnType<typeof vi.fn>).mock.calls;
+    const reportCall = writeCalls.find((call) =>
+      String(call[0]).includes("daily-report.html"),
+    );
+    expect(reportCall).toBeDefined();
+    expect(String(reportCall![0])).toContain("docs/2026-06-24");
+  });
+
+  it("Test 12: main() が docs/YYYY-MM-DD/ に meeting-minutes.html を書き出す", async () => {
+    const fsMock = await import("node:fs/promises");
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    const writeCalls = (fsMock.writeFile as ReturnType<typeof vi.fn>).mock.calls;
+    const minutesCall = writeCalls.find((call) =>
+      String(call[0]).includes("meeting-minutes.html"),
+    );
+    expect(minutesCall).toBeDefined();
+    expect(String(minutesCall![0])).toContain("docs/2026-06-24");
+  });
+
+  it("Test 13: main() が docs/YYYY-MM-DD/ に portfolio-report.html を書き出す", async () => {
+    const fsMock = await import("node:fs/promises");
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    const writeCalls = (fsMock.writeFile as ReturnType<typeof vi.fn>).mock.calls;
+    const portfolioCall = writeCalls.find((call) =>
+      String(call[0]).includes("portfolio-report.html"),
+    );
+    expect(portfolioCall).toBeDefined();
+    expect(String(portfolioCall![0])).toContain("docs/2026-06-24");
+  });
+
+  it("Test 14: main() が reports/ ではなく docs/ ディレクトリに出力する", async () => {
+    const fsMock = await import("node:fs/promises");
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    const writeCalls = (fsMock.writeFile as ReturnType<typeof vi.fn>).mock.calls;
+    for (const call of writeCalls) {
+      expect(String(call[0])).not.toContain("/reports/");
+      expect(String(call[0])).toContain("/docs/");
+    }
   });
 });

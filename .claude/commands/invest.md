@@ -1178,12 +1178,14 @@ const fs = require('fs');
 try {
   const result = JSON.parse(fs.readFileSync('tmp/meeting-result.json', 'utf-8'));
   const date = result.date;
-  const reportPath = 'reports/' + date + '/daily-report.html';
-  const minutesPath = 'reports/' + date + '/meeting-minutes.html';
+  const docsDir = 'docs/' + date;
+  const files = ['daily-report.html', 'meeting-minutes.html', 'portfolio-report.html'];
   console.log('レポート生成完了:');
   console.log('  日付:', date);
-  console.log('  Daily Report:', fs.existsSync(reportPath) ? reportPath + ' ✓' : reportPath + ' (未生成)');
-  console.log('  Meeting Minutes:', fs.existsSync(minutesPath) ? minutesPath + ' ✓' : minutesPath + ' (未生成)');
+  for (const file of files) {
+    const path = docsDir + '/' + file;
+    console.log('  ' + file + ':', fs.existsSync(path) ? '✓' : '(未生成)');
+  }
   console.log('  注目銘柄数:', result.highlightedStocks?.length ?? 0);
 } catch(e) {
   console.log('確認エラー:', e.message);
@@ -1191,4 +1193,4 @@ try {
 "
 ```
 
-「レポート生成完了: reports/{date}/daily-report.html」とユーザーに表示してください。
+「レポート生成完了: docs/{date}/ (3ファイル)」とユーザーに表示してください。
