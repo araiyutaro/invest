@@ -8,17 +8,17 @@
 
 毎日の投資判断に必要な多角的分析（ファンダメンタル、テクニカル、マクロ、リスク、テンバガー候補）を、複数AIアナリストの議論形式で提供すること。
 
-## Current Milestone: v2.0 Claude Code Migration
+## Current Milestone: v2.1 Report Quality & Pipeline Overhaul
 
-**Goal:** Gemini APIベースのAI分析をClaude Codeエージェントに全面移行し、スキルコマンドで実行可能にする
+**Goal:** v1.0品質の3レポート構成を復元し、新規銘柄発掘とポートフォリオ管理を分離、GitHub Pagesへの自動デプロイ
 
 **Target features:**
-- データ取得は既存TSコード活用、AI分析はClaude Codeエージェントに移行
-- 5アナリスト+モデレーター構成をClaude Codeサブエージェントとして再実装
-- ニュース分析・銘柄リサーチをClaude Code（WebSearch含む）に移行
-- チャート画像生成廃止、テキストベースレポートに統一
-- `/invest` スキルコマンドとして登録・実行
-- Gemini API依存の完全除去
+- 3レポート分離（Daily Report / Meeting Minutes / Portfolio Report）
+- ニュース・市況からの新規銘柄発掘（ポートフォリオ外）
+- アナリスト分析の詳細化（JSON圧縮→プロの散文分析）
+- ポートフォリオ個別評価（保持/買増/売却判断）
+- 出力先を docs/ に変更（GitHub Pages対応）
+- レポート生成後の自動 git commit + push
 
 ## Requirements
 
@@ -37,10 +37,11 @@
 
 ### Active
 
-- [x] Claude Codeエージェントへの分析機能移行 — Validated in Phase 2: Analyst Subagents (5アナリスト並列3ラウンド+モデレーター統合)
-- [x] スキルコマンド（/invest）による実行 — Validated in Phase 1: Data Layer + Skill Foundation
-- [x] WebSearchリサーチ + Bloomberg風HTMLレポート生成 — Validated in Phase 3: Report Builder + WebSearch Research
-- [x] Gemini API依存の除去 — Validated in Phase 4: Gemini Cleanup
+- [ ] 3レポート構成の復元（Daily Report / Meeting Minutes / Portfolio Report）
+- [ ] ニュース・市況からの新規銘柄発掘（ポートフォリオ非依存）
+- [ ] アナリスト分析の詳細散文化（v1.0品質への回帰）
+- [ ] ポートフォリオ個別評価と組入判断
+- [ ] docs/ 出力 + 自動 git push（GitHub Pages デプロイ）
 
 ### Out of Scope
 
@@ -56,7 +57,9 @@
 - Google News Japan + RSS でニュース補完
 - レポートは reports/YYYY-MM-DD/ に出力
 - エージェントは小型・中型株を優先（NVDA, AAPL等の大型株は推奨から除外）
-- Gemini API 依存は Phase 4 で完全除去済み（@google/generative-ai, @google/genai）
+- Gemini API 依存は v2.0 Phase 4 で完全除去済み
+- v2.0 では単一レポートに退化 → v2.1 で3レポート構成を復元予定
+- レポート出力先は docs/（GitHub Pages 公開用）
 
 ## Constraints
 
@@ -92,4 +95,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-25 after Phase 4 (Gemini Cleanup) completion — all v2.0 phases complete*
+*Last updated: 2026-06-25 — v2.1 milestone started*
