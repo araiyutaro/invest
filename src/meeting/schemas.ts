@@ -26,6 +26,7 @@ export const analystRound1OutputSchema = z.object({
 
 export const analystRound2OutputSchema = z.object({
   agentId: z.string(),
+  discussion: z.string(),
   comment: z.string(),
   agreements: z.array(z.string()),
   disagreements: z.array(z.string()),
