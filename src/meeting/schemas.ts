@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { MeetingResult, WebSearchResult, ReevaluationOutput } from "./types.js";
+import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnalysis } from "./types.js";
 
 export const stockPickSchema = z.object({
   ticker: z.string(),
@@ -136,4 +136,24 @@ export function validateWebSearchResult(data: unknown): WebSearchResult {
 
 export function validateReevaluationOutput(data: unknown): ReevaluationOutput {
   return reevaluationOutputSchema.parse(data) as ReevaluationOutput;
+}
+
+export const holdingEvaluationSchema = z.object({
+  symbol: z.string(),
+  nameJa: z.string(),
+  decision: z.enum(["保持", "買増", "一部売却", "全売却"]),
+  rationale: z.string(),
+  riskNote: z.string().optional(),
+});
+
+export const portfolioAnalysisSchema = z.object({
+  date: z.string(),
+  generatedAt: z.string(),
+  overallComment: z.string(),
+  holdings: z.array(holdingEvaluationSchema),
+  rebalanceActions: z.array(z.string()),
+});
+
+export function validatePortfolioAnalysis(data: unknown): PortfolioAnalysis {
+  return portfolioAnalysisSchema.parse(data) as PortfolioAnalysis;
 }

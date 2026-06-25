@@ -106,3 +106,19 @@ export interface ReevaluationOutput {
     readonly changed: boolean;
   }>;
 }
+
+export interface HoldingEvaluation {
+  readonly symbol: string;
+  readonly nameJa: string;
+  readonly decision: "保持" | "買増" | "一部売却" | "全売却";
+  readonly rationale: string;
+  readonly riskNote?: string;
+}
+
+export interface PortfolioAnalysis {
+  readonly date: string;
+  readonly generatedAt: string;
+  readonly overallComment: string;
+  readonly holdings: ReadonlyArray<HoldingEvaluation>;
+  readonly rebalanceActions: ReadonlyArray<string>;
+}
