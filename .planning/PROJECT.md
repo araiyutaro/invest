@@ -40,7 +40,7 @@
 - [x] Claude Codeエージェントへの分析機能移行 — Validated in Phase 2: Analyst Subagents (5アナリスト並列3ラウンド+モデレーター統合)
 - [x] スキルコマンド（/invest）による実行 — Validated in Phase 1: Data Layer + Skill Foundation
 - [x] WebSearchリサーチ + Bloomberg風HTMLレポート生成 — Validated in Phase 3: Report Builder + WebSearch Research
-- [ ] Gemini API依存の除去
+- [x] Gemini API依存の除去 — Validated in Phase 4: Gemini Cleanup
 
 ### Out of Scope
 
@@ -56,7 +56,7 @@
 - Google News Japan + RSS でニュース補完
 - レポートは reports/YYYY-MM-DD/ に出力
 - エージェントは小型・中型株を優先（NVDA, AAPL等の大型株は推奨から除外）
-- @google/generative-ai（テキスト分析）と @google/genai（画像生成）は異なるパッケージ
+- Gemini API 依存は Phase 4 で完全除去済み（@google/generative-ai, @google/genai）
 
 ## Constraints
 
@@ -69,10 +69,10 @@
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Gemini → Claude Code 移行 | Claude Codeエコシステムで完結、API依存削減 | — Pending |
-| ハイブリッドアプローチ | データ取得TSは安定、AI分析のみ置換 | — Pending |
-| チャート画像廃止 | Claude非対応、テキストで十分 | — Pending |
-| スキルコマンド実行 | ユーザー主導で柔軟な実行タイミング | — Pending |
+| Gemini → Claude Code 移行 | Claude Codeエコシステムで完結、API依存削減 | ✓ Complete (Phase 2+4) |
+| ハイブリッドアプローチ | データ取得TSは安定、AI分析のみ置換 | ✓ Complete (Phase 1-3) |
+| チャート画像廃止 | Claude非対応、テキストで十分 | ✓ Complete (Phase 4) |
+| スキルコマンド実行 | ユーザー主導で柔軟な実行タイミング | ✓ Complete (Phase 1) |
 
 ## Evolution
 
@@ -92,4 +92,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-25 after Phase 3 (Report Builder + WebSearch Research) completion*
+*Last updated: 2026-06-25 after Phase 4 (Gemini Cleanup) completion — all v2.0 phases complete*
