@@ -1,26 +1,26 @@
 ---
 gsd_state_version: 1.0
-milestone: v2.1
-milestone_name: Report Quality & Pipeline Overhaul
-status: completed
-last_updated: "2026-06-25T08:16:58Z"
-last_activity: 2026-06-25 — Auto git push deployment added to /invest pipeline (Step 4 complete)
+milestone: v2.2
+milestone_name: News Quality & Pipeline Metrics
+status: planning
+last_updated: "2026-06-26T04:41:53.477Z"
+last_activity: 2026-06-26
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Current Position
 
-Phase: Phase 7 — Portfolio Integration & Deployment
-Plan: 07-02 (completed)
-Status: Phase 7 complete — all plans done
-Last activity: 2026-06-25 — Auto git push deployment added to /invest pipeline (Step 4 complete)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-06-26 — Milestone v2.2 started
 
 ## Progress Bar
 

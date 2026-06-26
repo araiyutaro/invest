@@ -8,17 +8,15 @@
 
 毎日の投資判断に必要な多角的分析（ファンダメンタル、テクニカル、マクロ、リスク、テンバガー候補）を、複数AIアナリストの議論形式で提供すること。
 
-## Current Milestone: v2.1 Report Quality & Pipeline Overhaul
+## Current Milestone: v2.2 News Quality & Pipeline Metrics
 
-**Goal:** v1.0品質の3レポート構成を復元し、新規銘柄発掘とポートフォリオ管理を分離、GitHub Pagesへの自動デプロイ
+**Goal:** ニュース収集の品質改善（重複排除・フィルタ・件数見直し）とパイプライン実行時間の計測
 
 **Target features:**
-- 3レポート分離（Daily Report / Meeting Minutes / Portfolio Report）
-- ニュース・市況からの新規銘柄発掘（ポートフォリオ外）
-- アナリスト分析の詳細化（JSON圧縮→プロの散文分析）
-- ポートフォリオ個別評価（保持/買増/売却判断）
-- 出力先を docs/ に変更（GitHub Pages対応）
-- レポート生成後の自動 git commit + push
+- クロスソース重複排除（Finnhub / Google News / RSS 間）
+- 投資無関係記事の除外（キーワード・カテゴリベースのルールフィルタ）
+- アナリストへの記事供給数の見直し（50件固定→フィルタ後の有効記事を柔軟に）
+- `/invest` パイプラインの実行時間計測と最終表示
 
 ## Requirements
 
@@ -34,14 +32,18 @@
 - ✓ ポートフォリオ保有銘柄の追跡・分析 — v1.0
 - ✓ launchdによる毎朝8時の自動実行 — v1.0
 - ✓ US インデックスファンド戦略セクション — v1.0
+- ✓ 3レポート構成（Daily Report / Meeting Minutes / Portfolio Report） — v2.1
+- ✓ ポートフォリオ非依存の新規銘柄発掘 — v2.1
+- ✓ アナリスト詳細散文分析（Round 1 + Round 2 ディスカッション） — v2.1
+- ✓ ポートフォリオ個別評価と組入判断 — v2.1
+- ✓ docs/ 出力 + 自動 git push（GitHub Pages デプロイ） — v2.1
 
 ### Active
 
-- [ ] 3レポート構成の復元（Daily Report / Meeting Minutes / Portfolio Report）
-- [ ] ニュース・市況からの新規銘柄発掘（ポートフォリオ非依存）
-- [ ] アナリスト分析の詳細散文化（v1.0品質への回帰）
-- [ ] ポートフォリオ個別評価と組入判断
-- [ ] docs/ 出力 + 自動 git push（GitHub Pages デプロイ）
+- [ ] クロスソース重複排除（Finnhub / Google News / RSS 間）
+- [ ] 投資無関係記事の除外（ルールベースフィルタ）
+- [ ] アナリストへの記事供給数の見直し（50件→柔軟）
+- [ ] `/invest` パイプラインの実行時間計測と表示
 
 ### Out of Scope
 
@@ -55,11 +57,12 @@
 - yahoo-finance2 v3（`new YahooFinance()` でインスタンス化）
 - Finnhub API でニュース取得
 - Google News Japan + RSS でニュース補完
-- レポートは reports/YYYY-MM-DD/ に出力
+- レポートは docs/YYYY-MM-DD/ に出力（GitHub Pages 公開用）
 - エージェントは小型・中型株を優先（NVDA, AAPL等の大型株は推奨から除外）
 - Gemini API 依存は v2.0 Phase 4 で完全除去済み
-- v2.0 では単一レポートに退化 → v2.1 で3レポート構成を復元予定
-- レポート出力先は docs/（GitHub Pages 公開用）
+- v2.1 で3レポート構成を復元済み（Daily Report / Meeting Minutes / Portfolio Report）
+- ニュース取得: Finnhub API + Google News RSS + 5つの日本語RSSソース（計約160件/日）
+- アナリストには最新50件のみ渡しているが、品質フィルタなし
 
 ## Constraints
 
@@ -95,4 +98,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-25 — v2.1 milestone started*
+*Last updated: 2026-06-26 — v2.2 milestone started*
