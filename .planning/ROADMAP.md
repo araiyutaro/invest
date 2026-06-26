@@ -4,6 +4,7 @@
 
 - ✅ **v2.0 Claude Code Migration** — Phases 1-4 (shipped 2026-06-25)
 - ✅ **v2.1 Report Quality & Pipeline Overhaul** — Phases 5-7 (shipped 2026-06-25)
+- 🚧 **v2.2 News Quality & Pipeline Metrics** — Phases 8-10 (in progress)
 
 ## Phases
 
@@ -28,6 +29,14 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 5: Analysis Engine Overhaul** - アナリストが独立した銘柄発掘と詳細散文分析を行う能力を確立する
 - [x] **Phase 6: 3-Report Structure** - generate-report.tsが Daily Report / Meeting Minutes / Portfolio Report の3ファイルを docs/ に出力する
 - [x] **Phase 7: Portfolio Integration & Deployment** - ポートフォリオ評価、Daily Reportとの統合、自動git pushによるGitHub Pagesデプロイを完成させる
+
+### 🚧 v2.2 News Quality & Pipeline Metrics (In Progress)
+
+**Milestone Goal:** ニュース収集の品質改善（重複排除・フィルタ・件数見直し）とパイプライン実行時間の計測により、アナリストに供給するニュースの質を向上させる。
+
+- [ ] **Phase 8: News Filter Module** - クロスソース重複排除・関連性フィルタ・時間フィルタを一元管理するピュア関数モジュールをTDDで構築する
+- [ ] **Phase 9: Pipeline Integration** - filter.tsをcollect-data.tsとinvest.mdに統合し、アナリストがフィルタ済み記事のみを受け取る
+- [ ] **Phase 10: Pipeline Timing** - パイプライン全体とステップ別の実行時間を計測し、最終出力に表示する
 
 ## Phase Details
 
@@ -79,6 +88,49 @@ Plans:
 - [x] 07-02: PIPE-01/02 — 自動git push統合と /invest コマンド最終調整
 **UI hint**: yes
 
+### Phase 8: News Filter Module
+**Goal**: クロスソース重複排除・関連性フィルタ・時間フィルタを一元管理するピュア関数モジュール `src/data/news/filter.ts` をTDDで構築し、単体テストで動作を保証する
+**Depends on**: Phase 7
+**Requirements**: DEDUP-01, DEDUP-02, DEDUP-03, FILT-01, FILT-02
+**Success Criteria** (what must be TRUE):
+  1. 異なるソース（Finnhub/Google News/RSS）から届いた同一URLの記事が1件に集約される
+  2. NFKC正規化後にJaccard類似度 ≥ 0.70 の類似タイトルを持つ記事が1件に集約される（「【速報】〜」と「〜」が同一視される）
+  3. 「スポーツ選手が優勝」のような非投資記事はdenylistで除外され、「スポーツ用品株が高騰」はdenylistで除外されない
+  4. 全ソースで24時間以上前の記事が除外される
+  5. rss-sources.ts の50文字プレフィックスdedupが削除され、NFKC正規化+Jaccardに統一されている
+**Plans**: TBD
+
+Plans:
+- [ ] 08-01: DEDUP-01/02/03 — filter.ts 型定義・URLdedup・タイトル正規化Jaccard dedup の TDD 実装
+- [ ] 08-02: FILT-01/02 — 関連性denylistフィルタ・24時間時間フィルタの TDD 実装と rss-sources.ts dedup 置換
+
+### Phase 9: Pipeline Integration
+**Goal**: filter.ts を collect-data.ts と invest.md に統合し、フィルタ済み記事（MIN=20, MAX=80件）のみが tmp/news.json に書き込まれ、アナリストに供給される
+**Depends on**: Phase 8
+**Requirements**: INTG-01, INTG-02, FILT-03, FILT-04
+**Success Criteria** (what must be TRUE):
+  1. `collect-data.ts` 実行後に `tmp/news.json` にはフィルタ済み記事のみが保存される（非投資記事・重複記事なし）
+  2. コンソールに「生記事数 → dedup後 → フィルタ後」の3段階の記事数統計がログ出力される
+  3. アナリストへの記事供給数が50件固定ではなく、フィルタ後の実数（MIN=20, MAX=80）になっている
+  4. invest.md 内の `slice(0, 50)` や「最新50件」などのハードコードが除去されている
+**Plans**: TBD
+
+Plans:
+- [ ] 09-01: INTG-01/FILT-03/04 — collect-data.ts への filter.ts 統合・記事数フロア/シーリング・統計ログ実装
+- [ ] 09-02: INTG-02 — invest.md の50件ハードキャップ除去とフィルタ済み全記事供給
+
+### Phase 10: Pipeline Timing
+**Goal**: `/invest` コマンドの最終出力にパイプライン全体とステップ別の実行時間が表示される
+**Depends on**: Phase 9
+**Requirements**: METR-01, METR-02
+**Success Criteria** (what must be TRUE):
+  1. `/invest` コマンドの最終出力にパイプライン全体の実行時間が表示される（例: `Total: 4m 23s`）
+  2. データ収集・Round 1分析・Round 2分析・レポート生成・デプロイの各ステップ別実行時間が最終出力に表示される
+**Plans**: TBD
+
+Plans:
+- [ ] 10-01: METR-01/02 — performance.now() 計測・tmp/pipeline-metrics.json 書き出し・invest.md 最終表示の実装
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -90,8 +142,12 @@ Plans:
 | 5. Analysis Engine Overhaul | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 6. 3-Report Structure | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 7. Portfolio Integration & Deployment | v2.1 | 2/2 | Complete | 2026-06-25 |
+| 8. News Filter Module | v2.2 | 0/2 | Not started | - |
+| 9. Pipeline Integration | v2.2 | 0/2 | Not started | - |
+| 10. Pipeline Timing | v2.2 | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-06-24*
 *Milestone v2.0 shipped: 2026-06-25*
-*Milestone v2.1 started: 2026-06-25*
+*Milestone v2.1 shipped: 2026-06-25*
+*Milestone v2.2 started: 2026-06-26*

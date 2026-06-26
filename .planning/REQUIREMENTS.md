@@ -63,23 +63,23 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DEDUP-01 | — | Pending |
-| DEDUP-02 | — | Pending |
-| DEDUP-03 | — | Pending |
-| FILT-01 | — | Pending |
-| FILT-02 | — | Pending |
-| FILT-03 | — | Pending |
-| FILT-04 | — | Pending |
-| INTG-01 | — | Pending |
-| INTG-02 | — | Pending |
-| METR-01 | — | Pending |
-| METR-02 | — | Pending |
+| DEDUP-01 | Phase 8 | Pending |
+| DEDUP-02 | Phase 8 | Pending |
+| DEDUP-03 | Phase 8 | Pending |
+| FILT-01 | Phase 8 | Pending |
+| FILT-02 | Phase 8 | Pending |
+| FILT-03 | Phase 9 | Pending |
+| FILT-04 | Phase 9 | Pending |
+| INTG-01 | Phase 9 | Pending |
+| INTG-02 | Phase 9 | Pending |
+| METR-01 | Phase 10 | Pending |
+| METR-02 | Phase 10 | Pending |
 
 **Coverage:**
 - v2.2 requirements: 11 total
-- Mapped to phases: 0
-- Unmapped: 11 ⚠️
+- Mapped to phases: 11
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-06-26*
-*Last updated: 2026-06-26 after initial definition*
+*Last updated: 2026-06-26 — traceability mapped after roadmap creation*
