@@ -1,43 +1,46 @@
 # Requirements: Investment Agent
 
-**Defined:** 2026-06-25
+**Defined:** 2026-06-26
 **Core Value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
 
-## v2.1 Requirements
+## v2.2 Requirements
 
-Requirements for Report Quality & Pipeline Overhaul. v1.0品質の3レポート構成を復元し、分析品質を向上させる。
+Requirements for News Quality & Pipeline Metrics. ニュース収集の品質改善とパイプライン実行時間の計測。
 
-### Report Structure
+### News Deduplication
 
-- [ ] **RPT-01**: Daily Report（日次投資レポート）がニュース・市況分析に基づく独立した銘柄推奨を含む（ポートフォリオ非依存）
-- [ ] **RPT-02**: Meeting Minutes（議事録）が各アナリストの詳細な散文分析を含む（JSON圧縮ではなくプロフェッショナルな長文）
-- [ ] **RPT-03**: Portfolio Report（ポートフォリオレポート）が保有銘柄の個別評価（保持/買増/売却）と、Daily Reportの推奨銘柄の組入判断を含む
-- [ ] **RPT-04**: 3つのレポートが `docs/YYYY-MM-DD/` に個別HTMLファイルとして出力される
+- [ ] **DEDUP-01**: Finnhub / Google News / RSS間でURL完全一致による重複記事が排除される
+- [ ] **DEDUP-02**: タイトルのNFKC正規化（全角→半角、【速報】等プレフィックス除去）後のJaccard類似度による重複記事が排除される
+- [ ] **DEDUP-03**: 既存rss-sources.tsの50文字プレフィックスdedupがタイトル正規化Jaccardに置換される
 
-### Analysis Quality
+### News Filtering
 
-- [x] **ANL-01**: アナリストが市場ニュースを分析し、ポートフォリオとは無関係に注目すべき新規銘柄を発掘する
-- [x] **ANL-02**: 各アナリストの Round 1 分析が複数段落の詳細な散文として出力される（v1.0品質）
-- [ ] **ANL-03**: Round 2 ディスカッションが具体的な論点に対する実質的な議論を含む
-- [ ] **ANL-04**: スコアリング結果が各アナリストの理由付きコメントとともに表形式で Daily Report に表示される
+- [ ] **FILT-01**: 非投資記事（スポーツ、芸能、天気等）がキーワードdenylistにより除外される
+- [ ] **FILT-02**: 全ニュースソースに統一の24時間以内時間フィルタが適用される
+- [ ] **FILT-03**: フィルタ処理前後の記事数統計（生→dedup後→フィルタ後）がログに出力される
+- [ ] **FILT-04**: フィルタ後の記事数にフロア（MIN=20）とシーリング（MAX=80）が設けられる
 
-### Pipeline & Deployment
+### Pipeline Integration
 
-- [ ] **PIPE-01**: レポート生成後に自動で `git add docs/ && git commit && git push` が実行される
-- [ ] **PIPE-02**: `/invest` スキルコマンドが3レポート構成のパイプラインを実行する
-- [ ] **PIPE-03**: generate-report.ts が3つの独立したHTMLファイルを生成する
+- [ ] **INTG-01**: collect-data.tsがフィルタ済み記事のみをtmp/news.jsonに書き込む
+- [ ] **INTG-02**: invest.mdの50件ハードコード上限が除去され、フィルタ済み全記事がアナリストに渡される
 
-### Portfolio Management
+### Pipeline Metrics
 
-- [ ] **PORT-01**: Portfolio Report がデイリーレポートの推奨銘柄を「新規組み入れ候補」として評価する
-- [ ] **PORT-02**: 保有銘柄ごとに「保持/買増/一部売却/全売却」の判断と根拠が提示される
-- [ ] **PORT-03**: リバランス提案（具体的なアクションアイテム）が含まれる
+- [ ] **METR-01**: パイプライン全体の実行時間が最終出力に表示される
+- [ ] **METR-02**: ステップ別内訳（データ収集、各分析ラウンド、レポート生成、デプロイ）が表示される
 
 ## Future Requirements
 
-Deferred to v2.x+. Tracked but not in current roadmap.
+Deferred to v2.3+. Tracked but not in current roadmap.
 
-### Enhanced Analysis
+### Enhanced News
+
+- **ENH-04**: Finnhubのポートフォリオティッカー別ニュース取得
+- **ENH-05**: 時間帯重み付け（直近6h優先）
+- **ENH-06**: クロス言語（英↔日）重複排除（埋め込みモデル必須）
+
+### Enhanced Analysis (from v2.1)
 
 - **ENH-01**: スコアリングラウンドを専用並列サブエージェントで実行
 - **ENH-02**: 前日レポートの注入によるクロスセッション分析記憶
@@ -47,35 +50,36 @@ Deferred to v2.x+. Tracked but not in current roadmap.
 
 | Feature | Reason |
 |---------|--------|
+| MinHash/LSH重複排除 | 160件/日にはO(n²)で十分、過剰な複雑さ |
+| ML/LLMベース関連性スコアリング | 1記事ごとのAPI呼び出しはコスト面で非現実的 |
+| アナリスト別記事パーソナライズ | 全アナリスト共通フィードで十分、v2.2スコープ外 |
+| allowlist方式フィルタ | 54%の正規投資記事を誤除外するリスク（Reuters実証） |
 | チャート画像生成 | テキストベースで十分、Claude Code内で画像生成不可 |
-| launchd/cron自動実行 | Claude Codeスキルはアクティブセッション必須 |
 | 新規アナリスト追加 | 既存5+1構成で十分 |
-| OAuth/外部認証 | 個人利用のみ |
 
 ## Traceability
 
+Which phases cover which requirements. Updated during roadmap creation.
+
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| RPT-01 | Phase 6 | Pending |
-| RPT-02 | Phase 6 | Pending |
-| RPT-03 | Phase 7 | Pending |
-| RPT-04 | Phase 6 | Pending |
-| ANL-01 | Phase 5 | Complete |
-| ANL-02 | Phase 5 | Complete |
-| ANL-03 | Phase 5 | Pending |
-| ANL-04 | Phase 5 | Pending |
-| PIPE-01 | Phase 7 | Pending |
-| PIPE-02 | Phase 7 | Pending |
-| PIPE-03 | Phase 6 | Pending |
-| PORT-01 | Phase 7 | Pending |
-| PORT-02 | Phase 7 | Pending |
-| PORT-03 | Phase 7 | Pending |
+| DEDUP-01 | — | Pending |
+| DEDUP-02 | — | Pending |
+| DEDUP-03 | — | Pending |
+| FILT-01 | — | Pending |
+| FILT-02 | — | Pending |
+| FILT-03 | — | Pending |
+| FILT-04 | — | Pending |
+| INTG-01 | — | Pending |
+| INTG-02 | — | Pending |
+| METR-01 | — | Pending |
+| METR-02 | — | Pending |
 
 **Coverage:**
-- v2.1 requirements: 14 total
-- Mapped to phases: 14
-- Unmapped: 0
+- v2.2 requirements: 11 total
+- Mapped to phases: 0
+- Unmapped: 11 ⚠️
 
 ---
-*Requirements defined: 2026-06-25*
-*Traceability updated: 2026-06-25 — v2.1 roadmap created*
+*Requirements defined: 2026-06-26*
+*Last updated: 2026-06-26 after initial definition*
