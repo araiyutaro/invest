@@ -120,7 +120,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 08-01-PLAN.md — 型定義・URL dedup・タイトルJaccard dedup の TDD 実装 (DEDUP-01/02)
+- [x] 08-01-PLAN.md — 型定義・URL dedup・タイトルJaccard dedup の TDD 実装 (DEDUP-01/02)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -172,7 +172,7 @@ Plans:
 | 5. Analysis Engine Overhaul | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 6. 3-Report Structure | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 7. Portfolio Integration & Deployment | v2.1 | 2/2 | Complete | 2026-06-25 |
-| 8. News Filter Module | v2.2 | 0/2 | Planning | - |
+| 8. News Filter Module | v2.2 | 1/2 | In Progress|  |
 | 9. Pipeline Integration | v2.2 | 0/2 | Not started | - |
 | 10. Pipeline Timing | v2.2 | 0/1 | Not started | - |
 
