@@ -98,13 +98,13 @@ describe("Title Jaccard dedup (DEDUP-02)", () => {
     const articles = [
       makeArticle({
         url: "https://nikkei.com/c",
-        title: "スポーツ用品株が高騰",
-        summary: "スポーツ用品メーカーの株価が上昇",
+        title: "日銀が利上げを決定した",
+        summary: "日銀の金融政策決定会合で利上げが決定された",
       }),
       makeArticle({
         url: "https://nikkei.com/d",
-        title: "スポーツ選手が優勝",
-        summary: "国内スポーツ大会で選手が優勝",
+        title: "米国雇用統計が予想を上回る結果",
+        summary: "米国の雇用統計が市場予想を上回る強い結果となった",
       }),
     ];
     const result = filterNewsArticles(articles);

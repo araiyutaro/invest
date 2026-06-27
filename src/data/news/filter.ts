@@ -117,20 +117,72 @@ function deduplicateByTitle(
 }
 
 /**
+ * 除外対象カテゴリ: 娯楽・スポーツ・天気 (D-06)
+ * タイトルのみに適用する (RESEARCH.md Pitfall 5)。
+ */
+export const DENYLIST_PATTERNS: ReadonlyArray<RegExp> = [
+  /スポーツ|野球|サッカー|テニス|競馬|ゴルフ|バスケ|オリンピック/,
+  /芸能|タレント|俳優|歌手|アイドル|ドラマ|映画|コンサート/,
+  /天気|台風|気象|豪雨|大雪/,
+];
+
+/**
+ * 投資関連キーワード: これらが存在すればdenylistにマッチしても除外しない (D-05)
+ */
+export const FINANCIAL_EXCEPTION_KEYWORDS: ReadonlyArray<RegExp> = [
+  /株|株価|上場|決算|業績|利益|売上/,
+  /金利|為替|円安|円高|インフレ/,
+  /投資|ファンド|ETF|債券|IPO|M&A|買収/,
+];
+
+/**
+ * タイトルが denylist に該当し、かつ投資関連キーワードが存在しない場合に true を返す。
+ * タイトルのみを照合対象とする (summaryは対象外 -- RESEARCH.md Pitfall 5)。
+ */
+export function isDenylisted(title: string): boolean {
+  const hasDenyMatch = DENYLIST_PATTERNS.some((p) => p.test(title));
+  if (!hasDenyMatch) return false;
+  // 例外: 投資関連キーワードがあれば除外しない (D-05)
+  const hasFinancialKeyword = FINANCIAL_EXCEPTION_KEYWORDS.some((p) =>
+    p.test(title),
+  );
+  return !hasFinancialKeyword;
+}
+
+/**
+ * denylist に該当する記事を除外する (FILT-01 / D-05 / D-07)。
+ */
+export function filterByRelevance(
+  articles: ReadonlyArray<RawNewsArticle>,
+): RawNewsArticle[] {
+  return articles.filter((a) => !isDenylisted(a.title));
+}
+
+/**
+ * 24時間以内の記事のみを残す (FILT-02 / D-08)。
+ * finnhub.ts 39-42行目のパターンを踏襲。
+ */
+export function filterByTime(
+  articles: ReadonlyArray<RawNewsArticle>,
+): RawNewsArticle[] {
+  const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+  return articles.filter((a) => a.publishedAt.getTime() > oneDayAgo);
+}
+
+/**
  * ニュース記事をフィルタリングする。
- * Pass 1: URL dedup
- * Pass 2: Title Jaccard dedup
- * Pass 3/4: Phase 09-02 で実装
+ * Pass 1: URL dedup (DEDUP-01)
+ * Pass 2: Title Jaccard dedup (DEDUP-02)
+ * Pass 3: Relevance filter — denylist + 投資キーワード例外 (FILT-01)
+ * Pass 4: 24h time filter (FILT-02)
  */
 export function filterNewsArticles(
   articles: ReadonlyArray<RawNewsArticle>,
 ): NewsFilterResult {
   const afterUrlDedup = deduplicateByUrl(articles);
   const afterTitleDedup = deduplicateByTitle(afterUrlDedup);
-
-  // Pass 3 (関連性フィルタ) と Pass 4 (24h フィルタ) は Plan 08-02 で実装
-  const afterRelevance = afterTitleDedup;
-  const finalArticles = afterRelevance;
+  const afterRelevance = filterByRelevance(afterTitleDedup);
+  const finalArticles = filterByTime(afterRelevance);
 
   return {
     articles: finalArticles,
