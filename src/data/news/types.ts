@@ -19,3 +19,16 @@ export interface MarketNews {
   readonly sectors: string;
   readonly earnings: string;
 }
+
+export interface NewsFilterStats {
+  readonly raw: number;
+  readonly afterUrlDedup: number;
+  readonly afterTitleDedup: number;
+  readonly afterRelevance: number;
+  readonly final: number;
+}
+
+export interface NewsFilterResult {
+  readonly articles: ReadonlyArray<RawNewsArticle>;
+  readonly stats: NewsFilterStats;
+}
