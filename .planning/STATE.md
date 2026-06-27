@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-26)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** v2.2 Phase 8 — News Filter Module
+**Current focus:** v2.2 Phase 9 — Pipeline Integration
 
 ## Current Position
 
@@ -38,7 +38,7 @@ Progress: [██░░░░░░░░] 33%
 
 - v2.0 plans completed: 7
 - v2.1 plans completed: 6
-- v2.2 plans: 0/5
+- v2.2 plans: 2/5
 
 **By Phase (v2.2):**
 
