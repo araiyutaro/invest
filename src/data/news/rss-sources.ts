@@ -152,15 +152,7 @@ export async function fetchAllRssNews(): Promise<ReadonlyArray<RawNewsArticle>> 
 
   const allArticles = results.flat();
 
-  const seen = new Set<string>();
-  const deduplicated = allArticles.filter((article) => {
-    const key = article.title.slice(0, 50);
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-
-  return deduplicated.sort(
+  return allArticles.sort(
     (a, b) => b.publishedAt.getTime() - a.publishedAt.getTime(),
   );
 }
