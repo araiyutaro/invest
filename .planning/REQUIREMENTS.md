@@ -9,14 +9,14 @@ Requirements for News Quality & Pipeline Metrics. ニュース収集の品質改
 
 ### News Deduplication
 
-- [ ] **DEDUP-01**: Finnhub / Google News / RSS間でURL完全一致による重複記事が排除される
-- [ ] **DEDUP-02**: タイトルのNFKC正規化（全角→半角、【速報】等プレフィックス除去）後のJaccard類似度による重複記事が排除される
-- [ ] **DEDUP-03**: 既存rss-sources.tsの50文字プレフィックスdedupがタイトル正規化Jaccardに置換される
+- [x] **DEDUP-01**: Finnhub / Google News / RSS間でURL完全一致による重複記事が排除される
+- [x] **DEDUP-02**: タイトルのNFKC正規化（全角→半角、【速報】等プレフィックス除去）後のJaccard類似度による重複記事が排除される
+- [x] **DEDUP-03**: 既存rss-sources.tsの50文字プレフィックスdedupがタイトル正規化Jaccardに置換される
 
 ### News Filtering
 
-- [ ] **FILT-01**: 非投資記事（スポーツ、芸能、天気等）がキーワードdenylistにより除外される
-- [ ] **FILT-02**: 全ニュースソースに統一の24時間以内時間フィルタが適用される
+- [x] **FILT-01**: 非投資記事（スポーツ、芸能、天気等）がキーワードdenylistにより除外される
+- [x] **FILT-02**: 全ニュースソースに統一の24時間以内時間フィルタが適用される
 - [ ] **FILT-03**: フィルタ処理前後の記事数統計（生→dedup後→フィルタ後）がログに出力される
 - [ ] **FILT-04**: フィルタ後の記事数にフロア（MIN=20）とシーリング（MAX=80）が設けられる
 
@@ -63,11 +63,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DEDUP-01 | Phase 8 | Pending |
-| DEDUP-02 | Phase 8 | Pending |
-| DEDUP-03 | Phase 8 | Pending |
-| FILT-01 | Phase 8 | Pending |
-| FILT-02 | Phase 8 | Pending |
+| DEDUP-01 | Phase 8 | Complete |
+| DEDUP-02 | Phase 8 | Complete |
+| DEDUP-03 | Phase 8 | Complete |
+| FILT-01 | Phase 8 | Complete |
+| FILT-02 | Phase 8 | Complete |
 | FILT-03 | Phase 9 | Pending |
 | FILT-04 | Phase 9 | Pending |
 | INTG-01 | Phase 9 | Pending |

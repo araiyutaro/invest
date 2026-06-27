@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: News Quality & Pipeline Metrics
 status: executing
-stopped_at: Phase 8 Plan 01 complete
-last_updated: "2026-06-27T14:02:02Z"
-last_activity: 2026-06-27 -- Phase 08 Plan 01 complete (DEDUP-01/02 TDD GREEN)
+stopped_at: Phase 8 Plan 02 complete
+last_updated: "2026-06-27T14:13:00Z"
+last_activity: 2026-06-27 -- Phase 08 Plan 02 complete (FILT-01/02 TDD GREEN + dedup削除)
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
-  percent: 50
+  completed_plans: 2
+  percent: 33
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-06-26)
 
 ## Current Position
 
-Phase: 8 of 10 (News Filter Module)
-Plan: 1 complete / 2 total
-Status: Executing — Plan 02 next
-Last activity: 2026-06-27 -- Phase 08 Plan 01 complete
+Phase: 8 of 10 (News Filter Module) — COMPLETE
+Plan: 2 complete / 2 total
+Status: Phase 8 complete — ready for Phase 9 (Pipeline Integration)
+Last activity: 2026-06-27 -- Phase 08 Plan 02 complete
 
-Progress: [█████░░░░░] 50%
+Progress: [██░░░░░░░░] 33%
 
 ## Performance Metrics
 
@@ -44,7 +44,7 @@ Progress: [█████░░░░░] 50%
 
 | Phase | Plans | Completed | Avg/Plan |
 |-------|-------|-----------|----------|
-| 8. News Filter Module | 2 | 1 | 5min |
+| 8. News Filter Module | 2 | 2 | 5min |
 | 9. Pipeline Integration | 2 | 0 | - |
 | 10. Pipeline Timing | 1 | 0 | - |
 
@@ -53,6 +53,7 @@ Progress: [█████░░░░░] 50%
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 08-news-filter-module P01 | 5min | 2 tasks | 3 files |
+| Phase 08-news-filter-module P02 | 5min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -65,6 +66,8 @@ Progress: [█████░░░░░] 50%
 - **トークンJaccard 閾値0.70-0.75**: Dice係数は日本語多語タイトルで過大評価のためJaccard採用
 - **二層dedup構造**: rss-sources.ts の既存内ソース dedup は削除し、filter.ts がクロスソース dedup を担当
 - **新規npm依存ゼロ**: Jaccard・NFKC正規化はすべてネイティブTypeScriptで実装
+- **denylist タイトルのみ照合**: summaryは除外対象外 (Pitfall 5) — 偽陽性を最小化
+- **filterByRelevance / isDenylisted をエクスポート**: Plan 09 統合テストでの直接アサートを可能にするため
 
 ### Pitfalls to Avoid (v2.2)
 
@@ -88,6 +91,6 @@ None
 
 ## Session Continuity
 
-Last session: 2026-06-27T14:02:02Z
-Stopped at: Phase 8 Plan 01 complete — ready for Plan 02
-Resume file: .planning/phases/08-news-filter-module/08-02-PLAN.md
+Last session: 2026-06-27T14:13:00Z
+Stopped at: Phase 8 Plan 02 complete — Phase 8 fully complete
+Resume file: .planning/phases/09-pipeline-integration/09-01-PLAN.md
