@@ -61,10 +61,12 @@ describe("URL dedup (DEDUP-01)", () => {
     const articles = [
       makeArticle({
         url: "https://news.google.com/rss/articles/CBMiABCD1234?hl=ja",
+        title: "日銀が政策金利を引き上げ円高が進む",
         summary: "記事A",
       }),
       makeArticle({
         url: "https://news.google.com/rss/articles/CBMiXYZW5678?hl=ja",
+        title: "米国雇用統計が予想を上回りドル高に",
         summary: "記事B",
       }),
     ];
@@ -109,17 +111,20 @@ describe("Title Jaccard dedup (DEDUP-02)", () => {
     expect(result.articles).toHaveLength(2);
   });
 
-  it("Jaccard類似度0.75境界テスト: ほぼ同一タイトルが集約される (DEDUP-02 / D-01)", () => {
+  it("Jaccard類似度0.75以上の英語タイトルが1件に集約される (DEDUP-02 / D-01)", () => {
+    // Apple Q3 2026 results... vs Apple Q3 results... → Jaccard 9/10 = 0.9 >= 0.75
     const articles = [
       makeArticle({
-        url: "https://source1.com/art",
-        title: "トヨタ自動車の決算が好調で株価が上昇した",
+        url: "https://reuters.com/apple-q3-2026",
+        title: "Apple Q3 2026 results beat analyst forecasts on services revenue",
         summary: "短い",
+        source: "Reuters",
       }),
       makeArticle({
-        url: "https://source2.com/art",
-        title: "【決算速報】トヨタ自動車の決算が好調で株価が上昇",
+        url: "https://bloomberg.com/apple-q3",
+        title: "Apple Q3 results beat analyst forecasts on services revenue",
         summary: "こちらの方が長い本文",
+        source: "Bloomberg",
       }),
     ];
     const result = filterNewsArticles(articles);
