@@ -41,94 +41,124 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 ## Phase Details
 
 ### Phase 5: Analysis Engine Overhaul
+
 **Goal**: アナリストがポートフォリオとは独立してニュース・市況から注目銘柄を発掘し、各自が複数段落の詳細な散文分析を生成できる
 **Depends on**: Phase 4 (Gemini cleanup complete)
 **Requirements**: ANL-01, ANL-02, ANL-03, ANL-04
 **Success Criteria** (what must be TRUE):
+
   1. アナリストがポートフォリオ保有銘柄とは無関係に、ニュース・市況から新規の注目銘柄を1〜3銘柄推奨できる
   2. Round 1分析がJSONの圧縮テキストではなく、各アナリスト固有の視点を持つ複数段落の散文として出力される
   3. Round 2ディスカッションでアナリスト間が互いの主張に言及した具体的な反論・支持を行う
   4. Daily Reportのスコアリングセクションに各アナリストのコメント付きスコア表が表示される
+
 **Plans**: 2 plans
 
 Plans:
+
 - [x] 05-01: ANL-01/02 — 新規銘柄発掘ロジックと詳細散文分析プロンプトの実装
 - [x] 05-02: ANL-03/04 — Round 2実質ディスカッションとスコアリングマトリクスの実装
 
 ### Phase 6: 3-Report Structure
+
 **Goal**: generate-report.tsが3つの独立したHTMLファイルを docs/YYYY-MM-DD/ に生成し、Daily Report と Meeting Minutes が完全な内容で出力される
 **Depends on**: Phase 5
 **Requirements**: RPT-01, RPT-02, RPT-04, PIPE-03
 **Success Criteria** (what must be TRUE):
+
   1. `/invest` コマンド実行後、`docs/YYYY-MM-DD/` ディレクトリに `daily-report.html`、`meeting-minutes.html`、`portfolio-report.html` の3ファイルが生成される
   2. Daily Report HTMLがPhase 5の独立銘柄推奨とスコアリング表を含む
   3. Meeting Minutes HTMLが各アナリストの詳細散文分析を完全な長さで表示する（JSON圧縮ではない）
   4. 既存のBloomberg風ダークテーマデザインが3ファイルすべてに維持されている
+
 **Plans**: 2 plans
 
 Plans:
+
 - [x] 06-01: RPT-04/PIPE-03 — generate-report.tsの3ファイル出力リファクタリングと docs/ 出力先変更
 - [x] 06-02: RPT-01/02 — Daily Report・Meeting Minutes HTMLテンプレートの実装
+
 **UI hint**: yes
 
 ### Phase 7: Portfolio Integration & Deployment
+
 **Goal**: Portfolio Reportがデイリーレポートの推奨銘柄を統合評価し、保有銘柄への判断とリバランス提案を含む。レポート生成後に自動でGitHub Pagesへデプロイされる
 **Depends on**: Phase 6
 **Requirements**: RPT-03, ANL-01, PORT-01, PORT-02, PORT-03, PIPE-01, PIPE-02
 **Success Criteria** (what must be TRUE):
+
   1. Portfolio Report HTMLが各保有銘柄に対して「保持/買増/一部売却/全売却」の判断と根拠を表示する
   2. Portfolio ReportがDaily Reportで推奨された銘柄を「新規組入候補」として評価するセクションを含む
   3. リバランス提案セクションに具体的なアクションアイテム（例: 「XYZを5%まで買増し、ABCを全売却」）が提示される
   4. レポート生成完了後に自動で `git add docs/ && git commit && git push` が実行され、コンソールに成功メッセージが表示される
   5. `/invest` スキルコマンドが3レポートパイプライン全体（データ収集→分析→レポート生成→git push）を1コマンドで実行できる
+
 **Plans**: 2 plans
 
 Plans:
+
 - [x] 07-01: PORT-01/02/03/RPT-03 — Portfolio Report生成ロジックとHTMLテンプレートの実装
 - [x] 07-02: PIPE-01/02 — 自動git push統合と /invest コマンド最終調整
+
 **UI hint**: yes
 
 ### Phase 8: News Filter Module
+
 **Goal**: クロスソース重複排除・関連性フィルタ・時間フィルタを一元管理するピュア関数モジュール `src/data/news/filter.ts` をTDDで構築し、単体テストで動作を保証する
 **Depends on**: Phase 7
 **Requirements**: DEDUP-01, DEDUP-02, DEDUP-03, FILT-01, FILT-02
 **Success Criteria** (what must be TRUE):
+
   1. 異なるソース（Finnhub/Google News/RSS）から届いた同一URLの記事が1件に集約される
   2. NFKC正規化後にJaccard類似度 ≥ 0.75 の類似タイトルを持つ記事が1件に集約される（「【速報】〜」と「〜」が同一視される）
   3. 「スポーツ選手が優勝」のような非投資記事はdenylistで除外され、「スポーツ用品株が高騰」はdenylistで除外されない
   4. 全ソースで24時間以上前の記事が除外される
   5. rss-sources.ts の50文字プレフィックスdedupが削除され、NFKC正規化+Jaccardに統一されている
+
 **Plans**: 2 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 08-01-PLAN.md — 型定義・URL dedup・タイトルJaccard dedup の TDD 実装 (DEDUP-01/02)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 08-02-PLAN.md — 関連性denylistフィルタ・24時間時間フィルタの TDD 実装と rss-sources.ts dedup 削除 (DEDUP-03/FILT-01/02)
 
 ### Phase 9: Pipeline Integration
+
 **Goal**: filter.ts を collect-data.ts と invest.md に統合し、フィルタ済み記事（MIN=20, MAX=80件）のみが tmp/news.json に書き込まれ、アナリストに供給される
 **Depends on**: Phase 8
 **Requirements**: INTG-01, INTG-02, FILT-03, FILT-04
 **Success Criteria** (what must be TRUE):
+
   1. `collect-data.ts` 実行後に `tmp/news.json` にはフィルタ済み記事のみが保存される（非投資記事・重複記事なし）
   2. コンソールに「生記事数 → dedup後 → フィルタ後」の3段階の記事数統計がログ出力される
   3. アナリストへの記事供給数が50件固定ではなく、フィルタ後の実数（MIN=20, MAX=80）になっている
   4. invest.md 内の `slice(0, 50)` や「最新50件」などのハードコードが除去されている
+
 **Plans**: TBD
 
 Plans:
+
 - [ ] 09-01: INTG-01/FILT-03/04 — collect-data.ts への filter.ts 統合・記事数フロア/シーリング・統計ログ実装
 - [ ] 09-02: INTG-02 — invest.md の50件ハードキャップ除去とフィルタ済み全記事供給
 
 ### Phase 10: Pipeline Timing
+
 **Goal**: `/invest` コマンドの最終出力にパイプライン全体とステップ別の実行時間が表示される
 **Depends on**: Phase 9
 **Requirements**: METR-01, METR-02
 **Success Criteria** (what must be TRUE):
+
   1. `/invest` コマンドの最終出力にパイプライン全体の実行時間が表示される（例: `Total: 4m 23s`）
   2. データ収集・Round 1分析・Round 2分析・レポート生成・デプロイの各ステップ別実行時間が最終出力に表示される
+
 **Plans**: TBD
 
 Plans:
+
 - [ ] 10-01: METR-01/02 — performance.now() 計測・tmp/pipeline-metrics.json 書き出し・invest.md 最終表示の実装
 
 ## Progress
