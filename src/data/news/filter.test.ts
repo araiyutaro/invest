@@ -153,3 +153,177 @@ describe("Language group separation (D-03)", () => {
     expect(result.articles).toHaveLength(2);
   });
 });
+
+describe("Relevance filter (FILT-01)", () => {
+  it("「プロ野球選手が引退を発表」がdenylistで除外される (FILT-01)", () => {
+    const articles = [
+      makeArticle({
+        title: "プロ野球選手が引退を発表",
+        url: "https://example.com/baseball1",
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(0);
+  });
+
+  it("「人気俳優が結婚を発表」がdenylistで除外される (FILT-01)", () => {
+    const articles = [
+      makeArticle({
+        title: "人気俳優が結婚を発表",
+        url: "https://example.com/actor1",
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(0);
+  });
+
+  it("「台風15号が関東に接近」がdenylistで除外される (FILT-01)", () => {
+    const articles = [
+      makeArticle({
+        title: "台風15号が関東に接近",
+        url: "https://example.com/typhoon1",
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(0);
+  });
+
+  it("「スポーツ用品株が高騰」がdenylistで除外されない (投資キーワード例外, FILT-01)", () => {
+    const articles = [
+      makeArticle({
+        title: "スポーツ用品株が高騰",
+        url: "https://example.com/sports-stock1",
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(1);
+  });
+
+  it("「オリンピック関連銘柄の決算が好調」がdenylistで除外されない (投資キーワード例外, FILT-01)", () => {
+    const articles = [
+      makeArticle({
+        title: "オリンピック関連銘柄の決算が好調",
+        url: "https://example.com/olympic-stock1",
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(1);
+  });
+
+  it("「日銀が金利政策を発表」がdenylist対象外 (政治・社会は除外しない, FILT-01)", () => {
+    const articles = [
+      makeArticle({
+        title: "日銀が金利政策を発表",
+        url: "https://example.com/boj1",
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(1);
+  });
+
+  it("「テスラが新型EVを発表」がdenylist対象外 (テクノロジー記事は除外対象外, FILT-01)", () => {
+    const articles = [
+      makeArticle({
+        title: "テスラが新型EVを発表",
+        url: "https://example.com/tesla1",
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(1);
+  });
+});
+
+describe("Time filter (FILT-02)", () => {
+  it("25時間前のpublishedAtを持つ記事が除外される (FILT-02)", () => {
+    const articles = [
+      makeArticle({
+        title: "25時間前の古いニュース",
+        url: "https://example.com/old25h",
+        publishedAt: new Date(Date.now() - 25 * 60 * 60 * 1000),
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(0);
+  });
+
+  it("23時間前のpublishedAtを持つ記事が残る (FILT-02)", () => {
+    const articles = [
+      makeArticle({
+        title: "23時間前の新しいニュース",
+        url: "https://example.com/new23h",
+        publishedAt: new Date(Date.now() - 23 * 60 * 60 * 1000),
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(1);
+  });
+
+  it("new Date(0)エポック日時の記事が除外される (FILT-02)", () => {
+    const articles = [
+      makeArticle({
+        title: "エポック日付の記事",
+        url: "https://example.com/epoch1",
+        publishedAt: new Date(0),
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(0);
+  });
+});
+
+describe("filterNewsArticles integration (全4Pass)", () => {
+  it("全4Passのstatsが正しいカウントを返す", () => {
+    const now = Date.now();
+    const articles = [
+      // Pass1で除外: 同一URL (2件→1件)
+      makeArticle({
+        url: "https://example.com/dup-url",
+        title: "重複URL記事A",
+        summary: "短い",
+      }),
+      makeArticle({
+        url: "https://example.com/dup-url",
+        title: "重複URL記事B",
+        summary: "こちらの方が長い本文",
+      }),
+      // Pass2で除外: 類似タイトル英語 (2件→1件)
+      makeArticle({
+        url: "https://reuters.com/apple-integration",
+        title: "Apple Q4 2026 earnings beat analyst forecasts on services revenue",
+        summary: "短い",
+        source: "Reuters",
+      }),
+      makeArticle({
+        url: "https://bloomberg.com/apple-integration",
+        title: "Apple Q4 earnings beat analyst forecasts on services revenue",
+        summary: "こちらの方が長い本文",
+        source: "Bloomberg",
+      }),
+      // Pass3で除外: denylistヒット (芸能)
+      makeArticle({
+        url: "https://example.com/entertain1",
+        title: "人気アイドルグループが解散を発表",
+        publishedAt: new Date(now - 1 * 60 * 60 * 1000),
+      }),
+      // Pass4で除外: 25時間前
+      makeArticle({
+        url: "https://example.com/old3",
+        title: "古い経済ニュース記事",
+        publishedAt: new Date(now - 25 * 60 * 60 * 1000),
+      }),
+      // 残る: 正常な投資記事
+      makeArticle({
+        url: "https://example.com/keep1",
+        title: "日経平均が今週の最高値を更新",
+        publishedAt: new Date(now - 1 * 60 * 60 * 1000),
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.stats.raw).toBe(7);
+    expect(result.stats.afterUrlDedup).toBe(6);
+    expect(result.stats.afterTitleDedup).toBe(5);
+    expect(result.stats.afterRelevance).toBe(4);
+    expect(result.stats.final).toBe(3);
+    expect(result.articles).toHaveLength(3);
+  });
+});
