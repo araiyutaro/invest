@@ -94,15 +94,15 @@ Plans:
 **Requirements**: DEDUP-01, DEDUP-02, DEDUP-03, FILT-01, FILT-02
 **Success Criteria** (what must be TRUE):
   1. 異なるソース（Finnhub/Google News/RSS）から届いた同一URLの記事が1件に集約される
-  2. NFKC正規化後にJaccard類似度 ≥ 0.70 の類似タイトルを持つ記事が1件に集約される（「【速報】〜」と「〜」が同一視される）
+  2. NFKC正規化後にJaccard類似度 ≥ 0.75 の類似タイトルを持つ記事が1件に集約される（「【速報】〜」と「〜」が同一視される）
   3. 「スポーツ選手が優勝」のような非投資記事はdenylistで除外され、「スポーツ用品株が高騰」はdenylistで除外されない
   4. 全ソースで24時間以上前の記事が除外される
   5. rss-sources.ts の50文字プレフィックスdedupが削除され、NFKC正規化+Jaccardに統一されている
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 08-01: DEDUP-01/02/03 — filter.ts 型定義・URLdedup・タイトル正規化Jaccard dedup の TDD 実装
-- [ ] 08-02: FILT-01/02 — 関連性denylistフィルタ・24時間時間フィルタの TDD 実装と rss-sources.ts dedup 置換
+- [ ] 08-01-PLAN.md — 型定義・URL dedup・タイトルJaccard dedup の TDD 実装 (DEDUP-01/02)
+- [ ] 08-02-PLAN.md — 関連性denylistフィルタ・24時間時間フィルタの TDD 実装と rss-sources.ts dedup 削除 (DEDUP-03/FILT-01/02)
 
 ### Phase 9: Pipeline Integration
 **Goal**: filter.ts を collect-data.ts と invest.md に統合し、フィルタ済み記事（MIN=20, MAX=80件）のみが tmp/news.json に書き込まれ、アナリストに供給される
@@ -142,7 +142,7 @@ Plans:
 | 5. Analysis Engine Overhaul | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 6. 3-Report Structure | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 7. Portfolio Integration & Deployment | v2.1 | 2/2 | Complete | 2026-06-25 |
-| 8. News Filter Module | v2.2 | 0/2 | Not started | - |
+| 8. News Filter Module | v2.2 | 0/2 | Planning | - |
 | 9. Pipeline Integration | v2.2 | 0/2 | Not started | - |
 | 10. Pipeline Timing | v2.2 | 0/1 | Not started | - |
 
