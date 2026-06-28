@@ -465,17 +465,15 @@ it("main() 実行後に tmp/pipeline-metrics.json が書き込まれ collectData
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Step 1 の表示値をどちらの計測値で出すか**
+1. **Step 1 の表示値をどちらの計測値で出すか** — RESOLVED: `collectData.durationMs`（collect-data.ts 内計測値）を使用。`pipelineStart` から `deployEnd` までを Total とする。tsx オーバーヘッドはユーザーに見せない
    - What we know: collect-data.ts の `performance.now()` 値（tsx 起動コスト除く）と、invest.md の `Date.now()` による前後差（tsx 起動コスト含む）が存在する
-   - What's unclear: ユーザーが見たい値はどちらか
-   - Recommendation: `collectData.durationMs`（collect-data.ts 内計測値）を Step 1 の表示値とする。`pipelineStart` から `deployEnd` までを Total とする。これにより Total と Step 合計の微小な差（tsx オーバーヘッド）はユーザーには見えない
+   - Resolution: PLAN.md Task 2 で collectData.durationMs を Step 1 表示値として実装
 
-2. **pipeline-metrics.json の初期化タイミング**
+2. **pipeline-metrics.json の初期化タイミング** — RESOLVED: invest.md の「市場データ収集を開始します...」直前で `{ pipelineStart: Date.now() }` として初期化
    - What we know: `pipelineStart` は最初の Bash コマンド（Step 1 開始前）に記録すべき
-   - What's unclear: Step 1 開始前の Bash コマンド追加場所
-   - Recommendation: 現行 invest.md の「市場データ収集を開始します...」表示コマンドに統合する
+   - Resolution: PLAN.md Task 2 セクションA で pipelineStart 初期化 + pipeline-metrics.json クリアを実装
 
 ---
 
