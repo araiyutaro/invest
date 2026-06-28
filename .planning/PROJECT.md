@@ -8,15 +8,15 @@
 
 毎日の投資判断に必要な多角的分析（ファンダメンタル、テクニカル、マクロ、リスク、テンバガー候補）を、複数AIアナリストの議論形式で提供すること。
 
-## Current Milestone: v2.2 News Quality & Pipeline Metrics
+## Current State: v2.2 shipped (2026-06-28)
 
-**Goal:** ニュース収集の品質改善（重複排除・フィルタ・件数見直し）とパイプライン実行時間の計測
+**Latest shipped:** v2.2 News Quality & Pipeline Metrics
+- クロスソース重複排除（URL + NFKC正規化Jaccard）
+- denylistベースの非投資記事フィルタリング
+- 記事供給数の柔軟化（MIN=20/MAX=80）
+- Pipeline Timing（12ステップの実行時間計測・表示）
 
-**Target features:**
-- クロスソース重複排除（Finnhub / Google News / RSS 間）
-- 投資無関係記事の除外（キーワード・カテゴリベースのルールフィルタ）
-- アナリストへの記事供給数の見直し（50件固定→フィルタ後の有効記事を柔軟に）
-- `/invest` パイプラインの実行時間計測と最終表示
+**Next milestone:** 未定 — `/gsd-new-milestone` で定義
 
 ## Requirements
 
@@ -37,13 +37,14 @@
 - ✓ アナリスト詳細散文分析（Round 1 + Round 2 ディスカッション） — v2.1
 - ✓ ポートフォリオ個別評価と組入判断 — v2.1
 - ✓ docs/ 出力 + 自動 git push（GitHub Pages デプロイ） — v2.1
+- ✓ クロスソース重複排除（URL + NFKC正規化Jaccard） — v2.2
+- ✓ 投資無関係記事の除外（キーワードdenylistフィルタ） — v2.2
+- ✓ アナリストへの記事供給数柔軟化（MIN=20/MAX=80） — v2.2
+- ✓ パイプライン実行時間計測と12ステップ表示 — v2.2
 
 ### Active
 
-- [ ] クロスソース重複排除（Finnhub / Google News / RSS 間）
-- [ ] 投資無関係記事の除外（ルールベースフィルタ）
-- [ ] アナリストへの記事供給数の見直し（50件→柔軟）
-- [ ] `/invest` パイプラインの実行時間計測と表示
+(次のマイルストーンで定義)
 
 ### Out of Scope
 

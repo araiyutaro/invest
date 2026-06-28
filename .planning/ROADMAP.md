@@ -4,7 +4,7 @@
 
 - ✅ **v2.0 Claude Code Migration** — Phases 1-4 (shipped 2026-06-25)
 - ✅ **v2.1 Report Quality & Pipeline Overhaul** — Phases 5-7 (shipped 2026-06-25)
-- 🚧 **v2.2 News Quality & Pipeline Metrics** — Phases 8-10 (in progress)
+- ✅ **v2.2 News Quality & Pipeline Metrics** — Phases 8-10 (shipped 2026-06-28)
 
 ## Phases
 
@@ -22,21 +22,31 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 
 </details>
 
-### ✅ v2.1 Report Quality & Pipeline Overhaul (Shipped 2026-06-25)
+<details>
+<summary>✅ v2.1 Report Quality & Pipeline Overhaul (Phases 5-7) — SHIPPED 2026-06-25</summary>
 
-**Milestone Goal:** v1.0品質の3レポート構成を復元し、新規銘柄発掘とポートフォリオ管理を分離、GitHub Pagesへの自動デプロイを実現する。
+v1.0品質の3レポート構成を復元し、新規銘柄発掘とポートフォリオ管理を分離、GitHub Pagesへの自動デプロイを実現。
 
-- [x] **Phase 5: Analysis Engine Overhaul** - アナリストが独立した銘柄発掘と詳細散文分析を行う能力を確立する
-- [x] **Phase 6: 3-Report Structure** - generate-report.tsが Daily Report / Meeting Minutes / Portfolio Report の3ファイルを docs/ に出力する
-- [x] **Phase 7: Portfolio Integration & Deployment** - ポートフォリオ評価、Daily Reportとの統合、自動git pushによるGitHub Pagesデプロイを完成させる
+- [x] **Phase 5: Analysis Engine Overhaul** (2/2 plans) — completed 2026-06-25
+- [x] **Phase 6: 3-Report Structure** (2/2 plans) — completed 2026-06-25
+- [x] **Phase 7: Portfolio Integration & Deployment** (2/2 plans) — completed 2026-06-25
 
-### 🚧 v2.2 News Quality & Pipeline Metrics (In Progress)
+Full details: `.planning/milestones/v2.1-ROADMAP.md`
 
-**Milestone Goal:** ニュース収集の品質改善（重複排除・フィルタ・件数見直し）とパイプライン実行時間の計測により、アナリストに供給するニュースの質を向上させる。
+</details>
 
-- [x] **Phase 8: News Filter Module** - クロスソース重複排除・関連性フィルタ・時間フィルタを一元管理するピュア関数モジュールをTDDで構築する
-- [x] **Phase 9: Pipeline Integration** - filter.tsをcollect-data.tsとinvest.mdに統合し、アナリストがフィルタ済み記事のみを受け取る
-- [x] **Phase 10: Pipeline Timing** - パイプライン全体とステップ別の実行時間を計測し、最終出力に表示する (completed 2026-06-28)
+<details>
+<summary>✅ v2.2 News Quality & Pipeline Metrics (Phases 8-10) — SHIPPED 2026-06-28</summary>
+
+ニュース収集の品質改善（重複排除・フィルタ・件数見直し）とパイプライン実行時間の計測。
+
+- [x] **Phase 8: News Filter Module** (2/2 plans) — completed 2026-06-27
+- [x] **Phase 9: Pipeline Integration** (2/2 plans) — completed 2026-06-28
+- [x] **Phase 10: Pipeline Timing** (1/1 plan) — completed 2026-06-28
+
+Full details: `.planning/milestones/v2.2-ROADMAP.md`
+
+</details>
 
 ## Phase Details
 
