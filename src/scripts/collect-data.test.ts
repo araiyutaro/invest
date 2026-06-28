@@ -189,13 +189,14 @@ describe("collect-data script", () => {
 
   it("fmt(ms) 関数が正しい分秒フォーマットを返す (METR-02補完)", () => {
     function fmt(ms: number | undefined): string {
-      if (!ms || isNaN(ms)) return "スキップ";
+      if (ms == null || isNaN(ms)) return "スキップ";
       const s = Math.floor(ms / 1000);
       return Math.floor(s / 60) + "m " + String(s % 60).padStart(2, "0") + "s";
     }
     expect(fmt(32000)).toBe("0m 32s");
     expect(fmt(65000)).toBe("1m 05s");
     expect(fmt(352000)).toBe("5m 52s");
+    expect(fmt(0)).toBe("0m 00s");
     expect(fmt(undefined)).toBe("スキップ");
     expect(fmt(NaN)).toBe("スキップ");
   });

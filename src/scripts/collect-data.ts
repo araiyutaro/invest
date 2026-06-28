@@ -93,8 +93,8 @@ export async function main() {
   } catch {
     // ファイル未存在は正常（パイプライン初回）
   }
-  metrics.collectData = { durationMs };
-  await writeFile(metricsPath, JSON.stringify(metrics, null, 2), "utf-8");
+  const updated = { ...metrics, collectData: { durationMs } };
+  await writeFile(metricsPath, JSON.stringify(updated, null, 2), "utf-8");
   console.log("データ収集完了");
 }
 

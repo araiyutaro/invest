@@ -1643,7 +1643,7 @@ try {
   process.exit(0);
 }
 function fmt(ms) {
-  if (!ms || isNaN(ms)) return 'スキップ';
+  if (ms == null || isNaN(ms)) return 'スキップ';
   const s = Math.floor(ms / 1000);
   return Math.floor(s/60) + 'm ' + String(s%60).padStart(2,'0') + 's';
 }
