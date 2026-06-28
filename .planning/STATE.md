@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: News Quality & Pipeline Metrics
-status: executing
-stopped_at: Phase 09 Plan 02 complete (Phase 09 DONE)
-last_updated: "2026-06-28T14:00:00.000Z"
+status: ready_to_plan
+stopped_at: Phase 09 complete (2/2) — ready to discuss Phase 10
+last_updated: 2026-06-28T04:43:33.201Z
 last_activity: 2026-06-28 -- Phase 09 Plan 02 executed (invest.md 50件ハードキャップ除去)
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 5
   completed_plans: 4
-  percent: 80
+  percent: 33
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-26)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 09 — pipeline-integration
+**Current focus:** Phase 10 — pipeline timing
 
 ## Current Position
 
-Phase: 09 (pipeline-integration) — COMPLETE
-Plan: 2 of 2 COMPLETE — Phase 09 完了
-Status: Phase 09 全プラン完了 — next: Phase 10 (Pipeline Timing)
-Last activity: 2026-06-28 -- Phase 09 Plan 02 executed (invest.md 50件ハードキャップ除去)
+Phase: 10
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-06-28
 
 Progress: [██████░░░░] 60%
 
