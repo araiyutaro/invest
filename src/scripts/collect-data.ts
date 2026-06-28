@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { fetchAllMarketData } from "../data/market.js";
 import { fetchAllFinnhubNews } from "../data/news/finnhub.js";
@@ -12,6 +12,7 @@ import { fetchPortfolioData } from "../portfolio/data.js";
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
 
 export async function main() {
+  const t0 = performance.now();
   console.log("データ収集開始...");
   await mkdir(TMP_DIR, { recursive: true });
 
@@ -84,6 +85,16 @@ export async function main() {
     );
   }
   console.log(`指数数: ${marketData.indices.length}件`);
+  const durationMs = Math.round(performance.now() - t0);
+  const metricsPath = join(TMP_DIR, "pipeline-metrics.json");
+  let metrics: Record<string, unknown> = {};
+  try {
+    metrics = JSON.parse(await readFile(metricsPath, "utf-8")) as Record<string, unknown>;
+  } catch {
+    // ファイル未存在は正常（パイプライン初回）
+  }
+  metrics.collectData = { durationMs };
+  await writeFile(metricsPath, JSON.stringify(metrics, null, 2), "utf-8");
   console.log("データ収集完了");
 }
 
