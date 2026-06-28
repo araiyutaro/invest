@@ -142,7 +142,7 @@ Plans:
 
 Plans:
 
-- [ ] 09-01: INTG-01/FILT-03/04 — collect-data.ts への filter.ts 統合・記事数フロア/シーリング・統計ログ実装
+- [x] 09-01: INTG-01/FILT-03/04 — collect-data.ts への filter.ts 統合・記事数フロア/シーリング・統計ログ実装
 - [ ] 09-02: INTG-02 — invest.md の50件ハードキャップ除去とフィルタ済み全記事供給
 
 ### Phase 10: Pipeline Timing
