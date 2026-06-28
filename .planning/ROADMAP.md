@@ -174,7 +174,7 @@ Plans:
 | 7. Portfolio Integration & Deployment | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 8. News Filter Module | v2.2 | 2/2 | Complete | 2026-06-27 |
 | 9. Pipeline Integration | v2.2 | 2/2 | Complete   | 2026-06-28 |
-| 10. Pipeline Timing | v2.2 | 1/1 | Complete   | 2026-06-28 |
+| 10. Pipeline Timing | v2.2 | 1/1 | Complete    | 2026-06-28 |
 
 ---
 *Roadmap created: 2026-06-24*

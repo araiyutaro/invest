@@ -27,8 +27,8 @@ Requirements for News Quality & Pipeline Metrics. ニュース収集の品質改
 
 ### Pipeline Metrics
 
-- [ ] **METR-01**: パイプライン全体の実行時間が最終出力に表示される
-- [ ] **METR-02**: ステップ別内訳（データ収集、各分析ラウンド、レポート生成、デプロイ）が表示される
+- [x] **METR-01**: パイプライン全体の実行時間が最終出力に表示される
+- [x] **METR-02**: ステップ別内訳（データ収集、各分析ラウンド、レポート生成、デプロイ）が表示される
 
 ## Future Requirements
 
@@ -72,8 +72,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FILT-04 | Phase 9 | Pending |
 | INTG-01 | Phase 9 | Pending |
 | INTG-02 | Phase 9 | Pending |
-| METR-01 | Phase 10 | Pending |
-| METR-02 | Phase 10 | Pending |
+| METR-01 | Phase 10 | Complete |
+| METR-02 | Phase 10 | Complete |
 
 **Coverage:**
 - v2.2 requirements: 11 total
