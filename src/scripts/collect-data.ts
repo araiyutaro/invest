@@ -5,6 +5,7 @@ import { fetchAllMarketData } from "../data/market.js";
 import { fetchAllFinnhubNews } from "../data/news/finnhub.js";
 import { fetchGoogleNewsJapan } from "../data/news/google-news.js";
 import { fetchAllRssNews } from "../data/news/rss-sources.js";
+import { filterNewsArticles } from "../data/news/filter.js";
 import { PORTFOLIO_HOLDINGS } from "../portfolio/holdings.js";
 import { fetchPortfolioData } from "../portfolio/data.js";
 
@@ -38,12 +39,23 @@ export async function main() {
       ...googleNews,
       ...rssNews,
     ];
+    const { articles: filtered, stats } = filterNewsArticles(allArticles);
+    console.log(`ニュース: ${stats.raw}件 → dedup: ${stats.afterTitleDedup}件 → フィルタ後: ${stats.final}件`);
+    let finalArticles = [...filtered];
+    if (filtered.length > 80) {
+      console.log(`MAX=80超過: ${filtered.length}件 → 80件にトリミング`);
+      finalArticles = [...filtered]
+        .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+        .slice(0, 80);
+    }
+    if (finalArticles.length < 20) {
+      console.log(`⚠ フィルタ後の記事が${finalArticles.length}件です（MIN=20未満）`);
+    }
     await writeFile(
       join(TMP_DIR, "news.json"),
-      JSON.stringify(allArticles, null, 2),
+      JSON.stringify(finalArticles, null, 2),
       "utf-8",
     );
-    console.log(`ニュース収集完了 (${allArticles.length}件)`);
   } catch (e) {
     console.error("ニュース収集失敗（続行）:", e);
     await writeFile(join(TMP_DIR, "news.json"), "[]", "utf-8");
