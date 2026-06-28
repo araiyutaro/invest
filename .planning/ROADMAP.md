@@ -35,7 +35,7 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 **Milestone Goal:** ニュース収集の品質改善（重複排除・フィルタ・件数見直し）とパイプライン実行時間の計測により、アナリストに供給するニュースの質を向上させる。
 
 - [x] **Phase 8: News Filter Module** - クロスソース重複排除・関連性フィルタ・時間フィルタを一元管理するピュア関数モジュールをTDDで構築する
-- [ ] **Phase 9: Pipeline Integration** - filter.tsをcollect-data.tsとinvest.mdに統合し、アナリストがフィルタ済み記事のみを受け取る
+- [x] **Phase 9: Pipeline Integration** - filter.tsをcollect-data.tsとinvest.mdに統合し、アナリストがフィルタ済み記事のみを受け取る
 - [ ] **Phase 10: Pipeline Timing** - パイプライン全体とステップ別の実行時間を計測し、最終出力に表示する
 
 ## Phase Details
@@ -143,7 +143,7 @@ Plans:
 Plans:
 
 - [x] 09-01: INTG-01/FILT-03/04 — collect-data.ts への filter.ts 統合・記事数フロア/シーリング・統計ログ実装
-- [ ] 09-02: INTG-02 — invest.md の50件ハードキャップ除去とフィルタ済み全記事供給
+- [x] 09-02: INTG-02 — invest.md の50件ハードキャップ除去とフィルタ済み全記事供給
 
 ### Phase 10: Pipeline Timing
 
@@ -173,7 +173,7 @@ Plans:
 | 6. 3-Report Structure | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 7. Portfolio Integration & Deployment | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 8. News Filter Module | v2.2 | 2/2 | Complete | 2026-06-27 |
-| 9. Pipeline Integration | v2.2 | 1/2 | In Progress|  |
+| 9. Pipeline Integration | v2.2 | 2/2 | Complete | 2026-06-28 |
 | 10. Pipeline Timing | v2.2 | 0/1 | Not started | - |
 
 ---
