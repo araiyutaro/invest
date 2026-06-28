@@ -4,6 +4,7 @@ import type { RawNewsArticle } from "../data/news/types.js";
 vi.mock("node:fs/promises", () => ({
   mkdir: vi.fn().mockResolvedValue(undefined),
   writeFile: vi.fn().mockResolvedValue(undefined),
+  readFile: vi.fn().mockRejectedValue(new Error("ENOENT: no such file or directory")),
 }));
 
 const mockMarketData = {
@@ -47,6 +48,7 @@ vi.mock("../data/news/filter.js", () => ({
 describe("collect-data script", () => {
   let writeFileMock: ReturnType<typeof vi.fn>;
   let mkdirMock: ReturnType<typeof vi.fn>;
+  let readFileMock: ReturnType<typeof vi.fn>;
   let consoleLogSpy: ReturnType<typeof vi.spyOn>;
   let processExitSpy: ReturnType<typeof vi.spyOn>;
 
@@ -54,8 +56,10 @@ describe("collect-data script", () => {
     const fsMock = await import("node:fs/promises");
     writeFileMock = fsMock.writeFile as ReturnType<typeof vi.fn>;
     mkdirMock = fsMock.mkdir as ReturnType<typeof vi.fn>;
+    readFileMock = fsMock.readFile as ReturnType<typeof vi.fn>;
     writeFileMock.mockClear();
     mkdirMock.mockClear();
+    readFileMock.mockClear();
 
     const marketMock = await import("../data/market.js");
     (marketMock.fetchAllMarketData as ReturnType<typeof vi.fn>).mockResolvedValue(mockMarketData);
@@ -166,6 +170,34 @@ describe("collect-data script", () => {
     const logCalls = consoleLogSpy.mock.calls.map((call: unknown[]) => String(call[0]));
     const found = logCalls.some((msg: string) => msg.includes("市場データ収集中..."));
     expect(found).toBe(true);
+  });
+
+  it("main() 実行後に tmp/pipeline-metrics.json が書き込まれ collectData.durationMs が正の整数である (METR-01)", async () => {
+    const { main } = await import("./collect-data.js");
+    await main();
+
+    const writeCalls = writeFileMock.mock.calls;
+    const metricsCall = writeCalls.find((call) =>
+      String(call[0]).includes("pipeline-metrics.json"),
+    );
+    expect(metricsCall).toBeDefined();
+    const parsed = JSON.parse(metricsCall![1] as string);
+    expect(parsed).toHaveProperty("collectData.durationMs");
+    expect(typeof parsed.collectData.durationMs).toBe("number");
+    expect(parsed.collectData.durationMs).toBeGreaterThanOrEqual(0);
+  });
+
+  it("fmt(ms) 関数が正しい分秒フォーマットを返す (METR-02補完)", () => {
+    function fmt(ms: number | undefined): string {
+      if (!ms || isNaN(ms)) return "スキップ";
+      const s = Math.floor(ms / 1000);
+      return Math.floor(s / 60) + "m " + String(s % 60).padStart(2, "0") + "s";
+    }
+    expect(fmt(32000)).toBe("0m 32s");
+    expect(fmt(65000)).toBe("1m 05s");
+    expect(fmt(352000)).toBe("5m 52s");
+    expect(fmt(undefined)).toBe("スキップ");
+    expect(fmt(NaN)).toBe("スキップ");
   });
 });
 
