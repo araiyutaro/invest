@@ -69,7 +69,7 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
 - `/Users/arai/invest/src/agents/risk-manager.ts` — `systemPrompt` フィールドの値を取得
 - `/Users/arai/invest/src/agents/moderator.ts` — `systemPrompt` フィールドの値を取得
 - `/Users/arai/invest/tmp/market.json` — 全内容
-- `/Users/arai/invest/tmp/news.json` — 全内容（最新50件に絞って使用）
+- `/Users/arai/invest/tmp/news.json` — 全内容
 
 ---
 
@@ -91,8 +91,8 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
     ## 市場データ (tmp/market.json)
     [tmp/market.json の全内容]
 
-    ## ニュースデータ (tmp/news.json) ※最新50件
-    [tmp/news.json の最新50件の内容]
+    ## ニュースデータ (tmp/news.json)
+    [tmp/news.json の全内容]
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
@@ -127,8 +127,8 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
     ## 市場データ (tmp/market.json)
     [tmp/market.json の全内容]
 
-    ## ニュースデータ (tmp/news.json) ※最新50件
-    [tmp/news.json の最新50件の内容]
+    ## ニュースデータ (tmp/news.json)
+    [tmp/news.json の全内容]
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
@@ -163,8 +163,8 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
     ## 市場データ (tmp/market.json)
     [tmp/market.json の全内容]
 
-    ## ニュースデータ (tmp/news.json) ※最新50件
-    [tmp/news.json の最新50件の内容]
+    ## ニュースデータ (tmp/news.json)
+    [tmp/news.json の全内容]
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
@@ -199,8 +199,8 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
     ## 市場データ (tmp/market.json)
     [tmp/market.json の全内容]
 
-    ## ニュースデータ (tmp/news.json) ※最新50件
-    [tmp/news.json の最新50件の内容]
+    ## ニュースデータ (tmp/news.json)
+    [tmp/news.json の全内容]
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
@@ -235,8 +235,8 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
     ## 市場データ (tmp/market.json)
     [tmp/market.json の全内容]
 
-    ## ニュースデータ (tmp/news.json) ※最新50件
-    [tmp/news.json の最新50件の内容]
+    ## ニュースデータ (tmp/news.json)
+    [tmp/news.json の全内容]
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
