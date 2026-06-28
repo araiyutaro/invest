@@ -15,6 +15,18 @@ allowed-tools:
 
 市場データ・ニュース・ポートフォリオデータを収集し、`tmp/` に保存します。
 
+まず、以下のBashコマンドでパイプラインタイミング計測を初期化してください:
+
+```bash
+node -e "
+const fs = require('fs');
+fs.mkdirSync('/Users/arai/invest/tmp', { recursive: true });
+const m = { pipelineStart: Date.now() };
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+console.log('パイプラインタイミング計測を開始');
+"
+```
+
 「市場データ収集を開始します...」とユーザーに表示してから、以下のBashコマンドを実行してください:
 
 ```bash
@@ -76,6 +88,18 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
 ### Step 2a: Round 1 — 分析プレゼンテーション
 
 「Round 1: 5アナリストが分析を実行中...」とユーザーに表示してください。
+
+以下のBashコマンドで Round 1 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.round1Start = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 **以下5つの Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
 
@@ -275,11 +299,35 @@ mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/ar
 成功したエージェント数をユーザーに表示してください:
 「Round 1 完了: N/5 アナリスト成功」
 
+以下のBashコマンドで Round 1 完了タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.round1End = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ### Step 2b: モデレーター介入1 — ティッカー抽出
 
 「ティッカー抽出中...」とユーザーに表示してください。
+
+以下のBashコマンドで ティッカー抽出 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.tickerExtractStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 以下のBashコマンドで、Round 1 の全結果から推奨銘柄ティッカーを収集してください:
 
@@ -332,11 +380,35 @@ console.log(tickers.join(', '));
 
 「ティッカー抽出: N銘柄を特定」とユーザーに表示してください。
 
+以下のBashコマンドで ティッカー抽出完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.tickerExtractEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ### Step 2c: Round 2 — ディスカッション
 
 「Round 2: ディスカッション実行中...」とユーザーに表示してください。
+
+以下のBashコマンドで Round 2 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.round2Start = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 まず `/Users/arai/invest/tmp/round-1/` の各ファイルを Read ツールで読み込んでください。
 
@@ -564,11 +636,35 @@ console.log(tickers.join(', '));
 
 「Round 2 完了: N/5 アナリスト成功」とユーザーに表示してください。
 
+以下のBashコマンドで Round 2 完了タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.round2End = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ### Step 2d: モデレーター介入2 — 論点整理
 
 「モデレーターが論点を整理中...」とユーザーに表示してください。
+
+以下のBashコマンドで モデレーター論点整理 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.moderatorIssuesStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 まず `/Users/arai/invest/tmp/round-1/` と `/Users/arai/invest/tmp/round-2/` の全ファイルを Read ツールで読み込んでください。
 
@@ -632,11 +728,35 @@ console.log(tickers.join(', '));
 
 「論点整理完了」とユーザーに表示してください。
 
+以下のBashコマンドで モデレーター論点整理完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.moderatorIssuesEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ### Step 2e: Round 3 — 銘柄スコアリング
 
 「Round 3: 銘柄スコアリング実行中...」とユーザーに表示してください。
+
+以下のBashコマンドで Round 3 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.round3Start = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 まず `/Users/arai/invest/tmp/moderator-tickers.json` を Read ツールで読み込み、ティッカーリストを取得してください。
 
@@ -722,11 +842,35 @@ picks: [tmp/round-1/{agentId}.json の picks フィールド]
 
 「Round 3 完了: N/5 アナリスト成功」とユーザーに表示してください。
 
+以下のBashコマンドで Round 3 完了タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.round3End = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ### Step 2f: モデレーター最終統合
 
 「モデレーターが最終レポートを統合中...」とユーザーに表示してください。
+
+以下のBashコマンドで モデレーター最終統合 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.moderatorFinalStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 まず以下のファイルを Read ツールで読み込んでください:
 - `/Users/arai/invest/tmp/round-1/` の全ファイル（まだ読んでいない場合）
@@ -850,11 +994,35 @@ picks: [tmp/round-1/{agentId}.json の picks フィールド]
 
 「ミーティング統合完了」とユーザーに表示してください。
 
+以下のBashコマンドで モデレーター最終統合完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.moderatorFinalEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ### Step 2g: バリデーション
 
 「meeting-result.json のバリデーションを実行中...」とユーザーに表示してください。
+
+以下のBashコマンドで バリデーション の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.validationStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 ```bash
 cd /Users/arai/invest && npx tsx src/scripts/validate-meeting.ts
@@ -893,6 +1061,18 @@ try {
 
 「Step 2 完了: アナリストミーティングが正常に終了しました。」とユーザーに表示してください。
 
+以下のBashコマンドで バリデーション完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.validationEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ## Step 3: WebSearch リサーチ & レポート生成
@@ -918,6 +1098,18 @@ mkdir -p /Users/arai/invest/tmp/websearch /Users/arai/invest/tmp/reeval
 ---
 
 ### Step 3a: WebSearch リサーチ（銘柄ごと並列 Agent）
+
+以下のBashコマンドで WebSearch+再評価 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.webSearchStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 「WebSearchリサーチ: N銘柄を調査中...」（N は highlightedStocks の件数）とユーザーに表示してください。
 
@@ -1164,9 +1356,33 @@ Step 2.0 で読み込んだ各エージェントの systemPrompt を再利用し
 
 「再評価完了: N/5 アナリスト成功」とユーザーに表示してください。
 
+以下のBashコマンドで WebSearch+再評価完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.webSearchEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ### Step 3d: ポートフォリオ分析（Portfolio Analysis）
+
+以下のBashコマンドで ポートフォリオ分析 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.portfolioStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 「ポートフォリオ分析を実行中...」とユーザーに表示してください。
 
@@ -1241,11 +1457,35 @@ Step 2.0 で読み込んだ各エージェントの systemPrompt を再利用し
 
 「ポートフォリオ分析完了」とユーザーに表示してください。
 
+以下のBashコマンドで ポートフォリオ分析完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.portfolioEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ### Step 3c: HTMLレポート生成
 
 「Bloomberg風HTMLレポートを生成中...」とユーザーに表示してください。
+
+以下のBashコマンドで レポート生成 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.reportStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 以下のBashコマンドを実行してください:
 
@@ -1278,9 +1518,33 @@ try {
 
 「レポート生成完了: docs/{date}/ (3ファイル)」とユーザーに表示してください。
 
+以下のBashコマンドで レポート生成完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.reportEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ## Step 4: 自動デプロイ（GitHub Pages）
+
+以下のBashコマンドで デプロイ の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.deployStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 「インデックスページを更新中...」とユーザーに表示してから、以下のBashコマンドを実行してください:
 
@@ -1330,9 +1594,33 @@ try {
 - 変更なし（スキップ）: 「docs/ に変更がないためスキップしました」
 - 失敗: エラー内容をユーザーに表示して終了
 
+以下のBashコマンドで デプロイ完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.deployEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
 ---
 
 ## パイプライン完了
+
+以下のBashコマンドでパイプライン終了タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.pipelineEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
 
 「投資分析パイプライン完了」とユーザーに表示してください。
 
@@ -1341,3 +1629,42 @@ try {
 - Step 2: アナリストミーティング (3ラウンド) -- 完了
 - Step 3: WebSearch + 再評価 + ポートフォリオ分析 + レポート生成 -- 完了
 - Step 4: GitHub Pages デプロイ -- 完了
+
+以下のBashコマンドで Pipeline Timing を表示してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try {
+  m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8'));
+} catch(e) {
+  console.log('(タイミングデータなし)');
+  process.exit(0);
+}
+function fmt(ms) {
+  if (!ms || isNaN(ms)) return 'スキップ';
+  const s = Math.floor(ms / 1000);
+  return Math.floor(s/60) + 'm ' + String(s%60).padStart(2,'0') + 's';
+}
+const totalMs = m.pipelineEnd && m.pipelineStart ? m.pipelineEnd - m.pipelineStart : null;
+console.log('');
+console.log('═══ Pipeline Timing ═══');
+console.log('Step 1: データ収集         ' + fmt(m.collectData && m.collectData.durationMs));
+console.log('Step 2: アナリストミーティング');
+console.log('  Round 1 分析            ' + fmt(m.round1End - m.round1Start));
+console.log('  ティッカー抽出          ' + fmt(m.tickerExtractEnd - m.tickerExtractStart));
+console.log('  Round 2 議論            ' + fmt(m.round2End - m.round2Start));
+console.log('  モデレーター論点整理    ' + fmt(m.moderatorIssuesEnd - m.moderatorIssuesStart));
+console.log('  Round 3 スコアリング    ' + fmt(m.round3End - m.round3Start));
+console.log('  モデレーター最終統合    ' + fmt(m.moderatorFinalEnd - m.moderatorFinalStart));
+console.log('  バリデーション          ' + fmt(m.validationEnd - m.validationStart));
+console.log('Step 3: WebSearch+レポート');
+console.log('  WebSearch+再評価        ' + fmt(m.webSearchEnd - m.webSearchStart));
+console.log('  ポートフォリオ分析      ' + fmt(m.portfolioEnd - m.portfolioStart));
+console.log('  レポート生成            ' + fmt(m.reportEnd - m.reportStart));
+console.log('Step 4: デプロイ           ' + fmt(m.deployEnd - m.deployStart));
+console.log('──────────────────────────────');
+console.log('Total:                    ' + (totalMs ? fmt(totalMs) : '(計測中)'));
+"
+```
