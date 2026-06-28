@@ -36,7 +36,7 @@ Full details: `.planning/milestones/v2.0-ROADMAP.md`
 
 - [x] **Phase 8: News Filter Module** - クロスソース重複排除・関連性フィルタ・時間フィルタを一元管理するピュア関数モジュールをTDDで構築する
 - [x] **Phase 9: Pipeline Integration** - filter.tsをcollect-data.tsとinvest.mdに統合し、アナリストがフィルタ済み記事のみを受け取る
-- [ ] **Phase 10: Pipeline Timing** - パイプライン全体とステップ別の実行時間を計測し、最終出力に表示する
+- [x] **Phase 10: Pipeline Timing** - パイプライン全体とステップ別の実行時間を計測し、最終出力に表示する (completed 2026-06-28)
 
 ## Phase Details
 
@@ -159,7 +159,7 @@ Plans:
 
 Plans:
 
-- [ ] 10-01: METR-01/02 — performance.now() 計測・tmp/pipeline-metrics.json 書き出し・invest.md 最終表示の実装
+- [x] 10-01: METR-01/02 — performance.now() 計測・tmp/pipeline-metrics.json 書き出し・invest.md 最終表示の実装
 
 ## Progress
 
@@ -174,7 +174,7 @@ Plans:
 | 7. Portfolio Integration & Deployment | v2.1 | 2/2 | Complete | 2026-06-25 |
 | 8. News Filter Module | v2.2 | 2/2 | Complete | 2026-06-27 |
 | 9. Pipeline Integration | v2.2 | 2/2 | Complete   | 2026-06-28 |
-| 10. Pipeline Timing | v2.2 | 0/1 | Not started | - |
+| 10. Pipeline Timing | v2.2 | 1/1 | Complete   | 2026-06-28 |
 
 ---
 *Roadmap created: 2026-06-24*
