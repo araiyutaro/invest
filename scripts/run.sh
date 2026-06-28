@@ -25,11 +25,17 @@ claude --dangerously-skip-permissions \
   -p "/invest" \
   --model claude-sonnet-4-6 \
   --max-turns 200 \
-  >> "$LOG_FILE" 2>&1
+  >> "$LOG_FILE" 2>&1 || true
 
-EXIT_CODE=$?
+EXIT_CODE=${PIPESTATUS[0]:-$?}
 
 echo "=== Investment Pipeline Finished: $(date) (exit: $EXIT_CODE) ===" | tee -a "$LOG_FILE"
+
+if [ "$EXIT_CODE" -eq 0 ]; then
+  osascript -e 'display notification "パイプライン正常完了" with title "Investment Agent" sound name "Glass"'
+else
+  osascript -e "display notification \"パイプライン異常終了 (exit: $EXIT_CODE)\" with title \"Investment Agent\" sound name \"Basso\""
+fi
 
 find "$LOG_DIR" -name "invest-*.log" -mtime +7 -delete 2>/dev/null || true
 
