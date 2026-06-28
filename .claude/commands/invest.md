@@ -9,6 +9,11 @@ allowed-tools:
 
 投資分析の全パイプラインを実行します。データ収集から5アナリストの並列分析、モデレーターによる統合、レポート生成まで一括実行します。
 
+**重要な制約:**
+- `docs/index.html` および `docs/portfolio.html` のデザイン・スタイル・HTML構造を直接編集しないこと。エントリの追加は `update-index.ts` が行う
+- `src/scripts/generate-report.ts` が生成する HTML テンプレートを直接編集しないこと
+- docs/ 配下の既存 HTML ファイルの見た目を変更する行為は禁止
+
 ---
 
 ## Step 1: データ収集
