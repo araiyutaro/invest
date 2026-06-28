@@ -3,8 +3,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+LOG_DIR="$PROJECT_DIR/logs"
+TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+LOG_FILE="$LOG_DIR/invest-${TIMESTAMP}.log"
 
-export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 cd "$PROJECT_DIR"
 
@@ -14,6 +17,20 @@ if [ -f .env ]; then
   set +a
 fi
 
-# v2.0: /invest skill command is the entry point; automated execution removed.
-# Phase 4 cleanup: v1.0 entry point and docs/ git commit/push logic removed.
-echo "v2.0: Use /invest skill command to run investment analysis."
+mkdir -p "$LOG_DIR"
+
+echo "=== Investment Pipeline Started: $(date) ===" | tee "$LOG_FILE"
+
+claude --dangerously-skip-permissions \
+  -p "/invest" \
+  --model claude-sonnet-4-6 \
+  --max-turns 200 \
+  >> "$LOG_FILE" 2>&1
+
+EXIT_CODE=$?
+
+echo "=== Investment Pipeline Finished: $(date) (exit: $EXIT_CODE) ===" | tee -a "$LOG_FILE"
+
+find "$LOG_DIR" -name "invest-*.log" -mtime +7 -delete 2>/dev/null || true
+
+exit $EXIT_CODE
