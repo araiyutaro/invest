@@ -21,6 +21,8 @@ mkdir -p "$LOG_DIR"
 
 echo "=== Investment Pipeline Started: $(date) ===" | tee "$LOG_FILE"
 
+terminal-notifier -title "Investment Agent" -message "パイプライン開始 (約40分)" -sound Tink
+
 claude --dangerously-skip-permissions \
   -p "/invest" \
   --model claude-sonnet-4-6 \
