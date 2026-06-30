@@ -229,11 +229,15 @@ Plans:
 **Requirements**: OPS-01, OPS-02, OPS-03
 **Success Criteria** (what must be TRUE):
 
-  1. パイプラインが途中失敗した場合、logs/pipeline-YYYY-MM-DD.logに失敗ステップ名・エラーメッセージ・スタックトレースが記録される
+  1. パイプラインが途中失敗した場合、logs/invest-*.logに失敗ステップ名・エラーメッセージが `[STEP:{name}:FAIL:{error}]` 形式で記録される
   2. docs/index.htmlおよびdocs/portfolio.htmlがスクリプト外（手動編集・auto-run等）からの変更を防ぐ保護機構が機能している
   3. macOS通知でパイプライン開始・完了・失敗が報告される（terminal-notifierの動作がlaunchd環境で検証済み）
 
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+
+- [x] 13-01-PLAN.md — ステップマーカー追加（OPS-01）・HTMLチェックサム保護（OPS-02）・macOS通知検証（OPS-03）
 
 ### Phase 14: Report UI
 
@@ -265,7 +269,7 @@ Plans:
 | 10. Pipeline Timing | v2.2 | 1/1 | Complete    | 2026-06-28 |
 | 11. News Quality Enhancements | v2.3 | 2/2 | Complete    | 2026-06-30 |
 | 12. Analysis Quality | v2.3 | 2/2 | Complete    | 2026-06-30 |
-| 13. Operational Stability | v2.3 | 0/? | Not started | - |
+| 13. Operational Stability | v2.3 | 1/1 | In Progress | 2026-06-30 |
 | 14. Report UI | v2.3 | 0/? | Not started | - |
 
 ---
