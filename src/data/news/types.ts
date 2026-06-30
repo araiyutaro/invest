@@ -5,6 +5,7 @@ export interface RawNewsArticle {
   readonly url: string;
   readonly publishedAt: Date;
   readonly category: string;
+  readonly ticker?: string;
 }
 
 export interface NewsDigest {
