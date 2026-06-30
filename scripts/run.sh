@@ -23,6 +23,15 @@ echo "=== Investment Pipeline Started: $(date) ===" | tee "$LOG_FILE"
 
 terminal-notifier -title "Investment Agent" -message "パイプライン開始 (約40分)" -sound Tink
 
+# HTML Protection: record checksums before pipeline
+PROTECT_FILES="docs/index.html docs/portfolio.html"
+CHECKSUM_FILE="/tmp/invest-html-checksums-${TIMESTAMP}.txt"
+for f in $PROTECT_FILES; do
+  if [ -f "$PROJECT_DIR/$f" ]; then
+    shasum -a 256 "$PROJECT_DIR/$f" >> "$CHECKSUM_FILE"
+  fi
+done
+
 claude --dangerously-skip-permissions \
   -p "/invest" \
   --model claude-sonnet-4-6 \
@@ -30,6 +39,28 @@ claude --dangerously-skip-permissions \
   >> "$LOG_FILE" 2>&1 || true
 
 EXIT_CODE=${PIPESTATUS[0]:-$?}
+
+# HTML Protection: verify checksums and restore if changed
+if [ -f "$CHECKSUM_FILE" ]; then
+  RESTORED=""
+  for f in $PROTECT_FILES; do
+    if [ -f "$PROJECT_DIR/$f" ]; then
+      EXPECTED=$(grep "$PROJECT_DIR/$f" "$CHECKSUM_FILE" | awk '{print $1}')
+      if [ -n "$EXPECTED" ]; then
+        ACTUAL=$(shasum -a 256 "$PROJECT_DIR/$f" | awk '{print $1}')
+        if [ "$EXPECTED" != "$ACTUAL" ]; then
+          git -C "$PROJECT_DIR" checkout -- "$f"
+          RESTORED="$RESTORED $f"
+          echo "HTML保護: $f を復元しました" | tee -a "$LOG_FILE"
+        fi
+      fi
+    fi
+  done
+  rm -f "$CHECKSUM_FILE"
+  if [ -n "$RESTORED" ]; then
+    echo "HTML保護: 復元されたファイル:$RESTORED" | tee -a "$LOG_FILE"
+  fi
+fi
 
 echo "=== Investment Pipeline Finished: $(date) (exit: $EXIT_CODE) ===" | tee -a "$LOG_FILE"
 
