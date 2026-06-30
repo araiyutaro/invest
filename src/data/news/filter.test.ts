@@ -3,6 +3,8 @@ import {
   filterNewsArticles,
   calculatePriorityScore,
   sortByPriorityScore,
+  extractProperNouns,
+  deduplicateCrossLanguage,
 } from "./filter.js";
 import type { RawNewsArticle } from "./types.js";
 
@@ -326,6 +328,7 @@ describe("filterNewsArticles integration (全4Pass)", () => {
     expect(result.stats.raw).toBe(7);
     expect(result.stats.afterUrlDedup).toBe(6);
     expect(result.stats.afterTitleDedup).toBe(5);
+    expect(result.stats.afterCrossLangDedup).toBe(5);
     expect(result.stats.afterRelevance).toBe(4);
     expect(result.stats.final).toBe(3);
     expect(result.articles).toHaveLength(3);
@@ -479,5 +482,217 @@ describe("filterNewsArticles with portfolioTickers (NEWS-02 / D-06)", () => {
     ];
     const result = filterNewsArticles(articles, ["MRNA"]);
     expect(result.articles[0].url).toBe("https://example.com/new");
+  });
+});
+
+describe("extractProperNouns (NEWS-03 / D-07, D-10)", () => {
+  it("4桁年を抽出する", () => {
+    const result = extractProperNouns("Apple Q3 2026 results beat estimates");
+    expect(result.has("2026")).toBe(true);
+  });
+
+  it("大文字始まりの固有名詞（2文字以上）を抽出する", () => {
+    const result = extractProperNouns("Apple Q3 2026 results beat estimates");
+    expect(result.has("Apple")).toBe(true);
+  });
+
+  it("Q1-Q4パターンを大文字で抽出する", () => {
+    const result = extractProperNouns("Apple Q3 2026 results");
+    expect(result.has("Q3")).toBe(true);
+  });
+
+  it("全大文字のティッカー（2-5文字）を抽出する", () => {
+    const result = extractProperNouns("MRNA Q3 2026 earnings miss analyst");
+    expect(result.has("MRNA")).toBe(true);
+  });
+
+  it("日本語タイトルから年数を抽出する", () => {
+    const result = extractProperNouns("モデルナが2026年第3四半期の決算を発表");
+    expect(result.has("2026")).toBe(true);
+  });
+
+  it("日本語タイトルにASCIIティッカーが含まれる場合は抽出する", () => {
+    const result = extractProperNouns("MRNA 2026年3Q 決算ミス");
+    expect(result.has("MRNA")).toBe(true);
+    expect(result.has("2026")).toBe(true);
+  });
+
+  it("空文字列は空Setを返す", () => {
+    const result = extractProperNouns("");
+    expect(result.size).toBe(0);
+  });
+
+  it("2文字未満のトークンは含まれない", () => {
+    const result = extractProperNouns("AI is up");
+    expect(result.has("is")).toBe(false);
+  });
+});
+
+describe("deduplicateCrossLanguage (NEWS-03 / D-07, D-08, D-09)", () => {
+  const baseTime = new Date(Date.now() - 2 * 60 * 60 * 1000);
+
+  it("共通固有名詞2つ以上かつ6h以内のEN/JP記事ペアが1件に集約される", () => {
+    const articles = [
+      makeArticle({
+        url: "https://reuters.com/mrna-q3",
+        title: "MRNA Q3 2026 earnings miss analyst estimates",
+        summary: "Short EN summary.",
+        source: "Reuters",
+        publishedAt: baseTime,
+      }),
+      makeArticle({
+        url: "https://jp.reuters.com/mrna-q3",
+        title: "MRNA 2026年第3四半期の決算が予想を下回る",
+        summary: "こちらの方が長い日本語の本文サマリー",
+        source: "ロイター",
+        publishedAt: new Date(baseTime.getTime() + 30 * 60 * 1000),
+      }),
+    ];
+    const result = deduplicateCrossLanguage(articles);
+    expect(result).toHaveLength(1);
+  });
+
+  it("summary が長い方の記事が残る (D-09)", () => {
+    const articles = [
+      makeArticle({
+        url: "https://reuters.com/mrna-q3",
+        title: "MRNA Q3 2026 earnings miss analyst",
+        summary: "Short.",
+        source: "Reuters",
+        publishedAt: baseTime,
+      }),
+      makeArticle({
+        url: "https://jp.reuters.com/mrna-q3",
+        title: "MRNA 2026年第3四半期決算がアナリスト予想を下回る",
+        summary: "こちらの方が長い日本語サマリーです",
+        source: "ロイター",
+        publishedAt: new Date(baseTime.getTime() + 10 * 60 * 1000),
+      }),
+    ];
+    const result = deduplicateCrossLanguage(articles);
+    expect(result).toHaveLength(1);
+    expect(result[0].summary).toBe("こちらの方が長い日本語サマリーです");
+  });
+
+  it("6時間超の時間差がある記事ペアは集約されない (D-07: 6h window)", () => {
+    const articles = [
+      makeArticle({
+        url: "https://reuters.com/mrna-old",
+        title: "MRNA Q3 2026 earnings miss analyst estimates",
+        summary: "EN summary",
+        source: "Reuters",
+        publishedAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
+      }),
+      makeArticle({
+        url: "https://jp.reuters.com/mrna-new",
+        title: "MRNA 2026年3Q 決算ミス",
+        summary: "JP summary",
+        source: "ロイター",
+        publishedAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
+      }),
+    ];
+    const result = deduplicateCrossLanguage(articles);
+    expect(result).toHaveLength(2);
+  });
+
+  it("共通固有名詞が1つだけの場合は集約されない (D-08: conservative)", () => {
+    const articles = [
+      makeArticle({
+        url: "https://reuters.com/market-2026",
+        title: "Market outlook for 2026 remains positive",
+        summary: "EN summary",
+        publishedAt: baseTime,
+      }),
+      makeArticle({
+        url: "https://jp.example.com/market-2026",
+        title: "2026年の市場見通しはポジティブ",
+        summary: "JP summary",
+        publishedAt: baseTime,
+      }),
+    ];
+    const result = deduplicateCrossLanguage(articles);
+    expect(result).toHaveLength(2);
+  });
+
+  it("異なる銘柄のEN/JP記事ペアは集約されない", () => {
+    const articles = [
+      makeArticle({
+        url: "https://reuters.com/mrna",
+        title: "MRNA Q3 2026 earnings miss",
+        summary: "MRNA EN",
+        publishedAt: baseTime,
+      }),
+      makeArticle({
+        url: "https://jp.reuters.com/joby",
+        title: "JOBY 2026年3Q 決算",
+        summary: "JOBY JP",
+        publishedAt: baseTime,
+      }),
+    ];
+    const result = deduplicateCrossLanguage(articles);
+    expect(result).toHaveLength(2);
+  });
+
+  it("EN/EN または JP/JP ペアには適用されない", () => {
+    const articles = [
+      makeArticle({
+        url: "https://reuters.com/a",
+        title: "MRNA Q3 2026 earnings miss analyst estimates",
+        summary: "Reuters EN",
+        publishedAt: baseTime,
+      }),
+      makeArticle({
+        url: "https://bloomberg.com/a",
+        title: "MRNA Q3 2026 results disappoint analysts",
+        summary: "Bloomberg EN",
+        publishedAt: baseTime,
+      }),
+    ];
+    const result = deduplicateCrossLanguage(articles);
+    expect(result).toHaveLength(2);
+  });
+
+  it("元の配列を変更しない（immutable）", () => {
+    const articles = [
+      makeArticle({ url: "https://a.com", title: "MRNA Q3 2026 earnings" }),
+      makeArticle({ url: "https://b.com", title: "MRNA 2026年3Q 決算" }),
+    ];
+    const originalLength = articles.length;
+    deduplicateCrossLanguage(articles);
+    expect(articles).toHaveLength(originalLength);
+  });
+});
+
+describe("filterNewsArticles cross-language integration (NEWS-03)", () => {
+  it("EN/JP同内容記事ペアがパイプライン全体で1件に集約される", () => {
+    const baseTime = new Date(Date.now() - 1 * 60 * 60 * 1000);
+    const articles = [
+      makeArticle({
+        url: "https://reuters.com/mrna-q3-en",
+        title: "MRNA Q3 2026 earnings miss analyst estimates forecast",
+        summary: "Short EN.",
+        source: "Reuters",
+        publishedAt: baseTime,
+      }),
+      makeArticle({
+        url: "https://jp.reuters.com/mrna-q3-jp",
+        title: "MRNA 2026年3Q 決算ミス アナリスト予想下回る",
+        summary: "こちらの方が長い日本語本文サマリーです",
+        source: "ロイター",
+        publishedAt: new Date(baseTime.getTime() + 15 * 60 * 1000),
+      }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(1);
+    expect(result.articles[0].summary).toBe("こちらの方が長い日本語本文サマリーです");
+    expect(result.stats.afterTitleDedup).toBe(2);
+    expect(result.stats.afterCrossLangDedup).toBe(1);
+  });
+
+  it("statsにafterCrossLangDedupフィールドが含まれる", () => {
+    const articles = [makeArticle({ url: "https://example.com/1" })];
+    const result = filterNewsArticles(articles);
+    expect(result.stats).toHaveProperty("afterCrossLangDedup");
+    expect(typeof result.stats.afterCrossLangDedup).toBe("number");
   });
 });
