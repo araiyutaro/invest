@@ -15,8 +15,8 @@ Requirements for Analysis Quality & Operational Stability. ニュース品質・
 
 ### Analysis Quality
 
-- [ ] **ANLQ-01**: 前日のmeeting-result.jsonがアナリストのRound 1プロンプトに注入され、前日の推奨銘柄の追跡・見解変化が議論される
-- [ ] **ANLQ-02**: Round 3スコアリングが専用の並列エージェントとして実行され、Round 2完了を待って起動される
+- [x] **ANLQ-01**: 前日のmeeting-result.jsonがアナリストのRound 1プロンプトに注入され、前日の推奨銘柄の追跡・見解変化が議論される
+- [x] **ANLQ-02**: Round 3スコアリングが専用の並列エージェントとして実行され、Round 2完了を待って起動される
 
 ### Operational Stability
 
@@ -55,8 +55,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NEWS-01 | Phase 11 | Complete |
 | NEWS-02 | Phase 11 | Complete |
 | NEWS-03 | Phase 11 | Complete |
-| ANLQ-01 | Phase 12 | Pending |
-| ANLQ-02 | Phase 12 | Pending |
+| ANLQ-01 | Phase 12 | Complete |
+| ANLQ-02 | Phase 12 | Complete |
 | OPS-01 | Phase 13 | Pending |
 | OPS-02 | Phase 13 | Pending |
 | OPS-03 | Phase 13 | Pending |
