@@ -53,7 +53,7 @@ Full details: `.planning/milestones/v2.2-ROADMAP.md`
 
 ニュース品質・分析品質・運用安定性・レポートUIを総合的に底上げし、毎日の自動実行パイプラインの信頼性と出力品質を向上させる。
 
-- [ ] **Phase 11: News Quality Enhancements** - Finnhubティッカー別取得・時間重み付け・クロス言語dedup
+- [x] **Phase 11: News Quality Enhancements** - Finnhubティッカー別取得・時間重み付け・クロス言語dedup (completed 2026-06-30)
 - [ ] **Phase 12: Analysis Quality** - 前日レポート注入・スコアリング並列エージェント化
 - [ ] **Phase 13: Operational Stability** - エラーログ・HTML保護・macOS通知検証
 - [ ] **Phase 14: Report UI** - index.htmlモバイル対応・インラインチャート追加
@@ -197,7 +197,7 @@ Plans:
 Plans:
 
 - [x] 11-01: NEWS-01/NEWS-02 — Finnhubティッカー別カンパニーニュース取得と時間重み付けスコアリング
-- [ ] 11-02: NEWS-03 — クロス言語（英日）重複排除
+- [x] 11-02: NEWS-03 — クロス言語（英日）重複排除
 
 ### Phase 12: Analysis Quality
 
@@ -253,7 +253,7 @@ Plans:
 | 8. News Filter Module | v2.2 | 2/2 | Complete | 2026-06-27 |
 | 9. Pipeline Integration | v2.2 | 2/2 | Complete   | 2026-06-28 |
 | 10. Pipeline Timing | v2.2 | 1/1 | Complete    | 2026-06-28 |
-| 11. News Quality Enhancements | v2.3 | 1/2 | In Progress|  |
+| 11. News Quality Enhancements | v2.3 | 2/2 | Complete   | 2026-06-30 |
 | 12. Analysis Quality | v2.3 | 0/? | Not started | - |
 | 13. Operational Stability | v2.3 | 0/? | Not started | - |
 | 14. Report UI | v2.3 | 0/? | Not started | - |
