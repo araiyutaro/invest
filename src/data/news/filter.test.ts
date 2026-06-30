@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { filterNewsArticles } from "./filter.js";
+import {
+  filterNewsArticles,
+  calculatePriorityScore,
+  sortByPriorityScore,
+} from "./filter.js";
 import type { RawNewsArticle } from "./types.js";
 
 const makeArticle = (overrides: Partial<RawNewsArticle>): RawNewsArticle => ({
@@ -325,5 +329,155 @@ describe("filterNewsArticles integration (全4Pass)", () => {
     expect(result.stats.afterRelevance).toBe(4);
     expect(result.stats.final).toBe(3);
     expect(result.articles).toHaveLength(3);
+  });
+});
+
+describe("calculatePriorityScore (NEWS-02 / D-04, D-05)", () => {
+  const PORTFOLIO_TICKERS = ["MRNA", "JOBY", "HII", "POWL", "FLNC", "EE", "NXT", "BWMX"];
+
+  it("5時間前の記事はtimeScore=1.0を返す (D-04: 0-6h tier)", () => {
+    const article = makeArticle({
+      publishedAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+    });
+    const score = calculatePriorityScore(article, Date.now(), []);
+    expect(score).toBeCloseTo(1.0);
+  });
+
+  it("9時間前の記事はtimeScore=0.7を返す (D-04: 6-12h tier)", () => {
+    const article = makeArticle({
+      publishedAt: new Date(Date.now() - 9 * 60 * 60 * 1000),
+    });
+    const score = calculatePriorityScore(article, Date.now(), []);
+    expect(score).toBeCloseTo(0.7);
+  });
+
+  it("20時間前の記事はtimeScore=0.4を返す (D-04: 12-24h tier)", () => {
+    const article = makeArticle({
+      publishedAt: new Date(Date.now() - 20 * 60 * 60 * 1000),
+    });
+    const score = calculatePriorityScore(article, Date.now(), []);
+    expect(score).toBeCloseTo(0.4);
+  });
+
+  it("ちょうど6時間前は0.7tierに入る (D-04: 境界値は上tier外)", () => {
+    const article = makeArticle({
+      publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+    });
+    const score = calculatePriorityScore(article, Date.now(), []);
+    expect(score).toBeCloseTo(0.7);
+  });
+
+  it("ポートフォリオティッカー記事には+0.2ボーナスが付く (D-05)", () => {
+    const article = makeArticle({
+      publishedAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+      ticker: "MRNA",
+    });
+    const score = calculatePriorityScore(article, Date.now(), PORTFOLIO_TICKERS);
+    expect(score).toBeCloseTo(1.2);
+  });
+
+  it("ポートフォリオ外ティッカーはボーナスなし (D-05)", () => {
+    const article = makeArticle({
+      publishedAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+      ticker: "AAPL",
+    });
+    const score = calculatePriorityScore(article, Date.now(), PORTFOLIO_TICKERS);
+    expect(score).toBeCloseTo(1.0);
+  });
+
+  it("tickerフィールドなし記事はボーナスなし (D-05)", () => {
+    const article = makeArticle({
+      publishedAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+    });
+    const score = calculatePriorityScore(article, Date.now(), PORTFOLIO_TICKERS);
+    expect(score).toBeCloseTo(1.0);
+  });
+});
+
+describe("sortByPriorityScore (NEWS-02 / D-06)", () => {
+  const PORTFOLIO_TICKERS = ["MRNA", "JOBY"];
+
+  it("高スコア記事が低スコア記事より前に来る", () => {
+    const articles = [
+      makeArticle({
+        url: "https://example.com/old",
+        publishedAt: new Date(Date.now() - 20 * 60 * 60 * 1000),
+      }),
+      makeArticle({
+        url: "https://example.com/new",
+        publishedAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
+      }),
+    ];
+    const sorted = sortByPriorityScore(articles, []);
+    expect(sorted[0].url).toBe("https://example.com/new");
+  });
+
+  it("ティッカーボーナスで古い記事が新しい記事を上回る", () => {
+    const articles = [
+      makeArticle({
+        url: "https://example.com/new-nobonus",
+        publishedAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
+      }),
+      makeArticle({
+        url: "https://example.com/old-ticker",
+        publishedAt: new Date(Date.now() - 9 * 60 * 60 * 1000),
+        ticker: "MRNA",
+      }),
+    ];
+    const sorted = sortByPriorityScore(articles, PORTFOLIO_TICKERS);
+    expect(sorted[0].url).toBe("https://example.com/new-nobonus");
+  });
+
+  it("同スコアの場合は新しい記事が先", () => {
+    const articles = [
+      makeArticle({
+        url: "https://example.com/a",
+        publishedAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
+      }),
+      makeArticle({
+        url: "https://example.com/b",
+        publishedAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
+      }),
+    ];
+    const sorted = sortByPriorityScore(articles, []);
+    expect(sorted[0].url).toBe("https://example.com/b");
+  });
+
+  it("元の配列を変更しない（immutable）", () => {
+    const articles = [
+      makeArticle({ url: "https://a.com", publishedAt: new Date(Date.now() - 20 * 60 * 60 * 1000) }),
+      makeArticle({ url: "https://b.com", publishedAt: new Date(Date.now() - 1 * 60 * 60 * 1000) }),
+    ];
+    const original = [...articles];
+    sortByPriorityScore(articles, []);
+    expect(articles[0].url).toBe(original[0].url);
+  });
+});
+
+describe("filterNewsArticles with portfolioTickers (NEWS-02 / D-06)", () => {
+  it("portfolioTickersなしでも既存のfilterNewsArticlesが動作する（後方互換）", () => {
+    const articles = [
+      makeArticle({ url: "https://example.com/a" }),
+    ];
+    const result = filterNewsArticles(articles);
+    expect(result.articles).toHaveLength(1);
+  });
+
+  it("filterNewsArticles結果はスコア降順になっている", () => {
+    const now = Date.now();
+    const articles = [
+      makeArticle({
+        url: "https://example.com/old",
+        title: "古い記事です",
+        publishedAt: new Date(now - 20 * 60 * 60 * 1000),
+      }),
+      makeArticle({
+        url: "https://example.com/new",
+        title: "新しい記事です",
+        publishedAt: new Date(now - 1 * 60 * 60 * 1000),
+      }),
+    ];
+    const result = filterNewsArticles(articles, ["MRNA"]);
+    expect(result.articles[0].url).toBe("https://example.com/new");
   });
 });
