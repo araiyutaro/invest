@@ -169,20 +169,60 @@ export function filterByTime(
   return articles.filter((a) => a.publishedAt.getTime() > oneDayAgo);
 }
 
+export function calculatePriorityScore(
+  article: RawNewsArticle,
+  now: number,
+  portfolioTickers: ReadonlyArray<string>,
+): number {
+  const ageHours = (now - article.publishedAt.getTime()) / (60 * 60 * 1000);
+
+  let timeScore: number;
+  if (ageHours < 6) {
+    timeScore = 1.0;
+  } else if (ageHours < 12) {
+    timeScore = 0.7;
+  } else {
+    timeScore = 0.4;
+  }
+
+  const tickerBonus =
+    article.ticker !== undefined && portfolioTickers.includes(article.ticker)
+      ? 0.2
+      : 0;
+
+  return timeScore + tickerBonus;
+}
+
+export function sortByPriorityScore(
+  articles: ReadonlyArray<RawNewsArticle>,
+  portfolioTickers: ReadonlyArray<string>,
+): RawNewsArticle[] {
+  const now = Date.now();
+  return [...articles].sort((a, b) => {
+    const scoreA = calculatePriorityScore(a, now, portfolioTickers);
+    const scoreB = calculatePriorityScore(b, now, portfolioTickers);
+    if (scoreB !== scoreA) return scoreB - scoreA;
+    return b.publishedAt.getTime() - a.publishedAt.getTime();
+  });
+}
+
 /**
- * ニュース記事をフィルタリングする。
+ * ニュース記事をフィルタリングしてスコア順にソートする。
  * Pass 1: URL dedup (DEDUP-01)
  * Pass 2: Title Jaccard dedup (DEDUP-02)
  * Pass 3: Relevance filter — denylist + 投資キーワード例外 (FILT-01)
  * Pass 4: 24h time filter (FILT-02)
+ * Pass 5: Priority score sort (NEWS-02)
  */
 export function filterNewsArticles(
   articles: ReadonlyArray<RawNewsArticle>,
+  portfolioTickers: ReadonlyArray<string> = [],
 ): NewsFilterResult {
   const afterUrlDedup = deduplicateByUrl(articles);
   const afterTitleDedup = deduplicateByTitle(afterUrlDedup);
   const afterRelevance = filterByRelevance(afterTitleDedup);
-  const finalArticles = filterByTime(afterRelevance);
+  const afterTime = filterByTime(afterRelevance);
+  const finalArticles = sortByPriorityScore(afterTime, portfolioTickers);
 
   return {
     articles: finalArticles,
@@ -191,7 +231,7 @@ export function filterNewsArticles(
       afterUrlDedup: afterUrlDedup.length,
       afterTitleDedup: afterTitleDedup.length,
       afterRelevance: afterRelevance.length,
-      final: finalArticles.length,
+      final: afterTime.length,
     },
   };
 }
