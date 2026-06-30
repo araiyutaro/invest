@@ -77,6 +77,27 @@ console.log('  ポートフォリオ銘柄:', portfolio.length, '銘柄');
 mkdir -p /Users/arai/invest/tmp/round-1 /Users/arai/invest/tmp/round-2 /Users/arai/invest/tmp/round-3
 ```
 
+次に、以下のBashコマンドで前日の推奨銘柄データを確認してください:
+
+```bash
+node -e "
+const fs = require('fs');
+try {
+  const prev = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/meeting-result.json', 'utf-8'));
+  if (Array.isArray(prev.highlightedStocks) && prev.highlightedStocks.length > 0) {
+    fs.writeFileSync('/Users/arai/invest/tmp/prev-highlighted-stocks.json', JSON.stringify(prev.highlightedStocks, null, 2));
+    console.log('[前日データ] ' + prev.highlightedStocks.length + '銘柄: ' + prev.highlightedStocks.map(s => s.ticker + '(スコア:' + s.averageScore + '/10, ' + s.verdict + ')').join(', '));
+  } else {
+    console.log('前日データなし');
+  }
+} catch(e) {
+  console.log('前日データなし');
+}
+"
+```
+
+`tmp/prev-highlighted-stocks.json` が作成された場合（前日データあり）は Round 1 の各アナリストプロンプトに後述の「## 前日の推奨銘柄」セクションを含めてください。作成されなかった場合（前日データなし）は通常通り Round 1 を実行し、前日セクション全体を省略してください。
+
 次に、以下のファイルを Read ツールで読み込んでください（後のステップで Agent prompt に埋め込むために必要です）:
 
 - `/Users/arai/invest/src/agents/fundamentals.ts` — `systemPrompt` フィールドの値を取得
@@ -123,6 +144,15 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     ## ニュースデータ (tmp/news.json)
     [tmp/news.json の全内容]
 
+    （tmp/prev-highlighted-stocks.json が存在する場合のみ以下を含めること）
+    ## 前日の推奨銘柄
+    前日のミーティングでチームが注目した銘柄と評価スコアです。本日の市場データ・ニュースを踏まえ、これらの銘柄への見解が変化したかどうかを明示的に述べてください。
+
+    [tmp/prev-highlighted-stocks.json の各銘柄の ticker, averageScore, verdict, agentScores フィールドを全て展開してください。表示例: {ticker}: 前日スコア {averageScore}/10 / 判定: {verdict} / 各エージェントスコア要約: {agentScores の agentRole+score を列挙}]
+
+    前日推奨銘柄について、今日の市場データ・ニュースを踏まえて見解が変化したか明示すること。
+    （tmp/prev-highlighted-stocks.json が存在しない場合はこのセクション全体を省略）
+
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
 
@@ -158,6 +188,15 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     ## ニュースデータ (tmp/news.json)
     [tmp/news.json の全内容]
+
+    （tmp/prev-highlighted-stocks.json が存在する場合のみ以下を含めること）
+    ## 前日の推奨銘柄
+    前日のミーティングでチームが注目した銘柄と評価スコアです。本日の市場データ・ニュースを踏まえ、これらの銘柄への見解が変化したかどうかを明示的に述べてください。
+
+    [tmp/prev-highlighted-stocks.json の各銘柄の ticker, averageScore, verdict, agentScores フィールドを全て展開してください。表示例: {ticker}: 前日スコア {averageScore}/10 / 判定: {verdict} / 各エージェントスコア要約: {agentScores の agentRole+score を列挙}]
+
+    前日推奨銘柄について、今日の市場データ・ニュースを踏まえて見解が変化したか明示すること。
+    （tmp/prev-highlighted-stocks.json が存在しない場合はこのセクション全体を省略）
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
@@ -195,6 +234,15 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     ## ニュースデータ (tmp/news.json)
     [tmp/news.json の全内容]
 
+    （tmp/prev-highlighted-stocks.json が存在する場合のみ以下を含めること）
+    ## 前日の推奨銘柄
+    前日のミーティングでチームが注目した銘柄と評価スコアです。本日の市場データ・ニュースを踏まえ、これらの銘柄への見解が変化したかどうかを明示的に述べてください。
+
+    [tmp/prev-highlighted-stocks.json の各銘柄の ticker, averageScore, verdict, agentScores フィールドを全て展開してください。表示例: {ticker}: 前日スコア {averageScore}/10 / 判定: {verdict} / 各エージェントスコア要約: {agentScores の agentRole+score を列挙}]
+
+    前日推奨銘柄について、今日の市場データ・ニュースを踏まえて見解が変化したか明示すること。
+    （tmp/prev-highlighted-stocks.json が存在しない場合はこのセクション全体を省略）
+
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
 
@@ -231,6 +279,15 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     ## ニュースデータ (tmp/news.json)
     [tmp/news.json の全内容]
 
+    （tmp/prev-highlighted-stocks.json が存在する場合のみ以下を含めること）
+    ## 前日の推奨銘柄
+    前日のミーティングでチームが注目した銘柄と評価スコアです。本日の市場データ・ニュースを踏まえ、これらの銘柄への見解が変化したかどうかを明示的に述べてください。
+
+    [tmp/prev-highlighted-stocks.json の各銘柄の ticker, averageScore, verdict, agentScores フィールドを全て展開してください。表示例: {ticker}: 前日スコア {averageScore}/10 / 判定: {verdict} / 各エージェントスコア要約: {agentScores の agentRole+score を列挙}]
+
+    前日推奨銘柄について、今日の市場データ・ニュースを踏まえて見解が変化したか明示すること。
+    （tmp/prev-highlighted-stocks.json が存在しない場合はこのセクション全体を省略）
+
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
 
@@ -266,6 +323,15 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     ## ニュースデータ (tmp/news.json)
     [tmp/news.json の全内容]
+
+    （tmp/prev-highlighted-stocks.json が存在する場合のみ以下を含めること）
+    ## 前日の推奨銘柄
+    前日のミーティングでチームが注目した銘柄と評価スコアです。本日の市場データ・ニュースを踏まえ、これらの銘柄への見解が変化したかどうかを明示的に述べてください。
+
+    [tmp/prev-highlighted-stocks.json の各銘柄の ticker, averageScore, verdict, agentScores フィールドを全て展開してください。表示例: {ticker}: 前日スコア {averageScore}/10 / 判定: {verdict} / 各エージェントスコア要約: {agentScores の agentRole+score を列挙}]
+
+    前日推奨銘柄について、今日の市場データ・ニュースを踏まえて見解が変化したか明示すること。
+    （tmp/prev-highlighted-stocks.json が存在しない場合はこのセクション全体を省略）
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
