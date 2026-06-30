@@ -55,7 +55,7 @@ Full details: `.planning/milestones/v2.2-ROADMAP.md`
 
 - [x] **Phase 11: News Quality Enhancements** - Finnhubティッカー別取得・時間重み付け・クロス言語dedup (completed 2026-06-30)
 - [x] **Phase 12: Analysis Quality** - 前日レポート注入・スコアリング並列エージェント化 (completed 2026-06-30)
-- [ ] **Phase 13: Operational Stability** - エラーログ・HTML保護・macOS通知検証
+- [x] **Phase 13: Operational Stability** - エラーログ・HTML保護・macOS通知検証 (completed 2026-06-30)
 - [ ] **Phase 14: Report UI** - index.htmlモバイル対応・インラインチャート追加
 
 ## Phase Details
@@ -269,7 +269,7 @@ Plans:
 | 10. Pipeline Timing | v2.2 | 1/1 | Complete    | 2026-06-28 |
 | 11. News Quality Enhancements | v2.3 | 2/2 | Complete    | 2026-06-30 |
 | 12. Analysis Quality | v2.3 | 2/2 | Complete    | 2026-06-30 |
-| 13. Operational Stability | v2.3 | 1/1 | In Progress | 2026-06-30 |
+| 13. Operational Stability | v2.3 | 1/1 | Complete    | 2026-06-30 |
 | 14. Report UI | v2.3 | 0/? | Not started | - |
 
 ---

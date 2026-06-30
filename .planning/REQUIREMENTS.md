@@ -20,9 +20,9 @@ Requirements for Analysis Quality & Operational Stability. ニュース品質・
 
 ### Operational Stability
 
-- [ ] **OPS-01**: 自動実行（launchd）でパイプラインが途中失敗した場合、失敗ステップを特定するエラーログが出力される
-- [ ] **OPS-02**: docs/index.htmlおよびdocs/portfolio.htmlがスクリプト以外から変更されない保護機構が実装される
-- [ ] **OPS-03**: 自動実行の開始/完了/失敗がmacOS通知で報告される（実装済み、動作検証）
+- [x] **OPS-01**: 自動実行（launchd）でパイプラインが途中失敗した場合、失敗ステップを特定するエラーログが出力される
+- [x] **OPS-02**: docs/index.htmlおよびdocs/portfolio.htmlがスクリプト以外から変更されない保護機構が実装される
+- [x] **OPS-03**: 自動実行の開始/完了/失敗がmacOS通知で報告される（実装済み、動作検証）
 
 ### Report UI
 
@@ -57,9 +57,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NEWS-03 | Phase 11 | Complete |
 | ANLQ-01 | Phase 12 | Complete |
 | ANLQ-02 | Phase 12 | Complete |
-| OPS-01 | Phase 13 | Pending |
-| OPS-02 | Phase 13 | Pending |
-| OPS-03 | Phase 13 | Pending |
+| OPS-01 | Phase 13 | Complete |
+| OPS-02 | Phase 13 | Complete |
+| OPS-03 | Phase 13 | Complete |
 | UI-01 | Phase 14 | Pending |
 | UI-02 | Phase 14 | Pending |
 

@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v2.3
 milestone_name: Analysis Quality & Operational Stability
-status: in_progress
-stopped_at: Phase 13 Plan 01 complete
-last_updated: "2026-06-30T23:36:44Z"
+status: ready_to_plan
+stopped_at: Phase 13 complete (1/1) — ready to discuss Phase 14
+last_updated: 2026-06-30T23:49:09.837Z
 last_activity: 2026-06-30
 progress:
   total_phases: 10
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 13 — operational stability
+**Current focus:** Phase 14 — report ui
 
 ## Current Position
 
-Phase: 13
-Plan: 01 complete
-Status: In Progress (1/1 plan done)
+Phase: 14
+Plan: Not started
+Status: Ready to plan
 Last activity: 2026-06-30
 
 ```
