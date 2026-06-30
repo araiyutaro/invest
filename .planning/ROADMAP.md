@@ -192,7 +192,12 @@ Plans:
   2. 直近6時間以内のニュース記事が優先スコアを持ち、古い記事より上位に配置されてアナリストに渡される
   3. 英語と日本語で同内容の記事（例: Reuters英語版とロイター日本語版）がクロス言語dedupで1件に集約される
 
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+
+- [x] 11-01: NEWS-01/NEWS-02 — Finnhubティッカー別カンパニーニュース取得と時間重み付けスコアリング
+- [ ] 11-02: NEWS-03 — クロス言語（英日）重複排除
 
 ### Phase 12: Analysis Quality
 
@@ -248,7 +253,7 @@ Plans:
 | 8. News Filter Module | v2.2 | 2/2 | Complete | 2026-06-27 |
 | 9. Pipeline Integration | v2.2 | 2/2 | Complete   | 2026-06-28 |
 | 10. Pipeline Timing | v2.2 | 1/1 | Complete    | 2026-06-28 |
-| 11. News Quality Enhancements | v2.3 | 0/? | Not started | - |
+| 11. News Quality Enhancements | v2.3 | 1/2 | In Progress|  |
 | 12. Analysis Quality | v2.3 | 0/? | Not started | - |
 | 13. Operational Stability | v2.3 | 0/? | Not started | - |
 | 14. Report UI | v2.3 | 0/? | Not started | - |
