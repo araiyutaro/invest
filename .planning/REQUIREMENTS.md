@@ -9,9 +9,9 @@ Requirements for Analysis Quality & Operational Stability. ニュース品質・
 
 ### News Quality
 
-- [ ] **NEWS-01**: Finnhub APIがポートフォリオ保有銘柄のティッカー別ニュースを取得し、汎用ニュースと統合される
-- [ ] **NEWS-02**: ニュース記事に時間帯重み付け（直近6h以内の記事が優先スコアを持つ）が適用される
-- [ ] **NEWS-03**: 英語と日本語で同内容のニュース記事がクロス言語重複排除される
+- [x] **NEWS-01**: Finnhub APIがポートフォリオ保有銘柄のティッカー別ニュースを取得し、汎用ニュースと統合される
+- [x] **NEWS-02**: ニュース記事に時間帯重み付け（直近6h以内の記事が優先スコアを持つ）が適用される
+- [x] **NEWS-03**: 英語と日本語で同内容のニュース記事がクロス言語重複排除される
 
 ### Analysis Quality
 
@@ -52,9 +52,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NEWS-01 | Phase 11 | Pending |
-| NEWS-02 | Phase 11 | Pending |
-| NEWS-03 | Phase 11 | Pending |
+| NEWS-01 | Phase 11 | Complete |
+| NEWS-02 | Phase 11 | Complete |
+| NEWS-03 | Phase 11 | Complete |
 | ANLQ-01 | Phase 12 | Pending |
 | ANLQ-02 | Phase 12 | Pending |
 | OPS-01 | Phase 13 | Pending |
