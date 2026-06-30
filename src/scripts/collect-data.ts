@@ -29,25 +29,28 @@ export async function main() {
 
   try {
     console.log("ニュース収集中...");
+    const usTickers = PORTFOLIO_HOLDINGS
+      .map((h) => h.symbol)
+      .filter((s) => !s.includes("."));
+
     const [finnhubNews, googleNews, rssNews] = await Promise.all([
-      fetchAllFinnhubNews(),
+      fetchAllFinnhubNews(usTickers),
       fetchGoogleNewsJapan().catch(() => [] as Awaited<ReturnType<typeof fetchGoogleNewsJapan>>),
       fetchAllRssNews().catch(() => [] as Awaited<ReturnType<typeof fetchAllRssNews>>),
     ]);
     const allArticles = [
       ...finnhubNews.general,
       ...finnhubNews.merger,
+      ...finnhubNews.company,
       ...googleNews,
       ...rssNews,
     ];
-    const { articles: filtered, stats } = filterNewsArticles(allArticles);
+    const { articles: filtered, stats } = filterNewsArticles(allArticles, usTickers);
     console.log(`ニュース: ${stats.raw}件 → dedup: ${stats.afterTitleDedup}件 → フィルタ後: ${stats.final}件`);
     let finalArticles = [...filtered];
     if (filtered.length > 80) {
       console.log(`MAX=80超過: ${filtered.length}件 → 80件にトリミング`);
-      finalArticles = [...filtered]
-        .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
-        .slice(0, 80);
+      finalArticles = [...filtered].slice(0, 80);
     }
     if (finalArticles.length < 20) {
       console.log(`⚠ フィルタ後の記事が${finalArticles.length}件です（MIN=20未満）`);
