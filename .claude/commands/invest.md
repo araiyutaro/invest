@@ -829,9 +829,33 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 "
 ```
 
+**Round 2 完了確認（D-06）:** Step 2c で保存された全5アナリストの Round 2 応答ファイルの存在を確認してから Round 3 を起動してください。以下のBashコマンドで確認します:
+
+```bash
+node -e "
+const fs = require('fs');
+const agents = ['fundamentals', 'tenbagger', 'macro', 'technical', 'risk-manager'];
+const baseDir = '/Users/arai/invest/tmp/round-2/';
+const missing = agents.filter(a => !fs.existsSync(baseDir + a + '.json'));
+if (missing.length === 0) {
+  console.log('[Round 3] Round 2 完了確認: 5/5 アナリスト応答確認済み');
+} else {
+  console.log('[Round 3] 警告: Round 2 応答が ' + missing.length + ' ファイル不足: ' + missing.join(', '));
+}
+"
+```
+
 まず `/Users/arai/invest/tmp/moderator-tickers.json` を Read ツールで読み込み、ティッカーリストを取得してください。
 
 ティッカーが0件の場合は、「スコアリング対象銘柄が0件のためRound 3をスキップします。」とユーザーに表示してステップを終了し、空の round-3 ファイルを作成してください。
+
+以下のBashコマンドで Round 3 の起動ログを表示してください（ティッカーが0件の場合は実行しません）:
+
+```bash
+node -e "
+console.log('[Round 3] エージェント起動: ファンダメンタルズ, テンバガー, マクロ, テクニカル, リスクマネ');
+"
+```
 
 **以下5つの Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
 
@@ -910,6 +934,28 @@ picks: [tmp/round-1/{agentId}.json の picks フィールド]
 - `risk-manager-r3` の出力 → `/Users/arai/invest/tmp/round-3/risk-manager.json`
 
 出力が有効なJSONでない場合は、`{"agentId": "...", "agentRole": "...", "scores": []}` を保存してください。
+
+以下のBashコマンドで各エージェントの完了ログを表示してください（D-05）:
+
+```bash
+node -e "
+const fs = require('fs');
+const agents = [
+  {file: 'fundamentals', role: 'ファンダメンタルズアナリスト'},
+  {file: 'tenbagger', role: 'テンバガーハンター'},
+  {file: 'macro', role: 'マクロエコノミスト'},
+  {file: 'technical', role: 'テクニカルストラテジスト'},
+  {file: 'risk-manager', role: 'リスクマネージャー'}
+];
+let count = 0;
+agents.forEach(agent => {
+  if (fs.existsSync('/Users/arai/invest/tmp/round-3/' + agent.file + '.json')) {
+    count++;
+    console.log('[Round 3] ' + agent.role + ' スコアリング完了 (' + count + '/5)');
+  }
+});
+"
+```
 
 「Round 3 完了: N/5 アナリスト成功」とユーザーに表示してください。
 
