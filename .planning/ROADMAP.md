@@ -216,7 +216,7 @@ Plans:
 
 **Wave 1**
 
-- [ ] 12-01-PLAN.md — ANLQ-01: Step 2.0 前日データ読み込みと Round 1 全5エージェントへの前日推奨銘柄セクション注入
+- [x] 12-01-PLAN.md — ANLQ-01: Step 2.0 前日データ読み込みと Round 1 全5エージェントへの前日推奨銘柄セクション注入
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -264,7 +264,7 @@ Plans:
 | 9. Pipeline Integration | v2.2 | 2/2 | Complete   | 2026-06-28 |
 | 10. Pipeline Timing | v2.2 | 1/1 | Complete    | 2026-06-28 |
 | 11. News Quality Enhancements | v2.3 | 2/2 | Complete    | 2026-06-30 |
-| 12. Analysis Quality | v2.3 | 0/2 | Planned | - |
+| 12. Analysis Quality | v2.3 | 1/2 | In Progress|  |
 | 13. Operational Stability | v2.3 | 0/? | Not started | - |
 | 14. Report UI | v2.3 | 0/? | Not started | - |
 
