@@ -935,6 +935,28 @@ picks: [tmp/round-1/{agentId}.json の picks フィールド]
 
 出力が有効なJSONでない場合は、`{"agentId": "...", "agentRole": "...", "scores": []}` を保存してください。
 
+以下のBashコマンドで各エージェントの完了ログを表示してください（D-05）:
+
+```bash
+node -e "
+const fs = require('fs');
+const agents = [
+  {file: 'fundamentals', role: 'ファンダメンタルズアナリスト'},
+  {file: 'tenbagger', role: 'テンバガーハンター'},
+  {file: 'macro', role: 'マクロエコノミスト'},
+  {file: 'technical', role: 'テクニカルストラテジスト'},
+  {file: 'risk-manager', role: 'リスクマネージャー'}
+];
+let count = 0;
+agents.forEach(agent => {
+  if (fs.existsSync('/Users/arai/invest/tmp/round-3/' + agent.file + '.json')) {
+    count++;
+    console.log('[Round 3] ' + agent.role + ' スコアリング完了 (' + count + '/5)');
+  }
+});
+"
+```
+
 「Round 3 完了: N/5 アナリスト成功」とユーザーに表示してください。
 
 以下のBashコマンドで Round 3 完了タイムスタンプを記録してください:
