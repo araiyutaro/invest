@@ -19,7 +19,7 @@ vi.mock("../data/market.js", () => ({
 }));
 
 vi.mock("../data/news/finnhub.js", () => ({
-  fetchAllFinnhubNews: vi.fn().mockResolvedValue({ general: [], merger: [] }),
+  fetchAllFinnhubNews: vi.fn().mockResolvedValue({ general: [], merger: [], company: [] }),
 }));
 
 vi.mock("../data/news/google-news.js", () => ({
@@ -41,7 +41,7 @@ vi.mock("../portfolio/holdings.js", () => ({
 vi.mock("../data/news/filter.js", () => ({
   filterNewsArticles: vi.fn().mockReturnValue({
     articles: [],
-    stats: { raw: 0, afterUrlDedup: 0, afterTitleDedup: 0, afterRelevance: 0, final: 0 },
+    stats: { raw: 0, afterUrlDedup: 0, afterTitleDedup: 0, afterCrossLangDedup: 0, afterRelevance: 0, final: 0 },
   }),
 }));
 
@@ -65,7 +65,7 @@ describe("collect-data script", () => {
     (marketMock.fetchAllMarketData as ReturnType<typeof vi.fn>).mockResolvedValue(mockMarketData);
 
     const finnhubMock = await import("../data/news/finnhub.js");
-    (finnhubMock.fetchAllFinnhubNews as ReturnType<typeof vi.fn>).mockResolvedValue({ general: [], merger: [] });
+    (finnhubMock.fetchAllFinnhubNews as ReturnType<typeof vi.fn>).mockResolvedValue({ general: [], merger: [], company: [] });
 
     consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
@@ -235,6 +235,7 @@ describe("news filter integration (INTG-01/FILT-03/FILT-04)", () => {
     (finnhubModule.fetchAllFinnhubNews as ReturnType<typeof vi.fn>).mockResolvedValue({
       general: [],
       merger: [],
+      company: [],
     });
 
     const filterModule = await import("../data/news/filter.js");
@@ -242,7 +243,7 @@ describe("news filter integration (INTG-01/FILT-03/FILT-04)", () => {
     filterMock.mockReset();
     filterMock.mockReturnValue({
       articles: [],
-      stats: { raw: 0, afterUrlDedup: 0, afterTitleDedup: 0, afterRelevance: 0, final: 0 },
+      stats: { raw: 0, afterUrlDedup: 0, afterTitleDedup: 0, afterCrossLangDedup: 0, afterRelevance: 0, final: 0 },
     });
 
     consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -262,11 +263,12 @@ describe("news filter integration (INTG-01/FILT-03/FILT-04)", () => {
     (finnhubModule.fetchAllFinnhubNews as ReturnType<typeof vi.fn>).mockResolvedValue({
       general: [article1, article2, article3],
       merger: [],
+      company: [],
     });
 
     filterMock.mockReturnValue({
       articles: [article1, article2],
-      stats: { raw: 3, afterUrlDedup: 3, afterTitleDedup: 2, afterRelevance: 2, final: 2 },
+      stats: { raw: 3, afterUrlDedup: 3, afterTitleDedup: 2, afterCrossLangDedup: 2, afterRelevance: 2, final: 2 },
     });
 
     const { main } = await import("./collect-data.js");
@@ -285,7 +287,7 @@ describe("news filter integration (INTG-01/FILT-03/FILT-04)", () => {
       articles: Array.from({ length: 65 }, (_, i) =>
         makeArticle({ url: `https://example.com/${i}` }),
       ),
-      stats: { raw: 100, afterUrlDedup: 90, afterTitleDedup: 80, afterRelevance: 70, final: 65 },
+      stats: { raw: 100, afterUrlDedup: 90, afterTitleDedup: 80, afterCrossLangDedup: 80, afterRelevance: 70, final: 65 },
     });
 
     const { main } = await import("./collect-data.js");
@@ -303,7 +305,7 @@ describe("news filter integration (INTG-01/FILT-03/FILT-04)", () => {
       articles: Array.from({ length: 90 }, (_, i) =>
         makeArticle({ url: `https://example.com/${i}` }),
       ),
-      stats: { raw: 100, afterUrlDedup: 95, afterTitleDedup: 92, afterRelevance: 91, final: 90 },
+      stats: { raw: 100, afterUrlDedup: 95, afterTitleDedup: 92, afterCrossLangDedup: 92, afterRelevance: 91, final: 90 },
     });
 
     const { main } = await import("./collect-data.js");
@@ -322,7 +324,7 @@ describe("news filter integration (INTG-01/FILT-03/FILT-04)", () => {
       articles: Array.from({ length: 10 }, (_, i) =>
         makeArticle({ url: `https://example.com/${i}` }),
       ),
-      stats: { raw: 50, afterUrlDedup: 45, afterTitleDedup: 15, afterRelevance: 12, final: 10 },
+      stats: { raw: 50, afterUrlDedup: 45, afterTitleDedup: 15, afterCrossLangDedup: 15, afterRelevance: 12, final: 10 },
     });
 
     const { main } = await import("./collect-data.js");
