@@ -8,15 +8,15 @@
 
 毎日の投資判断に必要な多角的分析（ファンダメンタル、テクニカル、マクロ、リスク、テンバガー候補）を、複数AIアナリストの議論形式で提供すること。
 
-## Current State: v2.2 shipped (2026-06-28)
+## Current Milestone: v2.3 Analysis Quality & Operational Stability
 
-**Latest shipped:** v2.2 News Quality & Pipeline Metrics
-- クロスソース重複排除（URL + NFKC正規化Jaccard）
-- denylistベースの非投資記事フィルタリング
-- 記事供給数の柔軟化（MIN=20/MAX=80）
-- Pipeline Timing（12ステップの実行時間計測・表示）
+**Goal:** ニュース品質・分析品質・運用安定性・レポートUIを総合的に底上げし、毎日の自動実行パイプラインの信頼性と出力品質を向上させる
 
-**Next milestone:** 未定 — `/gsd-new-milestone` で定義
+**Target features:**
+- Finnhubポートフォリオティッカー別ニュース取得、時間帯重み付け（直近6h優先）、英日クロス言語dedup
+- 前日レポート注入によるクロスセッション分析記憶、スコアリングラウンドの専用並列エージェント化
+- 自動実行のエラーリカバリ、index.html保護強化、ログ改善
+- index.htmlデザイン刷新、モバイル対応、チャート/グラフ追加
 
 ## Requirements
 
@@ -44,7 +44,14 @@
 
 ### Active
 
-(次のマイルストーンで定義)
+- [ ] Finnhubポートフォリオティッカー別ニュース取得
+- [ ] 時間帯重み付け（直近6h優先）
+- [ ] 英日クロス言語重複排除
+- [ ] 前日レポート注入によるクロスセッション分析記憶
+- [ ] スコアリングラウンドの専用並列エージェント化
+- [ ] 自動実行のエラーリカバリ強化
+- [ ] index.html保護・ログ改善
+- [ ] レポートUIデザイン刷新・モバイル対応・チャート追加
 
 ### Out of Scope
 
@@ -99,4 +106,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-26 — v2.2 milestone started*
+*Last updated: 2026-06-30 — v2.3 milestone started*
