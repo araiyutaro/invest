@@ -32,6 +32,10 @@ console.log('パイプラインタイミング計測を開始');
 "
 ```
 
+```bash
+echo '[STEP:data-collection:START]'
+```
+
 「市場データ収集を開始します...」とユーザーに表示してから、以下のBashコマンドを実行してください:
 
 ```bash
@@ -57,6 +61,16 @@ console.log('  セクター:', market.sectors.length, '件');
 console.log('  ニュース:', news.length, '件');
 console.log('  ポートフォリオ銘柄:', portfolio.length, '銘柄');
 "
+```
+
+```bash
+echo '[STEP:data-collection:OK]'
+```
+
+上記3ファイルのいずれかが存在しない場合は、以下を実行してからパイプラインを停止してください:
+```bash
+echo '[STEP:data-collection:FAIL:必須データファイルが見つかりません]'
+echo '[PIPELINE:FAIL] ステップ: data-collection, エラー: 必須データファイルが見つかりません'
 ```
 
 ---
@@ -112,6 +126,10 @@ try {
 ---
 
 ### Step 2a: Round 1 — 分析プレゼンテーション
+
+```bash
+echo '[STEP:round-1:START]'
+```
 
 「Round 1: 5アナリストが分析を実行中...」とユーザーに表示してください。
 
@@ -365,10 +383,19 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 出力が有効なJSONでない場合は、`{"agentId": "...", "agentRole": "...", "analysis": "", "summary": "", "highlights": [], "risks": [], "picks": [], "sectorView": "", "error": "invalid JSON"}` を保存してください。
 
-**失敗カウント:** 保存に失敗したエージェントをカウントし、3人以上失敗した場合は「エラー: Round 1 で3人以上のアナリストが失敗しました。ミーティングを中止します。」とユーザーに表示してパイプラインを停止してください。
+**失敗カウント:** 保存に失敗したエージェントをカウントし、3人以上失敗した場合は以下を実行してからパイプラインを停止してください:
+```bash
+echo '[STEP:round-1:FAIL:3人以上のアナリストが失敗]'
+echo '[PIPELINE:FAIL] ステップ: round-1, エラー: 3人以上のアナリストが失敗'
+```
+「エラー: Round 1 で3人以上のアナリストが失敗しました。ミーティングを中止します。」とユーザーに表示してパイプラインを停止してください。
 
 成功したエージェント数をユーザーに表示してください:
 「Round 1 完了: N/5 アナリスト成功」
+
+```bash
+echo '[STEP:round-1:OK]'
+```
 
 以下のBashコマンドで Round 1 完了タイムスタンプを記録してください:
 
@@ -466,6 +493,10 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 ---
 
 ### Step 2c: Round 2 — ディスカッション
+
+```bash
+echo '[STEP:round-2:START]'
+```
 
 「Round 2: ディスカッション実行中...」とユーザーに表示してください。
 
@@ -707,6 +738,10 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 「Round 2 完了: N/5 アナリスト成功」とユーザーに表示してください。
 
+```bash
+echo '[STEP:round-2:OK]'
+```
+
 以下のBashコマンドで Round 2 完了タイムスタンプを記録してください:
 
 ```bash
@@ -814,6 +849,10 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 ---
 
 ### Step 2e: Round 3 — 銘柄スコアリング
+
+```bash
+echo '[STEP:round-3:START]'
+```
 
 「Round 3: 銘柄スコアリング実行中...」とユーザーに表示してください。
 
@@ -1107,7 +1146,12 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 モデレーターの出力を `/Users/arai/invest/tmp/meeting-result.json` に保存してください。
 
-出力が有効なJSONでない場合は、モデレーターを1回リトライしてください。2回目も失敗した場合は「エラー: モデレーター最終統合に失敗しました。ミーティングを中止します。」とユーザーに表示してパイプラインを停止してください。
+出力が有効なJSONでない場合は、モデレーターを1回リトライしてください。2回目も失敗した場合は以下を実行してからパイプラインを停止してください:
+```bash
+echo '[STEP:round-3:FAIL:モデレーター最終統合に失敗]'
+echo '[PIPELINE:FAIL] ステップ: round-3, エラー: モデレーター最終統合に失敗'
+```
+「エラー: モデレーター最終統合に失敗しました。ミーティングを中止します。」とユーザーに表示してパイプラインを停止してください。
 
 「ミーティング統合完了」とユーザーに表示してください。
 
@@ -1178,6 +1222,10 @@ try {
 
 「Step 2 完了: アナリストミーティングが正常に終了しました。」とユーザーに表示してください。
 
+```bash
+echo '[STEP:round-3:OK]'
+```
+
 以下のBashコマンドで バリデーション完了 タイムスタンプを記録してください:
 
 ```bash
@@ -1197,6 +1245,10 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 ---
 
 ### Step 3.0: 準備
+
+```bash
+echo '[STEP:report-generation:START]'
+```
 
 「Step 3: WebSearchリサーチ & レポート生成を開始します...」とユーザーに表示してください。
 
@@ -1610,6 +1662,12 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 cd /Users/arai/invest && npx tsx src/scripts/generate-report.ts
 ```
 
+`generate-report.ts` がエラーで終了した場合は、以下を実行してからパイプラインを停止してください:
+```bash
+echo '[STEP:report-generation:FAIL:レポート生成スクリプトがエラーで終了]'
+echo '[PIPELINE:FAIL] ステップ: report-generation, エラー: レポート生成スクリプトがエラーで終了'
+```
+
 完了後、以下のコマンドで生成結果を確認してユーザーに表示してください:
 
 ```bash
@@ -1647,9 +1705,17 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 "
 ```
 
+```bash
+echo '[STEP:report-generation:OK]'
+```
+
 ---
 
 ## Step 4: 自動デプロイ（GitHub Pages）
+
+```bash
+echo '[STEP:deploy:START]'
+```
 
 以下のBashコマンドで デプロイ の計測タイムスタンプを記録してください:
 
@@ -1707,9 +1773,19 @@ try {
 ```
 
 結果に応じてユーザーに表示してください:
-- 成功（プッシュ完了）: 「デプロイ完了」
-- 変更なし（スキップ）: 「docs/ に変更がないためスキップしました」
-- 失敗: エラー内容をユーザーに表示して終了
+- 成功（プッシュ完了）: 「デプロイ完了」を表示後に以下を実行してください:
+  ```bash
+  echo '[STEP:deploy:OK]'
+  ```
+- 変更なし（スキップ）: 「docs/ に変更がないためスキップしました」を表示後に以下を実行してください:
+  ```bash
+  echo '[STEP:deploy:OK]'
+  ```
+- 失敗: 以下を実行してからエラー内容をユーザーに表示して終了してください:
+  ```bash
+  echo '[STEP:deploy:FAIL:git push に失敗]'
+  echo '[PIPELINE:FAIL] ステップ: deploy, エラー: git push に失敗'
+  ```
 
 以下のBashコマンドで デプロイ完了 タイムスタンプを記録してください:
 
@@ -1784,4 +1860,9 @@ console.log('Step 4: デプロイ           ' + fmt(m.deployEnd - m.deployStart)
 console.log('──────────────────────────────');
 console.log('Total:                    ' + (totalMs ? fmt(totalMs) : '(計測中)'));
 "
+```
+
+以下のBashコマンドでパイプライン完了ステータスを出力してください:
+```bash
+echo '[PIPELINE:OK]'
 ```
