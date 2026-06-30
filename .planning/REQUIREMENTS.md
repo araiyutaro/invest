@@ -52,11 +52,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
+| NEWS-01 | Phase 11 | Pending |
+| NEWS-02 | Phase 11 | Pending |
+| NEWS-03 | Phase 11 | Pending |
+| ANLQ-01 | Phase 12 | Pending |
+| ANLQ-02 | Phase 12 | Pending |
+| OPS-01 | Phase 13 | Pending |
+| OPS-02 | Phase 13 | Pending |
+| OPS-03 | Phase 13 | Pending |
+| UI-01 | Phase 14 | Pending |
+| UI-02 | Phase 14 | Pending |
 
 **Coverage:**
 - v2.3 requirements: 10 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 10
+- Mapped to phases: 10 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-06-30*

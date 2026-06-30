@@ -5,6 +5,7 @@
 - ✅ **v2.0 Claude Code Migration** — Phases 1-4 (shipped 2026-06-25)
 - ✅ **v2.1 Report Quality & Pipeline Overhaul** — Phases 5-7 (shipped 2026-06-25)
 - ✅ **v2.2 News Quality & Pipeline Metrics** — Phases 8-10 (shipped 2026-06-28)
+- [ ] **v2.3 Analysis Quality & Operational Stability** — Phases 11-14 (in progress)
 
 ## Phases
 
@@ -47,6 +48,15 @@ Full details: `.planning/milestones/v2.1-ROADMAP.md`
 Full details: `.planning/milestones/v2.2-ROADMAP.md`
 
 </details>
+
+### v2.3 Analysis Quality & Operational Stability (Phases 11-14)
+
+ニュース品質・分析品質・運用安定性・レポートUIを総合的に底上げし、毎日の自動実行パイプラインの信頼性と出力品質を向上させる。
+
+- [ ] **Phase 11: News Quality Enhancements** - Finnhubティッカー別取得・時間重み付け・クロス言語dedup
+- [ ] **Phase 12: Analysis Quality** - 前日レポート注入・スコアリング並列エージェント化
+- [ ] **Phase 13: Operational Stability** - エラーログ・HTML保護・macOS通知検証
+- [ ] **Phase 14: Report UI** - index.htmlモバイル対応・インラインチャート追加
 
 ## Phase Details
 
@@ -171,6 +181,59 @@ Plans:
 
 - [x] 10-01: METR-01/02 — performance.now() 計測・tmp/pipeline-metrics.json 書き出し・invest.md 最終表示の実装
 
+### Phase 11: News Quality Enhancements
+
+**Goal**: アナリストに供給されるニュースが銘柄別Finnhubデータ・時間重み付け・クロス言語dedupによって品質向上する
+**Depends on**: Phase 10
+**Requirements**: NEWS-01, NEWS-02, NEWS-03
+**Success Criteria** (what must be TRUE):
+
+  1. Finnhub APIがポートフォリオ保有ティッカー（例: AAPL, MSFT）ごとのカンパニーニュースを取得し、汎用ニュースと統合されてtmp/news.jsonに保存される
+  2. 直近6時間以内のニュース記事が優先スコアを持ち、古い記事より上位に配置されてアナリストに渡される
+  3. 英語と日本語で同内容の記事（例: Reuters英語版とロイター日本語版）がクロス言語dedupで1件に集約される
+
+**Plans**: TBD
+
+### Phase 12: Analysis Quality
+
+**Goal**: アナリストが前日の推奨銘柄を追跡した継続的な議論を行い、Round 3スコアリングが専用並列エージェントで高速実行される
+**Depends on**: Phase 11
+**Requirements**: ANLQ-01, ANLQ-02
+**Success Criteria** (what must be TRUE):
+
+  1. Round 1のアナリストプロンプトに前日のmeeting-result.jsonの内容が含まれ、前日推奨銘柄への見解変化がアナリスト発言に明示的に現れる
+  2. Round 3スコアリングが5つの専用並列エージェントとして起動され、Round 2の全アナリスト応答完了後に実行される
+  3. パイプライン実行ログにRound 3の並列起動確認と各エージェントの完了メッセージが表示される
+
+**Plans**: TBD
+
+### Phase 13: Operational Stability
+
+**Goal**: 自動実行パイプラインが障害時に失敗ステップを特定できるログを出力し、重要HTMLファイルが保護され、macOS通知で進捗が確認できる
+**Depends on**: Phase 12
+**Requirements**: OPS-01, OPS-02, OPS-03
+**Success Criteria** (what must be TRUE):
+
+  1. パイプラインが途中失敗した場合、logs/pipeline-YYYY-MM-DD.logに失敗ステップ名・エラーメッセージ・スタックトレースが記録される
+  2. docs/index.htmlおよびdocs/portfolio.htmlがスクリプト外（手動編集・auto-run等）からの変更を防ぐ保護機構が機能している
+  3. macOS通知でパイプライン開始・完了・失敗が報告される（terminal-notifierの動作がlaunchd環境で検証済み）
+
+**Plans**: TBD
+
+### Phase 14: Report UI
+
+**Goal**: index.htmlがモバイル端末でも快適に閲覧でき、Daily ReportにVIX・セクターパフォーマンス等のビジュアルチャートが追加される
+**Depends on**: Phase 13
+**Requirements**: UI-01, UI-02
+**Success Criteria** (what must be TRUE):
+
+  1. index.htmlがモバイル端末（375px幅）で崩れずに表示され、リンク・テキストが読みやすいサイズで閲覧できる
+  2. Daily ReportにVIX推移・セクターパフォーマンスのインラインチャート（SVGまたはCSSベース）が表示される
+  3. 既存のBloomberg風ダークテーマが維持されながらモダンなデザインに刷新されている
+
+**Plans**: TBD
+**UI hint**: yes
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -185,9 +248,14 @@ Plans:
 | 8. News Filter Module | v2.2 | 2/2 | Complete | 2026-06-27 |
 | 9. Pipeline Integration | v2.2 | 2/2 | Complete   | 2026-06-28 |
 | 10. Pipeline Timing | v2.2 | 1/1 | Complete    | 2026-06-28 |
+| 11. News Quality Enhancements | v2.3 | 0/? | Not started | - |
+| 12. Analysis Quality | v2.3 | 0/? | Not started | - |
+| 13. Operational Stability | v2.3 | 0/? | Not started | - |
+| 14. Report UI | v2.3 | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-06-24*
 *Milestone v2.0 shipped: 2026-06-25*
 *Milestone v2.1 shipped: 2026-06-25*
-*Milestone v2.2 started: 2026-06-26*
+*Milestone v2.2 shipped: 2026-06-28*
+*Milestone v2.3 started: 2026-06-30*
