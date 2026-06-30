@@ -58,6 +58,69 @@ function isJapaneseTitle(title: string): boolean {
   return nonAsciiCount / title.length >= 0.5;
 }
 
+export function extractProperNouns(title: string): Set<string> {
+  const tokens = new Set<string>();
+
+  const years = title.match(/\b20[2-9]\d\b/g) ?? [];
+  for (const y of years) tokens.add(y);
+
+  const quarters = title.match(/\bQ[1-4]\b/gi) ?? [];
+  for (const q of quarters) tokens.add(q.toUpperCase());
+
+  const allCaps = title.match(/\b[A-Z]{2,5}\b/g) ?? [];
+  for (const t of allCaps) tokens.add(t);
+
+  const properNouns = title.match(/\b[A-Z][a-z][a-zA-Z]*\b/g) ?? [];
+  for (const n of properNouns) tokens.add(n);
+
+  return tokens;
+}
+
+export function deduplicateCrossLanguage(
+  articles: ReadonlyArray<RawNewsArticle>,
+): RawNewsArticle[] {
+  const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
+  const excluded = new Set<number>();
+
+  const enEntries = articles
+    .map((a, i) => ({ a, i }))
+    .filter(({ a }) => !isJapaneseTitle(a.title));
+
+  const jpEntries = articles
+    .map((a, i) => ({ a, i }))
+    .filter(({ a }) => isJapaneseTitle(a.title));
+
+  for (const { a: enArticle, i: enIdx } of enEntries) {
+    if (excluded.has(enIdx)) continue;
+
+    const enNouns = extractProperNouns(enArticle.title);
+    if (enNouns.size === 0) continue;
+
+    for (const { a: jpArticle, i: jpIdx } of jpEntries) {
+      if (excluded.has(jpIdx)) continue;
+
+      const timeDiff = Math.abs(
+        enArticle.publishedAt.getTime() - jpArticle.publishedAt.getTime(),
+      );
+      if (timeDiff > SIX_HOURS_MS) continue;
+
+      const jpNouns = extractProperNouns(jpArticle.title);
+      const sharedCount = [...enNouns].filter((n) => jpNouns.has(n)).length;
+
+      if (sharedCount < 2) continue;
+
+      if (enArticle.summary.length >= jpArticle.summary.length) {
+        excluded.add(jpIdx);
+      } else {
+        excluded.add(enIdx);
+        break;
+      }
+    }
+  }
+
+  return articles.filter((_, idx) => !excluded.has(idx));
+}
+
 /**
  * URL 正規化後に同一 URL の記事を集約し、summary が長い方を残す (DEDUP-01 / D-02)。
  */
@@ -210,6 +273,7 @@ export function sortByPriorityScore(
  * ニュース記事をフィルタリングしてスコア順にソートする。
  * Pass 1: URL dedup (DEDUP-01)
  * Pass 2: Title Jaccard dedup (DEDUP-02)
+ * Pass 2.5: Cross-language dedup — EN/JP 間 (NEWS-03)
  * Pass 3: Relevance filter — denylist + 投資キーワード例外 (FILT-01)
  * Pass 4: 24h time filter (FILT-02)
  * Pass 5: Priority score sort (NEWS-02)
@@ -220,7 +284,8 @@ export function filterNewsArticles(
 ): NewsFilterResult {
   const afterUrlDedup = deduplicateByUrl(articles);
   const afterTitleDedup = deduplicateByTitle(afterUrlDedup);
-  const afterRelevance = filterByRelevance(afterTitleDedup);
+  const afterCrossLangDedup = deduplicateCrossLanguage(afterTitleDedup);
+  const afterRelevance = filterByRelevance(afterCrossLangDedup);
   const afterTime = filterByTime(afterRelevance);
   const finalArticles = sortByPriorityScore(afterTime, portfolioTickers);
 
@@ -230,6 +295,7 @@ export function filterNewsArticles(
       raw: articles.length,
       afterUrlDedup: afterUrlDedup.length,
       afterTitleDedup: afterTitleDedup.length,
+      afterCrossLangDedup: afterCrossLangDedup.length,
       afterRelevance: afterRelevance.length,
       final: afterTime.length,
     },

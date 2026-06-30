@@ -25,6 +25,7 @@ export interface NewsFilterStats {
   readonly raw: number;
   readonly afterUrlDedup: number;
   readonly afterTitleDedup: number;
+  readonly afterCrossLangDedup: number;
   readonly afterRelevance: number;
   readonly final: number;
 }
