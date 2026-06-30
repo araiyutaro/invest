@@ -210,7 +210,17 @@ Plans:
   2. Round 3スコアリングが5つの専用並列エージェントとして起動され、Round 2の全アナリスト応答完了後に実行される
   3. パイプライン実行ログにRound 3の並列起動確認と各エージェントの完了メッセージが表示される
 
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+
+**Wave 1**
+
+- [ ] 12-01-PLAN.md — ANLQ-01: Step 2.0 前日データ読み込みと Round 1 全5エージェントへの前日推奨銘柄セクション注入
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 12-02-PLAN.md — ANLQ-02: Step 2e Round 2 完了確認・Round 3 起動ログ・完了ログ追加
 
 ### Phase 13: Operational Stability
 
