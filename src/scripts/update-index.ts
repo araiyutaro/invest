@@ -154,9 +154,9 @@ export function buildRegion(entries: ReadonlyArray<ReportEntry>): string {
 
 function buildPortfolioEntry(date: string): string {
   return `      <li class="report-item">
-        <div class="report-date">${date}</div>
+        <div class="report-date">${escapeHtml(date)}</div>
         <div class="report-links">
-          <a href="${date}/portfolio-report.html">Portfolio Report</a>
+          <a href="${escapeHtml(date)}/portfolio-report.html">Portfolio Report</a>
         </div>
       </li>`;
 }
