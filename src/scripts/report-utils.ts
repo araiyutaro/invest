@@ -163,6 +163,13 @@ export function generateBaseStyles(accentColor: string): string {
       border-left: 4px solid #f59e0b;
     }
     .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
   </style>
 `;
 }
