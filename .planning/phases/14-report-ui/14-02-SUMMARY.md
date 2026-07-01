@@ -111,3 +111,14 @@ None - no external service configuration required. No new dependencies added.
 ---
 *Phase: 14-report-ui*
 *Completed: 2026-07-01*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/report-charts.ts
+- FOUND: src/scripts/report-charts.test.ts
+- FOUND: .planning/phases/14-report-ui/14-02-SUMMARY.md
+- FOUND commit: 03bd1da (test: sector RED)
+- FOUND commit: 295f819 (feat: sector GREEN)
+- FOUND commit: eca6e26 (test: vix RED)
+- FOUND commit: 143b176 (feat: vix GREEN)
+- FOUND commit: bb80e99 (docs: plan metadata)
