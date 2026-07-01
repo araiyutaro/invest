@@ -14,4 +14,4 @@ Out-of-scope discoveries logged during plan execution (not fixed, per Scope Boun
   for Phase 14 — not fixed.
 - **Action needed:** Investigate `portfolioAnalysisSchema` enum validation in a future
   phase/plan touching `src/scripts/validate-meeting.ts`.
-- **Independently observed by:** Plan 14-01, Plan 14-02, Plan 14-05 (all 2026-07-01).
+- **Independently observed by:** Plan 14-01, Plan 14-02, Plan 14-04, Plan 14-05 (all 2026-07-01).
