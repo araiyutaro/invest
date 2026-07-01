@@ -42,6 +42,8 @@
 - ✓ アナリストへの記事供給数柔軟化（MIN=20/MAX=80） — v2.2
 - ✓ パイプライン実行時間計測と12ステップ表示 — v2.2
 - ✓ レポートUIデザイン刷新（index.htmlヒーロー+月別アコーディオン）・モバイル対応・VIX/セクターインラインチャート追加 — v2.3 (Phase 14)
+- ✓ 自動実行のエラーリカバリ強化（EXIT_CODEの正確な捕捉、STEPマーカーのログ到達、失敗ステップ名付き通知） — v2.3 (Phase 14.1, OPS-01/OPS-03再オープン分の実修正。Phase 13時点ではコード上実装済みと誤判定されていた)
+- ✓ index.html保護ロジックの堅牢化（PROTECT_FILES配列化、grep -F厳密一致、チェックサム照合失敗時のクラッシュ防止） — v2.3 (Phase 14.1)
 
 ### Active
 
@@ -50,8 +52,6 @@
 - [ ] 英日クロス言語重複排除
 - [ ] 前日レポート注入によるクロスセッション分析記憶
 - [ ] スコアリングラウンドの専用並列エージェント化
-- [ ] 自動実行のエラーリカバリ強化
-- [ ] index.html保護・ログ改善
 
 ### Out of Scope
 
@@ -106,4 +106,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-01 — Phase 14 (report-ui) complete, v2.3 milestone's final phase*
+*Last updated: 2026-07-01 — Phase 14.1 (close-gap-ops-01-ops-03) complete, v2.3-MILESTONE-AUDIT.mdで再オープンされたOPS-01/OPS-03を実修正*
