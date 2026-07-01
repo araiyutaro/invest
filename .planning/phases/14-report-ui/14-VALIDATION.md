@@ -36,17 +36,21 @@ created: 2026-07-01
 
 ## Per-Task Verification Map
 
-| Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
-|---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 14-01 | TBD | TBD | UI-02 | — | `renderSectorBarChart` sorts descending, colors green/red correctly, handles empty array | unit | `npx vitest run src/scripts/report-charts.test.ts -t "sector"` | ❌ W0 | ⬜ pending |
-| 14-02 | TBD | TBD | UI-02 | — | `renderVixLineChart` renders threshold lines at 20/30, handles empty array, uses viewBox not fixed width/height | unit | `npx vitest run src/scripts/report-charts.test.ts -t "vix"` | ❌ W0 | ⬜ pending |
-| 14-03 | TBD | TBD | UI-02 | — | `fetchVixHistory()` maps `chart()` quotes to `{date, close}` shape, filters null closes, catches errors→`[]` | unit | `npx vitest run src/data/market.test.ts` | ❌ W0 | ⬜ pending |
-| 14-04 | TBD | TBD | UI-02 | — | `generateDailyReportHtml` output includes both chart SVGs when market data present | integration | `npx vitest run src/scripts/generate-report.test.ts -t "chart"` | ⚠️ W0 (extend) | ⬜ pending |
-| 14-05 | TBD | TBD | UI-01 | — | `update-index.ts` groups entries by month, latest month has `open` attribute, older months don't | unit | `npx vitest run src/scripts/update-index.test.ts` | ❌ W0 | ⬜ pending |
-| 14-06 | TBD | TBD | UI-01 | — | Mobile CSS media query present in `generateBaseStyles()` output (`@media (max-width: 768px)`) | unit | `npx vitest run src/scripts/generate-report.test.ts -t "responsive"` | ⚠️ W0 (extend) | ⬜ pending |
+| Plan-Task | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
+|-----------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
+| 14-01-T1 | 14-01 | 1 | UI-02 | T-14-01/02 | `fetchVixHistory()` maps `chart()` quotes to `{date, close}` (YYYY-MM-DD), filters null closes, catches errors→`[]` | unit | `npx vitest run src/data/market.test.ts` | ❌ W0 (task creates) | ⬜ pending |
+| 14-01-T2 | 14-01 | 1 | UI-02 | — | `collect-data.test.ts` mock stays shape-consistent (`vixHistory: []`) | unit | `npx vitest run src/scripts/collect-data.test.ts` | ✅ extend | ⬜ pending |
+| 14-02-T1 | 14-02 | 1 | UI-02 | T-14-03/04 | `renderSectorBarChart` sorts descending, colors green/red, empty→"データ取得エラー", viewBox+width:100% | unit | `npx vitest run src/scripts/report-charts.test.ts -t "sector"` | ❌ W0 (task creates) | ⬜ pending |
+| 14-02-T2 | 14-02 | 1 | UI-02 | T-14-03/04 | `renderVixLineChart` renders 20/30 threshold lines, empty→"データ取得エラー", viewBox not fixed px | unit | `npx vitest run src/scripts/report-charts.test.ts -t "vix"` | ❌ W0 (task creates) | ⬜ pending |
+| 14-03-T1 | 14-03 | 2 | UI-02 | T-14-05/06 | `generateDailyReportHtml` includes both chart SVGs when market data present; empty→"データ取得エラー" | integration | `npx vitest run src/scripts/generate-report.test.ts -t "chart"` | ⚠️ W0 (extend) | ⬜ pending |
+| 14-03-T2 | 14-03 | 2 | UI-02 | T-14-05/06 | `loadMarketData()` reads market.json with empty-fallback; main() threads 4th arg | integration | `npx vitest run src/scripts/generate-report.test.ts` | ⚠️ W0 (extend) | ⬜ pending |
+| 14-04-T1 | 14-04 | 1 | UI-01 | T-14-07/08 | `update-index.ts` groups by month, newest month `open`, older not, preserves 2-link entries, deterministic | unit | `npx vitest run src/scripts/update-index.test.ts` | ❌ W0 (task creates) | ⬜ pending |
+| 14-04-T2 | 14-04 | 1 | UI-01 | T-14-09 | docs/index.html has region markers + hero/accordion/`@media (max-width: 768px)` CSS, theme preserved | grep-gate | `bash -c 'grep -q "/REPORT_ENTRIES" docs/index.html && grep -q "max-width: 768px" docs/index.html && grep -q "month-group" docs/index.html'` | ✅ edit | ⬜ pending |
+| 14-05-T1 | 14-05 | 1 | UI-01 | T-14-11 | Mobile media query present in `generateBaseStyles()` (`@media (max-width: 768px)`, overflow-x, 44px) | unit | `npx vitest run src/scripts/report-utils.test.ts` | ❌ W0 (task creates) | ⬜ pending |
+| 14-05-T2 | 14-05 | 1 | UI-01 | T-14-10/11 | docs/portfolio.html responsive `@media (max-width: 768px)`, green accent preserved | grep-gate | `bash -c 'grep -q "max-width: 768px" docs/portfolio.html && grep -q "overflow-x: auto" docs/portfolio.html'` | ✅ edit | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
-*Task IDs are placeholders — the planner assigns final plan/wave IDs; this table is refreshed by the planner/checker against actual PLAN.md task IDs.*
+*Task IDs bound to actual PLAN.md tasks by the planner (2026-07-01). Note: the responsive-CSS check moved from generate-report.test.ts to a new report-utils.test.ts to avoid a same-wave file-write collision with Plan 14-03.*
 
 ---
 

@@ -250,8 +250,21 @@ Plans:
   2. Daily ReportにVIX推移・セクターパフォーマンスのインラインチャート（SVGまたはCSSベース）が表示される
   3. 既存のBloomberg風ダークテーマが維持されながらモダンなデザインに刷新されている
 
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
+
+Plans:
+
+**Wave 1** (parallel — no file overlap)
+
+- [ ] 14-01-PLAN.md — UI-02: market.ts VIX履歴取得（fetchVixHistory）とmarket.jsonへのvixHistory追加
+- [ ] 14-02-PLAN.md — UI-02: report-charts.ts インラインSVG（セクター横バー／VIX折れ線）レンダラ
+- [ ] 14-04-PLAN.md — UI-01: index.htmlヒーロー＋月別アコーディオン刷新（update-index.ts書き換え）
+- [ ] 14-05-PLAN.md — UI-01: 全レポート＋portfolio.htmlのモバイルレスポンシブCSS
+
+**Wave 2** *(blocked on Wave 1: 14-01 + 14-02)*
+
+- [ ] 14-03-PLAN.md — UI-02: チャートをDaily Reportへ配線（generate-daily-report/generate-report）
 
 ## Progress
 
