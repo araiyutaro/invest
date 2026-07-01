@@ -1,226 +1,200 @@
 # Feature Research
 
-**Domain:** Investment News Quality Improvement — v2.2 Milestone
-**Researched:** 2026-06-26
-**Confidence:** HIGH
+**Domain:** AI-curated financial news digest (daily HTML report, personal investment tool)
+**Researched:** 2026-07-02
+**Confidence:** MEDIUM
 
-## Context: What Already Exists
+Scope note: This research covers only the NEW feature — `news-digest.html`, the 4th daily
+report (v2.4 milestone, CURA-01). It assumes the existing filtered article pool (20-80
+articles/day, deduped, denylist-filtered, from `src/data/news/filter.ts`) as the sole input.
+Fields available per article from `RawNewsArticle`: `title`, `summary`, `source`, `url`,
+`publishedAt`, `category`, `ticker?`. There is no existing "importance" signal beyond
+`priorityScore` (recency + portfolio-ticker bonus used for supply ordering to analysts) — the
+digest's importance ranking must be produced fresh by the curation step; it cannot be reused
+as-is since recency ≠ importance.
 
-| Source | Articles/Day | Current Dedup | Time Filter |
-|--------|-------------|---------------|-------------|
-| Finnhub API (English) | ~60–80 | None | 24h only |
-| Google News RSS (Japanese) | ~20 | None | None |
-| 5 custom RSS (Japanese) | ~65 | Title prefix 50-char within-RSS only | None |
-| **Total** | **~161** | **No cross-source dedup** | **Partial** |
-| Analyst feed | Top 50 by recency | Hardcoded in invest.md | N/A |
-
-Key gap: `invest.md` hardcodes `「最新50件」` in all 5 analyst prompts. No dedup or
-relevance filtering happens before that cutoff, so duplicate and irrelevant articles
-consume analyst context budget.
-
----
+This supersedes the previous FEATURES.md content (v2.2 News Quality milestone, dated
+2026-06-26), which covered dedup/relevance-filter features that are now already shipped
+(v2.2/v2.3) and out of scope for this research pass.
 
 ## Feature Landscape
 
 ### Table Stakes (Users Expect These)
 
-Features that any serious news aggregation pipeline for investment use must have.
-Missing = analysts receive noisy input, degrading recommendation quality.
+Features users assume exist in any curated news digest. Missing these = the digest reads as
+a raw article dump, not a "curated" product.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| **Cross-source deduplication** | Same article from Finnhub + Google News + RSS wastes analyst context with redundant content | MEDIUM | Normalize title → token-set Jaccard similarity ≥0.7; no MinHash needed at 161 articles/day |
-| **Non-investment article exclusion** | RSS sources (Yahoo!ニュース, NHK経済) mix in sports/politics/weather; wastes analyst tokens | LOW | Keyword blocklist + category allowlist; rule-based, no ML needed |
-| **Consistent 24h time filter across all sources** | RSS sources have no recency filter today; old articles crowd out fresh news | LOW | Apply `publishedAt > Date.now() - 24h` globally, same as Finnhub |
-| **Flexible article limit (not hardcoded 50)** | After dedup + filter, remaining quality article count should drive the feed size | LOW | Remove hardcoded "最新50件" from invest.md prompts; inject `filteredCount` dynamically |
-| **Pipeline step timing display** | User has no visibility into where time is spent; essential for debugging slow runs | LOW | `performance.now()` or `Date.now()` timestamps at each major step; print summary at end |
+| Per-article headline + source + timestamp | Every digest format studied (Bloomberg Five Things, Axios, TLDR, Morning Brew) leads each item with what/who/when before commentary | LOW | Already available directly from `RawNewsArticle` (title, source, publishedAt) — no new data collection needed |
+| Link to original article | Digest is a curation layer, not a replacement; readers expect to click through to verify or read more. Also mitigates AI-hallucination risk (see Pitfalls below) by anchoring every claim to a checkable source | LOW | `url` field already present; render as anchor tag |
+| "Why it matters" / commentary per article | Axios's Smart Brevity ("Why it matters", "The bottom line") and Bloomberg's framing both center on explaining significance, not just repeating the headline — this is the entire value-add of curation over a raw feed | MEDIUM | Requires a new AI generation step (1-2 sentence Japanese commentary per selected article); this is the CURA-01 core deliverable per PROJECT.md |
+| Section grouping (by market/theme) | Every reviewed format groups items (Morning Brew's Markets section, Axios's categorized items, TLDR's themed sections) — an unsorted list of 10-15 unrelated headlines is harder to scan | LOW-MEDIUM | Milestone already specifies US / Japan / Global grouping — requires the curation step to assign a market tag per article (new small classification task) |
+| Importance-based ordering within section | Bloomberg "Five Things", Axios, TLDR all rank by significance, not just recency — readers scan top-to-bottom expecting most important first | MEDIUM | Requires the AI curation step to produce a rank/score, not just a selection; recency-based `priorityScore` from filter.ts is an insufficient proxy (recency ≠ importance) |
+| Concise item count (10-15, not all 20-80) | Every studied format is explicitly a *reduction* of the raw feed (TLDR: "5 minutes per edition"; Axios: "six or so items"; Bloomberg: literally "Five Things") — curation value comes from what's excluded as much as what's included | LOW | Already specified in milestone scope (10-15 of 20-80) |
+| Consistent visual identity with other 3 reports | User already has Bloomberg-style dark theme + nav across daily/meeting/portfolio reports; a 4th report with a different look would break the "single product" feel | LOW | Reuse existing CSS/layout partials from `report-utils.ts` / existing report generators rather than building new styling |
+| Publish/generation date visible | All reviewed digests are dated editions (Bloomberg "5 things to start your day" is date-stamped) — readers need to know freshness, especially since input articles are filtered to a 24h window | LOW | Reuse existing date-header pattern from other 3 reports |
 
 ### Differentiators (Competitive Advantage)
 
-Features that improve output quality beyond baseline dedup.
+Features that set this digest apart from a generic newsletter clone. Should tie back to the
+project's Core Value (multi-angle AI-assisted daily decision support for a single power user).
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| **Title normalization before dedup** | Raw title comparison misses "【速報】日経平均…" vs "日経平均…" (prefix noise, brackets, whitespace) | LOW | Strip `【…】`, `[…]`, leading spaces, lowercase/normalize CJK full-width chars before comparison |
-| **Relevance keyword allowlist for RSS** | RSS sources include legit finance news mixed with noise; positive keyword match confirms relevance even without category signal | LOW | Keywords: 株価, 決算, 上場, 金利, 為替, 日銀, FRB, インフレ, etc. → article passes if ANY keyword present |
-| **Article count floor + ceiling** | Prevent analyst starvation (too few articles after aggressive filtering) or context overflow (too many) | LOW | `max(MIN_ARTICLES, min(MAX_ARTICLES, filteredCount))`; suggest MIN=20, MAX=80 |
-| **Pipeline timing per-step breakdown** | Know whether bottleneck is data collection, AI analysis, or report generation | LOW | Record marks at: collect-start, collect-end, round1-start, round1-end, etc.; display table at end |
+| Related tickers / portfolio relevance tag per article | Bloomberg terminal news and Seeking Alpha both tag articles with affected tickers; for this user (own portfolio + watchlist), flagging "this affects your holding X" turns a generic digest into a personalized one — directly serves Core Value ("individual investor decision support") | LOW-MEDIUM | `ticker` field already exists on some articles (Finnhub company news); for articles without an explicit ticker, the AI curation step can extract tickers mentioned in title/summary as a lightweight step (no new API calls) |
+| Impact/importance badge (e.g., High/Medium impact) | Gives at-a-glance visual triage beyond ordinal position — useful for a single reader scanning quickly before market open, echoes Axios's scannable "Smart Brevity" design philosophy | LOW | Derived directly from the same importance score already needed for ordering; just needs a 3-tier bucketing + badge styling, no extra AI calls |
+| Cross-report thematic link (digest ↔ daily report/meeting minutes) | Existing pipeline already does previous-day report injection for analyst memory (ANLQ-01, v2.3); the digest can note "この記事は本日のミーティングで議論された [テーマ] に関連" to bridge the 4 reports into one coherent daily narrative | MEDIUM | Requires digest generation step to run after/alongside meeting analysis and cross-reference topics — nice-to-have, not required for v1; depends on meeting output being available at digest-generation time |
+| Short top-of-page lede/overview paragraph | Bloomberg Five Things and Morning Brew both open with a 2-3 sentence "here's what's moving markets today" framing before the itemized list — gives context for someone who reads only the top | LOW-MEDIUM | One additional short AI-generated paragraph synthesizing the day's digest; cheap since it reuses the already-curated article set |
 
 ### Anti-Features (Commonly Requested, Often Problematic)
 
-| Feature | Why Requested | Why Problematic | Alternative |
-|---------|---------------|-----------------|-------------|
-| **URL-based dedup** | URLs uniquely identify articles | Syndicated content appears at different URLs (e.g., Reuters article on Yahoo Finance + Investing.com); URL dedup misses these — the most common cross-source duplicate pattern | Title similarity dedup catches syndication; URL dedup is complementary but not primary |
-| **MinHash / LSH deduplication** | Production-grade dedup used by Feedly, Google News | At 161 articles/day, MinHash overhead (hashing, band computation) adds complexity with no benefit vs simple Jaccard on tokenized titles | Token-set Jaccard similarity on normalized titles: O(n²) over 161 articles = 12,961 comparisons, negligible cost |
-| **ML-based relevance scoring** | More accurate than keyword rules | Requires API call per article → latency + cost; overkill when 90% of non-relevant articles are excluded by simple rules (sports scores, weather, celebrity news) | Keyword blocklist + allowlist; review false-positive rate manually and tune rules |
-| **Per-analyst article personalization** | Each analyst gets different news slice relevant to their specialty | Increases complexity of collect-data.ts → 5 separate filtered sets; out of scope for v2.2 | All analysts receive the same deduplicated, filtered feed; analyst prompts guide which news to focus on |
-| **Persistent dedup state across days** | Avoid showing same slow-moving story multiple times across days | Cross-day state file management adds complexity; storage, migration, and staleness concerns | 24h time filter already handles this naturally — each day's feed is a fresh window |
+Features that seem good but create problems for this specific project (personal daily tool,
+single AI curation pass, existing cost/complexity constraints already documented in
+PROJECT.md Out of Scope).
 
----
+| Feature | Why Requested | Why Problematic | Alternative |
+|---------|---------------|------------------|-------------|
+| Per-article sentiment score / numeric AI confidence score | Looks quantitative and "data-driven," common in fintech news products | Adds a fabricated precision (a "73% bullish" score from an LLM reads as more authoritative than it is) — high hallucination/false-precision risk for a personal decision tool; PROJECT.md already rejected "ML/LLMベース関連性スコアリング" per-article as cost/complexity-not-worth-it | Keep impact tagging qualitative (High/Medium/Low) tied to the same importance judgment already needed for ordering — no separate scoring subsystem |
+| Full-length AI paraphrase/rewrite of each article body | Seems like it saves the reader a click | Multiplies hallucination surface area (research shows AI-labeled news articles are markedly more likely to contain a hallucinated claim than human-written ones) for content the user could otherwise read at the source; also duplicates effort already done well by existing analyst Round 1/2 prose in the other 3 reports | Keep commentary short (1-2 sentence "why it matters"), always link to source, let the reader click through for full text |
+| Real-time/intraday digest updates | "Fresher is better" instinct | PROJECT.md already explicitly rejects real-time streaming ("日次バッチで十分"); this is a daily personal tool run once via launchd at 8am — intraday updates would require a second pipeline run and duplicate infra | Single daily generation, same cadence as the other 3 reports |
+| New dedicated news fetching/scoring pipeline for the digest | Tempting to fetch a differently-curated article set optimized for "digest-worthiness" | PROJECT.md explicitly scopes this milestone to reuse the existing filtered pipeline output ("新規取得ロジックは不要") — building a parallel fetch path duplicates the news pipeline (Finnhub + Google News + RSS + filter.ts) for no proven benefit | Curation step selects from the same `NewsFilterResult.articles` already produced for the 5 analysts |
+| Reader personalization controls (topic filters, mute keywords, saved articles) | Feels like a "real newsletter product" feature | This is a single-user personal tool with no auth/settings infrastructure; adding stateful preferences is out of proportion to a static daily HTML report generator deployed to GitHub Pages | None needed — the digest is already implicitly personalized via portfolio-ticker awareness in the existing pipeline |
+| Multi-language toggle (EN/JP switch) | Source articles are a mix of English and Japanese | Existing 3 reports and the whole product are Japanese-language by convention (per PROJECT.md, analyst prose is Japanese); a toggle adds UI/generation complexity with no stated user need (single Japanese-speaking user) | All curated commentary in Japanese regardless of source article language, same as the existing analyst reports handle mixed-language input today |
 
 ## Feature Dependencies
 
 ```
-[fetchAllFinnhubNews()]
-[fetchGoogleNewsJapan()]    ──merge──> [all ~161 articles]
-[fetchAllRssNews()]                        │
-                                           ├──> [FEATURE: 24h time filter (all sources)]
-                                           │         │
-                                           │         ├──> [FEATURE: normalize titles]
-                                           │         │         │
-                                           │         │         └──> [FEATURE: cross-source dedup]
-                                           │         │                     │
-                                           │         └──────────────────> [FEATURE: relevance filter]
-                                           │                                     │
-                                           │                         [filtered articles N]
-                                           │                                     │
-                                           │                         [FEATURE: article count floor/ceiling]
-                                           │                                     │
-                                           v                         [feed: min(MAX, max(MIN, N)) articles]
-                               [tmp/news.json]                                   │
-                                                                                 v
-                                                                    [invest.md: inject dynamic count]
-                                                                                 │
-                                                                                 v
-                                                              [5 analyst agents × 3 rounds]
-                                                                                 │
-                                                                    [FEATURE: pipeline timing]
-                                                              (spans entire collect→report flow)
+[Table Stakes: Per-article headline/source/link]
+    └──requires──> [existing filter.ts output] (already built, no dependency risk)
+
+[Table Stakes: "Why it matters" commentary]
+    └──requires──> [New: AI curation/selection step]
+                       └──requires──> [existing filtered article pool as input]
+
+[Table Stakes: Importance-based ordering]
+    └──requires──> [New: AI curation step producing an importance judgment]
+                       └──enhances──> [Differentiator: Impact/importance badge] (same score, different rendering)
+
+[Table Stakes: Section grouping (US/Japan/Global)]
+    └──requires──> [New: AI curation step producing a market classification per article]
+
+[Differentiator: Related tickers tag]
+    └──partially satisfied by──> [existing `ticker` field on Finnhub company-news articles]
+    └──requires (for full coverage)──> [New: lightweight ticker extraction within curation step]
+
+[Differentiator: Top-of-page lede paragraph]
+    └──requires──> [New: AI curation step's selected+ranked article set as input]
+    └──enhances──> [overall digest, not required for MVP]
+
+[Table Stakes: Consistent visual identity]
+    └──requires──> [existing report-utils.ts / CSS / dark theme partials]
+
+[Differentiator: Cross-report thematic link]
+    └──requires──> [Table Stakes: "Why it matters" commentary]
+    └──requires──> [meeting analysis output being available at digest-generation time]
+    └──conflicts with──> [pipeline step ordering if digest generation is scheduled independently of the meeting]
 ```
 
 ### Dependency Notes
 
-- **Cross-source dedup requires title normalization first:** Raw CJK titles contain brackets, spaces, and source-specific prefixes that must be stripped before similarity comparison. Normalization is a prerequisite.
-- **Relevance filter should run after dedup:** Filter on the already-deduplicated set to avoid wasted comparisons on articles that will be removed anyway.
-- **Article count floor/ceiling requires dedup + filter first:** The final count only makes sense after removing duplicates and irrelevant articles.
-- **Dynamic article limit requires all above:** The `invest.md` command must read the filtered count (from `tmp/news.json` length or a stats file) before injecting it into analyst prompts.
-- **Pipeline timing is independent:** Timing instrumentation wraps the entire pipeline; it does not depend on any news feature but is often requested alongside pipeline improvements.
-
----
+- **All table-stakes content features (commentary, ordering, grouping) require a single new
+  "AI curation step":** rather than three separate AI calls, the curation prompt should
+  produce selection + ranking + market classification + commentary in one structured pass
+  over the filtered article pool. This keeps cost proportional to the existing pipeline (one
+  additional Claude Code step, not three).
+- **Importance ordering and impact badge share the same underlying score:** design the
+  curation step to output a single importance judgment (e.g., ordinal rank or 3-tier label)
+  and derive both list order and badge from it — avoid computing two different "importance"
+  signals that could disagree.
+- **Related tickers tag is only a *partial* free win:** articles from Finnhub company-news
+  already carry `ticker`, but Google News/RSS articles do not. Full ticker coverage requires
+  the curation step to also extract mentioned tickers from title/summary text — a small
+  additional instruction in the same prompt, not a new pipeline stage.
+- **Cross-report thematic link conflicts with independent scheduling:** if news-digest.html
+  generation runs before or in parallel with the meeting (rather than after), it cannot
+  reference meeting themes. This is a good reason to treat it as a v2+ feature rather than
+  building pipeline-ordering complexity into v1.
+- **Visual identity reuse is a hard dependency, not optional:** the existing dark-theme CSS,
+  navigation, and date-header patterns already live in `report-utils.ts` / existing report
+  generators (`generate-report.ts`, `generate-portfolio-report.ts`) — this dependency should
+  be treated as "reuse, don't rebuild" given the SHA256 checksum protection already in place
+  on other generated docs (OPS-02, v2.3).
 
 ## MVP Definition
 
-### v2.2 Target Features (this milestone)
+### Launch With (v1)
 
-All 4 features are independently implementable in `collect-data.ts` and `invest.md`.
+Minimum viable digest — what's needed to validate "AI-curated digest is more useful than the
+raw filtered feed."
 
-- [ ] **Cross-source dedup** — Normalize titles, compute token Jaccard ≥0.7, keep first-seen (highest recency). Implement in `collect-data.ts` after merging all sources. Expected impact: ~15–30 duplicate articles removed/day.
-- [ ] **Relevance filter** — Blocklist (sports/entertainment keywords) + allowlist (financial keywords for RSS sources). Implement in `collect-data.ts` after dedup. Expected impact: ~10–20 non-investment articles removed/day from Yahoo!ニュース and NHK経済.
-- [ ] **Dynamic article limit** — Remove "最新50件" hardcoding from all 5 analyst prompts in `invest.md`. Inject actual filtered article count dynamically (e.g., via `tmp/news-stats.json` or by reading `tmp/news.json` length). Keep MAX_ARTICLES=80, MIN_ARTICLES=20.
-- [ ] **Pipeline timing** — Record `Date.now()` at: pipeline-start, collect-end, round1-start, round1-end, round2-end, round3-end, report-end. Display step durations and total at pipeline completion.
+- [ ] Single AI curation step selecting 10-15 articles from the existing filtered pool (20-80) — this is the entire point of "curation"; without a real reduction it's just a re-listing
+- [ ] Per-article: headline, source, published time, link to original — non-negotiable table stakes, near-zero cost since data already exists
+- [ ] Per-article Japanese "why it matters" commentary (1-2 sentences) — the core value-add distinguishing this from a plain article list; this is literally what CURA-01 specifies
+- [ ] Market grouping (US / Japan / Global) — explicitly scoped in PROJECT.md milestone target features
+- [ ] Importance-ordered within each group — without ranking, "curated" reduces to "randomly selected," undermining trust
+- [ ] Reuse existing Bloomberg dark-theme layout, nav, and deploy flow (docs/YYYY-MM-DD/news-digest.html) — required for product coherence and explicitly stated in milestone scope
 
-### Deferred (v2.3+)
+### Add After Validation (v1.x)
 
-- [ ] **Finnhub ticker-specific news** — Fetch news per portfolio ticker (not just general/merger categories); higher relevance but more API calls.
-- [ ] **Time-of-day weighting** — Prefer news from the last 6h over 6–24h; more timely for daily market analysis.
+Features to add once the core digest is shipped and the user has used it for real daily
+decisions for a few weeks.
 
----
+- [ ] Impact/importance badge (visual High/Medium/Low tag) — add once the underlying importance score from v1's ranking has proven reliable/trustworthy in practice
+- [ ] Related-tickers tag per article (including extraction beyond the existing `ticker` field) — add once basic digest format is validated; nice-to-have personalization layer
+- [ ] Top-of-page lede/overview paragraph — add if user finds jumping straight into the list per section lacks context; cheap to add later since it only needs the already-curated set
+
+### Future Consideration (v2+)
+
+Features to defer until the digest itself has proven valuable in daily use.
+
+- [ ] Cross-report thematic linking to meeting minutes/daily report — defer because it introduces pipeline-ordering dependencies (digest must run after meeting analysis) that add operational complexity to a currently-working launchd pipeline; validate the standalone digest first
+- [ ] Historical digest archive/search — defer; the existing index.html monthly accordion navigation may already suffice, revisit only if browsing 4 reports/day becomes unwieldy over months
 
 ## Feature Prioritization Matrix
 
 | Feature | User Value | Implementation Cost | Priority |
 |---------|------------|---------------------|----------|
-| Cross-source deduplication | HIGH — removes redundant analyst context | MEDIUM | P1 |
-| Relevance filter (keyword rules) | HIGH — removes noise from RSS sources | LOW | P1 |
-| Pipeline timing display | MEDIUM — diagnostic visibility | LOW | P1 |
-| Dynamic article limit | MEDIUM — avoids over/under-feeding analysts | LOW | P1 |
-| Title normalization (CJK-aware) | MEDIUM — prerequisite for quality dedup | LOW | P1 (part of dedup) |
-| Article count floor/ceiling | LOW — edge case guard | LOW | P2 |
+| AI curation/selection (10-15 of 20-80) | HIGH | MEDIUM | P1 |
+| Per-article headline/source/link | HIGH | LOW | P1 |
+| "Why it matters" Japanese commentary | HIGH | MEDIUM | P1 |
+| Market grouping (US/Japan/Global) | HIGH | LOW-MEDIUM | P1 |
+| Importance ordering within group | HIGH | MEDIUM | P1 |
+| Reuse existing dark theme/nav/deploy | HIGH | LOW | P1 |
+| Impact/importance badge | MEDIUM | LOW | P2 |
+| Related tickers tag | MEDIUM | LOW-MEDIUM | P2 |
+| Top-of-page lede paragraph | MEDIUM | LOW-MEDIUM | P2 |
+| Cross-report thematic linking | LOW-MEDIUM | MEDIUM-HIGH | P3 |
+| Sentiment/confidence numeric scores | LOW | MEDIUM | Reject (anti-feature) |
+| Full article paraphrase/rewrite | LOW | MEDIUM | Reject (anti-feature) |
 
----
+**Priority key:**
+- P1: Must have for launch (v1 of news-digest.html)
+- P2: Should have, add when possible (v1.x)
+- P3: Nice to have, future consideration (v2+)
 
-## Implementation Notes
+## Competitor Feature Analysis
 
-### Cross-Source Dedup Algorithm (recommended)
-
-At ~161 articles/day, simple O(n²) token Jaccard is sufficient (< 1ms total):
-
-```typescript
-function normalizeTitle(title: string): string {
-  return title
-    .replace(/【[^】]*】/g, "")   // remove 【速報】 etc.
-    .replace(/\[[^\]]*\]/g, "")   // remove [PR] etc.
-    .replace(/[　\s]+/g, " ")     // normalize whitespace (includes full-width space)
-    .toLowerCase()
-    .trim();
-}
-
-function tokenize(title: string): Set<string> {
-  // CJK: bigrams; Latin: space-split words
-  // Simple approach: split on whitespace + punctuation, filter length >= 2
-  return new Set(title.split(/[\s　・、。]+/).filter((t) => t.length >= 2));
-}
-
-function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
-  const intersection = [...a].filter((x) => b.has(x)).length;
-  const union = new Set([...a, ...b]).size;
-  return union === 0 ? 0 : intersection / union;
-}
-
-// Usage: dedup across all ~161 articles
-function crossSourceDedup(articles: RawNewsArticle[]): RawNewsArticle[] {
-  const kept: RawNewsArticle[] = [];
-  const keptTokens: Set<string>[] = [];
-  for (const article of articles) {
-    const tokens = tokenize(normalizeTitle(article.title));
-    const isDuplicate = keptTokens.some((t) => jaccardSimilarity(tokens, t) >= 0.7);
-    if (!isDuplicate) {
-      kept.push(article);
-      keptTokens.push(tokens);
-    }
-  }
-  return kept;
-}
-```
-
-### Relevance Filter (recommended keyword sets)
-
-```typescript
-// Blocklist: exclude if title contains any of these (non-financial topics)
-const IRRELEVANT_KEYWORDS = [
-  "スポーツ", "野球", "サッカー", "テニス", "競馬", "ゴルフ",
-  "芸能", "タレント", "俳優", "歌手", "アイドル",
-  "天気", "台風", "地震", "洪水",
-  "レシピ", "グルメ", "旅行", "観光",
-];
-
-// Allowlist: RSS articles that DON'T match blocklist but seem borderline
-// → pass if ANY of these present (confirms financial relevance)
-const FINANCIAL_KEYWORDS = [
-  "株", "株価", "上場", "決算", "業績", "利益", "売上",
-  "金利", "為替", "円安", "円高", "ドル", "インフレ",
-  "日銀", "FRB", "FOMC", "GDP", "CPI",
-  "投資", "ファンド", "ETF", "債券",
-  "M&A", "買収", "合併", "IPO",
-  "半導体", "AI", "EV", "原油",
-];
-```
-
-### Pipeline Timing Output (recommended format)
-
-```
-=== パイプライン完了 ===
-  データ収集:     42s  (市場データ + ニュース + ポートフォリオ)
-  Round 1分析:   183s  (5アナリスト並列)
-  Round 2討議:   156s  (5アナリスト並列)
-  Round 3統合:    98s  (モデレーター)
-  レポート生成:    8s
-  ──────────────────
-  合計:          487s  (8分7秒)
-```
-
----
+| Feature | Bloomberg Five Things / Axios | TLDR / Morning Brew | Our Approach |
+|---------|-------------------------------|----------------------|--------------|
+| Item count | Bloomberg: literally 5 items; Axios: ~6 items per newsletter (Smart Brevity discipline) | TLDR: enough for "5 minutes"; sectioned by theme | 10-15 items — larger than a consumer newsletter because this is a single power-user tool wanting fuller market coverage, still a major reduction from 20-80 |
+| Significance framing | Axios: explicit "Why it matters" labeled block; Bloomberg: narrative framing, less labeled | TLDR: terse 2-3 sentence summary, less explicit "why" framing | Adopt Axios-style explicit "why it matters" commentary per article — clearest, most scannable pattern found, matches CURA-01's "解説コメント" requirement |
+| Grouping | Bloomberg groups by region edition (Americas/Asia); Axios groups by topic | TLDR groups by theme (Big Tech, Science, Misc) | Group by market (US/Japan/Global) — matches this tool's existing US+Japan stock dual focus better than a topic-based grouping |
+| Personalization | None of the reviewed newsletter formats personalize to an individual portfolio (they're mass-market products) | Same — no personalization | Ticker-relevance tagging tied to the user's own portfolio — a genuine differentiator vs. all reviewed newsletter formats, since this tool already has portfolio context the mass-market products lack |
+| Source transparency | Both link out to full articles; neither replaces the source | Both link out; TLDR explicitly avoids long-form paraphrase | Always link to original `url`; keep commentary short — directly mitigates AI hallucination risk noted in research (AI-labeled news articles show markedly higher hallucination rates than human-written ones per recent academic study) |
 
 ## Sources
 
-- Codebase analysis (ground truth): `src/data/news/rss-sources.ts`, `src/data/news/finnhub.ts`, `src/data/news/google-news.ts`, `src/scripts/collect-data.ts`, `.claude/commands/invest.md` — HIGH confidence
-- [Feedly: News Clustering & Deduplication Engineering](https://feedly.com/engineering/posts/reducing-clustering-latency) — MEDIUM confidence (production system, confirmed Jaccard/MinHash approach)
-- [NewsCatcher API: Article Deduplication](https://www.newscatcherapi.com/docs/news-api/guides-and-concepts/articles-deduplication) — MEDIUM confidence (confirms URL + title similarity as standard approach)
-- [CrackingWalnuts: News Aggregator System Design](https://crackingwalnuts.com/post/news-aggregator-system-design) — MEDIUM confidence (confirms MinHash/LSH for scale, O(n²) viable at small scale)
-- [Node.js Performance API](https://nodejs.org/api/perf_hooks.html) — HIGH confidence (official docs, `performance.now()` standard approach)
-- [Scanz: Keyword-Based News Scanning](https://scanz.com/smart-ways-to-create-keyword-based-news-scans/) — MEDIUM confidence (confirms keyword allowlist/blocklist is industry standard for investment news)
+- [Bloomberg "5 things to start your day"](https://link.mail.bloombergbusiness.com/public/14190293) — MEDIUM confidence (WebSearch, cross-checked across multiple Bloomberg newsletter pages; note the "Five Things" newsletter itself was retired in Oct 2024 in favor of "Markets Daily," but the format pattern is well documented across years of archived editions)
+- [Bloomberg Five Things You Need to Know — Americas edition](https://www.bloomberg.com/news/newsletters/2024-10-07/five-things-you-need-to-know-to-start-your-day-americas) — MEDIUM confidence
+- [Axios Smart Brevity / "Why it matters" methodology](https://writewithai.substack.com/p/axios-newsletter-template-for-content) — MEDIUM confidence (third-party analysis of a well-documented, publicly discussed Axios methodology; not primary source but consistent across multiple independent write-ups)
+- [Axios Macro newsletter launch](https://www.axios.com/press-past-releases/axios-launches-axios-macro-newsletter) — MEDIUM confidence (Axios press release, primary source for format description)
+- [Morning Brew newsletter deep dive — Markets section](https://theaudiencers.com/deep-dive-into-the-morning-brew-newsletter-andy-griffiths/) — LOW-MEDIUM confidence (third-party analysis, single-source pattern description)
+- [TLDR Newsletter Review 2026](https://www.readless.app/blog/tldr-newsletter-review-2026) — LOW-MEDIUM confidence (third-party review, WebSearch only, not independently cross-verified against a raw TLDR archive)
+- [arXiv: AI use in American newspapers is widespread, uneven, and rarely disclosed](https://arxiv.org/pdf/2510.18774) — MEDIUM confidence (academic paper, primary source on AI-generated news hallucination rates)
+- [AI hallucination risk in financial services](https://launchlemonade.app/blog/ai-hallucination-risk-in-financial-services-what-your-firm-needs-to-know) — LOW-MEDIUM confidence (industry blog, corroborates directionally but not independently verified)
+- Codebase inspection: `/Users/arai/invest/src/data/news/filter.ts`, `/Users/arai/invest/src/data/news/types.ts`, `/Users/arai/invest/src/report/`, `/Users/arai/invest/.planning/PROJECT.md` — HIGH confidence (direct source reading, defines actual available data fields and existing pipeline constraints)
 
 ---
-
-*Feature research for: Investment News Quality Improvement (v2.2 Milestone)*
-*Researched: 2026-06-26*
+*Feature research for: AI-curated financial news digest (news-digest.html, v2.4 milestone)*
+*Researched: 2026-07-02*

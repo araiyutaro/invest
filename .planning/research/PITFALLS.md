@@ -1,359 +1,243 @@
 # Pitfalls Research
 
-**Domain:** ニュース品質改善 & パイプラインメトリクス（v2.2 milestone）
-**Researched:** 2026-06-26
-**Confidence:** HIGH（コードベース直接分析 + 複数公式ソース検証）
+**Domain:** Adding an LLM-curated news digest step (news-digest.html, 4th daily report) to an existing automated multi-agent investment pipeline (v2.4 milestone)
+**Researched:** 2026-07-02
+**Confidence:** HIGH (all findings grounded in current codebase: `.claude/commands/invest.md`, `src/scripts/generate-report.ts`, `src/scripts/update-index.ts`, `src/scripts/report-utils.ts`, `src/meeting/schemas.ts`, `src/data/news/filter.ts`, `src/data/news/types.ts`, `scripts/run.sh`)
 
-> **Note:** このファイルは v2.2 milestone 専用。v2.0/v2.1（Gemini→Claude移行）のピットフォールは旧バージョンのPITFALLS.mdを参照。
-
----
+> **Note:** This file supersedes the v2.2-era PITFALLS.md (news dedup/filter/metrics pitfalls), which is no longer the active milestone. Historical v2.2 findings remain valid in the shipped code but are not repeated here — this file is scoped exclusively to the v2.4 news-digest-report addition.
 
 ## Critical Pitfalls
 
-### Pitfall 1: 50文字プレフィックス重複排除の精度崩壊
+### Pitfall 1: Promise.all collapses all 4 reports if the digest generator throws
 
 **What goes wrong:**
-`rss-sources.ts` の現行重複排除ロジック（`title.slice(0, 50)` をキーとする Set）は2方向で壊れる。
-- **偽陰性（見逃し）**: "Toyota announces Q2 earnings beat" と "Toyota reports strong Q2 results" は同じ決算ニュースだが別キーになる。
-- **偽陽性（過剰除去）**: 「【速報】日経平均株価が一時500円高…」というような定型プレフィックスを持つ記事が複数あると、最初の1件しか残らない。
+`src/scripts/generate-report.ts` builds `dailyHtml`, `minutesHtml`, `portfolioHtml` as plain synchronous consts, then writes all three via a single `Promise.all([writeFile(...), writeFile(...), writeFile(...)])` (lines 108-116). If a 4th `generateNewsDigestHtml(...)` call is added to that same sequence and it throws (malformed curated-article data, undefined field access, etc.), the thrown error propagates out of `main()` before any `writeFile` calls execute — **zero** reports get written for that day, not just the digest. This is a strict regression versus the current baseline where a bad 4th feature would ideally degrade gracefully, not kill 3 previously-reliable reports.
 
 **Why it happens:**
-同一記事かどうかを「タイトルの文字列の先頭50文字」で判定しようとしている。しかしニュースは「同じイベントを別の切り口で書く」「ワイヤーサービス（Reuters等）の記事を各社が改変して配信する」という性質を持つ。単純なプレフィックスマッチでは意味的な同一性を捉えられない。さらに日本語全角文字は50文字でもバイト換算で異なるが、現行コードは文字数で切り取っているため日本語・英語混在で境界がズレる。
+The existing 3-report generation was written when "all reports come from the same trusted, schema-validated `meeting-result.json`" was a safe assumption. The digest introduces a second, less-trusted LLM output (freeform article curation) into the same all-or-nothing code path without anyone re-examining the failure semantics.
 
 **How to avoid:**
-- タイトルの最初N文字ではなく、**正規化後タイトル全体のハッシュ**をキーにする
-- 正規化: NFKC変換 → 小文字化 → 句読点・記号除去 → 空白正規化
-- 英語と日本語で戦略を分ける: 英語はtitle全体の類似度(Jaccard係数 > 0.7)、日本語はNFKC正規化後の完全一致
-- 実用的な中間策: `title.normalize('NFKC').toLowerCase().replace(/[^a-z0-9぀-鿿]/g, '').slice(0, 80)` をキーにする
+- Wrap `generateNewsDigestHtml(...)` in its own `try/catch` inside `generate-report.ts`, independent from the other 3 generators.
+- On failure, log a warning, skip writing `news-digest.html` for that day, and let the other 3 `writeFile` calls proceed unaffected (do not include the digest write in the same `Promise.all` group as the other three, or guard it separately).
+- `update-index.ts` must not link to a `news-digest.html` that was never written for that date (see Pitfall 4).
 
-**Warning signs:**
-- 同じ決算発表ニュースが5件以上並ぶ
-- 「日経平均」系の記事が1日1件しかない（過剰除去）
-- Finnhub の英語記事に "Reuters", "Bloomberg" が同じ事件で複数本ある
+**Warning signs:** A local test where the digest curation agent returns malformed JSON causes `daily-report.html`/`meeting-minutes.html`/`portfolio-report.html` to also go missing for that day.
 
-**Phase to address:**
-Phase 1（重複排除実装）の最初にキー生成ロジックをテストファーストで実装。モックデータで偽陰性・偽陽性を定量評価してから本番適用。
+**Phase to address:** The phase that adds `generate-news-digest.ts` and wires it into `generate-report.ts`'s `main()`.
 
 ---
 
-### Pitfall 2: クロスソース重複排除が完全に欠如している
+### Pitfall 2: Hallucinated/mismatched article references (title, URL, or content not matching the supplied article)
 
 **What goes wrong:**
-`collect-data.ts` の現行コード（line 35-44）は `finnhubNews.general`, `finnhubNews.merger`, `googleNews`, `rssNews` を**何も処理せず単純結合**している。クロスソース重複排除ゼロ。
-
-具体的に発生するケース:
-- Finnhub (英語): "Reuters: Toyota Q2 earnings beat estimates"
-- jp.investing.com RSS (日本語): 「ロイター：トヨタ2Q決算、予想を上回る」
-
-これは同一のロイター記事の英日翻訳版だが、URL・タイトル・言語が異なるためどの既存ロジックにも引っかからない。160件/日のうち理論上20〜40%が実質重複の可能性がある。
+The curation agent is asked to pick 10-15 of 20-80 supplied articles and write commentary. LLMs frequently paraphrase/retype titles or URLs from memory instead of copying the supplied strings verbatim, producing digest entries whose `url` doesn't resolve to the article that was actually filtered/scored, or whose title doesn't match any article in `tmp/news.json`. Because the underlying articles are legitimate URLs (Finnhub/Google News/RSS), a hallucinated or slightly-mangled URL can point to a 404, an unrelated page, or (worst case) a URL fragment that happens to look valid but leads nowhere useful — degrading user trust in a report that looks authoritative.
 
 **Why it happens:**
-各ソース内での重複排除（`rss-sources.ts` の Set）は実装されているが、**ソース間**の重複排除はスコープ外だった。v2.1 まで「とにかく件数を確保」が優先だったため問題が表面化しなかった。
+This project has already hit this exact class of problem and solved it differently elsewhere: the WebSearch research step's `keyArticles` schema (`src/meeting/schemas.ts`, `webSearchResultSchema`) deliberately has **no `url` field** — only `title` and `summary`. The precedent is: never trust an LLM to reproduce a URL byte-for-byte in output.
 
 **How to avoid:**
-重複排除は2層構造にする:
-1. **同一ソース内重複**: 既存の `seen` Set（ただし Pitfall 1 のキー改善後）
-2. **クロスソース重複**: `collect-data.ts` で全記事結合後、URLの正規化ハッシュ OR タイトル正規化ハッシュを使って最終重複排除
+- Do not ask the curation agent to output the article `url` (or full title) as free text. Instead, assign each filtered article a stable index/ID before the agent sees it (e.g., `tmp/news.json` array index, or an explicit `id` field added during `collect-data.ts`/filter step), and have the agent select **by ID only** (`{"articleId": 17, "commentary": "..."}`).
+- TypeScript-side (`generate-news-digest.ts`) then looks up the real `title`/`url`/`source` from `tmp/news.json` by ID and renders those verbatim — the LLM never controls the href that ends up in HTML.
+- Reject/drop any selected ID that doesn't exist in the supplied article list (defensive bounds check) rather than trusting the agent's echo of the ID back.
 
-URL正規化で注意: Google Newsの `link` フィールドは `news.google.com/rss/articles/CBMi...` というリダイレクトURLのため、URL一致では対応不可。**タイトル正規化ハッシュ** による重複検出が必要。
+**Warning signs:** Digest entries whose rendered URL doesn't match any URL in `tmp/news.json`; manual click-through reveals dead links or unrelated pages.
 
-```typescript
-// 推奨アプローチ
-function deduplicateArticles(articles: RawNewsArticle[]): RawNewsArticle[] {
-  const seen = new Set<string>();
-  return articles.filter(article => {
-    const key = normalizeTitle(article.title); // NFKC + 小文字 + 記号除去
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
-```
-
-**Warning signs:**
-- `news.json` に英語と日本語で内容が同じ記事が並んでいる
-- アナリストレポートに同じ会社の同じ決算ニュースが複数言及される
-- Finnhub 記事数と RSS 記事数を足すと 160件超えるが、重複排除後が 80件程度
-
-**Phase to address:**
-Phase 1（重複排除）で `collect-data.ts` の結合ポイントに最終重複排除ステップを追加する。単体テストで Finnhub+RSS の同一イベント記事ペアを使って検証。
+**Phase to address:** The phase that designs the curation agent's output contract (prompt + schema), before any HTML rendering work begins.
 
 ---
 
-### Pitfall 3: 関連性フィルタの過剰除外（false positives）でアナリストが投資関連ニュースを失う
+### Pitfall 3: Rigid 10-15 count validation causes a hard pipeline failure
 
 **What goes wrong:**
-キーワードインクルードリスト方式（「これらのキーワードが含まれていれば投資関連」）は精度が低い。Reuters の実証研究では、標準的なキーワードブロックリストが**54%の正規投資関連URLを誤って除外**した。
-
-過剰除外の具体例:
-- 「株」 → 「株式民主主義」「株式漫才」等の非金融記事がPASS、「小型株ファンド」がBLOCK（コンテキスト次第）
-- 「リスク」 → 健康リスク、地震リスク、技術リスク など投資と無関係な記事が通過
-- 「円」 → 「500円ランチ」「千円札」等が通過
+`filter.ts` supplies a variable article pool (MIN=20/MAX=80, per `collect-data.ts` lines 51-57). If the digest schema enforces `z.array(...).min(10).max(15)` and the agent returns 9 or 16 items (common LLM count drift, especially near the boundary of "10-15"), `zod.parse()` throws. If validation follows the existing `validate-meeting.ts` pattern (`process.exit(1)` on schema failure), this kills the whole step.
 
 **Why it happens:**
-金融用語は文脈依存性が高い。単語レベルの一致では意味的関連性を判断できない。特に日本語は英語より曖昧性が高く（漢字の多義性、同音異義語）、単純なキーワードマッチは機能しない。
+Analogous to `analystRound1OutputSchema`/`meetingResultSchema`, but those fields (picks, scores) already tolerate variable-length arrays without hard min/max because count instability wasn't safety-critical there. A digest is the first place in this codebase where the roadmap explicitly wants a *bounded* count (10-15), which is inherently harder for an LLM to hit exactly than "give me your picks."
 
 **How to avoid:**
-**カテゴリベースフィルタ（既存フィールドを使う）を優先**する。`RawNewsArticle.category` フィールドはソース登録時に設定されており（"japan_market", "general", "merger" など）、これをプライマリフィルタとして使う。
+- Follow the project's own established mitigation pattern for LLM field/shape drift: `portfolioAnalysisSchema` and `holdingEvaluationSchema` (`src/meeting/schemas.ts`, lines 141-186) use `.passthrough()` + optional fields + `.transform()` to tolerate LLM deviations (wrong field names like `action` vs `decision`) rather than hard-rejecting.
+- For the digest, validate count with a **soft clamp**, not a hard schema reject: accept the schema with a loose bound (e.g., `min(5).max(20)`) and then in TS code truncate to the top N (by score/priority order already present in `tmp/news.json`) if the agent over-selects, or accept a shorter list (with a logged warning) if under-selects, rather than failing the pipeline outright.
+- Treat "exactly 10-15" as a target communicated in the prompt, not a hard contract enforced by `zod.parse()` throwing.
 
-キーワードフィルタは「明らかに無関係なカテゴリ」の排除に使う（除外リスト方式）:
-```typescript
-const IRRELEVANT_CATEGORIES = ['sports', 'entertainment', 'weather', 'lifestyle'];
-const IRRELEVANT_TITLE_PATTERNS = [/芸能/, /スポーツ/, /天気/, /グルメ/, /レシピ/];
-```
+**Warning signs:** Occasional `[STEP:news-digest:FAIL]` on days where the agent selected 9 or 16 articles despite a reasonable curation.
 
-インクルードリスト（「これがあれば金融」）ではなく、**エクスクルードリスト（「これがあれば確実に非金融」）**を使う。False negative（見逃し）はfalse positive（過剰除外）より許容しやすい。
-
-**Warning signs:**
-- フィルタ後の記事数が期待値の半分以下（過剰除外）
-- 「経済」「株価」というタイトルの記事がフィルタ後に残らない
-- フィルタ適用前後で記事数を毎回ログ出力してから判断する
-
-**Phase to address:**
-Phase 2（関連性フィルタ）を独立実装し、フィルタ前後の記事数を必ずログ出力する。最初は除外率0%から始め、段階的にルールを追加してテスト。
+**Phase to address:** Schema/contract design phase, same phase as Pitfall 2.
 
 ---
 
-### Pitfall 4: RSS pubDate のパース失敗が記事の時系列を破壊する
+### Pitfall 4: `update-index.ts` links to a `news-digest.html` that was never generated (dangling 404)
 
 **What goes wrong:**
-現行コード `new Date(item.pubDate || Date.now())` は、`pubDate` がパース不能な場合に `Date.now()` にフォールバックする。これにより**古い記事が現在時刻として記録**され、時系列ソートで最新記事として最上位に来る。
+`buildStandardLinks(date)` in `src/scripts/report-utils.ts` (lines 29-35) is a hardcoded list of exactly 3 links, always included regardless of whether the corresponding file actually exists on disk. If a 4th link is added the same way (unconditionally), and the digest step is skipped/fails for a given day (empty article pool, curation agent failure — see Pitfall 1/3), `index.html` will permanently point to a `news-digest.html` that was never written for that date. Unlike `portfolio.html`'s entry logic (`updatePortfolioHtml`, which checks `content.includes(...)` before inserting), there is no existence check for the standard 3 (soon 4) links today — this gap simply hasn't mattered yet because those 3 files are always written together by the same trusted, always-succeeding code path.
 
-実際に問題が起きるケース:
-- 非標準タイムゾーン文字列: `"Mon, 26 Jun 2026 08:00:00 JST"` → Node.js は `JST` を認識しないため Invalid Date
-- RDF形式のNHK経済RSS: `<dc:date>2026-06-26T08:00:00+09:00</dc:date>` という異なるフィールド名
-- 空文字列 or 欠損: `pubDate` 要素が存在しない
-
-RFC 822 に準拠しない pubDate は現実のRSSフィードで広く見られる既知問題。
+**Why it happens:**
+The digest is the first of the 4 reports whose successful generation is not guaranteed (depends on a second LLM curation step with its own failure modes). The existing `buildStandardLinks` function was designed for a world where "3 links always exist together."
 
 **How to avoid:**
-```typescript
-function parsePubDate(raw: string | undefined): Date {
-  if (!raw) return new Date(0); // エポックにフォールバック（ソート最下位）
-  const parsed = new Date(raw);
-  if (isNaN(parsed.getTime())) return new Date(0); // Invalid Dateも最下位
-  // 未来日付（24時間以上先）も疑わしいのでフォールバック
-  if (parsed.getTime() > Date.now() + 24 * 60 * 60 * 1000) return new Date(0);
-  return parsed;
-}
-```
+- Make `buildStandardLinks` conditional: only include the `news-digest.html` link if the file was actually written this run (pass a boolean/flag from `generate-report.ts` → `update-index.ts`, e.g., check file existence with `existsSync` before building the entry, or read a marker written by the digest generator).
+- Since `parseExistingEntries`/`ReportEntry.links` already supports variable link counts per entry (see code comment: "do not assume 3 links per entry" in `report-utils.ts` line 39) — this flexibility already exists and should be leveraged, not fought.
+- Historical index entries prior to the digest's launch date will correctly retain 3 links (unaffected, per existing merge-by-date-wins logic) — verify this is the intended behavior with the user/roadmap before implementation.
 
-`Date.now()` へのフォールバックは「最新記事として扱う」という意図せぬ挙動を招くため**絶対に使わない**。エポック(new Date(0))にフォールバックすれば最下位にソートされ、ハーム最小化できる。
+**Warning signs:** `index.html` "最新レポート" hero block links to `news-digest.html` returning 404 on GitHub Pages; `docs/YYYY-MM-DD/` directory missing `news-digest.html` despite the index entry existing.
 
-**Warning signs:**
-- `news.json` を確認して `publishedAt` が全記事で同一時刻になっている
-- 記事が「2026-06-26T08:00:00.000Z」 (現在時刻) で大量発生
-- NHK経済RSSからの記事の `publishedAt` が全て現在時刻
-
-**Phase to address:**
-Phase 1（重複排除実装）と合わせて `parsePubDate` ユーティリティを作成し、全ソースで共通使用。Invalid Dateのテストケースを必ず含める。
+**Phase to address:** The phase that modifies `update-index.ts`/`report-utils.ts` to add the 4th link.
 
 ---
 
-## Moderate Pitfalls
-
-### Pitfall 5: 記事供給数変更時の消費側の見落とし
+### Pitfall 5: HTML injection via unescaped curated-article text or LLM-controlled `href`
 
 **What goes wrong:**
-PROJECT.mdには「アナリストには最新50件のみ渡している」とあるが、`collect-data.ts` は `news.json` に全記事（160件以上）を書き出している。**50件制限は `collect-data.ts` ではなく、エージェント側のスクリプト**で適用されている可能性が高い。
+Every existing report generator (`generate-daily-report.ts`) wraps 100% of LLM-derived string fields in `escapeHtml()` before interpolation — confirmed across ~20 call sites (index names, summaries, tickers, rationale, WebSearch findings, etc.). Critically, even `keyArticles` (an LLM-curated article list) is rendered as `<li><strong>${escapeHtml(a.title)}</strong>: ${escapeHtml(a.summary)}</li>` — **plain text, never an `<a href>` built from LLM output**. A news digest naturally wants "click to read" links, which is new territory: if a developer builds `<a href="${article.url}">` using the LLM's own emitted URL string (unescaped, and/or without validating it's `http(s)://`), this reintroduces both an XSS vector (`javascript:` URIs, `"` breaking out of the attribute) and reinforces Pitfall 2's hallucination risk.
 
-「フレキシブルな件数に変更」する際に、`collect-data.ts` 側だけ変更して エージェント側の制限を見落とすと、**変更が無効**になる。逆に両方変更し忘れると不整合が生じる。
+**Why it happens:**
+Building an anchor tag with the correct href *and* correct escaping *and* a real (non-hallucinated) URL simultaneously requires combining two separate precedents in this codebase (escapeHtml everywhere + never trust LLM-echoed URLs) that no single existing report needed to combine before.
 
 **How to avoid:**
-変更前に `grep -r "50\|slice\|limit\|maxArticles" src/agents/ src/scripts/` で制限が適用されている箇所を全て特定する。変更後も同じ検索で残存箇所がないか確認。
+- Reuse `escapeHtml` from `report-utils.ts` for all commentary/title/summary text, matching existing convention exactly (no new escaping logic).
+- Source the `href` value from the TS-side lookup by article ID (Pitfall 2's fix), not from LLM output, and still run it through `escapeHtml()` when interpolating into the `href="..."` attribute (URLs can contain `&` which must be escaped even for legitimate hrefs).
+- Optionally validate the URL scheme is `http:`/`https:` before rendering as a link (defense in depth, since even TS-sourced URLs originate from RSS/Finnhub feeds parsed with minimal validation — see `filter.ts`/`types.ts`, no URL scheme check currently exists anywhere in the pipeline).
 
-記事数制限は1箇所で管理する設計にする:
-```typescript
-// src/data/news/config.ts (新規作成)
-export const NEWS_LIMITS = {
-  perAnalyst: 50, // デフォルト; フィルタ後の有効記事数に置き換え
-  finnhubGeneral: 30,
-  finnhubMerger: 10,
-  googleNews: 20,
-  rssPerSource: 10,
-} as const;
-```
+**Warning signs:** A code review of the new `generate-news-digest.ts` that does not import/call `escapeHtml`, or that string-concatenates an `<a href="${...}">` with a raw agent-output field.
 
-**Warning signs:**
-- `collect-data.ts` の変更後もアナリストが「50件のニュース」と言及する
-- `src/agents/*.ts` 内に `slice(0, 50)` がハードコードされている
-- フィルタ後0件でも「空の配列を渡した」という警告が出ない
-
-**Phase to address:**
-Phase 1 着手前に全コードベースで件数ハードコードを検索し、設定定数に集約する。
+**Phase to address:** Same phase as HTML template implementation for news-digest.html.
 
 ---
 
-### Pitfall 6: 非同期パイプライン計測に Date.now() を使うと負の値が出る
+### Pitfall 6: Market classification (US / JP / Global) is not derivable from any existing reliable field
 
 **What goes wrong:**
-`Date.now()` はモノトニック（単調増加）ではない。NTPによるシステムクロック補正が発生すると**時間が後退**し、`endTime - startTime` が負になる。毎朝8時に自動実行するシステムでは、OS の NTP 同期タイミングと重なる可能性がある。
+The `category` field on `RawNewsArticle` (`src/data/news/types.ts`) is not a market classifier — it is an artifact of *which fetch path* produced the article: `"company"`/`"general"`/`"merger"` come from Finnhub (whose `company` category only ever queries `usTickers` — US portfolio symbols without a `.` — per `collect-data.ts` lines 32-34, but `general`/`merger` are broad wire categories that can cover any geography), while `"japan_market"` comes exclusively from Google News Japan and the 5 JP RSS feeds. There is no `"us_market"` or `"global"` category, and nothing distinguishes "US-relevant macro/Fed news" from "JP-relevant macro/BOJ news" from genuinely cross-market news (e.g., oil prices, USD/JPY FX, global supply chain). Asking the curation LLM to freely classify each article into US/JP/Global is a judgment call with no ground truth to check it against — expect systematic misclassification of dual-listed companies (e.g., Sony ADR vs 6758.T), Fed/macro news mislabeled as "US" when it's genuinely "Global," and JP RSS articles about US markets (Nikkei covering Wall Street) landing in the wrong bucket.
 
-さらに `Promise.all()` で並行実行されるステップのタイミングは、個別ステップが「いつ終わったか」ではなく「全部終わったら」しか計測できない。Finnhubが5秒、RSSが2秒かかっても、記録は「合計7秒」のように見える。
+**Why it happens:**
+The `category` field was designed for the filter pipeline's own internal needs (denylist matching, cross-language dedup grouping via `isJapaneseTitle()`), not for market taxonomy. It happens to correlate loosely with geography but was never intended as ground truth for a 3-way US/JP/Global split.
 
 **How to avoid:**
-```typescript
-// 推奨: performance.now() を使う（Node.js でモノトニック保証）
-import { performance } from 'node:perf_hooks';
+- Do not treat `category` as authoritative market classification. Use it only as a weak prior/heuristic (e.g., `"japan_market"` → JP by default, `ticker` matching `/\.T$/` → JP, `ticker` present without `.` suffix → US) and let the curation agent override with explicit reasoning, rather than the reverse.
+- Explicitly instruct the agent in the prompt on the 3-way taxonomy with concrete disambiguation rules (e.g., "macro/Fed/BOJ/FX/commodity news that isn't specific to a single market → Global"), and validate the returned market value is one of exactly 3 enum values via zod (`z.enum(["US", "JP", "Global"])`), matching the existing enum-validation pattern already used for `verdict`/`trend`/`severity` in `meetingResultSchema`.
+- Accept that misclassification will happen occasionally (LOW-stakes UX issue, not a data-integrity issue) — this is a "best effort grouping," not a hard requirement; do not gate pipeline success on classification accuracy.
 
-const pipelineStart = performance.now();
+**Warning signs:** Manual review of a digest showing Fed rate articles under "US" when Global was more accurate, or JP RSS wire articles about US earnings appearing under "JP".
 
-// 個別ステップの計測
-const t0 = performance.now();
-await collectData();
-const collectElapsed = performance.now() - t0; // 常に正の値
-
-const t1 = performance.now();
-await runAgents();
-const agentElapsed = performance.now() - t1;
-
-const totalElapsed = performance.now() - pipelineStart;
-console.log(`パイプライン完了: 合計${totalElapsed.toFixed(0)}ms (収集:${collectElapsed.toFixed(0)}ms, 分析:${agentElapsed.toFixed(0)}ms)`);
-```
-
-`performance.now()` は `node:perf_hooks` モジュールから import する（ブラウザの `window.performance` ではない）。
-
-**Warning signs:**
-- 計測値がたまに負になる
-- 全ステップ合計が「最も遅いステップ」より短い（並行実行の誤計測）
-- Finnhub タイムアウトが発生しても計測値が正常に見える
-
-**Phase to address:**
-Phase 3（パイプライン計測）。タイミングは最初から `performance.now()` で実装。`Date.now()` は使わない。
+**Phase to address:** Prompt/schema design phase for the curation agent (same phase as Pitfall 2/3).
 
 ---
 
-### Pitfall 7: タイミング計測結果がユーザーに届かない
+### Pitfall 7: New digest step treated as a hard-fail gate, blocking deploy of the other 3 already-working reports
 
 **What goes wrong:**
-`collect-data.ts` は独立したTSスクリプトとして実行される（`npx tsx src/scripts/collect-data.ts`）。ここに `console.log` でタイミングを出力しても、`/invest` スキルの最終サマリーとしてユーザーに表示されない。スキルはBashツールでスクリプトを呼び出し、その出力を内部的に処理するため、計測値がどこで「最終表示」されるかを設計しないと計測結果が消える。
+The pipeline's STEP marker convention (`invest.md`) already distinguishes hard-fail steps (`data-collection`, `round-1` with a ≥3-analyst-failure threshold, `round-3` moderator failure, `report-generation`, `deploy` — each emits `[PIPELINE:FAIL]` and stops the run) from soft-warn steps (Round 2's discussion-length check only prints a warning, never fails). If the new digest curation Agent call and its validation are inserted into the existing `report-generation` step without a dedicated fail-soft path, any digest failure (agent returns malformed JSON, curation quality too low, 0 articles after filter that day) will trip the *existing* `report-generation:FAIL` handler — which today only exists to catch `generate-report.ts` crashing entirely — and block Step 4 (deploy) for the **entire day's pipeline**, even though `daily-report.html`, `meeting-minutes.html`, and `portfolio-report.html` were generated successfully.
+
+**Why it happens:**
+The path of least resistance is to bolt the new curation Agent call onto Step 3 (report generation) without introducing a new STEP marker or a fail-soft branch, since Step 3 already has an established `[STEP:report-generation:...]` wrapper.
 
 **How to avoid:**
-タイミング計測の出力先を明確にする:
-1. **オプションA**: `collect-data.ts` がタイミングをJSONとして `tmp/pipeline-metrics.json` に書き出す → スキルの最後でそのファイルを読んで表示
-2. **オプションB**: スキル自体（Markdown）がBash呼び出し前後で `performance.now()` を計測し、最終メッセージに含める
-3. **オプションC**: `collect-data.ts` の `console.log` 出力を、スキルがBashツール結果として受け取り、そのまま最終メッセージに転記する
+- Introduce a distinct `[STEP:news-digest:START/OK/FAIL]` marker pair, and treat a `FAIL` here the same way Round 2 quality warnings are treated: log/notify but do **not** emit `[PIPELINE:FAIL]` or block Step 4 (deploy). The other 3 reports and the deploy of `index.html`/`portfolio.html` must succeed independently of digest curation success.
+- If the digest curation agent's output is invalid, fall back to *not writing* `news-digest.html` for that day (see Pitfall 4's conditional-link fix) rather than halting the pipeline — mirroring the existing `portfolio-analyst` retry-once-then-fallback-without-file pattern (`invest.md` line 1636).
+- `run.sh`'s SHA256 checksum protection (`PROTECT_FILES=("docs/index.html" "docs/portfolio.html")`) does **not** cover per-date report files including `news-digest.html` — a buggy digest generator could corrupt/leave malformed `docs/YYYY-MM-DD/news-digest.html` without triggering the existing restore-from-checksum safety net. This is acceptable only if the digest failure path never touches `index.html`/`portfolio.html` content it shouldn't (i.e., Pitfall 4's fix is in place).
 
-オプションAが最も明示的で確実。
+**Warning signs:** A day with 0 filtered articles (edge case already logged as a warning in `collect-data.ts` when `finalArticles.length < 20`) causes the entire pipeline to fail and no reports deploy at all, when previously (pre-digest) that same day would have deployed 3 reports fine.
 
-**Warning signs:**
-- 計測値が `console.log` にあるのに `/invest` 実行後のユーザー表示に出てこない
-- スキルの最終出力に「パイプライン完了: X秒」が含まれない
-- `tmp/` ディレクトリにメトリクスファイルが存在しない
-
-**Phase to address:**
-Phase 3（パイプライン計測）設計時に、「どこで計測してどこに表示するか」の端点を最初に決める。
+**Phase to address:** Pipeline orchestration phase — updating `invest.md`'s STEP markers and `run.sh`/deploy-gating logic.
 
 ---
 
-### Pitfall 8: Google News URL がリダイレクトURLでURL一致が使えない
+### Pitfall 8: `tmp/*` handoff convention violation (stdout doesn't reach `invest.md`; stale leftover files from prior days)
 
 **What goes wrong:**
-`google-news.ts` の `item.link` は `https://news.google.com/rss/articles/CBMi...?hl=ja&gl=JP&ceid=JP:ja` という Google のリダイレクト URL を返す。これは同一記事の Canonical URL（例: `https://www.nikkei.com/article/DGXZQO...`）とは全く異なる。
+Two distinct failure modes tied to this project's established file-handoff convention:
+1. **stdout-doesn't-reach convention violation:** This project's core lesson (documented in memory/PROJECT.md) is that subagent stdout never reaches the orchestrating `invest.md` skill — only files under `tmp/` do. If the digest curation agent's output is threaded through inline prompt text or assumed to be readable from an Agent tool's return value rather than written to a `tmp/*.json` file and re-read via the `Read` tool (the pattern every other step in `invest.md` uses, e.g. `tmp/websearch/{ticker}.json`, `tmp/reeval/*.json`), the digest data will silently be unavailable to `generate-report.ts`.
+2. **Stale directory listings:** `generate-report.ts`'s `loadWebSearchResults()`/`loadReevalResults()` (lines 23-65) read **every file** in `tmp/websearch/`/`tmp/reeval/` each run via `readdir()`, with no cleanup of those directories between daily runs (`run.sh`/`invest.md` never `rm -rf tmp/websearch` or similar — confirmed no cleanup step exists anywhere in the pipeline). If the digest output is similarly designed as "one file per market group" in a directory (e.g., `tmp/news-digest/us.json`, `tmp/news-digest/jp.json`, `tmp/news-digest/global.json`) and one group is skipped on a given day (e.g., 0 Global articles selected), a stale file from a previous day's run would leak into today's digest under the wrong date.
 
-URL ベースの重複排除を実装しても、Google News 経由の記事と直接 RSS 経由の記事は**永遠に別記事として扱われる**。
+**Why it happens:**
+Directory-of-files-per-item is the established pattern in this codebase for per-ticker/per-agent outputs (where the item set is naturally small and stable), but it silently assumes every run fully repopulates the directory — which has not yet been tested against a day where an expected file is legitimately absent.
 
 **How to avoid:**
-Google News 経由の記事については URL ベースの重複排除を使わず、**タイトル正規化ハッシュのみ**で重複判定する。URLはレコードとして保持するが、重複排除キーには使わない。
+- Follow the file-handoff convention exactly: curation agent(s) write to a single `tmp/news-digest.json` (or a fixed small set of well-known filenames if split by market), never rely on Agent tool stdout being read directly downstream.
+- Prefer a **single JSON file** over a directory-of-files pattern for the digest output (all 10-15 curated articles + market grouping in one document), since the "10-15 items, 3 fixed market groups" shape doesn't need per-item files the way per-ticker WebSearch results do — this sidesteps the stale-file risk entirely.
+- If a directory pattern is used regardless, explicitly clear/recreate it at the start of the digest step (`rm -rf tmp/news-digest && mkdir -p tmp/news-digest`), matching how `collect-data.ts` fully overwrites `tmp/news.json` each run rather than appending.
 
-将来的に Canonical URL が必要なら、Google News の redirect を実際にフォローして最終URLを取得する必要があるが、これは100件× HTTP リクエストになるためコスト高い。現状は不要。
+**Warning signs:** Digest report shows a market group with articles that don't appear in that day's filtered `tmp/news.json`, or a group is unexpectedly empty despite the agent having selected articles for it (stdout not persisted).
 
-**Warning signs:**
-- URL ベースの重複排除を実装したが Google News と RSS の同一記事が残る
-- `news.json` の Google News 記事 URL が全て `news.google.com` ドメイン
-- Canonical URL を取りに行く fetch が大量発生（ネットワーク過負荷）
-
-**Phase to address:**
-Phase 1（重複排除）設計時に「URLではなくタイトルベース」と明記する。
+**Phase to address:** Pipeline integration phase — defining where/how the curation agent writes its output in `invest.md`.
 
 ---
 
 ## Technical Debt Patterns
 
 | Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
-|----------|-------------------|----------------|-----------------|
-| タイトル50文字プレフィックスキーを維持 | コード変更なし | 重複見逃し・過剰除去の継続 | never（v2.2で必ず修正） |
-| インクルードリスト方式の関連性フィルタ | 直感的に実装できる | 過剰除外でアナリスト情報欠乏 | 過剰除外が20%未満であることを確認した場合のみ |
-| `Date.now()` で計測 | 実装簡単 | 負の値・NTPジャンプ対応不要 | never（`performance.now()` を使う） |
-| `console.log` で計測値を出力するだけ | 実装簡単 | 計測値がスキル最終出力に届かない | スクリプト単体デバッグ時のみ |
-| クロスソース重複排除を後回し | 最初の実装が楽 | アナリストへの重複情報供給が継続 | never（v2.2の主要目標） |
-
----
+|----------|-------------------|-----------------|------------------|
+| Let curation agent free-type article URLs instead of ID-based selection | Faster to prompt/implement | Hallucinated/broken links erode trust in reports (Pitfall 2) | Never |
+| Hard `min(10).max(15)` zod array bound on selection count | Simple schema | Sporadic pipeline hard-failures on off-by-one counts (Pitfall 3) | Never — use soft clamp instead |
+| Bolt digest onto existing `report-generation` STEP marker without a dedicated fail-soft path | Less `invest.md` editing | Digest bugs block deploy of 3 working reports (Pitfall 7) | Never |
+| Unconditional 4th link in `buildStandardLinks` | Simpler code, matches existing 3-link pattern | Dangling 404 links in index.html on digest-failure days (Pitfall 4) | Only if digest generation is proven to never fail (unrealistic for an LLM step) |
+| Skip explicit US/JP/Global validation enum, let agent output freeform strings | Faster prompt iteration | Typos/variants ("USA", "米国", "us") break grouping logic downstream | Only during early prototyping, must add zod enum before roadmap "done" |
 
 ## Integration Gotchas
 
 | Integration | Common Mistake | Correct Approach |
-|-------------|----------------|------------------|
-| Finnhub × RSS 重複排除 | URLで一致しようとする | NFKC正規化タイトルハッシュで一致 |
-| Google News RSS `link` フィールド | Canonical URL として扱う | `news.google.com` リダイレクトURLと認識し、URL重複排除から除外 |
-| RDF形式RSS（NHK経済） | `item.pubDate` を参照 | `dc:date` フィールドも考慮（fast-xml-parserのnamespace設定に注意） |
-| `rss-sources.ts` の内部dedup | 全体のdedup完了と思い込む | これはRSS内の重複のみ。Finnhub・Google News とのクロス重複は別途必要 |
-| フィルタ後の記事数 | フィルタ実装=完成 | フィルタ前後の記事数をログして除外率を毎回検証する仕組みが必要 |
-| `performance.now()` in Node.js | `window.performance.now()` と混同 | `import { performance } from 'node:perf_hooks'` を使う |
+|-------------|-----------------|-------------------|
+| `generate-report.ts` main() | Adding digest HTML generation into the same `Promise.all` as the 3 existing writes | Isolate digest generation in its own try/catch; don't let it block the other 3 writes |
+| `update-index.ts` / `report-utils.ts` | Hardcoding the 4th link unconditionally in `buildStandardLinks` | Conditionally include the link only if `news-digest.html` exists for that date |
+| `invest.md` STEP markers | Reusing `report-generation:FAIL` for digest failures | Add a distinct `news-digest` STEP marker with fail-soft (warn-only) semantics |
+| `tmp/*.json` handoff | Assuming Agent tool stdout reaches `invest.md` directly | Always write curated output to a `tmp/*.json` file, re-read via `Read` tool, per existing convention |
+| `src/meeting/schemas.ts` (zod) | Hard-rejecting on LLM field-name drift (e.g., agent uses `articles` instead of `selectedArticles`) | Use `.passthrough()` + optional fields + `.transform()` aliasing, matching `portfolioAnalysisSchema`'s established pattern |
+| `filter.ts` output (`tmp/news.json`) | Re-deriving market classification purely from LLM judgment with no fallback | Seed classification with a cheap heuristic (ticker suffix, `category` field, source name) and let the agent refine, validated against a strict 3-value enum |
 
----
+## Security Mistakes
 
-## Performance Traps
-
-| Trap | Symptoms | Prevention | When It Breaks |
-|------|----------|------------|----------------|
-| フィルタ後0件の記事をアナリストに渡す | アナリストが「ニュースがありません」と報告 | フィルタ後記事数の下限チェック（最低10件保証） | フィルタが厳しすぎる場合 |
-| 全Google News URLのリダイレクト解決 | 100件以上のHTTPリクエスト発生 | リダイレクト解決は行わずタイトルで重複判定 | URLベースのdedup要求が来たとき |
-| 全デデュープ処理をO(n²)比較で実装 | 160件なら問題ないが将来的に遅延 | Set/Mapを使ったO(n)実装を最初から選ぶ | 1000件/日超えたとき |
-| パイプラインの各ステップで毎回news.jsonを再読み込み | ディスクI/O増加 | 変数渡しで1回だけ読む | ステップが5つ以上になったとき |
-
----
+| Mistake | Risk | Prevention |
+|---------|------|------------|
+| Rendering curated article `href` from raw LLM-echoed URL string | XSS via `javascript:`/`data:` URI, or attribute-breakout via unescaped `"` | Source href from TS-side article lookup by ID (never LLM-echoed), still pass through `escapeHtml()`, validate scheme is http(s) |
+| Interpolating curated commentary text without `escapeHtml()` | Stored XSS in a publicly deployed GitHub Pages report (same class of risk already flagged historically in CONCERNS.md for LLM-generated content) | Use `escapeHtml()` for every LLM-derived string field, exactly as done in `generate-daily-report.ts` |
+| Treating `docs/YYYY-MM-DD/news-digest.html` as covered by the existing SHA256 checksum protection in `run.sh` | False sense of safety — `PROTECT_FILES` only covers `docs/index.html`/`docs/portfolio.html`, not per-date report files | Don't rely on `run.sh`'s checksum restore for digest content integrity; rely on generation-time validation/escaping instead |
 
 ## "Looks Done But Isn't" Checklist
 
-- [ ] **重複排除実装**: RSS内のdedup だけでなく、Finnhub+GoogleNews+RSS のクロス重複が排除されているか — `news.json` を目視確認して同じイベントの英日記事が1件になっているか
-- [ ] **関連性フィルタ**: フィルタ実装後、フィルタ前後の記事数が両方ログ出力されているか — 除外率が0%（フィルタ未動作）または80%超（過剰除外）でないか
-- [ ] **記事数フレキシブル化**: `src/agents/` 内のハードコードされた50件制限が全て除去されているか — `grep -r "slice(0, 50)\|\.slice(0,50)" src/` でゼロ件を確認
-- [ ] **タイミング計測**: `performance.now()` の値が `/invest` スキルの最終出力に表示されているか — コンソールではなくユーザー向けメッセージに含まれているか
-- [ ] **pubDate正規化**: Invalid Date のフォールバックが `Date.now()` ではなく `new Date(0)` になっているか — NHK RSSや非標準フォーマットのテストケースがあるか
-- [ ] **クロスソースdedup**: Google News と jp.investing.com の同一Reuters記事が1件に集約されているか
-
----
+- [ ] **Article references:** Often "done" by asking the LLM for title+url directly — verify selection uses article IDs looked up server-side, not LLM-echoed URLs (Pitfall 2)
+- [ ] **Count validation:** Often "done" with a strict zod `min(10).max(15)` — verify a soft-clamp/truncate strategy exists instead of a hard throw (Pitfall 3)
+- [ ] **Failure isolation:** Often "done" by wrapping the whole Step 3 in a try/catch already present — verify the digest specifically cannot prevent the other 3 reports from writing or block deploy (Pitfall 1, 7)
+- [ ] **Index integration:** Often "done" by adding a 4th link to `buildStandardLinks` — verify the link is conditional on the file actually existing for that date (Pitfall 4)
+- [ ] **Escaping:** Often "done" by copy-pasting existing render functions — verify every new interpolation site (including any new `href` attributes) calls `escapeHtml()` (Pitfall 5)
+- [ ] **Market grouping:** Often "done" by trusting the LLM's freeform US/JP/Global label — verify a zod enum constrains output to exactly 3 values with a documented disambiguation rule for macro/global news (Pitfall 6)
+- [ ] **File handoff:** Often "done" by assuming the Agent tool result is directly usable — verify curated output is written to and re-read from a `tmp/*.json` file per the project's established convention (Pitfall 8)
+- [ ] **Stale data:** Often "done" without directory cleanup — verify no per-run directory (if used) can leak yesterday's files into today's digest (Pitfall 8)
 
 ## Recovery Strategies
 
 | Pitfall | Recovery Cost | Recovery Steps |
-|---------|---------------|----------------|
-| 過剰除外でアナリストが情報不足 | LOW | フィルタルールをログで確認、除外率>30%なら除外パターンを1つずつ削除してA/Bテスト |
-| タイミング値が負になる | LOW | `Date.now()` を `performance.now()` に全置換（5分作業） |
-| 記事数変更が一部のみ適用された | MEDIUM | `grep -r "50"` で残存ハードコードを発見、定数定義に集約し直す |
-| 重複排除キーの衝突で記事が0件 | MEDIUM | キーをハッシュ確認し、正規化ロジックを緩める（記号除去を減らす等） |
-| pubDate パース失敗で全記事が同一時刻 | LOW | `parsePubDate` を追加し `new Date(0)` フォールバックに変更 |
-
----
+|---------|----------------|------------------|
+| Promise.all collapse (Pitfall 1) already shipped | LOW | Isolate the digest write path in a follow-up patch; re-run pipeline manually for any missed day |
+| Hallucinated URLs already in a published digest | LOW | Re-run digest generation with ID-based selection fix; overwrite `docs/YYYY-MM-DD/news-digest.html` (not checksum-protected, safe to regenerate) |
+| Dangling 404 index links (Pitfall 4) | LOW | One-off script to conditionally strip the news-digest link from historical `index.html` entries where the file is missing, then fix `update-index.ts` going forward |
+| Hard-fail blocking deploy (Pitfall 7) | LOW-MEDIUM | Re-run `/invest` manually after relaxing the STEP marker to fail-soft; check `logs/invest-*.log` for the exact FAIL step first |
+| Market misclassification discovered post-launch | LOW | Cosmetic-only issue; no data recovery needed, just prompt/schema tuning in the next iteration |
 
 ## Pitfall-to-Phase Mapping
 
 | Pitfall | Prevention Phase | Verification |
-|---------|------------------|--------------|
-| 50文字プレフィックスキーの精度崩壊 | Phase 1: クロスソース重複排除 | 同一イベントの英日記事ペアで重複が1件になるテスト |
-| クロスソース重複排除の欠如 | Phase 1: クロスソース重複排除 | `collect-data.ts` 後のnews.jsonでURL重複・タイトル重複が0件 |
-| 関連性フィルタの過剰除外 | Phase 2: 関連性フィルタ | フィルタ前後の記事数ログ、除外率5〜30%以内 |
-| pubDate パース失敗 | Phase 1: 重複排除（前提作業） | NHK, Yahoo RSSのpubDateが正しく解析されるテスト |
-| 記事供給数のハードコード見落とし | Phase 3: 件数フレキシブル化 | `grep` で全ハードコードを除去確認 |
-| Date.now() 計測の非モノトニック問題 | Phase 4: パイプライン計測 | `performance.now()` のみ使用、Date.now()をコードベースから禁止 |
-| タイミング計測値がユーザーに届かない | Phase 4: パイプライン計測 | `/invest` 実行後の最終出力に計測値が含まれることをE2Eで確認 |
-| Google News リダイレクトURLの問題 | Phase 1: 重複排除設計 | URLではなくタイトルをdedup keyとする設計ドキュメント |
-
----
+|---------|-------------------|----------------|
+| Hallucinated article references (2) | Curation agent prompt/schema design phase | Confirm agent output schema has no free-text URL field; all rendered hrefs traceable to `tmp/news.json` entries by ID |
+| Rigid count validation (3) | Curation agent prompt/schema design phase | Test with agent returning 9 and 16 items; pipeline should not hard-fail |
+| Promise.all collapse (1) | HTML generation integration phase | Force `generateNewsDigestHtml` to throw in a test; confirm other 3 files still get written |
+| Dangling index links (4) | index/update-index integration phase | Simulate a digest failure day; confirm `index.html` entry has only 3 links, no 404 |
+| HTML injection (5) | HTML generation integration phase | Curated commentary containing `<script>`/`"` renders as escaped text, not executed markup |
+| Market misclassification (6) | Curation agent prompt/schema design phase | zod enum limited to `["US","JP","Global"]`; spot-check a week of digests for obviously wrong buckets |
+| Hard-fail blocking deploy (7) | Pipeline orchestration (`invest.md`/`run.sh`) phase | Simulate 0-article day; confirm `[PIPELINE:OK]` still emitted and deploy proceeds without digest |
+| tmp handoff / stale files (8) | Pipeline integration phase | Run pipeline twice in a row with different article sets; confirm second run's digest has no leftover data from the first |
 
 ## Sources
 
-- [NewsCatcher API — Articles Deduplication Guide](https://www.newscatcherapi.com/docs/v3/documentation/guides-and-concepts/articles-deduplication) — 3段階パイプライン（意味的類似度0.95 → Levenshtein → 信頼性）の実装例
-- [Media Cloud Tech Brief: How We Deduplicate Content](https://medium.com/media-cloud-project/tech-brief-how-we-deduplicate-content-in-media-cloud-772cd46b6f7f) — URL正規化の限界とタイトルマッチングの現実
-- [News Aggregator System Design — CrackingWalnuts](https://crackingwalnuts.com/post/news-aggregator-system-design) — LSH/MinHashによるスケーラブルな重複排除
-- [MDN: Performance.now()](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now) — モノトニック計測の公式解説
-- [Node.js Performance APIs](https://nodejs.org/api/perf_hooks.html) — `node:perf_hooks` の `performance.now()` 使用方法
-- [Text Normalization: Unicode Forms for NLP](https://mbrenndoerfer.com/writing/text-normalization-unicode-nlp) — NFKC正規化が日本語全角文字に必要な理由
-- [Keyword Blocking Demonetized 54% of Reuters Brand-Safe Stories](https://www.adexchanger.com/publishers/keyword-blocking-demonetized-more-than-half-of-reuters-brand-safe-stories/) — キーワードブロックの過剰除外リスクの実証例
-- [RSS pubDate timezone issues — GitHub Issues](https://github.com/alexdebril/feed-io/issues/134) — RFC-822 非準拠のpubDateが現実に多発する証拠
-- コードベース直接分析: `src/data/news/rss-sources.ts` (line 155-161), `src/scripts/collect-data.ts` (line 35-44)
+- `/Users/arai/invest/.claude/commands/invest.md` — full pipeline orchestration (STEP markers, Agent invocation patterns, fallback/retry conventions, deploy logic)
+- `/Users/arai/invest/scripts/run.sh` — launchd entrypoint, SHA256 checksum protection scope, EXIT_CODE handling
+- `/Users/arai/invest/src/scripts/generate-report.ts` — Promise.all report-writing pattern
+- `/Users/arai/invest/src/scripts/update-index.ts` and `src/scripts/report-utils.ts` — index merge/link-building logic, existing `escapeHtml` usage, `parseExistingEntries` flexible-link-count precedent
+- `/Users/arai/invest/src/scripts/generate-daily-report.ts` — confirms `keyArticles` schema/rendering precedent (no URL field, escaped title+summary only)
+- `/Users/arai/invest/src/meeting/schemas.ts` — zod validation patterns, including field-name-drift tolerance (`portfolioAnalysisSchema`, `holdingEvaluationSchema`)
+- `/Users/arai/invest/src/data/news/filter.ts` and `src/data/news/types.ts` — `category` field semantics, MIN=20/MAX=80 pool sizing
+- `/Users/arai/invest/src/scripts/collect-data.ts` — US-ticker-only Finnhub company news fetch, no market field in output
+- `/Users/arai/invest/.planning/codebase/CONCERNS.md` — historical (2026-04-08, pre-v2.0) HTML injection concern, referenced for continuity though the specific files cited are since superseded
+- `/Users/arai/invest/.planning/milestones/v2.3-REQUIREMENTS.md` — CURA-01 scope-cut context
 
 ---
-*Pitfalls research for: v2.2 ニュース品質改善 & パイプラインメトリクス*
-*Researched: 2026-06-26*
+*Pitfalls research for: LLM-curated news digest report integration into an existing daily investment pipeline*
+*Researched: 2026-07-02*

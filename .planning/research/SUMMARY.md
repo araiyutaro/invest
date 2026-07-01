@@ -1,203 +1,157 @@
 # Project Research Summary
 
-**Project:** Investment Agent v2.2 — News Quality & Pipeline Metrics
-**Domain:** News pipeline improvement for multi-agent investment analysis system
-**Researched:** 2026-06-26
+**Project:** Investment Agent — v2.4 News Curation Report
+**Domain:** AI-curated financial news digest, added as a 4th generated HTML report inside an existing multi-agent daily investment analysis pipeline
+**Researched:** 2026-07-02
 **Confidence:** HIGH
 
 ## Executive Summary
 
-v2.2はゼロから構築するものではなく、既存の TypeScript 投資エージェントへの**ピンポイントな追加**である。対象は4機能：クロスソース重複排除、関連性フィルタ、動的記事数供給、パイプライン計測。現状のパイプラインは約161件/日の記事を収集しているが、クロスソース重複排除が完全に欠如しており、非投資記事がアナリストのコンテキストを浪費し、アナリスト側の記事数上限（50件）がハードコードされたままである。研究の結論は「新しいnpm依存を追加せず、純粋なTypeScript関数として `src/data/news/filter.ts` に全フィルタロジックを集約せよ」という一点に集約される。
+This milestone adds `news-digest.html` — an AI-curated selection of 10-15 articles (grouped by market: US / Japan / Global, ranked by importance, with short Japanese "why it matters" commentary) — as the 4th daily report in an already-mature pipeline. The research is unusually conclusive: **zero new runtime dependencies, no new folders, no new external services.** Every piece needed already exists as an established pattern in this codebase (single-purpose Agent step like `portfolio-analyst`, pure-function HTML generator like `generate-portfolio-report.ts`, zod-validated `tmp/*.json` contract like `meeting/schemas.ts`, shared dark-theme CSS in `report-utils.ts`). This is additive, not novel, work.
 
-推奨アプローチはアーキテクチャ研究で定義されたビルド順序に従う3フェーズ構成：まずフィルタモジュール（型定義 + filter.ts + ユニットテスト）を作成し、次にcollect-data.tsとinvest.mdへの統合を行い、最後にパイプライン計測を追加する。既存のフェッチャー（finnhub.ts, google-news.ts, rss-sources.ts）は一切変更しない。フィルタは結合後の全記事を単一モジュールで処理することで、クロスソース比較を可能にする。
+The recommended approach: (1) design the curation output contract first — a single Agent call reads the existing `tmp/news.json` (already filtered to 20-80 articles by `filter.ts`) and emits `tmp/news-curation.json` with ID-based article selection (never LLM-echoed URLs/titles), a 3-value market enum, and a soft-bounded article count; (2) build `generate-news-digest.ts` as a pure, null-tolerant function mirroring `generate-portfolio-report.ts`; (3) wire it into the pipeline as an isolated step that can never block the other 3 reports or deploy; (4) make the index/nav link conditional on the file actually existing for that date. This order directly follows the dependency chain surfaced by architecture research and pre-empts the two costliest pitfalls (hard pipeline failure, dangling 404 links).
 
-最大のリスクは3つある。①50文字プレフィックスによる現行重複排除の精度崩壊（見逃し・過剰除去の両方向に壊れる）、②関連性フィルタの過剰除外（Reutersの実証研究では標準的なキーワードブロックで54%の正規記事を誤除外）、③タイミング計測値がユーザーに届かない設計ミス（collect-data.tsのconsole.logはinvest.md最終出力に自動では届かない）。いずれもTDDアプローチと事前設計で防止できる。
+The dominant risk is not technical complexity but **LLM output trustworthiness at a boundary this codebase hasn't combined before**: rendering clickable `<a href>` links built from AI-selected content. Pitfalls research is unusually specific and actionable here — the project's own `keyArticles` precedent (title+summary only, no URL field) exists precisely because this class of problem was already encountered. The fix (ID-based selection, TS-side lookup of the real URL, `escapeHtml()` on every interpolation, fail-soft isolation of the new step) is well-defined and low-risk to implement, but easy to skip if a developer treats this as "just a 4th report" rather than "the first optional/fallible report in the pipeline." All four research files converge tightly on this same risk from different angles (stack: validate everything; features: link-out instead of paraphrase to limit hallucination surface; architecture: null-fallback pattern; pitfalls: 5 of 8 findings are directly about this boundary) — that convergence is itself a strong signal the roadmap must treat the curation contract as its own dedicated phase, not a footnote inside HTML rendering.
 
 ## Key Findings
 
 ### Recommended Stack
 
-既存スタック（TypeScript + tsx + yahoo-finance2 + fast-xml-parser + dotenv + zod）は**一切変更しない**。v2.2の全機能はネイティブTypeScript文字列/配列操作と Node.js ビルトイン（`performance.now()` for timing）で実装可能。新規npm依存はゼロ。
+No installation is required. The existing stack (TypeScript + tsx, Claude Code's built-in `Agent` tool, `zod@^4.3.6` for validation, `fast-xml-parser` already used upstream, `vitest` for TDD) fully covers this feature. The only "new" work is first-party source files following patterns already present in the repo — a new generator script, a new zod schema, a new pipeline step in `invest.md`, and small edits to the report orchestrator and index builder.
 
 **Core technologies:**
-- **TypeScript (ESM, "type": "module")**: 全新規コード — 既存プロジェクト設定と一致
-- **Inline Dice/Jaccard coefficient**: タイトル類似度による重複排除 — 15行のコードのためにライブラリ不要
-- **`performance.now()` (node:perf_hooks)**: パイプライン計測 — モノトニック保証あり（`Date.now()` はNTPジャンプで負値が出るため使用禁止）
-- **RegExp配列**: 関連性フィルタ — NLPライブラリ不要
-- **NFKC正規化**: 日本語タイトル正規化 — 標準APIで対応可能
+- TypeScript + tsx: report generator script — identical pattern to the 3 existing generators, no reason to deviate
+- Claude Code `Agent` tool (built-in): single AI curation call — same mechanism as the 5 analysts and the existing one-off "Portfolio Analysis" step, not a new capability
+- `zod@^4.3.6`: validates curation JSON output — every AI JSON output in this pipeline is validated this way; skipping it here would be inconsistent
+- `tmp/*.json` file handoff (convention, not a package): the only supported TS↔Claude boundary in this project — curation output goes to `tmp/news-curation.json`, mirroring `tmp/portfolio-analysis.json`
 
-**New source files:**
-| File | Purpose |
-|------|---------|
-| `src/data/news/filter.ts` | 重複排除 + 関連性フィルタのピュア関数群 |
-| `src/data/news/types.ts` | `NewsFilterStats` / `NewsFilterResult` 型定義追加 |
-
-**Modified files:**
-| File | Change |
-|------|--------|
-| `src/scripts/collect-data.ts` | filter.tsを呼び出し、フィルタ済み記事のみnews.jsonに書き込む |
-| `.claude/commands/invest.md` | 50件ハードキャップ除去、パイプライン計測追加 |
-
-⚠️ **Stack内の不一致注意:** STACK.md はDice係数（閾値0.80）を推奨し、FEATURES.md はJaccard類似度（閾値0.70）を推奨している。PITFALLS.mdは NFKC正規化後のハッシュ比較を推奨。**統一判断: NFKC正規化後のトークンJaccard（閾値0.70〜0.75）を採用する。** Dice係数は日本語多語タイトルでは過大評価になりうる。
+**Explicitly rejected (per PROJECT.md constraints, confirmed by stack research):** external LLM APIs, new HTML templating engines, new chart libraries, per-article ML/LLM relevance scoring, MinHash/LSH dedup.
 
 ### Expected Features
 
-**Must have (table stakes — v2.2 scope):**
-- **クロスソース重複排除** — Finnhub/GoogleNews/RSS横断で同一記事を除去；現状は完全欠如で理論上20〜40%が重複
-- **非投資記事除外** — スポーツ・芸能・天気等のキーワードデナイリストによるフィルタ；Yahoo!ニュース・NHK経済から混入
-- **全ソース24h時間フィルタ** — RSS系ソースは現状タイムフィルタなし；古い記事が最新記事として上位に来る
-- **動的記事数上限** — 「最新50件」ハードコード除去；フィルタ済み実数をアナリストに供給（MAX=80, MIN=20）
-- **パイプライン計測表示** — Step別実行時間と合計をユーザー向け最終出力に含める
+Feature research (MEDIUM confidence — competitor analysis of Bloomberg Five Things, Axios Smart Brevity, TLDR, Morning Brew, cross-checked against the actual `RawNewsArticle` data shape available in this codebase) converges on a clear MVP.
 
-**Should have (differentiators):**
-- タイトル正規化前処理（NFKC + `【速報】` 等プレフィックス除去）— 重複排除精度の前提条件
-- フィルタ前後の記事数ログ（生→dedup後→フィルタ後）— 除外率の継続監視
-- 記事数フロア（最低10〜20件）— 過剰フィルタ時のアナリスト情報欠乏防止
+**Must have (table stakes):**
+- Per-article headline + source + timestamp + link to original — near-zero cost, data already exists
+- "Why it matters" Japanese commentary per article (1-2 sentences) — the actual value-add of curation; this is the CURA-01 core deliverable
+- Market grouping (US / Japan / Global), importance-ordered within each group
+- Concise count (10-15 of 20-80) — curation value comes from what's excluded as much as included
+- Consistent Bloomberg dark-theme visual identity, reused from `report-utils.ts`
 
-**Defer (v2.3+):**
-- Finnhubのポートフォリオティッカー別ニュース取得（API呼び出し増加を伴う）
-- 時間帯重み付け（直近6h優先）
+**Should have (competitive, v1.x):**
+- Impact/importance badge (High/Medium/Low) — derived from the same score already needed for ordering, no extra AI call
+- Related-tickers tag per article — partial free win from existing `ticker` field, full coverage needs light extraction in the same curation prompt
+- Top-of-page lede paragraph summarizing the day
 
-**Anti-features (do not build):**
-- MinHash/LSH — 160件/日には過剰；O(n²)で十分
-- ML/LLMベースの関連性スコアリング — 1記事ごとのAPI呼び出しはコスト面で非現実的
-- アナリスト別記事パーソナライズ — v2.2スコープ外；全アナリスト共通フィードで十分
-- クロス言語（英↔日）重複排除 — 埋め込みモデル必須；v2.2では同言語グループ内のみ
+**Defer (v2+):**
+- Cross-report thematic linking to meeting minutes (introduces pipeline-ordering dependencies)
+- Historical digest archive/search (existing index.html accordion likely sufficient)
+- **Explicitly reject:** per-article sentiment/confidence numeric scores (false precision, hallucination risk), full article paraphrase/rewrite (duplicates effort, multiplies hallucination surface), real-time updates, personalization controls, multi-language toggle — all conflict with PROJECT.md's existing Out-of-Scope decisions or the single-user/daily-batch nature of the tool.
 
 ### Architecture Approach
 
-アーキテクチャは「フィルタロジックの単一責任モジュール化」原則に基づく。`filter.ts` はI/Oを持たないピュア関数のみで構成され、単体テストが容易。`collect-data.ts` は既存の結合処理の直後に `filterNewsArticles()` を1回呼び出すだけ。既存のRSSソース別dedup（rss-sources.ts）はそのまま維持し、`filter.ts` は**クロスソース**deupを担当する二層構造。
+Architecture research (HIGH confidence, grounded in direct codebase inspection) confirms this is purely additive within the existing `meeting/` (contracts) and `scripts/` (generators/orchestration) domains — no new top-level folders. The curation step is a single-purpose Agent call (Pattern 1, same shape as `portfolio-analyst`, not a 6th standing analyst persona), producing a validated JSON contract that a pure-function generator renders with graceful null-fallback (Pattern 2, same shape as `generate-portfolio-report.ts`'s handling of a missing `portfolio-analysis.json`). Market classification and importance ranking are LLM-authored inside the JSON output, not recomputed via TS heuristics (Pattern 3) — mirroring how every other nuanced judgment (verdicts, sector views, picks) is always LLM-authored in this codebase.
 
 **Major components:**
-1. **`src/data/news/filter.ts` (NEW)** — URL正規化dedup → タイトル正規化dedup → 関連性フィルタ → `NewsFilterResult` を返す
-2. **`src/scripts/collect-data.ts` (MODIFIED)** — filterNewsArticlesを呼び出し、フィルタ済み記事のみを`tmp/news.json`に書き込む；セクション別計測追加
-3. **`.claude/commands/invest.md` (MODIFIED)** — 50件ハードキャップ削除；全フィルタ済み記事を読み込む；パイプライン全体計測
-
-**Key patterns:**
-- フェッチャー内では絶対にフィルタしない（クロスソース比較不可）
-- denylist方式（非投資コンテンツを除外）> allowlist方式（投資コンテンツのみ通過）
-- タイミング計測は `performance.now()` のみ（`Date.now()` 禁止）
-- タイミング値は `tmp/pipeline-metrics.json` に書き出してinvest.mdで読む（stdout捨てられる問題を回避）
-
-**Data flow:**
-```
-~165件 (raw) → URL dedup → ~145件 → タイトルdedup → ~125件 → 関連性フィルタ → ~85件 (quality)
-                                                                                    ↓
-                                                              invest.md: 全85件をアナリストに供給
-                                                              (旧: 50件ハードキャップ)
-```
+1. `meeting/types.ts` + `meeting/schemas.ts` (modified) — `NewsCuration`/`CuratedArticle` types and `newsCurationSchema`, colocated with every other pipeline JSON contract
+2. **News Curation Agent (new)** — single Agent invocation in `invest.md`, reads `tmp/news.json`, writes `tmp/news-curation.json`; can run in parallel with the existing Step 3d Portfolio Analysis call
+3. `generate-news-digest.ts` (new) — pure function `(NewsCuration | null) => string`, TDD, reuses `report-utils.ts` styling/escaping
+4. `generate-report.ts`, `report-data-loaders.ts`, `update-index.ts` (modified) — orchestration wiring, graceful null loading, conditional 4th nav link
 
 ### Critical Pitfalls
 
-1. **50文字プレフィックスdedup の精度崩壊** — 既存`rss-sources.ts`の`title.slice(0, 50)`は偽陰性（異なる文体の同一記事が残る）と偽陽性（「【速報】…」系の別記事が除去される）の両方向に壊れる → NFKC正規化後のトークンJaccard類似度に置き換える；TDDでテストケースを先に書く
+Pitfalls research (HIGH confidence, grounded in direct reading of `invest.md`, `generate-report.ts`, `update-index.ts`, `schemas.ts`) identifies 8 findings; the top ones that must shape the roadmap:
 
-2. **関連性フィルタの過剰除外** — allowlistは54%の正規投資記事を誤除外する（Reuters実証）；「スポーツ用品株」の「スポーツ」でfalse positiveが発生 → denylistのみ使用；フィルタ前後の記事数を毎回ログして除外率5〜30%を監視
+1. **`Promise.all` collapses all 4 reports if the digest generator throws** — isolate `generateNewsDigestHtml()` in its own try/catch, outside the existing 3-report write batch, so a digest bug never takes down the 3 previously-reliable reports.
+2. **Hallucinated/mismatched article URLs** — never let the curation agent free-type titles/URLs; assign stable article IDs, have the agent select by ID only, and look up the real title/url/source server-side in TS. This mirrors the project's own existing precedent (`keyArticles` schema deliberately has no `url` field).
+3. **Rigid `min(10).max(15)` count validation causes hard pipeline failure** — use a soft clamp/truncate strategy instead of a hard zod throw, following the established `.passthrough()`/optional-field tolerance pattern already used for LLM field drift elsewhere in `schemas.ts`.
+4. **`update-index.ts` links to a `news-digest.html` that was never generated** — make the 4th link conditional on the file actually existing for that date; `buildStandardLinks` currently assumes all reports always exist together, which is no longer true once one report depends on a fallible second LLM step.
+5. **HTML injection via unescaped commentary or LLM-controlled `href`** — source the `href` from TS-side ID lookup (never LLM-echoed), and run it through `escapeHtml()` like every other interpolation site in this codebase, including the URL itself (not just title/commentary text).
 
-3. **RSS pubDateパース失敗による時系列破壊** — `new Date(pubDate || Date.now())`のフォールバックは古い記事を現在時刻として記録し最上位ソートされる → `new Date(0)`（エポック=ソート最下位）にフォールバックする；Invalid Dateのテストケース必須
-
-4. **タイミング計測値がユーザーに届かない** — collect-data.tsのconsole.logはinvest.mdの最終出力に自動では届かない → `tmp/pipeline-metrics.json` への書き出し方式を採用；invest.mdの最後でファイルを読んで表示する
-
-5. **50件制限のハードコード残存** — 変更は`collect-data.ts`だけでなく、エージェント側スクリプトにも`slice(0, 50)`が残存している可能性 → 実装前に`grep -r "slice(0, 50)\|最新50件" src/ .claude/`で全箇所を特定してから修正
+Two additional findings worth flagging for planning: market classification (US/JP/Global) has no reliable ground-truth field to derive from (`category` is a fetch-path artifact, not a geography classifier) — treat this as a best-effort, low-stakes UX issue, not a data-integrity gate; and the digest step must get its own STEP marker with fail-soft semantics so a digest failure never blocks Step 4 deploy of the other 3 reports.
 
 ## Implications for Roadmap
 
 Based on research, suggested phase structure:
 
-### Phase 1: News Filter Module（filter.ts基盤構築）
-**Rationale:** フィルタモジュールはI/Oを持たないピュア関数なので、他コンポーネントと独立して先に作れる。TDDで確実に動作を保証してから統合することで、Pitfall 1（50字dedup精度崩壊）とPitfall 3（pubDateパース）を根本解決できる。
-**Delivers:** `src/data/news/types.ts`（型定義）+ `src/data/news/filter.ts`（dedup + 関連性フィルタ）+ 完全なユニットテスト群
-**Addresses:**
-- クロスソース重複排除（FEATURES: table stakes）
-- 非投資記事除外（FEATURES: table stakes）
-- タイトル正規化（FEATURES: differentiator）
-**Avoids:**
-- Pitfall 1: 50文字プレフィックスdedup → NFKC正規化 + Jaccard類似度に置き換え
-- Pitfall 2: クロスソースdedup欠如 → filter.tsで全ソース横断
-- Pitfall 3: 関連性フィルタ過剰除外 → denylistのみ採用
-- Pitfall 4: pubDateパース失敗 → parsePubDate()ユーティリティを合わせて作成
-**Test cases (must include):**
-- 同一URL、異なるソース → 1件に集約
-- 類似タイトル（Jaccard ≥ 0.70）→ 1件に集約
-- 「スポーツ用品株」→ denylistの「スポーツ」で除外されない
-- Invalid pubDate → エポック(new Date(0))にフォールバック
-- フィルタ前後のstatsカウントが正確
+### Phase 1: Curation Contract & Schema
+**Rationale:** Nothing downstream (generator, orchestration, index) can be built or tested without this contract existing first. This is also where the highest-risk pitfalls (2, 3, 6) must be designed away, not patched in later.
+**Delivers:** `NewsCuration`/`CuratedArticle` types in `meeting/types.ts`, `newsCurationSchema`/`validateNewsCuration` in `meeting/schemas.ts` with ID-based article selection, soft-bounded count validation, and a strict 3-value market enum — plus schema unit tests against fixture JSON (TDD RED).
+**Addresses:** Table-stakes "Why it matters" commentary, market grouping, importance ordering (FEATURES.md P1 items) via a contract design, not yet rendering.
+**Avoids:** Pitfall 2 (hallucinated URLs — ID-based selection), Pitfall 3 (rigid count — soft clamp), Pitfall 6 (unreliable market classification — enum + disambiguation rules in prompt).
 
-### Phase 2: Pipeline Integration（collect-data.ts + invest.md統合）
-**Rationale:** Phase 1のフィルタモジュールが完成したあと、collect-data.tsへの統合とinvest.mdの50件ハードキャップ除去を同時に行う。両者はtmp/news.jsonを通じて結合しているため、一度に整合性を確保する。
-**Delivers:** フィルタ済み記事のみをtmp/news.jsonに書き込む; アナリストが全フィルタ済み記事（〜85件）を受け取る; フィルタ前後の記事数ログ
-**Addresses:**
-- 動的記事数上限（FEATURES: table stakes）
-- 全ソース24h時間フィルタ適用
-- 記事数フロア/シーリング（MIN=20, MAX=80）
-**Avoids:**
-- Pitfall 5: 50件制限残存 → 統合前に全ハードコードをgrepで特定・除去
-- Pitfall 8: Google News リダイレクトURL → タイトルベースdedupのみ使用確認
-**Verification:** `collect-data.ts`単体実行でフィルタ統計ログを確認；`tmp/news.json`を目視で非投資記事がないか確認；除外率5〜30%以内
+### Phase 2: Report Generator (HTML Rendering)
+**Rationale:** Fully testable against Phase 1's fixtures with zero pipeline wiring — matches this codebase's established TDD-generator convention and lets rendering/escaping risk be resolved in isolation before touching the live pipeline.
+**Delivers:** `generate-news-digest.ts` + `.test.ts` (pure function, null-fallback shell, market-grouped rendering, 4th `ACCENT_VARIANTS` color in `report-utils.ts`).
+**Uses:** `zod` validation from Phase 1, `report-utils.ts` (`escapeHtml`, `generateBaseStyles`) per STACK.md's explicit reuse recommendation.
+**Implements:** Architecture Pattern 2 (pure-function generator + graceful-null fallback), Pattern 3 (LLM-side classification, TS-side rendering only).
+**Avoids:** Pitfall 5 (HTML injection — escapeHtml on every field including href).
 
-### Phase 3: Pipeline Timing（計測 + ユーザー表示）
-**Rationale:** 計測は他機能から独立しているが、表示方式（stdout vs ファイル）を最初に設計しないと計測値がユーザーに届かない（Pitfall 7）。Phase 2完了後に追加することでE2Eで動作確認できる。
-**Delivers:** ステップ別実行時間 + 合計をinvest.mdの最終出力に表示; `tmp/pipeline-metrics.json` に計測値を永続化
-**Addresses:**
-- パイプライン計測表示（FEATURES: table stakes）
-- Step別内訳（FEATURES: differentiator）
-**Avoids:**
-- Pitfall 6: Date.now()の非モノトニック問題 → `performance.now()`のみ使用
-- Pitfall 7: 計測値がユーザーに届かない → `tmp/pipeline-metrics.json`経由で表示
+### Phase 3: Pipeline Integration & Orchestration
+**Rationale:** With contract and renderer both independently tested, this phase focuses purely on wiring — the highest-risk *integration* pitfalls (isolated failure, fail-soft deploy gating, correct file-handoff) live here, separate from content-correctness concerns already resolved in Phases 1-2.
+**Delivers:** New curation Agent step in `invest.md` (parallel with existing Step 3d Portfolio Analysis, per architecture research's recommendation), `loadNewsCuration()` in `report-data-loaders.ts`, `generate-report.ts` wiring with an isolated try/catch around the digest write (not inside the existing 3-report `Promise.all`), a dedicated `[STEP:news-digest:...]` marker with fail-soft semantics.
+**Addresses:** End-to-end delivery of the AI curation/selection feature (FEATURES.md P1 core deliverable).
+**Avoids:** Pitfall 1 (Promise.all collapse), Pitfall 7 (hard-fail blocking deploy of 3 working reports), Pitfall 8 (tmp/*.json handoff convention violation, stale files).
+
+### Phase 4: Index/Nav Integration & Validation
+**Rationale:** This must come last — it depends on the digest reliably existing-or-not from Phase 3's fail-soft path, and is the phase where the "looks done but isn't" risk (dangling links) is easiest to miss if done earlier or bundled in.
+**Delivers:** `update-index.ts`'s `buildStandardLinks()` extended to a conditional 4th link (only included if `news-digest.html` was actually written for that date), updated `update-index.test.ts`, end-to-end pipeline validation (0-article day, malformed-JSON day, and a normal day all producing correct deploy behavior).
+**Addresses:** Product coherence requirement — "既存3レポートと同じBloomberg風ダークテーマ・ナビゲーション" (PROJECT.md).
+**Avoids:** Pitfall 4 (dangling 404 index links).
 
 ### Phase Ordering Rationale
 
-- **フィルタモジュールを先に作る**: ピュア関数で依存がないため、単体テストで品質保証してから統合できる。逆順（統合してからテスト）だと実データで挙動を確認できず、閾値チューニングが困難になる。
-- **統合を1フェーズにまとめる**: collect-data.tsとinvest.mdは`tmp/news.json`のコントラクトで接続しているため、両方を同時に変更するほうが中間状態（フィルタ済みだが50件上限のまま）を避けられる。
-- **計測を最後に追加する**: 計測はパイプラインの正しい動作に依存しないが、E2Eで計測値を確認するにはPhase 2が完成している必要がある。
+- **Contract-first ordering is directly dictated by architecture research's "Suggested Build Order"** (JSON contract → generator → data loader → orchestration → index wiring → pipeline wiring → validation) — collapsing that 8-step sequence into 4 phases groups steps that share the same risk class and can be fully tested in isolation before the next phase depends on them.
+- **Pitfalls cluster naturally by phase:** contract-design pitfalls (2, 3, 6) all resolve via schema/prompt decisions in Phase 1; rendering pitfalls (5) resolve in Phase 2; integration/failure-isolation pitfalls (1, 7, 8) resolve in Phase 3; the index-specific pitfall (4) resolves in Phase 4. This mapping was explicit in PITFALLS.md's own "Pitfall-to-Phase Mapping" table and is preserved here.
+- **Deferring index/nav to last avoids a known trap:** research explicitly warns that "often done" checklists miss the conditional-link requirement because it's easy to add the 4th link unconditionally at the same time as the other wiring — sequencing it as its own phase, after fail-soft behavior is proven in Phase 3, forces an explicit verification step rather than an assumption.
 
 ### Research Flags
 
-**Needs deeper research during planning:**
-- **Phase 1:** Jaccard類似度の閾値（0.70 vs 0.75 vs 0.80）は実データで検証が必要。Mock dataでは見えない偽陰性・偽陽性が出る可能性がある。最初は閾値を高め（0.80）に設定し、実データ確認後に下げることを推奨。
-- **Phase 2:** denylistキーワードの精度確認が必要。「スポーツ」→「スポーツ用品株」の偽陽性など、日本語特有の文脈依存性は実データでの検証が必要。
+Phases likely needing deeper research during planning:
+- **Phase 1 (Curation Contract & Schema):** the prompt design for market classification disambiguation rules (Fed/macro/FX news → "Global" vs "US") is a judgment call with no ground truth in the codebase; consider `--research-phase` if the initial enum/prompt approach shows high misclassification in early testing.
 
-**Standard patterns (skip research-phase):**
-- **Phase 1 (実装):** ピュア関数 + TypeScript = 標準パターン。Dice/Jaccard係数の実装は確立済みアルゴリズム。
-- **Phase 2 (統合):** importして呼び出すだけ。アーキテクチャ研究で詳細なBefore/Afterコードが提供済み。
-- **Phase 3 (計測):** `performance.now()` + JSONファイル書き出しは標準パターン。
+Phases with standard patterns (skip research-phase):
+- **Phase 2 (Report Generator):** directly mirrors `generate-portfolio-report.ts`, an existing, working pattern — no new research needed.
+- **Phase 3 (Pipeline Integration):** directly mirrors the existing `portfolio-analyst` Step 3d Agent-call pattern and STEP-marker conventions already documented in `invest.md` — no new research needed.
+- **Phase 4 (Index/Nav Integration):** `report-utils.ts` already documents flexible link-count support ("do not assume 3 links per entry") — the conditional-link change is additive to an existing, well-understood mechanism.
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | コードベース直接分析 + npm公式ドキュメント確認；新依存ゼロの判断は確実 |
-| Features | HIGH | コードベースの実測値（〜161件/日）が根拠；期待削減効果（〜20〜40%重複）はやや推定値 |
-| Architecture | HIGH | 直接コード分析；Before/Afterの具体的コード例が提供されている |
-| Pitfalls | HIGH | コードベース分析 + 公式ドキュメント + Reuters実証研究；全pitfallに具体的な「Warning signs」あり |
+| Stack | HIGH | Verified via direct codebase inspection (package.json, existing generators, schemas.ts) plus live npm registry checks; zero ambiguity, zero new dependencies needed |
+| Features | MEDIUM | Grounded in the project's actual data shapes (HIGH) but the competitive-format analysis (Bloomberg/Axios/TLDR/Morning Brew) relies on MEDIUM/LOW-confidence third-party sources for newsletter-format conventions |
+| Architecture | HIGH | Entirely grounded in direct reading of the live pipeline (`invest.md`, `generate-report.ts`, `schemas.ts`, `update-index.ts`) — proposed contract and build order are extrapolations from proven existing patterns, not speculative |
+| Pitfalls | HIGH | All 8 findings are grounded in specific line-level codebase evidence (existing `keyArticles` precedent, `Promise.all` structure, `buildStandardLinks` hardcoding, STEP marker fail-hard/fail-soft distinction) |
 
 **Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **Jaccard閾値の最適値**: 0.70（FEATURES.md推奨）と0.80（STACK.md推奨）に乖離がある。Phase 1完了後、実際の`tmp/news.json`データで両閾値を試して比較検証が必要。
-- **除外率の実態**: フィルタ後に「5〜30%除外」が適切と研究は示しているが、実際のYahoo!ニュース・NHK経済RSSの非投資記事混入率は未測定。初回実行後にログで確認し、denylistを調整する。
-- **performance.now() vs Date.now()の使い分け**: STACK.mdはDate.now()を推奨、PITFALLS.mdはperformance.now()を推奨している。**決定: performance.now()を採用**（PITFALLS研究が具体的リスクを示しており、STACK.mdの推奨は精度懸念を考慮していない）。
-- **パイプライン計測の出力先設計**: `tmp/pipeline-metrics.json` vs stdout直接キャプチャのどちらが実装しやすいかはinvest.mdの具体的な構造次第。Phase 3で決定する。
+- **Market classification accuracy is unverifiable in advance:** no existing field is authoritative for US/JP/Global; the roadmap should treat this as "best-effort UX, not a blocking quality gate" and plan a lightweight manual spot-check after the first week of production digests rather than trying to perfect the prompt before shipping (per PITFALLS.md Pitfall 6 recommendation).
+- **Parallel vs. sequential placement of the curation Agent call in `invest.md`** (extending Step 3d to 2 parallel Agents vs. a standalone sequential Step 3e) is a phase-level implementation decision, not fully resolved by research — architecture research recommends parallel for wall-clock savings but flags sequential as an acceptable lower-risk alternative; decide during Phase 3 planning based on implementation-time risk appetite.
+- **Article count guardrail strictness** (soft clamp with truncation logic vs. simple warn-and-accept-shorter-list) needs a concrete implementation decision in Phase 1 — research recommends soft validation over hard rejection but doesn't prescribe the exact truncation algorithm; use `filter.ts`'s existing `sortByPriorityScore()` as the tie-breaker if the agent over-selects.
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- コードベース直接分析: `src/data/news/rss-sources.ts`, `src/scripts/collect-data.ts`, `.claude/commands/invest.md`, `src/data/news/*.ts` — 実測値・現状コードの根拠
-- [Node.js Performance APIs](https://nodejs.org/api/perf_hooks.html) — `performance.now()` モノトニック保証確認
-- [Node.js perf_hooks docs](https://nodejs.org/api/perf_hooks.html) — `Date.now()`との差異確認
+- Direct codebase inspection: `/Users/arai/invest/package.json`, `/Users/arai/invest/src/scripts/generate-report.ts`, `generate-portfolio-report.ts`, `generate-daily-report.ts`, `report-utils.ts`, `report-data-loaders.ts`, `update-index.ts`
+- `/Users/arai/invest/src/meeting/types.ts`, `/Users/arai/invest/src/meeting/schemas.ts` — existing TS↔Claude JSON contract and validation patterns
+- `/Users/arai/invest/src/data/news/filter.ts`, `/Users/arai/invest/src/data/news/types.ts` — `RawNewsArticle` shape, filter pipeline, MIN=20/MAX=80 sizing
+- `/Users/arai/invest/.claude/commands/invest.md` — full pipeline orchestration, STEP marker conventions, existing Agent-call patterns
+- `/Users/arai/invest/scripts/run.sh` — launchd entrypoint, `PROTECT_FILES` checksum scope
+- `/Users/arai/invest/.planning/PROJECT.md` — milestone goal, explicit constraints and Out-of-Scope rationale
+- `npm view zod version` / `npm view fast-xml-parser version` / `npm view vitest version` (2026-07-02, live registry checks)
 
 ### Secondary (MEDIUM confidence)
-- [NewsCatcher API: Article Deduplication](https://www.newscatcherapi.com/docs/news-api/guides-and-concepts/articles-deduplication) — URL + タイトル類似度の標準アプローチ確認
-- [CrackingWalnuts: News Aggregator System Design](https://crackingwalnuts.com/post/news-aggregator-system-design) — 小規模（O(n²)）vs 大規模（MinHash）の分岐点確認
-- [Feedly Engineering: News Clustering & Deduplication](https://feedly.com/engineering/posts/reducing-clustering-latency) — Jaccard/MinHashの本番採用事例
-- [Scanz: Keyword-Based News Scanning](https://scanz.com/smart-ways-to-create-keyword-based-news-scans/) — 投資ニュースのキーワードallowlist/denylist業界標準確認
+- Bloomberg "5 things to start your day" / "Five Things You Need to Know" — newsletter format pattern (WebSearch, cross-checked across archived editions)
+- Axios Smart Brevity / "Why it matters" methodology — third-party analysis, consistent across multiple independent write-ups; corroborated by an Axios press release primary source
+- arXiv: "AI use in American newspapers is widespread, uneven, and rarely disclosed" — academic source on AI-generated news hallucination rates, informs the link-out-not-paraphrase recommendation
 
-### Tertiary (LOW-MEDIUM confidence)
-- [Keyword Blocking Demonetized 54% of Reuters Brand-Safe Stories](https://www.adexchanger.com/publishers/keyword-blocking-demonetized-more-than-half-of-reuters-brand-safe-stories/) — allowlist過剰除外リスクの実証（denylist推奨の根拠）
-- [Cross-Lingual News Dedup research](https://yingjiezhao.com/en/articles/Cross-Lingual-News-Dedup-at-100-Dollar-a-Month/) — 英日クロス言語dedupが埋め込みモデル必須である根拠
-- [RSS pubDate timezone issues](https://github.com/alexdebril/feed-io/issues/134) — RFC-822非準拠pubDateの実態
-- [Text Normalization: Unicode Forms for NLP](https://mbrenndoerfer.com/writing/text-normalization-unicode-nlp) — NFKC正規化が日本語全角文字に必要な根拠
+### Tertiary (LOW confidence)
+- Morning Brew newsletter deep dive (Markets section) — single-source third-party pattern description, needs no further validation since it only informed a non-binding stylistic comparison
+- TLDR Newsletter Review 2026 — third-party review, WebSearch only, informed item-count comparison only (not a hard requirement)
 
 ---
-*Research completed: 2026-06-26*
+*Research completed: 2026-07-02*
 *Ready for roadmap: yes*
