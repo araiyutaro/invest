@@ -5,11 +5,13 @@ Out-of-scope discoveries logged during plan execution (not fixed, per Scope Boun
 ## Pre-existing failing test: `src/scripts/validate-meeting.test.ts`
 
 - **Test:** `portfolioAnalysisSchema > decision must be one of 保持/買増/一部売却/全売却`
-- **Issue:** `expect(() => portfolioAnalysisSchema.parse(invalid)).toThrow()` fails — the schema
-  does not reject the invalid decision value `"ホールド"` as expected
+- **Symptom:** `expect(() => portfolioAnalysisSchema.parse(invalid)).toThrow()` does not throw
+  for the invalid decision value `"ホールド"` as expected
   (`expected [Function] to throw an error`).
-- **Status:** Pre-existing failure on `main`/current HEAD, unrelated to any Phase 14 changes.
-  File was last modified in an unrelated Phase 07 commit (`17f2158`); confirmed pre-existing via
-  `git log --oneline -1 -- src/scripts/validate-meeting.test.ts`. Out of scope for Phase 14 —
-  not fixed.
-- **Independently observed by:** Plan 14-01 (2026-07-01), Plan 14-02 (2026-07-01).
+- **Scope decision:** Pre-existing failure on `main`/current HEAD, unrelated to any Phase 14
+  changes. File was last modified in an unrelated Phase 07 commit (`17f2158`); confirmed
+  pre-existing via `git log --oneline -1 -- src/scripts/validate-meeting.test.ts`. Out of scope
+  for Phase 14 — not fixed.
+- **Action needed:** Investigate `portfolioAnalysisSchema` enum validation in a future
+  phase/plan touching `src/scripts/validate-meeting.ts`.
+- **Independently observed by:** Plan 14-01, Plan 14-02, Plan 14-05 (all 2026-07-01).
