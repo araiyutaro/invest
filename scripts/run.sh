@@ -24,9 +24,9 @@ echo "=== Investment Pipeline Started: $(date) ===" | tee "$LOG_FILE"
 terminal-notifier -title "Investment Agent" -message "パイプライン開始 (約40分)" -sound Tink
 
 # HTML Protection: record checksums before pipeline
-PROTECT_FILES="docs/index.html docs/portfolio.html"
+PROTECT_FILES=("docs/index.html" "docs/portfolio.html")
 CHECKSUM_FILE="/tmp/invest-html-checksums-${TIMESTAMP}.txt"
-for f in $PROTECT_FILES; do
+for f in "${PROTECT_FILES[@]}"; do
   if [ -f "$PROJECT_DIR/$f" ]; then
     shasum -a 256 "$PROJECT_DIR/$f" >> "$CHECKSUM_FILE"
   fi
@@ -43,9 +43,9 @@ claude --dangerously-skip-permissions \
 # HTML Protection: verify checksums and restore if changed
 if [ -f "$CHECKSUM_FILE" ]; then
   RESTORED=""
-  for f in $PROTECT_FILES; do
+  for f in "${PROTECT_FILES[@]}"; do
     if [ -f "$PROJECT_DIR/$f" ]; then
-      EXPECTED=$(grep "$PROJECT_DIR/$f" "$CHECKSUM_FILE" | awk '{print $1}')
+      EXPECTED=$(grep -F "$PROJECT_DIR/$f" "$CHECKSUM_FILE" | awk '{print $1}')
       if [ -n "$EXPECTED" ]; then
         ACTUAL=$(shasum -a 256 "$PROJECT_DIR/$f" | awk '{print $1}')
         if [ "$EXPECTED" != "$ACTUAL" ]; then
