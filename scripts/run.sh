@@ -67,7 +67,12 @@ echo "=== Investment Pipeline Finished: $(date) (exit: $EXIT_CODE) ===" | tee -a
 if [ "$EXIT_CODE" -eq 0 ]; then
   terminal-notifier -title "Investment Agent" -message "パイプライン正常完了" -sound Glass
 else
-  terminal-notifier -title "Investment Agent" -message "パイプライン異常終了 (exit: $EXIT_CODE)" -sound Basso
+  FAILED_STEP=$(grep -o '\[STEP:[^:]*:FAIL' "$LOG_FILE" | tail -1 | sed -E 's/\[STEP:([^:]*):FAIL/\1/') || true
+  if [ -n "$FAILED_STEP" ]; then
+    terminal-notifier -title "Investment Agent" -message "パイプライン異常終了 (${FAILED_STEP}で失敗, exit: $EXIT_CODE)" -sound Basso
+  else
+    terminal-notifier -title "Investment Agent" -message "パイプライン異常終了 (exit: $EXIT_CODE)" -sound Basso
+  fi
 fi
 
 find "$LOG_DIR" -name "invest-*.log" -mtime +7 -delete 2>/dev/null || true
