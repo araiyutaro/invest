@@ -1,5 +1,6 @@
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { validateMeetingResult, validateWebSearchResult, validateReevaluationOutput } from "../meeting/schemas.js";
 import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnalysis } from "../meeting/types.js";
 import { generateDailyReportHtml } from "./generate-daily-report.js";
@@ -120,7 +121,9 @@ export async function main(): Promise<void> {
   console.log("  - portfolio-report.html");
 }
 
-main().catch((error) => {
-  console.error("Fatal error:", error);
-  process.exit(1);
-});
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error("Fatal error:", error);
+    process.exit(1);
+  });
+}

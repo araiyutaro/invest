@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { PORTFOLIO_HOLDINGS } from "../portfolio/holdings.js";
 import { escapeHtml } from "./report-utils.js";
 
@@ -229,7 +230,9 @@ async function main(): Promise<void> {
   await Promise.all([updateIndexHtml(date), updatePortfolioHtml(date)]);
 }
 
-main().catch((err) => {
-  console.error("update-index failed:", err);
-  process.exit(1);
-});
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error("update-index failed:", err);
+    process.exit(1);
+  });
+}
