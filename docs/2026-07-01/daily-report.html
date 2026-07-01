@@ -96,13 +96,20 @@
       border-left: 4px solid #f59e0b;
     }
     .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
   </style>
 
 </head>
 <body>
   <div class="container">
     <h1>Daily Investment Report - 2026-07-01</h1>
-    <p class="timestamp">Generated: 2026/7/1 7:49:54</p>
+    <p class="timestamp">Generated: 2026/7/1 15:13:26</p>
     <hr>
     <h2>市場概況</h2>
     <div class="agent-card">
@@ -113,6 +120,78 @@
 <li>Dow Jones: <span style="color:#10b981">+0.26%</span></li>
 <li>Nikkei 225: <span style="color:#10b981">+0.86%</span></li>
 <li>VIX: <span style="color:#ef4444">-6.8%</span></li></ul>
+    </div>
+    <hr>
+    <h2>セクターパフォーマンス</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 400 352" width="100%" role="img" aria-label="セクターパフォーマンス">
+    <line x1="270" y1="0" x2="270" y2="352" stroke="#333" stroke-width="1"/>
+    
+      <text x="132" y="16" font-size="13" fill="#e0e0e0" text-anchor="end">Technology</text>
+      <rect x="270" y="0" width="126" height="24" fill="#10b981" rx="2"/>
+      <text x="400" y="16" font-size="13" fill="#e0e0e0" text-anchor="start">+2.76%</text>
+    
+      <text x="132" y="48" font-size="13" fill="#e0e0e0" text-anchor="end">Industrials</text>
+      <rect x="270" y="32" width="61.78734057800112" height="24" fill="#10b981" rx="2"/>
+      <text x="335.78734057800114" y="48" font-size="13" fill="#e0e0e0" text-anchor="start">+1.35%</text>
+    
+      <text x="132" y="80" font-size="13" fill="#e0e0e0" text-anchor="end">Materials</text>
+      <rect x="270" y="64" width="15.341638939787012" height="24" fill="#10b981" rx="2"/>
+      <text x="289.341638939787" y="80" font-size="13" fill="#e0e0e0" text-anchor="start">+0.34%</text>
+    
+      <text x="132" y="112" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Discretionary</text>
+      <rect x="270" y="96" width="6.245436040710437" height="24" fill="#10b981" rx="2"/>
+      <text x="280.24543604071044" y="112" font-size="13" fill="#e0e0e0" text-anchor="start">+0.14%</text>
+    
+      <text x="132" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">Financials</text>
+      <rect x="260.6385435677872" y="128" width="9.36145643221277" height="24" fill="#ef4444" rx="2"/>
+      <text x="256.6385435677872" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">-0.20%</text>
+    
+      <text x="132" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">Communication Services</text>
+      <rect x="238.21634513161953" y="160" width="31.78365486838047" height="24" fill="#ef4444" rx="2"/>
+      <text x="234.21634513161953" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">-0.70%</text>
+    
+      <text x="132" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">Energy</text>
+      <rect x="229.89674715625625" y="192" width="40.10325284374376" height="24" fill="#ef4444" rx="2"/>
+      <text x="225.89674715625625" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">-0.88%</text>
+    
+      <text x="132" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">Healthcare</text>
+      <rect x="210.84050724769145" y="224" width="59.15949275230855" height="24" fill="#ef4444" rx="2"/>
+      <text x="206.84050724769145" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">-1.29%</text>
+    
+      <text x="132" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">Utilities</text>
+      <rect x="202.44675532011394" y="256" width="67.55324467988606" height="24" fill="#ef4444" rx="2"/>
+      <text x="198.44675532011394" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">-1.48%</text>
+    
+      <text x="132" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Staples</text>
+      <rect x="199.55648845267683" y="288" width="70.44351154732315" height="24" fill="#ef4444" rx="2"/>
+      <text x="195.55648845267683" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">-1.54%</text>
+    
+      <text x="132" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">Real Estate</text>
+      <rect x="179.41971299504726" y="320" width="90.58028700495274" height="24" fill="#ef4444" rx="2"/>
+      <text x="175.41971299504726" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">-1.98%</text>
+    
+  </svg>
+    </div>
+    <hr>
+    <h2>VIX推移</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 600 200" width="100%" role="img" aria-label="VIX推移">
+    
+    <line x1="10" y1="137.5" x2="560" y2="137.5"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="141.5" font-size="13" fill="#6b7280">20</text>
+  
+    
+    <line x1="10" y1="52.5" x2="560" y2="52.5"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="56.5" font-size="13" fill="#6b7280">30</text>
+  
+    <polyline points="10,171.07500648498535 37.5,173.4549961090088 65,170.99000453948975 92.5,176.60000324249268 120,124.6649980545044 147.5,146.67999935150146 175,138.6049928665161 202.5,118.63000583648682 230,142.25999546051025 257.5,157.21999740600586 285,169.79999351501465 312.5,168.01500129699707 340,150.75999546051025 367.5,168.10000324249268 395,160.61999416351318 422.5,141.8350019454956 450,149.1450071334839 477.5,146.93500518798828 505,151.01500129699707 532.5,157.47500324249268 560,167.67499351501465" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="10" cy="171.07500648498535" r="3" fill="#3b82f6"/><circle cx="37.5" cy="173.4549961090088" r="3" fill="#3b82f6"/><circle cx="65" cy="170.99000453948975" r="3" fill="#3b82f6"/><circle cx="92.5" cy="176.60000324249268" r="3" fill="#3b82f6"/><circle cx="120" cy="124.6649980545044" r="3" fill="#3b82f6"/><circle cx="147.5" cy="146.67999935150146" r="3" fill="#3b82f6"/><circle cx="175" cy="138.6049928665161" r="3" fill="#3b82f6"/><circle cx="202.5" cy="118.63000583648682" r="3" fill="#3b82f6"/><circle cx="230" cy="142.25999546051025" r="3" fill="#3b82f6"/><circle cx="257.5" cy="157.21999740600586" r="3" fill="#3b82f6"/><circle cx="285" cy="169.79999351501465" r="3" fill="#3b82f6"/><circle cx="312.5" cy="168.01500129699707" r="3" fill="#3b82f6"/><circle cx="340" cy="150.75999546051025" r="3" fill="#3b82f6"/><circle cx="367.5" cy="168.10000324249268" r="3" fill="#3b82f6"/><circle cx="395" cy="160.61999416351318" r="3" fill="#3b82f6"/><circle cx="422.5" cy="141.8350019454956" r="3" fill="#3b82f6"/><circle cx="450" cy="149.1450071334839" r="3" fill="#3b82f6"/><circle cx="477.5" cy="146.93500518798828" r="3" fill="#3b82f6"/><circle cx="505" cy="151.01500129699707" r="3" fill="#3b82f6"/><circle cx="532.5" cy="157.47500324249268" r="3" fill="#3b82f6"/><circle cx="560" cy="167.67499351501465" r="3" fill="#3b82f6"/>
+    <text x="10" y="196" font-size="13" fill="#888">2026-06-01</text>
+    <text x="560" y="196" font-size="13" fill="#888" text-anchor="end">2026-06-30</text>
+  </svg>
     </div>
     <hr>
     <h2>セクター推奨ランキング</h2>
@@ -166,7 +245,7 @@
     <table>
       <tr>
         <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;">銘柄</td>
-        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;" style="text-align:center;font-size:0.8rem;">ファンダメンタルズアナリスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;" style="text-align:center;font-size:0.8rem;">テンバガーハンター</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;" style="text-align:center;font-size:0.8rem;">マクロエコノミスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;" style="text-align:center;font-size:0.8rem;">テクニカルストラテジスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;" style="text-align:center;font-size:0.8rem;">リスクマネージャー</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">ファンダメンタルズアナリスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テンバガーハンター</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">マクロエコノミスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テクニカルストラテジスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">リスクマネージャー</td>
         <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">平均</td>
         <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">判定</td>
       </tr>
@@ -221,19 +300,19 @@
       <p>キオクシアはAI需要主導のNAND市場逼迫を追い風に2026年3月期売上2.3兆円・純利益5,544億円と過去最高を達成。2026年生産枠は完売、需給逼迫は2027年まで継続見込み。日経225採用により機関投資家需要も増加。</p>
       <p><strong>ポジティブ:</strong></p><ul><li>2026年3月期売上収益2兆3,376億円（前期比+37%）、営業利益8,704億円（前期比+93%）と過去最高業績を達成</li><li>2026年のNAND生産枠は完全に完売（Sold Out）、需給逼迫は2027年まで続く見通しでASP上昇が継続</li><li>AIデータセンター向けエンタープライズSSDがNAND最大需要セグメントへ成長、2025〜2028年CAGR20%超の需要成長予測</li><li>BiCS10（332層NAND）の量産化を最優先戦略に指定し技術競争力強化</li><li>2026年4月に日経225構成銘柄へ採用、機関投資家からの安定需要が発生</li></ul>
       <p><strong>ネガティブ:</strong></p><ul><li>52週レンジが2,260円〜112,700円と株価変動が非常に大きく、高バリュエーションによる調整リスクが存在</li><li>Samsung（V-NAND 400層超）・SKハイニックス（321層QLC量産成功）との技術競争が激化</li><li>NAND市場は2027〜2028年に新規供給増が見込まれ、需給逼迫緩和に伴う価格下落サイクルのリスクがある</li></ul>
-      <p><strong>注目記事:</strong></p><ul><li><strong>Kioxia 2026 NAND Is 'Sold Out' — AI Storage Demand Pushes Tight Supply Toward 2027</strong>: 2026年のNAND生産枠が完全に完売状態。AIサーバー向けSSD需要急増により供給逼迫は2027年まで継続の見通し。</li><li><strong>Kioxia Holdings FY2026: Record Revenue 2.3 Trillion Yen</strong>: AI需要によるNAND市場見通し改善を受け過去最高業績を達成。業績ガイダンスを大幅に上方修正。</li><li><strong>Kioxia Announces Growth Strategy for the AI Inference Era at Investor Day</strong>: 2026年6月のInvestor Dayでデータセンター・AI推論向けストレージの成長戦略を発表。米国上場も検討。</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Kioxia 2026 NAND Is &#39;Sold Out&#39; — AI Storage Demand Pushes Tight Supply Toward 2027</strong>: 2026年のNAND生産枠が完全に完売状態。AIサーバー向けSSD需要急増により供給逼迫は2027年まで継続の見通し。</li><li><strong>Kioxia Holdings FY2026: Record Revenue 2.3 Trillion Yen</strong>: AI需要によるNAND市場見通し改善を受け過去最高業績を達成。業績ガイダンスを大幅に上方修正。</li><li><strong>Kioxia Announces Growth Strategy for the AI Inference Era at Investor Day</strong>: 2026年6月のInvestor Dayでデータセンター・AI推論向けストレージの成長戦略を発表。米国上場も検討。</li></ul>
     </div><div class="agent-card" style="border-left-color: #10b981;">
       <h4>CIBR</h4>
       <p>2026年のサイバーセキュリティ市場はAI脅威の激化により防衛支出が急拡大。CIBRは過去1年で好調。主要構成銘柄のPANW・CROWDがYTD+60%超の上昇。セキュリティ支出は2026年$2,400億規模に達する見通し。</p>
       <p><strong>ポジティブ:</strong></p><ul><li>Palo Alto Networks（CIBR 8.87%保有）がQ3 2026売上高31%増の30億ドルを達成、株価YTD+62%</li><li>CrowdStrike（CIBR 7.91%保有）が株価YTD+64%超と大幅上昇、S&amp;P500トップ30入り</li><li>Fortinet（CIBR最大保有9.26%）が決算で好業績・売上見通し引き上げ、翌日株価+20%</li><li>Gartner予測：2026年の世界情報セキュリティ支出2,400億ドル（前年比+12.5%）</li><li>AI駆動型サイバー攻撃の激化により企業・政府の防衛投資需要が継続的に拡大</li></ul>
       <p><strong>ネガティブ:</strong></p><ul><li>決算発表後にPANW・CROWDが急落する局面もあり、高バリュエーション（CRWD 98x EV/EBITDA）によるボラティリティリスク</li><li>CIBRは2025年にNasdaq-100を約7%ポイント下回るアンダーパフォームを記録</li><li>CIRCIA（サイバーインシデント報告義務化）の最終規則策定が延期され規制環境の不確実性が継続</li></ul>
-      <p><strong>注目記事:</strong></p><ul><li><strong>The NASDAQ Cybersecurity ETF Looks Like One of 2026's Best Investments</strong>: CIBRが2026年の有望投資先として注目。AUM130億ドル、PER33倍、46銘柄を保有。</li><li><strong>Palo Alto Networks and CrowdStrike Shares Are Soaring (May 2026)</strong>: PANWとCROWDが5月に+57%・+64%急騰、YTD+60%超でS&amp;P500トップパフォーマーに。</li><li><strong>2026 Cybersecurity Forecast: AI-Powered Threats to Intensify</strong>: AIマルウェアが実行中に攻撃動作を変化させる能力を持ち、自律型エージェントが新たな脅威に。</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>The NASDAQ Cybersecurity ETF Looks Like One of 2026&#39;s Best Investments</strong>: CIBRが2026年の有望投資先として注目。AUM130億ドル、PER33倍、46銘柄を保有。</li><li><strong>Palo Alto Networks and CrowdStrike Shares Are Soaring (May 2026)</strong>: PANWとCROWDが5月に+57%・+64%急騰、YTD+60%超でS&amp;P500トップパフォーマーに。</li><li><strong>2026 Cybersecurity Forecast: AI-Powered Threats to Intensify</strong>: AIマルウェアが実行中に攻撃動作を変化させる能力を持ち、自律型エージェントが新たな脅威に。</li></ul>
     </div><div class="agent-card" style="border-left-color: #10b981;">
       <h4>DDOG</h4>
       <p>Q1 2026売上高は前年比32%増の10.06億ドルと初の10億ドル突破。EPS0.60ドルでコンセンサス(0.42ドル)を大幅上回る。通期ガイダンスは43〜43.4億ドル。AI可観測性市場でリーダー地位を維持するも、高バリュエーションとOpenAI顧客リスクが懸念材料。</p>
       <p><strong>ポジティブ:</strong></p><ul><li>Q1 2026売上高が前年比32%増の10.06億ドルと初の10億ドル突破を達成し、EPS 0.60ドルでコンセンサスを大幅上回る好決算</li><li>100万ドル以上のARR顧客数が3,770社から4,550社へ増加し、エンタープライズ顧客基盤が拡大</li><li>通期2026年ガイダンスを43〜43.4億ドルに設定、フリーキャッシュフローも2.89億ドルと堅調</li><li>アナリスト56名中84%がBuy推奨、CIBCとBofAが目標株価を280ドルに引き上げ</li><li>DASH 2026カンファレンスでAI可観測性・セキュリティの新機能を発表予定、AI/LLMアプリ監視市場でのポジション強化</li></ul>
       <p><strong>ネガティブ:</strong></p><ul><li>OpenAI（最大顧客）が社内監視ソリューション構築を検討中とされ、2026年に最大1.5億ドルの収益ギャップが生じるリスク</li><li>フォワードPERが約80倍、EV/Salesが約17倍と競合比較で割高バリュエーションが継続</li><li>Dynatrace・Splunk・ネイティブクラウドツールがAI機能を強化し価格・機能面での競争が激化</li></ul>
-      <p><strong>注目記事:</strong></p><ul><li><strong>Datadog Q1 revenue rises 32% to $1.006B</strong>: Q1 2026売上高が前年比32%増の10.06億ドルに達し、EPS0.60ドルでコンセンサスを大幅上回る好決算を発表</li><li><strong>Datadog (DDOG) Analyst Ratings and Price Targets 2026</strong>: 56名のアナリストの84%がBuy推奨、CIBCとBofAが目標株価280ドルに引き上げ</li><li><strong>Datadog's Hot Streak Faces Pricey Expectations And Big-Name Risks</strong>: OpenAI顧客リスクと高バリュエーション(PER80倍)が課題。成長鈍化時の株価下落リスクを指摘</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Datadog Q1 revenue rises 32% to $1.006B</strong>: Q1 2026売上高が前年比32%増の10.06億ドルに達し、EPS0.60ドルでコンセンサスを大幅上回る好決算を発表</li><li><strong>Datadog (DDOG) Analyst Ratings and Price Targets 2026</strong>: 56名のアナリストの84%がBuy推奨、CIBCとBofAが目標株価280ドルに引き上げ</li><li><strong>Datadog&#39;s Hot Streak Faces Pricey Expectations And Big-Name Risks</strong>: OpenAI顧客リスクと高バリュエーション(PER80倍)が課題。成長鈍化時の株価下落リスクを指摘</li></ul>
     </div><div class="agent-card" style="border-left-color: #10b981;">
       <h4>EXEL</h4>
       <p>Q1 2026売上$610.8M（カボザンチニブ$555M）と好調。ザンザリンチニブのNDA受理・12/3審査期限。ASCO2026でCABINET試験がNETでPFS改善を実証。Merckと大腸癌STELLAR-316試験の新提携。最大リスクはCABOMETYX依存率~90%の集中リスク。P/E15.1xはピア24.5x比で割安感あり。</p>
@@ -251,7 +330,7 @@
       <p>2026年の防衛・宇宙ETF（ITA）は好調。NATOの全加盟国が対GDP比2%目標達成、欧州の防衛費は前年比20%増。ウクライナ紛争継続・中東緊張が防衛需要を下支え。RTX・LMTの受注残は高水準で、ETFは52週高値250.65に近い241.11で推移中。</p>
       <p><strong>ポジティブ:</strong></p><ul><li>2025年カレンダーイヤーでITAは48.66%の高パフォーマンスを記録し、テクニカル指標は「Strong Buy」シグナル</li><li>NATO全加盟国が初めてGDP比2%防衛費目標を達成、欧州・カナダの防衛費は2024年比20%増の5,740億ドル規模</li><li>2025年NATOハーグサミットでGDP比5%目標（2035年まで）を設定、長期的な防衛需要拡大が確実視される</li><li>RTXの2026年Q1フリーキャッシュフローが前年比65%増の72億ドルに急拡大、2026年業績ガイダンスを上方修正</li><li>LMTの受注残が1,600億ドル超、米国防衛予算は2026年に1兆ドルを突破・2027年は1.5兆ドル超が見込まれる</li></ul>
       <p><strong>ネガティブ:</strong></p><ul><li>米国のNATOへのコミットメント曖昧さが欧州同盟国との関係に摩擦を生じさせており影響が不透明</li><li>LMTはRTXと比べてバリュエーションが低い（NTM PER 16.75x vs RTX 25.07x）ものの成長期待の格差が拡大</li><li>ウクライナ停戦・和平交渉進展時には防衛株への投資家センチメントが悪化するリスク</li></ul>
-      <p><strong>注目記事:</strong></p><ul><li><strong>NATO Secretary General's Annual Report 2026</strong>: 全NATO加盟国がGDP比2%目標を達成し、欧州・カナダの防衛費が前年比20%増の5,740億ドルに到達したことを公式報告。</li><li><strong>Defense Stocks Outlook 2026: Lockheed, RTX, Northrop, and the Drone Trade</strong>: 2026年の主要防衛株の見通しを分析。RTXの多角化戦略とLMTのF-35バックログ優位性を比較。</li><li><strong>3 High Backlog Defense Stocks to Buy in June 2026 - 24/7 Wall St.</strong>: 高い受注残を持つ防衛株としてLMT・RTX・GDが推奨され、長期成長の確実性を評価。</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>NATO Secretary General&#39;s Annual Report 2026</strong>: 全NATO加盟国がGDP比2%目標を達成し、欧州・カナダの防衛費が前年比20%増の5,740億ドルに到達したことを公式報告。</li><li><strong>Defense Stocks Outlook 2026: Lockheed, RTX, Northrop, and the Drone Trade</strong>: 2026年の主要防衛株の見通しを分析。RTXの多角化戦略とLMTのF-35バックログ優位性を比較。</li><li><strong>3 High Backlog Defense Stocks to Buy in June 2026 - 24/7 Wall St.</strong>: 高い受注残を持つ防衛株としてLMT・RTX・GDが推奨され、長期成長の確実性を評価。</li></ul>
     </div><div class="agent-card" style="border-left-color: #10b981;">
       <h4>KTOS</h4>
       <p>無人機・極超音速・ロケットで成長加速。Q1 2026は22.6%増収、受注残$2.01Bで過去最高。海兵隊CCA契約（$231.5M）でValkyrie実績確立。ただし株価年初来-39%、キャッシュバーン$85-105M、株式希薄化などリスクあり。</p>
@@ -275,7 +354,7 @@
       <p>AI電力需要の急増により原子力需要が拡大。Big Tech各社が核エネルギー契約を締結し、CamecoはインドDAEと22M lbsのウラン長期供給契約（約26億ドル）を締結。米国は国内ウラン濃縮に27億ドル投資でロシア依存脱却を加速。</p>
       <p><strong>ポジティブ:</strong></p><ul><li>Meta・Microsoft・Amazon・GoogleがAIデータセンター向けに数百億ドル規模の原子力電力契約を締結（Metaは6.6GW確保）</li><li>CamecoがインドDAEと22M lbsのウラン長期供給契約（約26億ドル）を締結（2026年3月）</li><li>世界で75基の新規原子炉が建設中、さらに120基が計画中</li><li>米DOEが国内ウラン濃縮能力強化に27億ドル拠出、ロシア禁輸（2028年完全施行）に先手</li><li>トランプ政権の大統領令により原子炉承認プロセスが大幅加速（18ヶ月以内のライセンス評価義務化）</li></ul>
       <p><strong>ネガティブ:</strong></p><ul><li>URAのテクニカル指標はModerate Sellを示しており、短期的には慎重姿勢が必要</li><li>現在価格（43〜44ドル）は52週高値62ドルから大幅下落、上値が重い</li><li>SMR（小型モジュール炉）の本格普及は2030年以降とされ、短期的な供給増への寄与は限定的</li></ul>
-      <p><strong>注目記事:</strong></p><ul><li><strong>Nuclear's AI Moment Is Here - 4X Data Center Demand Explosion</strong>: AI需要によるデータセンター電力需要が4倍に膨らむ見通しで、原子力が唯一の安定電源として注目される</li><li><strong>Cameco Long-Term Supply Agreement with India (Mar 2026)</strong>: Camecoがインド政府と9年間・22M lbsのウラン供給契約を締結、総額約26億ドル規模</li><li><strong>U.S. Urgently Needs Domestic Enriched Uranium As Full Russian Ban Nears</strong>: 2028年のロシア産ウラン完全禁輸を前に、米国が国内濃縮能力の緊急強化を迫られている</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Nuclear&#39;s AI Moment Is Here - 4X Data Center Demand Explosion</strong>: AI需要によるデータセンター電力需要が4倍に膨らむ見通しで、原子力が唯一の安定電源として注目される</li><li><strong>Cameco Long-Term Supply Agreement with India (Mar 2026)</strong>: Camecoがインド政府と9年間・22M lbsのウラン供給契約を締結、総額約26億ドル規模</li><li><strong>U.S. Urgently Needs Domestic Enriched Uranium As Full Russian Ban Nears</strong>: 2028年のロシア産ウラン完全禁輸を前に、米国が国内濃縮能力の緊急強化を迫られている</li></ul>
     </div><div class="agent-card" style="border-left-color: #10b981;">
       <h4>XLI</h4>
       <p>XLIは2026年3月に過去最高値を更新後やや調整。AI電力インフラ需要・防衛拡大・リショアリングが構造的追い風。直近価格$181.80で200日MAを大幅上回る水準。ハイパースケーラー5社が2026年にAIインフラへ約$700Bを投資見込み。</p>
