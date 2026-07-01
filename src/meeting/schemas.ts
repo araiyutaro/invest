@@ -39,7 +39,7 @@ export const analystRound3OutputSchema = z.object({
 });
 
 export const meetingResultSchema = z.object({
-  date: z.string(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   generatedAt: z.string(),
   marketOverview: z.object({
     summary: z.string(),
