@@ -1746,6 +1746,12 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 cd /Users/arai/invest && npx tsx src/scripts/update-index.ts
 ```
 
+`update-index.ts` がエラーで終了した場合は、以下を実行してからパイプラインを停止してください:
+```bash
+echo '[STEP:deploy:FAIL:update-index.tsが失敗]'
+echo '[PIPELINE:FAIL] ステップ: deploy, エラー: update-index.tsが失敗'
+```
+
 「デプロイを開始します...」とユーザーに表示してから、以下のBashコマンドを実行してください:
 
 ```bash
