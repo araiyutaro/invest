@@ -283,7 +283,7 @@ Plans:
 | 11. News Quality Enhancements | v2.3 | 2/2 | Complete    | 2026-06-30 |
 | 12. Analysis Quality | v2.3 | 2/2 | Complete    | 2026-06-30 |
 | 13. Operational Stability | v2.3 | 1/1 | Complete    | 2026-06-30 |
-| 14. Report UI | v2.3 | 5/5 | Complete   | 2026-07-01 |
+| 14. Report UI | v2.3 | 5/5 | Complete    | 2026-07-01 |
 
 ---
 *Roadmap created: 2026-06-24*
