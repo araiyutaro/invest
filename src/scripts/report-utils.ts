@@ -27,6 +27,7 @@ export function markdownToHtml(md: string): string {
   html = html.replace(/^- (.+)$/gm, "<li>$1</li>");
   html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, "<ul>$1</ul>");
 
+  html = html.replace(/^\|[-| ]+\|\n?/gm, "");
   html = html.replace(
     /^\| (.+) \|$/gm,
     (_, content: string) => {
@@ -35,7 +36,6 @@ export function markdownToHtml(md: string): string {
       return `<tr>${row}</tr>`;
     },
   );
-  html = html.replace(/^\|[-| ]+\|$/gm, "");
   html = html.replace(/((?:<tr>.*<\/tr>\n?)+)/g, "<table>$1</table>");
 
   html = html.replace(/^---$/gm, "<hr>");
