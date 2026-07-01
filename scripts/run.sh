@@ -45,7 +45,7 @@ if [ -f "$CHECKSUM_FILE" ]; then
   RESTORED=""
   for f in "${PROTECT_FILES[@]}"; do
     if [ -f "$PROJECT_DIR/$f" ]; then
-      EXPECTED=$(grep -F "$PROJECT_DIR/$f" "$CHECKSUM_FILE" | awk '{print $1}')
+      EXPECTED=$(grep -F "$PROJECT_DIR/$f" "$CHECKSUM_FILE" 2>/dev/null | awk '{print $1}') || true
       if [ -n "$EXPECTED" ]; then
         ACTUAL=$(shasum -a 256 "$PROJECT_DIR/$f" | awk '{print $1}')
         if [ "$EXPECTED" != "$ACTUAL" ]; then
