@@ -56,7 +56,7 @@ Full details: `.planning/milestones/v2.2-ROADMAP.md`
 - [x] **Phase 11: News Quality Enhancements** - Finnhubティッカー別取得・時間重み付け・クロス言語dedup (completed 2026-06-30)
 - [x] **Phase 12: Analysis Quality** - 前日レポート注入・スコアリング並列エージェント化 (completed 2026-06-30)
 - [x] **Phase 13: Operational Stability** - エラーログ・HTML保護・macOS通知検証 (completed 2026-06-30)
-- [ ] **Phase 14: Report UI** - index.htmlモバイル対応・インラインチャート追加
+- [x] **Phase 14: Report UI** - index.htmlモバイル対応・インラインチャート追加 (completed 2026-07-01)
 
 ## Phase Details
 
@@ -264,7 +264,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1: 14-01 + 14-02)*
 
-- [ ] 14-03-PLAN.md — UI-02: チャートをDaily Reportへ配線（generate-daily-report/generate-report）
+- [x] 14-03-PLAN.md — UI-02: チャートをDaily Reportへ配線（generate-daily-report/generate-report）
 
 ## Progress
 
@@ -283,7 +283,7 @@ Plans:
 | 11. News Quality Enhancements | v2.3 | 2/2 | Complete    | 2026-06-30 |
 | 12. Analysis Quality | v2.3 | 2/2 | Complete    | 2026-06-30 |
 | 13. Operational Stability | v2.3 | 1/1 | Complete    | 2026-06-30 |
-| 14. Report UI | v2.3 | 4/5 | In Progress|  |
+| 14. Report UI | v2.3 | 5/5 | Complete   | 2026-07-01 |
 
 ---
 *Roadmap created: 2026-06-24*
