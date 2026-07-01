@@ -1,4 +1,6 @@
 import { escapeHtml, markdownToHtml, scoreColor, verdictColor, generateBaseStyles } from "./report-utils.js";
+import { renderSectorBarChart, renderVixLineChart } from "./report-charts.js";
+import type { SectorDatum, VixDatum } from "./report-charts.js";
 import type { MeetingResult, WebSearchResult, ReevaluationOutput } from "../meeting/types.js";
 
 function formatMarketOverviewHtml(result: MeetingResult): string {
@@ -209,11 +211,25 @@ export function generateDailyReportHtml(
   result: MeetingResult,
   webSearchResults: ReadonlyArray<WebSearchResult>,
   reevalResults: ReadonlyArray<ReevaluationOutput>,
+  marketData: {
+    sectors: ReadonlyArray<SectorDatum>;
+    vixHistory: ReadonlyArray<VixDatum>;
+  } = { sectors: [], vixHistory: [] },
 ): string {
   const timestamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
   const styles = generateBaseStyles("#3b82f6");
 
   const marketSection = formatMarketOverviewHtml(result);
+  const sectorChartSection = `<hr>
+    <h2>セクターパフォーマンス</h2>
+    <div class="chart-container">
+      ${renderSectorBarChart(marketData.sectors)}
+    </div>`;
+  const vixChartSection = `<hr>
+    <h2>VIX推移</h2>
+    <div class="chart-container">
+      ${renderVixLineChart(marketData.vixHistory)}
+    </div>`;
   const sectorSection = formatSectorRecommendationsHtml(result);
   const scoringSection = formatHighlightedStocksHtml(result);
   const webSearchSection = formatWebSearchHtml(webSearchResults);
@@ -235,6 +251,8 @@ export function generateDailyReportHtml(
     <h1>Daily Investment Report - ${escapeHtml(result.date)}</h1>
     <p class="timestamp">Generated: ${timestamp}</p>
     ${marketSection}
+    ${sectorChartSection}
+    ${vixChartSection}
     ${sectorSection}
     ${scoringSection}
     ${webSearchSection}

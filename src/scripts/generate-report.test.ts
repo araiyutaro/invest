@@ -201,6 +201,35 @@ describe("Daily Report", () => {
     const html = generateDailyReportHtml(validMeetingResult, validWebSearchResults, validReevalResults);
     expect(html).toContain("#3b82f6");
   });
+
+  it("Test 33 [chart]: marketData ありでセクターバーチャートと VIX ラインチャートの SVG セクションが生成される", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const html = generateDailyReportHtml(validMeetingResult, [], [], {
+      sectors: [{ sector: "Tech", changePercent: 2 }],
+      vixHistory: [{ date: "2026-06-01", close: 18 }],
+    });
+    expect(html).toContain("セクターパフォーマンス");
+    expect(html).toContain("VIX推移");
+    expect(html).toContain("<svg");
+  });
+
+  it("Test 34 [chart]: marketData が空配列の場合はデータ取得エラー表示になる（両チャート分）", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const html = generateDailyReportHtml(validMeetingResult, [], [], {
+      sectors: [],
+      vixHistory: [],
+    });
+    const matches = html.match(/データ取得エラー/g);
+    expect(matches).not.toBeNull();
+    expect(matches?.length).toBe(2);
+  });
+
+  it("Test 35 [chart]: marketData 省略時（3引数呼び出し）でも HTML が正常に生成される（後方互換）", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const html = generateDailyReportHtml(validMeetingResult, [], []);
+    expect(typeof html).toBe("string");
+    expect(html).toContain("<!DOCTYPE html>");
+  });
 });
 
 describe("Meeting Minutes HTML", () => {
