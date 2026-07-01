@@ -80,8 +80,9 @@ export function generateHtml(
   result: MeetingResult,
   webSearchResults: ReadonlyArray<WebSearchResult>,
   reevalResults: ReadonlyArray<ReevaluationOutput>,
+  marketData: MarketData = { sectors: [], vixHistory: [] },
 ): string {
-  return generateDailyReportHtml(result, webSearchResults, reevalResults);
+  return generateDailyReportHtml(result, webSearchResults, reevalResults, marketData);
 }
 
 export async function main(): Promise<void> {
