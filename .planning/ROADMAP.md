@@ -291,3 +291,24 @@ Plans:
 *Milestone v2.1 shipped: 2026-06-25*
 *Milestone v2.2 shipped: 2026-06-28*
 *Milestone v2.3 started: 2026-06-30*
+
+### Phase 14.1: Close gap: OPS-01/OPS-03 — run.sh EXIT_CODE常時0バグとSTEPマーカーのログ未到達を修正 (INSERTED)
+
+**Goal**: 自動実行パイプライン（launchd経由）が実際に失敗ステップ名をlogs/invest-*.logに記録し、EXIT_CODEが実際のclaude CLI終了コードを反映し、失敗時のmacOS通知に失敗ステップ名が含まれる。合わせてdeployステップのシェルインジェクション脆弱性（WR-04）とrun.sh内の軽微な技術的負債（WR-01/WR-03）、update-index.tsのFAILハンドリング欠如（D-08）を解消する
+**Requirements**: OPS-01, OPS-03 (v2.3-MILESTONE-AUDIT.mdでunsatisfiedと判定され再オープン — Phase 13時点ではコード上実装済みと誤判定されていた)
+**Depends on:** Phase 14
+**Success Criteria** (what must be TRUE):
+
+  1. `scripts/run.sh`の`claude`呼び出しが`--output-format stream-json --verbose`を使用し、invest.md内の`[STEP:*]`マーカーがlogs/invest-*.logに実際に到達する
+  2. `EXIT_CODE`が`|| true`によるマスキングなしで`claude`呼び出しの実際の終了コードを保持し、失敗時にterminal-notifierの異常終了通知（失敗ステップ名付き）が発火する
+  3. deployステップの`git commit`/`git push`がLLM生成の`date`値を正規表現検証してから`spawnSync`の引数配列形式で実行し、シェルインジェクションが成立しない
+  4. `update-index.ts`の実行失敗時に`[STEP:deploy:FAIL:...]`マーカーが出力されてからパイプラインが停止する
+
+**Plans**: 2 plans
+
+Plans:
+
+**Wave 1** (parallel — no file overlap)
+
+- [ ] 14.1-01-PLAN.md — OPS-01/OPS-03: scripts/run.shのstream-json出力フォーマット・EXIT_CODE捕捉修正・失敗ステップ名付き通知・grep -F/PROTECT_FILES配列化（tech debt WR-01/WR-03）
+- [ ] 14.1-02-PLAN.md — OPS-01/OPS-03: invest.mdのupdate-index.ts FAILハンドリング追加（D-08）とdeployシェルインジェクション修正（D-06/WR-04）
