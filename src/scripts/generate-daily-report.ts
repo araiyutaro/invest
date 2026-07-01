@@ -52,9 +52,26 @@ function formatSectorRecommendationsHtml(result: MeetingResult): string {
 function formatHighlightedStocksHtml(result: MeetingResult): string {
   if (result.highlightedStocks.length === 0) return "";
 
+  // Build the header from the union of all agentRoles seen across
+  // highlightedStocks (in first-seen order) rather than assuming every
+  // stock was scored by the same agents in the same order (WR-04).
+  const agentRoleOrder: string[] = [];
+  for (const s of result.highlightedStocks) {
+    for (const a of s.agentScores) {
+      if (!agentRoleOrder.includes(a.agentRole)) {
+        agentRoleOrder.push(a.agentRole);
+      }
+    }
+  }
+
   const rows = result.highlightedStocks.map((s) => {
-    const agentCells = s.agentScores
-      .map((a) => `<td style="text-align:center;color:${scoreColor(a.score)}"><strong>${a.score}</strong><br><span style="font-size:0.75rem;color:#888;">${escapeHtml(a.reason)}</span></td>`)
+    const agentCells = agentRoleOrder
+      .map((role) => {
+        const a = s.agentScores.find((score) => score.agentRole === role);
+        return a
+          ? `<td style="text-align:center;color:${scoreColor(a.score)}"><strong>${a.score}</strong><br><span style="font-size:0.75rem;color:#888;">${escapeHtml(a.reason)}</span></td>`
+          : `<td style="text-align:center;color:#888;">—</td>`;
+      })
       .join("");
 
     return `<tr>
@@ -65,9 +82,9 @@ function formatHighlightedStocksHtml(result: MeetingResult): string {
     </tr>`;
   }).join("\n");
 
-  const agentHeaders = result.highlightedStocks[0]?.agentScores
-    .map((a) => `<td style="text-align:center;font-size:0.8rem;">${escapeHtml(a.agentRole)}</td>`)
-    .join("") ?? "";
+  const agentHeaders = agentRoleOrder
+    .map((role) => `<td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">${escapeHtml(role)}</td>`)
+    .join("");
 
   return `<hr>
     <h2>注目銘柄スコアリングマトリクス</h2>
@@ -75,7 +92,7 @@ function formatHighlightedStocksHtml(result: MeetingResult): string {
     <table>
       <tr>
         <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;">銘柄</td>
-        ${agentHeaders.replace(/(<td)/g, '$1 style="background:#2a2a3e;font-weight:bold;color:#93c5fd;"')}
+        ${agentHeaders}
         <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">平均</td>
         <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">判定</td>
       </tr>
