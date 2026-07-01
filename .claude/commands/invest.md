@@ -1815,8 +1815,8 @@ try {
   ```
 - 失敗: 以下を実行してからエラー内容をユーザーに表示して終了してください:
   ```bash
-  echo '[STEP:deploy:FAIL:git push に失敗]'
-  echo '[PIPELINE:FAIL] ステップ: deploy, エラー: git push に失敗'
+  echo '[STEP:deploy:FAIL:デプロイ処理が失敗（date検証/commit/pushのいずれか、詳細はログのconsole.error出力を参照）]'
+  echo '[PIPELINE:FAIL] ステップ: deploy, エラー: デプロイ処理が失敗'
   ```
 
 以下のBashコマンドで デプロイ完了 タイムスタンプを記録してください:
