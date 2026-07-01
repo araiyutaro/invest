@@ -138,11 +138,13 @@ export function validateReevaluationOutput(data: unknown): ReevaluationOutput {
   return reevaluationOutputSchema.parse(data) as ReevaluationOutput;
 }
 
+const decisionEnum = z.enum(["保持", "買増", "一部売却", "全売却"]);
+
 const rawHoldingSchema = z.object({
   symbol: z.string(),
   nameJa: z.string().optional(),
-  decision: z.string().optional(),
-  action: z.string().optional(),
+  decision: decisionEnum.optional(),
+  action: decisionEnum.optional(),
   rationale: z.string().optional(),
   reason: z.string().optional(),
   riskNote: z.string().optional(),
@@ -156,7 +158,7 @@ export const holdingEvaluationSchema = rawHoldingSchema.transform((raw) => {
   return {
     symbol: raw.symbol,
     nameJa: raw.nameJa ?? "",
-    decision: (raw.decision ?? raw.action ?? "保持") as "保持" | "買増" | "一部売却" | "全売却",
+    decision: raw.decision ?? raw.action ?? "保持",
     rationale: raw.rationale ?? raw.reason ?? "",
     ...(riskNote !== undefined ? { riskNote } : {}),
   };
