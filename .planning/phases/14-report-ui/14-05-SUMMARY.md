@@ -110,3 +110,17 @@ None - no external service configuration required.
 ---
 *Phase: 14-report-ui*
 *Completed: 2026-07-01*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/report-utils.ts
+- FOUND: src/scripts/report-utils.test.ts
+- FOUND: docs/portfolio.html
+- FOUND: .planning/phases/14-report-ui/14-05-SUMMARY.md
+- FOUND: media query in src/scripts/report-utils.ts
+- FOUND: media query in docs/portfolio.html
+- FOUND: commit 43614ba (test)
+- FOUND: commit 24c6c95 (feat)
+- FOUND: commit 49aaa86 (chore)
+- FOUND: commit a43e678 (feat)
+- FOUND: commit b3df92c (docs, plan metadata)
