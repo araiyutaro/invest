@@ -8,15 +8,13 @@
 
 毎日の投資判断に必要な多角的分析（ファンダメンタル、テクニカル、マクロ、リスク、テンバガー候補）を、複数AIアナリストの議論形式で提供すること。
 
-## Current Milestone: v2.3 Analysis Quality & Operational Stability
+## Current State
 
-**Goal:** ニュース品質・分析品質・運用安定性・レポートUIを総合的に底上げし、毎日の自動実行パイプラインの信頼性と出力品質を向上させる
+**Shipped:** v2.3 Analysis Quality & Operational Stability (2026-07-01)
 
-**Target features:**
-- Finnhubポートフォリオティッカー別ニュース取得、時間帯重み付け（直近6h優先）、英日クロス言語dedup
-- 前日レポート注入によるクロスセッション分析記憶、スコアリングラウンドの専用並列エージェント化
-- 自動実行のエラーリカバリ、index.html保護強化、ログ改善
-- index.htmlデザイン刷新、モバイル対応、チャート/グラフ追加
+v2.0〜v2.3で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、そしてニュース/分析/運用安定性/レポートUIの総合底上げを完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、モバイル対応・インラインチャート付きのレポートをGitHub Pagesへ自動デプロイする。
+
+**Next milestone:** 未定義。`/gsd-new-milestone` で v2.4 の要件定義から開始する。
 
 ## Requirements
 
@@ -41,23 +39,26 @@
 - ✓ 投資無関係記事の除外（キーワードdenylistフィルタ） — v2.2
 - ✓ アナリストへの記事供給数柔軟化（MIN=20/MAX=80） — v2.2
 - ✓ パイプライン実行時間計測と12ステップ表示 — v2.2
-- ✓ レポートUIデザイン刷新（index.htmlヒーロー+月別アコーディオン）・モバイル対応・VIX/セクターインラインチャート追加 — v2.3 (Phase 14)
-- ✓ 自動実行のエラーリカバリ強化（EXIT_CODEの正確な捕捉、STEPマーカーのログ到達、失敗ステップ名付き通知） — v2.3 (Phase 14.1, OPS-01/OPS-03再オープン分の実修正。Phase 13時点ではコード上実装済みと誤判定されていた)
-- ✓ index.html保護ロジックの堅牢化（PROTECT_FILES配列化、grep -F厳密一致、チェックサム照合失敗時のクラッシュ防止） — v2.3 (Phase 14.1)
+- ✓ Finnhubポートフォリオティッカー別ニュース取得 — v2.3 (Phase 11, NEWS-01)
+- ✓ ニュース時間帯重み付け（直近6h優先スコア） — v2.3 (Phase 11, NEWS-02)
+- ✓ 英日クロス言語ニュース重複排除 — v2.3 (Phase 11, NEWS-03)
+- ✓ 前日レポート注入によるクロスセッション分析記憶 — v2.3 (Phase 12, ANLQ-01)
+- ✓ スコアリングラウンド（Round 3）の専用並列エージェント化 — v2.3 (Phase 12, ANLQ-02)
+- ✓ レポートUIデザイン刷新（index.htmlヒーロー+月別アコーディオン）・モバイル対応・VIX/セクターインラインチャート追加 — v2.3 (Phase 14, UI-01/UI-02)
+- ✓ 自動実行のエラーリカバリ強化（EXIT_CODEの正確な捕捉、STEPマーカーのログ到達、失敗ステップ名付き通知） — v2.3 (Phase 13/14.1, OPS-01/OPS-03。Phase 14.1でrun.shの根本バグを実修正)
+- ✓ docs/index.html・portfolio.html のSHA256チェックサム保護（PROTECT_FILES配列化、grep -F厳密一致、照合失敗時のクラッシュ防止） — v2.3 (Phase 13/14.1, OPS-02)
 
 ### Active
 
-- [ ] Finnhubポートフォリオティッカー別ニュース取得
-- [ ] 時間帯重み付け（直近6h優先）
-- [ ] 英日クロス言語重複排除
-- [ ] 前日レポート注入によるクロスセッション分析記憶
-- [ ] スコアリングラウンドの専用並列エージェント化
+（v2.3 出荷済み。次期マイルストーンの要件は `/gsd-new-milestone` で定義する）
 
 ### Out of Scope
 
-- チャート画像生成 — v2.0でテキストベースに統一、画像不要
-- launchd自動実行 — v2.0ではユーザー主導のコマンド実行に変更
+- チャート画像生成 — v2.0でテキストベースに統一、画像不要（v2.3でSVGインラインチャートを採用、外部画像は依然不要）
 - 新規アナリスト追加 — 現行の5+1構成を維持
+- MinHash/LSH重複排除 — 160件/日にはJaccardで十分、過剰な複雑さ
+- ML/LLMベース関連性スコアリング — 1記事ごとのAPI呼び出しはコスト非現実的（denylistフィルタで代替）
+- リアルタイム株価ストリーミング — 日次バッチで十分
 
 ## Context
 
@@ -69,8 +70,10 @@
 - エージェントは小型・中型株を優先（NVDA, AAPL等の大型株は推奨から除外）
 - Gemini API 依存は v2.0 Phase 4 で完全除去済み
 - v2.1 で3レポート構成を復元済み（Daily Report / Meeting Minutes / Portfolio Report）
-- ニュース取得: Finnhub API + Google News RSS + 5つの日本語RSSソース（計約160件/日）
-- アナリストには最新50件のみ渡しているが、品質フィルタなし
+- ニュース取得: Finnhub API（汎用 + ポートフォリオティッカー別カンパニーニュース）+ Google News RSS + 5つの日本語RSSソース（計約160件/日）
+- ニュースは filter.ts で品質フィルタ済み（URL+NFKC正規化Jaccard dedup、英日クロス言語dedup、denylist、24h時間フィルタ、直近6h優先スコア）。アナリストへの供給は50件固定ではなくフィルタ後の実数（MIN=20/MAX=80）
+- 自動実行は launchd（毎朝実行）で scripts/run.sh 経由。STEPマーカー（stream-jsonログ）・EXIT_CODE捕捉・terminal-notifier通知・docs HTMLのSHA256チェックサム保護を備える
+- パイプライン実行時間を performance.now() で計測し、12ステップ別に最終出力表示
 
 ## Constraints
 
@@ -83,10 +86,16 @@
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Gemini → Claude Code 移行 | Claude Codeエコシステムで完結、API依存削減 | ✓ Complete (Phase 2+4) |
-| ハイブリッドアプローチ | データ取得TSは安定、AI分析のみ置換 | ✓ Complete (Phase 1-3) |
-| チャート画像廃止 | Claude非対応、テキストで十分 | ✓ Complete (Phase 4) |
-| スキルコマンド実行 | ユーザー主導で柔軟な実行タイミング | ✓ Complete (Phase 1) |
+| Gemini → Claude Code 移行 | Claude Codeエコシステムで完結、API依存削減 | ✓ Good (Phase 2+4) |
+| ハイブリッドアプローチ | データ取得TSは安定、AI分析のみ置換 | ✓ Good (Phase 1-3) |
+| チャート画像廃止→SVGインライン | Claude非対応、v2.3でSVG文字列生成に統一（外部ライブラリ不要） | ✓ Good (Phase 4, 14) |
+| スキルコマンド実行 | ユーザー主導で柔軟な実行タイミング | ✓ Good (Phase 1) |
+| tmp/*.json ハンドオフ境界 | TS↔Claudeの受け渡しは全てファイル経由（stdoutは届かない） | ✓ Good (v2.2) |
+| denylistのみ（allowlist不採用） | allowlistはReuters実証で54%の正規記事を誤除外 | ✓ Good (Phase 8) |
+| トークンJaccard 0.70-0.75 | Dice係数は日本語多語タイトルで過大評価 | ✓ Good (Phase 8) |
+| run.sh stream-json + EXIT_CODE捕捉 | `\| \| true`マスキング除去で失敗ステップ検知・通知が機能 | ✓ Good (Phase 14.1) |
+| deploy を spawnSync 引数配列化 | LLM生成date値のシェルインジェクション防止（正規表現検証） | ✓ Good (Phase 14.1) |
+| Phase 13の誤判定→14.1で実修正 | OPS-01/03を監査再オープン、根本バグ（run.sh 35-41行）を修正 | ⚠️ Revisit — 実装済み誤判定の再発防止（監査は実コード検証を要する） |
 
 ## Evolution
 
@@ -99,11 +108,11 @@ This document evolves at phase transitions and milestone boundaries.
 4. Decisions to log? → Add to Key Decisions
 5. "What This Is" still accurate? → Update if drifted
 
-**After each milestone** (via `/gsd:complete-milestone`):
+**After each milestone** (via `/gsd-complete-milestone`):
 1. Full review of all sections
 2. Core Value check — still the right priority?
 3. Audit Out of Scope — reasons still valid?
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-01 — Phase 14.1 (close-gap-ops-01-ops-03) complete, v2.3-MILESTONE-AUDIT.mdで再オープンされたOPS-01/OPS-03を実修正*
+*Last updated: 2026-07-01 after v2.3 milestone*

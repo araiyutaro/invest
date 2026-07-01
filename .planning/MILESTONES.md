@@ -1,5 +1,33 @@
 # Milestones
 
+## v2.3 Analysis Quality & Operational Stability (Shipped: 2026-07-01)
+
+**Phases completed:** 5 phases (11-14.1), 12 plans, 25 tasks
+**Timeline:** 2026-06-30 → 2026-07-01 (2 days)
+**Changes:** 130 files changed (+12,786 / -7,720)
+**Git range:** feat(11-01) → f3c85db
+
+**Key accomplishments:**
+
+- invest.md Step 2.0 に meeting-result.json → prev-highlighted-stocks.json 変換ロジックと、Round 1 全5エージェントへの「## 前日の推奨銘柄」セクション自動注入を実装
+- invest.md Step 2e に Round 2 完了確認 Bash（D-06）、Round 3 起動ログ Bash（D-05）、各エージェント完了ログ Bash（D-05）を追加し、スコアリングラウンドのパイプライン進捗を可視化
+- Structured pipeline step markers (START/OK/FAIL) added to invest.md for 6 steps, SHA256 HTML checksum protection added to run.sh, macOS notification verified via launchd logs
+- Added `fetchVixHistory()` to market.ts, fetching 30-day ^VIX close history via yahoo-finance2's `chart()` API and threading it through `fetchAllMarketData()` as a new `vixHistory` field, with full TDD coverage for mapping, date formatting, and error tolerance.
+- Pure `renderSectorBarChart` + `renderVixLineChart` SVG-string generators (no external chart library) with TDD RED/GREEN per function, matching the codebase's existing `formatXxxHtml` convention.
+- Closed the RESEARCH.md data-plumbing gap: `tmp/market.json`'s `sectors`/`vixHistory` now flow through `loadMarketData()` into `generateDailyReportHtml`'s two new inline SVG chart sections (UI-02).
+- Rewrote `updateIndexHtml()` from an append-only `<li>` marker-insert into a deterministic parse+merge+group+render pipeline producing a hero section plus month-grouped `<details>` accordions, and added the matching hero/accordion/responsive CSS to `docs/index.html`.
+- Added `@media (max-width: 768px)` responsive block to the shared `generateBaseStyles()` (covering 3 of 5 report HTML surfaces) and to `docs/portfolio.html`'s inline stylesheet, with new unit test coverage and dark-theme regression checks.
+- Fixed scripts/run.sh's single root-cause block (claude invocation lines 35-41) so STEP markers reach the log via `--output-format stream-json --verbose` and EXIT_CODE correctly propagates claude's real exit status via `EXIT_CODE=0` + `|| EXIT_CODE=$?`, plus failed-step-name notification and WR-01/WR-03 hardening.
+- Closed two v2.3-audit-flagged gaps in invest.md's deploy step: added explicit FAIL handling for update-index.ts (D-08) and eliminated a shell-injection vector in git commit/push by switching from execSync string concatenation to validated spawnSync argument arrays (D-06/WR-04).
+
+**Audit:** v2.3-MILESTONE-AUDIT.md — passed (10/10 requirements, 0 broken flows)
+
+**Known deferred items at close:** 8 (Human-UAT / 実行時検証待ち — see STATE.md Deferred Items)
+
+**Archive:** `.planning/milestones/v2.3-ROADMAP.md`, `.planning/milestones/v2.3-REQUIREMENTS.md`, `.planning/milestones/v2.3-MILESTONE-AUDIT.md`
+
+---
+
 ## v2.0 Claude Code Migration (Shipped: 2026-06-25)
 
 **Phases completed:** 4 phases, 7 plans

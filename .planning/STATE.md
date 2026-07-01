@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.3
 milestone_name: Analysis Quality & Operational Stability
-status: milestone_complete
-stopped_at: Milestone complete (Phase 14.1 was final phase)
-last_updated: 2026-07-01T13:43:45.351Z
-last_activity: 2026-07-01 -- Phase 14.1 execution started
+status: Awaiting next milestone
+stopped_at: Phase 14.1 context gathered
+last_updated: "2026-07-01T14:00:21.251Z"
+last_activity: 2026-07-01 — Milestone v2.3 completed and archived
 progress:
   total_phases: 11
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 12
   completed_plans: 12
-  percent: 36
+  percent: 45
 ---
 
 # Project State
@@ -25,14 +25,10 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 14.1
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-07-01
-
-```
-Progress: [██████░░░░░░░░░░░░░░] 30% (3/10 phases)
-```
+Phase: Milestone v2.3 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-07-01 — Milestone v2.3 completed and archived
 
 ## Performance Metrics
 
@@ -41,7 +37,7 @@ Progress: [██████░░░░░░░░░░░░░░] 30% (3/
 - v2.0 plans completed: 7
 - v2.1 plans completed: 6
 - v2.2 plans completed: 5
-- v2.3 plans completed: 1
+- v2.3 plans completed: 12
 
 **By Phase (v2.2):**
 
@@ -105,8 +101,26 @@ None
 |----------|------|--------|-------------|
 | v2.4+ | ニュースキュレーションHTML (CURA-01) | Future | v2.3 scope cut |
 
+### Acknowledged at v2.3 milestone close (2026-07-01)
+
+Human-UAT / 実行時検証待ち項目。いずれも静的解析では確認不能でコードレベルは監査済み (v2.3-MILESTONE-AUDIT.md: passed)。クローズ後も各HUMAN-UAT.mdで追跡。
+
+| Category | Item | Status |
+|----------|------|--------|
+| uat_gap | phase-12 12-HUMAN-UAT.md (Round1前日参照/Round3ログの実動作) | partial (2 pending) |
+| uat_gap | phase-13 13-HUMAN-UAT.md (macOS通知の実機表示) | partial (1 pending) |
+| uat_gap | phase-14.1 14.1-HUMAN-UAT.md (明朝07:00 launchd実行検証) | partial (2 pending) |
+| verification_gap | phase-12 12-VERIFICATION.md | human_needed |
+| verification_gap | phase-13 13-VERIFICATION.md | human_needed |
+| verification_gap | phase-14 14-VERIFICATION.md | human_needed |
+| verification_gap | phase-14.1 14.1-VERIFICATION.md | human_needed |
+
 ## Session Continuity
 
 Last session: 2026-07-01T08:31:25.086Z
 Stopped at: Phase 14.1 context gathered
 Resume with: None — Phase 13 plan 01 complete. If Phase 13 has no more plans, run `/gsd-verify-work 13`
+
+## Operator Next Steps
+
+- Start the next milestone with /gsd-new-milestone
