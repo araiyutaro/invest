@@ -1,10 +1,11 @@
 ---
 phase: 14
 slug: report-ui
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-07-01
+reviewed_at: 2026-07-01
 ---
 
 # Phase 14 — UI Design Contract
