@@ -1756,12 +1756,18 @@ echo '[PIPELINE:FAIL] ステップ: deploy, エラー: update-index.tsが失敗'
 
 ```bash
 cd /Users/arai/invest && node -e "
-const { execSync } = require('child_process');
+const { execSync, spawnSync } = require('child_process');
 const fs = require('fs');
 
 // 日付を取得
 const result = JSON.parse(fs.readFileSync('tmp/meeting-result.json', 'utf-8'));
 const date = result.date;
+
+// date形式バリデーション（LLM生成値のシェルインジェクション対策、D-06/WR-04）
+if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+  console.error('不正なdate形式: ' + date);
+  process.exit(1);
+}
 
 // docs/ をステージング
 execSync('git add docs/', { stdio: 'inherit' });
@@ -1778,10 +1784,19 @@ try {
   hasChanges = true;
 }
 
-// コミット & プッシュ
+// コミット & プッシュ（spawnSyncで引数配列化、シェル解釈を回避）
 try {
-  execSync('git commit -m \"report: ' + date + ' daily update\"', { stdio: 'inherit' });
-  execSync('git push origin master', { stdio: 'inherit' });
+  const commitMsg = 'report: ' + date + ' daily update';
+  const commitResult = spawnSync('git', ['commit', '-m', commitMsg], { stdio: 'inherit' });
+  if (commitResult.status !== 0) {
+    console.error('デプロイエラー: git commit に失敗しました');
+    process.exit(1);
+  }
+  const pushResult = spawnSync('git', ['push', 'origin', 'master'], { stdio: 'inherit' });
+  if (pushResult.status !== 0) {
+    console.error('デプロイエラー: git push に失敗しました');
+    process.exit(1);
+  }
 } catch (commitErr) {
   console.error('デプロイエラー: ' + commitErr.message);
   process.exit(1);
