@@ -12,6 +12,7 @@ const mockMarketData = {
     { name: "S&P 500", symbol: "^GSPC", price: 5000, change: 10, changePercent: 0.2 },
   ],
   sectors: [],
+  vixHistory: [],
 };
 
 vi.mock("../data/market.js", () => ({
