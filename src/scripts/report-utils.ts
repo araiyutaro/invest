@@ -40,6 +40,13 @@ export function markdownToHtml(md: string): string {
 
   html = html.replace(/^---$/gm, "<hr>");
 
+  // Normalize the gap after a block-level element into a paragraph break
+  // (blank line) so the wrapping pass below can treat it uniformly, even
+  // when the block isn't followed by a blank line in the source Markdown
+  // (table/list wrapping above may already have consumed the one newline
+  // that followed the block, leaving zero newlines before the next text).
+  html = html.replace(/(<\/h[1-4]>|<\/ul>|<\/table>|<hr>)\n?(?=[^\n])/g, "$1\n\n");
+
   html = html.replace(/\n{2,}/g, "\n</p>\n<p>\n");
   html = `<p>${html}</p>`;
   html = html.replace(/<p>\s*(<h[1-4]>)/g, "$1");
