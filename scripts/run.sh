@@ -49,9 +49,12 @@ if [ -f "$CHECKSUM_FILE" ]; then
       if [ -n "$EXPECTED" ]; then
         ACTUAL=$(shasum -a 256 "$PROJECT_DIR/$f" | awk '{print $1}')
         if [ "$EXPECTED" != "$ACTUAL" ]; then
-          git -C "$PROJECT_DIR" checkout -- "$f"
-          RESTORED="$RESTORED $f"
-          echo "HTML保護: $f を復元しました" | tee -a "$LOG_FILE"
+          if git -C "$PROJECT_DIR" checkout -- "$f"; then
+            RESTORED="$RESTORED $f"
+            echo "HTML保護: $f を復元しました" | tee -a "$LOG_FILE"
+          else
+            echo "HTML保護: $f の復元に失敗しました" | tee -a "$LOG_FILE"
+          fi
         fi
       fi
     fi
