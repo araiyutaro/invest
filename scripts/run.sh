@@ -32,13 +32,13 @@ for f in $PROTECT_FILES; do
   fi
 done
 
+EXIT_CODE=0
 claude --dangerously-skip-permissions \
   -p "/invest" \
   --model claude-sonnet-4-6 \
   --max-turns 200 \
-  >> "$LOG_FILE" 2>&1 || true
-
-EXIT_CODE=${PIPESTATUS[0]:-$?}
+  --output-format stream-json --verbose \
+  >> "$LOG_FILE" 2>&1 || EXIT_CODE=$?
 
 # HTML Protection: verify checksums and restore if changed
 if [ -f "$CHECKSUM_FILE" ]; then
