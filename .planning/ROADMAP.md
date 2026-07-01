@@ -257,10 +257,10 @@ Plans:
 
 **Wave 1** (parallel — no file overlap)
 
-- [ ] 14-01-PLAN.md — UI-02: market.ts VIX履歴取得（fetchVixHistory）とmarket.jsonへのvixHistory追加
-- [ ] 14-02-PLAN.md — UI-02: report-charts.ts インラインSVG（セクター横バー／VIX折れ線）レンダラ
-- [ ] 14-04-PLAN.md — UI-01: index.htmlヒーロー＋月別アコーディオン刷新（update-index.ts書き換え）
-- [ ] 14-05-PLAN.md — UI-01: 全レポート＋portfolio.htmlのモバイルレスポンシブCSS
+- [x] 14-01-PLAN.md — UI-02: market.ts VIX履歴取得（fetchVixHistory）とmarket.jsonへのvixHistory追加
+- [x] 14-02-PLAN.md — UI-02: report-charts.ts インラインSVG（セクター横バー／VIX折れ線）レンダラ
+- [x] 14-04-PLAN.md — UI-01: index.htmlヒーロー＋月別アコーディオン刷新（update-index.ts書き換え）
+- [x] 14-05-PLAN.md — UI-01: 全レポート＋portfolio.htmlのモバイルレスポンシブCSS
 
 **Wave 2** *(blocked on Wave 1: 14-01 + 14-02)*
 
@@ -283,7 +283,7 @@ Plans:
 | 11. News Quality Enhancements | v2.3 | 2/2 | Complete    | 2026-06-30 |
 | 12. Analysis Quality | v2.3 | 2/2 | Complete    | 2026-06-30 |
 | 13. Operational Stability | v2.3 | 1/1 | Complete    | 2026-06-30 |
-| 14. Report UI | v2.3 | 0/? | Not started | - |
+| 14. Report UI | v2.3 | 4/5 | In Progress|  |
 
 ---
 *Roadmap created: 2026-06-24*
