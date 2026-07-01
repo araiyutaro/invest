@@ -22,7 +22,7 @@ export function markdownToHtml(md: string): string {
   html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
 
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-  html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
+  html = html.replace(/(?<!\*)\*([^\s*][^*]*?)\*(?!\*)/g, "<em>$1</em>");
 
   html = html.replace(/^- (.+)$/gm, "<li>$1</li>");
   html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, "<ul>$1</ul>");
