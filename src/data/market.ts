@@ -29,6 +29,11 @@ export interface SectorPerformance {
   readonly changePercent: number;
 }
 
+export interface VixHistoryPoint {
+  readonly date: string; // YYYY-MM-DD
+  readonly close: number;
+}
+
 const MAJOR_INDICES = [
   { name: "S&P 500", symbol: "^GSPC" },
   { name: "NASDAQ", symbol: "^IXIC" },
@@ -122,11 +127,30 @@ export async function fetchStockQuotes(
   return results.filter((r): r is StockQuote => r !== null);
 }
 
+export async function fetchVixHistory(): Promise<
+  ReadonlyArray<VixHistoryPoint>
+> {
+  try {
+    const period1 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const result = await yahooFinance.chart("^VIX", { period1 });
+    return result.quotes
+      .filter((q) => q.close !== null)
+      .map((q) => ({
+        date: q.date.toISOString().slice(0, 10),
+        close: q.close as number,
+      }));
+  } catch (error) {
+    console.error("Failed to fetch VIX history:", error);
+    return [];
+  }
+}
+
 export async function fetchAllMarketData() {
-  const [indices, sectors] = await Promise.all([
+  const [indices, sectors, vixHistory] = await Promise.all([
     fetchMarketIndices(),
     fetchSectorPerformance(),
+    fetchVixHistory(),
   ]);
 
-  return { indices, sectors } as const;
+  return { indices, sectors, vixHistory } as const;
 }
