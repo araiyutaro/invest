@@ -10,6 +10,15 @@ import { loadRound1Results, loadRound2Results, loadRound3Results, loadPortfolioA
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
 const DOCS_DIR = join(import.meta.dirname, "../../docs");
 
+interface MarketData {
+  readonly sectors: ReadonlyArray<{
+    sector: string;
+    symbol: string;
+    changePercent: number;
+  }>;
+  readonly vixHistory: ReadonlyArray<{ date: string; close: number }>;
+}
+
 async function loadWebSearchResults(): Promise<ReadonlyArray<WebSearchResult>> {
   const websearchDir = join(TMP_DIR, "websearch");
   try {
@@ -54,6 +63,19 @@ async function loadReevalResults(): Promise<ReadonlyArray<ReevaluationOutput>> {
   }
 }
 
+async function loadMarketData(): Promise<MarketData> {
+  try {
+    const raw = await readFile(join(TMP_DIR, "market.json"), "utf-8");
+    const parsed = JSON.parse(raw) as { sectors?: unknown; vixHistory?: unknown };
+    return {
+      sectors: Array.isArray(parsed.sectors) ? (parsed.sectors as MarketData["sectors"]) : [],
+      vixHistory: Array.isArray(parsed.vixHistory) ? (parsed.vixHistory as MarketData["vixHistory"]) : [],
+    };
+  } catch {
+    return { sectors: [], vixHistory: [] };
+  }
+}
+
 export function generateHtml(
   result: MeetingResult,
   webSearchResults: ReadonlyArray<WebSearchResult>,
@@ -68,19 +90,20 @@ export async function main(): Promise<void> {
   const raw = await readFile(join(TMP_DIR, "meeting-result.json"), "utf-8");
   const meetingResult = validateMeetingResult(JSON.parse(raw) as unknown);
 
-  const [webSearchResults, reevalResults, round1Results, round2Results, round3Results, portfolioAnalysis] = await Promise.all([
+  const [webSearchResults, reevalResults, round1Results, round2Results, round3Results, portfolioAnalysis, marketData] = await Promise.all([
     loadWebSearchResults(),
     loadReevalResults(),
     loadRound1Results(),
     loadRound2Results(),
     loadRound3Results(),
     loadPortfolioAnalysis(),
+    loadMarketData(),
   ]);
 
   const dateDir = join(DOCS_DIR, meetingResult.date);
   await mkdir(dateDir, { recursive: true });
 
-  const dailyHtml = generateDailyReportHtml(meetingResult, webSearchResults, reevalResults);
+  const dailyHtml = generateDailyReportHtml(meetingResult, webSearchResults, reevalResults, marketData);
   const minutesHtml = generateMeetingMinutesHtml(meetingResult, round1Results, round2Results, round3Results);
   const portfolioHtml = generatePortfolioReportHtml(meetingResult, portfolioAnalysis);
 
