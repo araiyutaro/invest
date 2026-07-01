@@ -24,28 +24,28 @@ echo "=== Investment Pipeline Started: $(date) ===" | tee "$LOG_FILE"
 terminal-notifier -title "Investment Agent" -message "パイプライン開始 (約40分)" -sound Tink
 
 # HTML Protection: record checksums before pipeline
-PROTECT_FILES="docs/index.html docs/portfolio.html"
+PROTECT_FILES=("docs/index.html" "docs/portfolio.html")
 CHECKSUM_FILE="/tmp/invest-html-checksums-${TIMESTAMP}.txt"
-for f in $PROTECT_FILES; do
+for f in "${PROTECT_FILES[@]}"; do
   if [ -f "$PROJECT_DIR/$f" ]; then
     shasum -a 256 "$PROJECT_DIR/$f" >> "$CHECKSUM_FILE"
   fi
 done
 
+EXIT_CODE=0
 claude --dangerously-skip-permissions \
   -p "/invest" \
   --model claude-sonnet-4-6 \
   --max-turns 200 \
-  >> "$LOG_FILE" 2>&1 || true
-
-EXIT_CODE=${PIPESTATUS[0]:-$?}
+  --output-format stream-json --verbose \
+  >> "$LOG_FILE" 2>&1 || EXIT_CODE=$?
 
 # HTML Protection: verify checksums and restore if changed
 if [ -f "$CHECKSUM_FILE" ]; then
   RESTORED=""
-  for f in $PROTECT_FILES; do
+  for f in "${PROTECT_FILES[@]}"; do
     if [ -f "$PROJECT_DIR/$f" ]; then
-      EXPECTED=$(grep "$PROJECT_DIR/$f" "$CHECKSUM_FILE" | awk '{print $1}')
+      EXPECTED=$(grep -F "$PROJECT_DIR/$f" "$CHECKSUM_FILE" | awk '{print $1}')
       if [ -n "$EXPECTED" ]; then
         ACTUAL=$(shasum -a 256 "$PROJECT_DIR/$f" | awk '{print $1}')
         if [ "$EXPECTED" != "$ACTUAL" ]; then
@@ -67,7 +67,12 @@ echo "=== Investment Pipeline Finished: $(date) (exit: $EXIT_CODE) ===" | tee -a
 if [ "$EXIT_CODE" -eq 0 ]; then
   terminal-notifier -title "Investment Agent" -message "パイプライン正常完了" -sound Glass
 else
-  terminal-notifier -title "Investment Agent" -message "パイプライン異常終了 (exit: $EXIT_CODE)" -sound Basso
+  FAILED_STEP=$(grep -o '\[STEP:[^:]*:FAIL' "$LOG_FILE" | tail -1 | sed -E 's/\[STEP:([^:]*):FAIL/\1/') || true
+  if [ -n "$FAILED_STEP" ]; then
+    terminal-notifier -title "Investment Agent" -message "パイプライン異常終了 (${FAILED_STEP}で失敗, exit: $EXIT_CODE)" -sound Basso
+  else
+    terminal-notifier -title "Investment Agent" -message "パイプライン異常終了 (exit: $EXIT_CODE)" -sound Basso
+  fi
 fi
 
 find "$LOG_DIR" -name "invest-*.log" -mtime +7 -delete 2>/dev/null || true
