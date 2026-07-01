@@ -52,3 +52,56 @@ export function renderSectorBarChart(
     ${bars}
   </svg>`;
 }
+
+export interface VixDatum {
+  readonly date: string; // YYYY-MM-DD
+  readonly close: number;
+}
+
+export function renderVixLineChart(history: ReadonlyArray<VixDatum>): string {
+  if (history.length === 0) {
+    return `<div class="chart-empty">
+      <p><strong>データ取得エラー</strong></p>
+      <p>VIX推移データを取得できませんでした。次回のレポート生成をお待ちください。</p>
+    </div>`;
+  }
+
+  const width = 600;
+  const height = 200;
+  const padding = { top: 10, right: 40, bottom: 20, left: 10 };
+  const plotW = width - padding.left - padding.right;
+  const plotH = height - padding.top - padding.bottom;
+
+  const values = history.map((h) => h.close);
+  const minV = Math.min(...values, 15); // ensure 20/30 thresholds stay visible
+  const maxV = Math.max(...values, 35);
+  const yFor = (v: number) =>
+    padding.top + plotH - ((v - minV) / (maxV - minV)) * plotH;
+  const xFor = (i: number) =>
+    padding.left + (i / (history.length - 1 || 1)) * plotW;
+
+  const points = history
+    .map((h, i) => `${xFor(i)},${yFor(h.close)}`)
+    .join(" ");
+  const dots = history
+    .map(
+      (h, i) =>
+        `<circle cx="${xFor(i)}" cy="${yFor(h.close)}" r="3" fill="#3b82f6"/>`,
+    )
+    .join("");
+
+  const thresholdLine = (level: number) => `
+    <line x1="${padding.left}" y1="${yFor(level)}" x2="${width - padding.right}" y2="${yFor(level)}"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="${width - padding.right + 4}" y="${yFor(level) + 4}" font-size="13" fill="#6b7280">${level}</text>
+  `;
+
+  return `<svg viewBox="0 0 ${width} ${height}" width="100%" role="img" aria-label="VIX推移">
+    ${thresholdLine(20)}
+    ${thresholdLine(30)}
+    <polyline points="${points}" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    ${dots}
+    <text x="${padding.left}" y="${height - 4}" font-size="13" fill="#888">${escapeHtml(history[0]?.date ?? "")}</text>
+    <text x="${width - padding.right}" y="${height - 4}" font-size="13" fill="#888" text-anchor="end">${escapeHtml(history[history.length - 1]?.date ?? "")}</text>
+  </svg>`;
+}
