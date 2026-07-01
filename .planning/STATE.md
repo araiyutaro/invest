@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v2.3
-milestone_name: Analysis Quality & Operational Stability
-status: Awaiting next milestone
-stopped_at: Phase 14.1 context gathered
-last_updated: "2026-07-01T14:00:21.251Z"
-last_activity: 2026-07-01 — Milestone v2.3 completed and archived
+milestone: v2.4
+milestone_name: News Curation Report
+status: planning
+last_updated: "2026-07-01T23:39:45.457Z"
+last_activity: 2026-07-01
 progress:
-  total_phases: 11
-  completed_phases: 5
-  total_plans: 12
-  completed_plans: 12
-  percent: 45
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -25,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: Milestone v2.3 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-07-01 — Milestone v2.3 completed and archived
+Status: Defining requirements
+Last activity: 2026-07-01 — Milestone v2.4 started
 
 ## Performance Metrics
 

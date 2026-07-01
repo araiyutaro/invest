@@ -14,7 +14,21 @@
 
 v2.0〜v2.3で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、そしてニュース/分析/運用安定性/レポートUIの総合底上げを完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、モバイル対応・インラインチャート付きのレポートをGitHub Pagesへ自動デプロイする。
 
-**Next milestone:** 未定義。`/gsd-new-milestone` で v2.4 の要件定義から開始する。
+**Next milestone:** v2.4 News Curation Report（進行中）
+
+## Current Milestone: v2.4 News Curation Report
+
+**Goal:** AIが厳選したニュースダイジェスト（news-digest.html）を4紙目のレポートとして日次パイプラインに追加する
+
+**Target features:**
+- AI編集の厳選ダイジェスト — フィルタ済みニュース（20〜80件）から重要記事を10〜15件程度選定し、日本語の解説コメント付きで提示
+- 市場別グルーピング — 米国株 / 日本株 / グローバルに分類し、各グループ内は重要度順に配列
+- 4紙目のレポートとして docs/YYYY-MM-DD/ に出力し、既存3レポートと同じBloomberg風ダークテーマ・ナビゲーション・デプロイフローに統合
+
+**Key context:**
+- v2.3でスコープカットされた CURA-01 の実現が本マイルストーンの唯一のスコープ
+- ニュースソースは既存の filter.ts フィルタ済みパイプライン出力を利用（新規取得ロジックは不要）
+- エージェント構成は5+1を維持（キュレーションは既存パイプライン内のステップとして実装）
 
 ## Requirements
 
@@ -50,7 +64,7 @@ v2.0〜v2.3で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 
 ### Active
 
-（v2.3 出荷済み。次期マイルストーンの要件は `/gsd-new-milestone` で定義する）
+- ニュースキュレーションHTML（news-digest.html）を4紙目のレポートとして生成 — v2.4 (CURA-01系、詳細は REQUIREMENTS.md)
 
 ### Out of Scope
 
@@ -115,4 +129,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-01 after v2.3 milestone*
+*Last updated: 2026-07-02 — v2.4 News Curation Report milestone started*
