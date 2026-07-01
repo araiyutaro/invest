@@ -41,6 +41,7 @@
 - ✓ 投資無関係記事の除外（キーワードdenylistフィルタ） — v2.2
 - ✓ アナリストへの記事供給数柔軟化（MIN=20/MAX=80） — v2.2
 - ✓ パイプライン実行時間計測と12ステップ表示 — v2.2
+- ✓ レポートUIデザイン刷新（index.htmlヒーロー+月別アコーディオン）・モバイル対応・VIX/セクターインラインチャート追加 — v2.3 (Phase 14)
 
 ### Active
 
@@ -51,7 +52,6 @@
 - [ ] スコアリングラウンドの専用並列エージェント化
 - [ ] 自動実行のエラーリカバリ強化
 - [ ] index.html保護・ログ改善
-- [ ] レポートUIデザイン刷新・モバイル対応・チャート追加
 
 ### Out of Scope
 
@@ -106,4 +106,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-30 — v2.3 milestone started*
+*Last updated: 2026-07-01 — Phase 14 (report-ui) complete, v2.3 milestone's final phase*
