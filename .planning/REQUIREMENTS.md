@@ -26,7 +26,7 @@ Requirements for Analysis Quality & Operational Stability. ニュース品質・
 
 ### Report UI
 
-- [ ] **UI-01**: index.htmlがモダンなデザインに刷新され、モバイルレスポンシブで閲覧できる
+- [x] **UI-01**: index.htmlがモダンなデザインに刷新され、モバイルレスポンシブで閲覧できる
 - [ ] **UI-02**: Daily ReportにセクターパフォーマンスやVIX推移のインラインチャートが表示される
 
 ## Future Requirements
@@ -60,7 +60,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OPS-01 | Phase 13 | Complete |
 | OPS-02 | Phase 13 | Complete |
 | OPS-03 | Phase 13 | Complete |
-| UI-01 | Phase 14 | Pending |
+| UI-01 | Phase 14 | Complete |
 | UI-02 | Phase 14 | Pending |
 
 **Coverage:**
