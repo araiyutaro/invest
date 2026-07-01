@@ -310,5 +310,5 @@ Plans:
 
 **Wave 1** (parallel — no file overlap)
 
-- [ ] 14.1-01-PLAN.md — OPS-01/OPS-03: scripts/run.shのstream-json出力フォーマット・EXIT_CODE捕捉修正・失敗ステップ名付き通知・grep -F/PROTECT_FILES配列化（tech debt WR-01/WR-03）
-- [ ] 14.1-02-PLAN.md — OPS-01/OPS-03: invest.mdのupdate-index.ts FAILハンドリング追加（D-08）とdeployシェルインジェクション修正（D-06/WR-04）
+- [x] 14.1-01-PLAN.md — OPS-01/OPS-03: scripts/run.shのstream-json出力フォーマット・EXIT_CODE捕捉修正・失敗ステップ名付き通知・grep -F/PROTECT_FILES配列化（tech debt WR-01/WR-03）
+- [x] 14.1-02-PLAN.md — OPS-01/OPS-03: invest.mdのupdate-index.ts FAILハンドリング追加（D-08）とdeployシェルインジェクション修正（D-06/WR-04）
