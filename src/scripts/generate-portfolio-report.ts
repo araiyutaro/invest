@@ -27,7 +27,7 @@ function formatHoldingEvaluationsHtml(holdings: ReadonlyArray<HoldingEvaluation>
       ? `<p style="color:#f59e0b;font-size:0.85rem;">リスク: ${escapeHtml(h.riskNote)}</p>`
       : "";
     return `<div class="agent-card" style="border-left-color:${color};">
-      <h4>${escapeHtml(h.symbol)} -- ${escapeHtml(h.nameJa)} <span style="float:right;color:${color};font-weight:bold;">${escapeHtml(h.decision)}</span></h4>
+      <h4>${escapeHtml(h.symbol)}${h.nameJa ? ` -- ${escapeHtml(h.nameJa)}` : ""} <span style="float:right;color:${color};font-weight:bold;">${escapeHtml(h.decision)}</span></h4>
       <p>${escapeHtml(h.rationale)}</p>
       ${riskHtml}
     </div>`;

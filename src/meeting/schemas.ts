@@ -138,21 +138,46 @@ export function validateReevaluationOutput(data: unknown): ReevaluationOutput {
   return reevaluationOutputSchema.parse(data) as ReevaluationOutput;
 }
 
-export const holdingEvaluationSchema = z.object({
+const rawHoldingSchema = z.object({
   symbol: z.string(),
-  nameJa: z.string(),
-  decision: z.enum(["保持", "買増", "一部売却", "全売却"]),
-  rationale: z.string(),
+  nameJa: z.string().optional(),
+  decision: z.string().optional(),
+  action: z.string().optional(),
+  rationale: z.string().optional(),
+  reason: z.string().optional(),
   riskNote: z.string().optional(),
+  keyMetric: z.string().optional(),
+  riskLevel: z.string().optional(),
+}).passthrough();
+
+export const holdingEvaluationSchema = rawHoldingSchema.transform((raw) => {
+  const riskParts = [raw.keyMetric, raw.riskLevel].filter((v): v is string => Boolean(v));
+  const riskNote = raw.riskNote ?? (riskParts.length > 0 ? riskParts.join(" / ") : undefined);
+  return {
+    symbol: raw.symbol,
+    nameJa: raw.nameJa ?? "",
+    decision: (raw.decision ?? raw.action ?? "保持") as "保持" | "買増" | "一部売却" | "全売却",
+    rationale: raw.rationale ?? raw.reason ?? "",
+    ...(riskNote !== undefined ? { riskNote } : {}),
+  };
 });
 
-export const portfolioAnalysisSchema = z.object({
+const rawPortfolioSchema = z.object({
   date: z.string(),
-  generatedAt: z.string(),
-  overallComment: z.string(),
+  generatedAt: z.string().optional(),
+  overallComment: z.string().optional(),
+  portfolioSummary: z.string().optional(),
   holdings: z.array(holdingEvaluationSchema),
-  rebalanceActions: z.array(z.string()),
-});
+  rebalanceActions: z.array(z.string()).optional(),
+}).passthrough();
+
+export const portfolioAnalysisSchema = rawPortfolioSchema.transform((raw) => ({
+  date: raw.date,
+  generatedAt: raw.generatedAt ?? "",
+  overallComment: raw.overallComment ?? raw.portfolioSummary ?? "",
+  holdings: raw.holdings,
+  rebalanceActions: raw.rebalanceActions ?? [],
+}));
 
 export function validatePortfolioAnalysis(data: unknown): PortfolioAnalysis {
   return portfolioAnalysisSchema.parse(data) as PortfolioAnalysis;

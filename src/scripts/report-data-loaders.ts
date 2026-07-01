@@ -75,7 +75,8 @@ export async function loadPortfolioAnalysis(): Promise<PortfolioAnalysis | null>
   try {
     const raw = await readFile(join(TMP_DIR, "portfolio-analysis.json"), "utf-8");
     return portfolioAnalysisSchema.parse(JSON.parse(raw) as unknown) as PortfolioAnalysis;
-  } catch {
+  } catch (error) {
+    console.error('Portfolio analysis load failed:', error instanceof Error ? error.message : error);
     return null;
   }
 }

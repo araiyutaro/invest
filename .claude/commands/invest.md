@@ -1589,8 +1589,10 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     保有比率データはありません。定性的な判断（「買増しを検討」「ポジション縮小を推奨」等）で判断してください。
 
-    以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
+    以下のJSONフォーマット**のみ**を出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
+
+    **重要: フィールド名は以下の通り正確に使用すること。独自のフィールド名（portfolioSummary, action, reason 等）に変えてはならない。**
 
     {
       "date": "YYYY-MM-DD（今日の日付）",
@@ -1610,6 +1612,15 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
         "具体的なアクション2"
       ]
     }
+
+    **フィールド名のルール（厳守）:**
+    - "overallComment" を使うこと（"portfolioSummary" は不可）
+    - "decision" を使うこと（"action" は不可）
+    - "rationale" を使うこと（"reason" は不可）
+    - "riskNote" を使うこと（"riskLevel", "keyMetric" は不可）
+    - "nameJa" は必須（各銘柄の日本語名称）
+    - "generatedAt" は必須（ISO 8601形式）
+    - "rebalanceActions" は必須（2-5項目）
 
     注意:
     - decision は「保持」「買増」「一部売却」「全売却」の4択のみ使用すること。他の表現（ホールド、買い増し、売却等）は使用しないこと
