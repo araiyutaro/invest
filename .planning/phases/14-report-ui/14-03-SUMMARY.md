@@ -114,3 +114,14 @@ None - no external service configuration required. No new dependencies added.
 ---
 *Phase: 14-report-ui*
 *Completed: 2026-07-01*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/generate-daily-report.ts
+- FOUND: src/scripts/generate-report.ts
+- FOUND: src/scripts/generate-report.test.ts
+- FOUND: .planning/phases/14-report-ui/14-03-SUMMARY.md
+- FOUND commit: 6a39cb8 (test: chart RED)
+- FOUND commit: 08be2a8 (feat: chart GREEN)
+- FOUND commit: baa9e9c (feat: loadMarketData + thread into main())
+- FOUND commit: 02c06a5 (docs: plan metadata)
