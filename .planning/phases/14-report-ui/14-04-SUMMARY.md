@@ -118,3 +118,14 @@ None - no external service configuration required.
 ---
 *Phase: 14-report-ui*
 *Completed: 2026-07-01*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/update-index.ts
+- FOUND: src/scripts/update-index.test.ts
+- FOUND: docs/index.html
+- FOUND: .planning/phases/14-report-ui/14-04-SUMMARY.md
+- FOUND: .planning/phases/14-report-ui/deferred-items.md
+- FOUND commit: bbb622f (Task 1)
+- FOUND commit: 307a6d8 (Task 2)
+- FOUND commit: 63a9b0d (SUMMARY.md)
