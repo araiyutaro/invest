@@ -70,7 +70,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 **Milestone Goal:** AIが厳選したニュースダイジェスト（news-digest.html）を4紙目のレポートとして日次パイプラインに追加する。既存 filter.ts のフィルタ済み記事プール（20〜80件）からAIが重要記事10〜15件をID参照方式で選定し、市場別グルーピング・重要度順・日本語解説コメント付きで、既存3レポートと同じBloomberg風ダークテーマに統合する。
 
 - [x] **Phase 15: Curation Contract & Schema** - AIキュレーションの出力契約（ID参照方式・市場enum・ソフト件数制約）をzodスキーマとして定義し、幻覚URL・不正市場値を構造的に防止する (completed 2026-07-02)
-- [ ] **Phase 16: Report Generator (HTML Rendering)** - Phase 15の契約に基づき、news-digest.htmlの本文（記事一覧・市場別グルーピング・重要度バッジ・ティッカータグ・リード文）を既存ダークテーマで描画するピュア関数を実装する
+- [x] **Phase 16: Report Generator (HTML Rendering)** - Phase 15の契約に基づき、news-digest.htmlの本文（記事一覧・市場別グルーピング・重要度バッジ・ティッカータグ・リード文）を既存ダークテーマで描画するピュア関数を実装する (completed 2026-07-02)
 - [ ] **Phase 17: Pipeline Integration & Orchestration** - キュレーションAgentステップと生成ロジックを日次パイプラインへfail-soft統合し、news-digest.htmlが4紙目として自動生成される
 - [ ] **Phase 18: Index/Nav Integration & Validation** - index.htmlのnews-digest.htmlリンクをファイル実在時のみ条件付きで出し分け、欠落日の404リンクを防止する
 
@@ -91,7 +91,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 
 **Plans**: 2 plans (Wave 1 → Wave 2)
 - [x] 16-01-PLAN.md — 契約拡張（CuratedArticle.tickerNames）+ アクセントカラー追加（#8b5cf6） (CURA-08, UI-03)
-- [ ] 16-02-PLAN.md — news-digest レンダラー generateNewsDigestHtml（TDD: 3値フォールバック・市場別グルーピング・重要度バッジ・ティッカーピル・リード文・安全なhref） (CURA-03, CURA-04, CURA-06, CURA-07, CURA-08, CURA-09, UI-03)
+- [x] 16-02-PLAN.md — news-digest レンダラー generateNewsDigestHtml（TDD: 3値フォールバック・市場別グルーピング・重要度バッジ・ティッカーピル・リード文・安全なhref） (CURA-03, CURA-04, CURA-06, CURA-07, CURA-08, CURA-09, UI-03)
 **UI hint**: yes
 
 ### Phase 17: Pipeline Integration & Orchestration
@@ -142,7 +142,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 14. Report UI | v2.3 | 5/5 | Complete | 2026-07-01 |
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
-| 16. Report Generator (HTML Rendering) | v2.4 | 1/2 | In Progress|  |
+| 16. Report Generator (HTML Rendering) | v2.4 | 2/2 | Complete   | 2026-07-02 |
 | 17. Pipeline Integration & Orchestration | v2.4 | 0/TBD | Not started | - |
 | 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |
 
