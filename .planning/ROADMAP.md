@@ -6,7 +6,7 @@
 - ✅ **v2.1 Report Quality & Pipeline Overhaul** — Phases 5-7 (shipped 2026-06-25)
 - ✅ **v2.2 News Quality & Pipeline Metrics** — Phases 8-10 (shipped 2026-06-28)
 - ✅ **v2.3 Analysis Quality & Operational Stability** — Phases 11-14.1 (shipped 2026-07-01)
-- 📋 **v2.4 (next)** — planning (`/gsd-new-milestone`)
+- 🚧 **v2.4 News Curation Report** — Phases 15-18 (in progress)
 
 ## Phases
 
@@ -65,9 +65,74 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 
 </details>
 
-### 📋 v2.4 (next milestone — planning)
+### 🚧 v2.4 News Curation Report (Phases 15-18) — In Progress
 
-次期マイルストーンは未定義。`/gsd-new-milestone` で要件定義から開始する。繰り越し候補: ニュースキュレーションHTML (CURA-01)。
+**Milestone Goal:** AIが厳選したニュースダイジェスト（news-digest.html）を4紙目のレポートとして日次パイプラインに追加する。既存 filter.ts のフィルタ済み記事プール（20〜80件）からAIが重要記事10〜15件をID参照方式で選定し、市場別グルーピング・重要度順・日本語解説コメント付きで、既存3レポートと同じBloomberg風ダークテーマに統合する。
+
+- [ ] **Phase 15: Curation Contract & Schema** - AIキュレーションの出力契約（ID参照方式・市場enum・ソフト件数制約）をzodスキーマとして定義し、幻覚URL・不正市場値を構造的に防止する
+- [ ] **Phase 16: Report Generator (HTML Rendering)** - Phase 15の契約に基づき、news-digest.htmlの本文（記事一覧・市場別グルーピング・重要度バッジ・ティッカータグ・リード文）を既存ダークテーマで描画するピュア関数を実装する
+- [ ] **Phase 17: Pipeline Integration & Orchestration** - キュレーションAgentステップと生成ロジックを日次パイプラインへfail-soft統合し、news-digest.htmlが4紙目として自動生成される
+- [ ] **Phase 18: Index/Nav Integration & Validation** - index.htmlのnews-digest.htmlリンクをファイル実在時のみ条件付きで出し分け、欠落日の404リンクを防止する
+
+## Phase Details
+
+### Phase 15: Curation Contract & Schema
+
+**Goal**: AIキュレーションの出力契約（記事ID参照方式・市場enum・ソフト件数制約）がzodスキーマとして定義され、幻覚URLと不正な市場分類を構造的に防止する
+**Depends on**: Phase 14.1 (v2.3完了)
+**Requirements**: CURA-02, CURA-05
+**Success Criteria** (what must be TRUE):
+
+  1. `newsCurationSchema`が記事IDのみを受理する構造になっており、LLMがタイトル/URLを自由生成しても、TS側の実データ照合なしにはHTMLへ反映されない設計になっている
+  2. market分類フィールドがzod enum（`us` / `japan` / `global`）で制約され、範囲外の値を含むJSONはバリデーションで検出される
+  3. 記事選定件数が10〜15件の範囲外（フィルタ済みプールが少数/大量の場合）でもパイプラインを停止させず、ソフトクランプまたはtruncateされた結果を返す
+  4. fixture JSON（正常系・異常系: 件数過不足、不正enum値、不正ID参照）に対するスキーマ単体テストが全てパスする
+
+**Plans**: TBD
+
+### Phase 16: Report Generator (HTML Rendering)
+
+**Goal**: Phase 15の契約に基づき、news-digest.htmlの本文が記事一覧・市場別グルーピング・重要度・関連ティッカー・リード文を含む形で、既存3レポートと同一のBloomberg風ダークテーマ・ナビゲーションで描画される
+**Depends on**: Phase 15
+**Requirements**: CURA-03, CURA-04, CURA-06, CURA-07, CURA-08, CURA-09, UI-03
+**Success Criteria** (what must be TRUE):
+
+  1. 生成されたHTMLの各記事に見出し・ソース名・公開時刻・元記事へのリンク（escapeHtml済みhref）が表示される
+  2. 各記事に日本語の「なぜ重要か」解説コメント（1〜2文）が表示される
+  3. 記事が市場別（米国株/日本株/グローバル）グループの中で重要度順に配列され、各記事にHigh/Medium/Lowバッジが同一スコアから導出されて表示される
+  4. 各記事に関連ティッカータグが表示され、ページ冒頭に「今日の市場を動かすもの」の2〜3文のリード文が表示される
+  5. news-digest.htmlが既存3レポートと同じダークテーマCSS・モバイル対応・レポート間ナビゲーションを持ち、キュレーションデータがnullの場合もグレースフルなフォールバック表示になる
+
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 17: Pipeline Integration & Orchestration
+
+**Goal**: news-digest.htmlが日次パイプライン（`/invest`）の実行により自動生成され、キュレーションステップの失敗が既存3レポートの生成・デプロイを妨げない
+**Depends on**: Phase 16
+**Requirements**: CURA-01, OPS-04
+**Success Criteria** (what must be TRUE):
+
+  1. `/invest`コマンド実行後、`docs/YYYY-MM-DD/`に`news-digest.html`が4紙目のレポートとして生成される
+  2. キュレーションAgentステップが`tmp/news.json`（フィルタ済み20〜80件）を読み込み、`tmp/news-curation.json`をID参照方式で書き出す
+  3. キュレーションステップを意図的に失敗させても（例: 不正JSON出力）、他の3レポート（daily-report / meeting-minutes / portfolio-report）は正常に生成されデプロイが完了する
+  4. 失敗時にログへ`[STEP:news-digest:FAIL:...]`形式の専用マーカーが記録され、成功時は`[STEP:news-digest:OK]`が記録される
+
+**Plans**: TBD
+
+### Phase 18: Index/Nav Integration & Validation
+
+**Goal**: index.htmlの日付エントリがnews-digest.htmlの実在有無に応じて正確にリンクを出し分け、欠落日でも404リンクを生成しない
+**Depends on**: Phase 17
+**Requirements**: UI-04
+**Success Criteria** (what must be TRUE):
+
+  1. news-digest.htmlが生成された日付のindex.htmlエントリに、同ファイルへのリンクが追加される
+  2. news-digest.htmlが生成されなかった日付（キュレーション失敗等）のindex.htmlエントリには、当該リンクが追加されない（404リンクなし）
+  3. 既存3レポート（daily-report / meeting-minutes / portfolio-report）のリンク描画ロジックには回帰がない
+
+**Plans**: TBD
+**UI hint**: yes
 
 ## Progress
 
@@ -88,6 +153,10 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 13. Operational Stability | v2.3 | 1/1 | Complete | 2026-06-30 |
 | 14. Report UI | v2.3 | 5/5 | Complete | 2026-07-01 |
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
+| 15. Curation Contract & Schema | v2.4 | 0/TBD | Not started | - |
+| 16. Report Generator (HTML Rendering) | v2.4 | 0/TBD | Not started | - |
+| 17. Pipeline Integration & Orchestration | v2.4 | 0/TBD | Not started | - |
+| 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-06-24*
@@ -95,3 +164,4 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 *Milestone v2.1 shipped: 2026-06-25*
 *Milestone v2.2 shipped: 2026-06-28*
 *Milestone v2.3 shipped: 2026-07-01*
+*Milestone v2.4 started: 2026-07-02*

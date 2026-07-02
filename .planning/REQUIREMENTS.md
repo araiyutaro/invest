@@ -52,18 +52,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CURA-01 | TBD | Pending |
-| CURA-02 | TBD | Pending |
-| CURA-03 | TBD | Pending |
-| CURA-04 | TBD | Pending |
-| CURA-05 | TBD | Pending |
-| CURA-06 | TBD | Pending |
-| CURA-07 | TBD | Pending |
-| CURA-08 | TBD | Pending |
-| CURA-09 | TBD | Pending |
-| UI-03 | TBD | Pending |
-| UI-04 | TBD | Pending |
-| OPS-04 | TBD | Pending |
+| CURA-01 | Phase 17 | Pending |
+| CURA-02 | Phase 15 | Pending |
+| CURA-03 | Phase 16 | Pending |
+| CURA-04 | Phase 16 | Pending |
+| CURA-05 | Phase 15 | Pending |
+| CURA-06 | Phase 16 | Pending |
+| CURA-07 | Phase 16 | Pending |
+| CURA-08 | Phase 16 | Pending |
+| CURA-09 | Phase 16 | Pending |
+| UI-03 | Phase 16 | Pending |
+| UI-04 | Phase 18 | Pending |
+| OPS-04 | Phase 17 | Pending |
 
 ---
-*Last updated: 2026-07-02*
+*Last updated: 2026-07-02 — roadmap created (Phases 15-18)*
