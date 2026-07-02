@@ -1,5 +1,12 @@
 import { z } from "zod";
-import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnalysis } from "./types.js";
+import type {
+  MeetingResult,
+  WebSearchResult,
+  ReevaluationOutput,
+  PortfolioAnalysis,
+  NewsCuration,
+  CuratedArticle,
+} from "./types.js";
 
 export const stockPickSchema = z.object({
   ticker: z.string(),
@@ -183,4 +190,100 @@ export const portfolioAnalysisSchema = rawPortfolioSchema.transform((raw) => ({
 
 export function validatePortfolioAnalysis(data: unknown): PortfolioAnalysis {
   return portfolioAnalysisSchema.parse(data) as PortfolioAnalysis;
+}
+
+// --- News Curation Contract (Phase 15: CURA-02 / CURA-05) ---
+// 第1層: 構造検証（curatedArticleRawSchema / rawNewsCurationSchema / validateRawNewsCuration）。
+// コア契約（id/market/importance）は厳格検証、それ以外は passthrough + デフォルト補完（D-09）。
+// 配列長のハード制約（.min/.max）は書かない — 件数の妥当性は resolveNewsCuration の
+// ソフトクランプに委ねる（D-03〜D-05, Pitfall 1）。
+
+const curatedArticleRawSchema = z
+  .object({
+    id: z.string().min(1),
+    market: z.enum(["us", "japan", "global"]),
+    importance: z.enum(["high", "medium", "low"]),
+    commentary: z.string().optional().default(""),
+    tickers: z.array(z.string()).optional().default([]),
+  })
+  .passthrough();
+
+const rawNewsCurationSchema = z
+  .object({
+    leadIn: z.string().optional().default(""),
+    articles: z.array(curatedArticleRawSchema).optional().default([]),
+  })
+  .passthrough();
+
+export type RawNewsCuration = z.infer<typeof rawNewsCurationSchema>;
+
+/** 第1層: 構造検証。不正enum値・型不一致はここでthrowする（D-09）。 */
+export function validateRawNewsCuration(data: unknown): RawNewsCuration {
+  return rawNewsCurationSchema.parse(data);
+}
+
+/** プールから解決する記事の最小形状（tmp/news.jsonをJSON.parseした後の実データ形状） */
+export interface NewsArticlePoolEntry {
+  readonly id: string;
+  readonly title: string;
+  readonly url: string;
+  readonly source: string;
+  readonly publishedAt: string; // JSON往復後は必ずstring（Pitfall 3）
+  readonly ticker?: string;
+}
+
+const MAX_ARTICLES = 15;
+const MIN_ARTICLES = 10;
+
+/**
+ * 第2層: プール参照によるID解決・重複排除・件数ソフトクランプ（D-03/D-04/D-05/D-08/D-10）。
+ * いかなる入力でも throw しない（グレースフルデグラデーション、console.warn を使用）。
+ */
+export function resolveNewsCuration(
+  raw: RawNewsCuration,
+  pool: ReadonlyArray<NewsArticlePoolEntry>,
+  date: string,
+  generatedAt: string,
+): NewsCuration {
+  const poolById = new Map(pool.map((a) => [a.id, a]));
+  const seenIds = new Set<string>();
+  const resolved: CuratedArticle[] = [];
+
+  for (const item of raw.articles) {
+    if (seenIds.has(item.id)) {
+      console.warn(`[news-curation] 重複記事IDをdrop: ${item.id}`);
+      continue;
+    }
+    const source = poolById.get(item.id);
+    if (!source) {
+      console.warn(`[news-curation] 不明な記事IDをdrop: ${item.id}`);
+      continue;
+    }
+    if (item.commentary.trim() === "") {
+      console.warn(`[news-curation] 解説コメント欠落によりdrop: ${item.id}`);
+      continue;
+    }
+    seenIds.add(item.id);
+    resolved.push({
+      id: item.id,
+      title: source.title,
+      url: source.url,
+      source: source.source,
+      publishedAt: source.publishedAt,
+      market: item.market,
+      importance: item.importance,
+      commentary: item.commentary,
+      tickers: source.ticker ? [...new Set([source.ticker, ...item.tickers])] : item.tickers,
+    });
+  }
+
+  let articles = resolved;
+  if (articles.length > MAX_ARTICLES) {
+    console.warn(`[news-curation] 選定${articles.length}件 > ${MAX_ARTICLES}件、上位${MAX_ARTICLES}件にtruncate`);
+    articles = articles.slice(0, MAX_ARTICLES); // Agent自身の重要度順を尊重（D-03, 再ソートしない）
+  } else if (articles.length < MIN_ARTICLES) {
+    console.warn(`[news-curation] 選定${articles.length}件 < ${MIN_ARTICLES}件（情報量の少ない日として受理）`);
+  }
+
+  return { date, generatedAt, leadIn: raw.leadIn, articles };
 }
