@@ -1,5 +1,12 @@
 import { z } from "zod";
-import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnalysis } from "./types.js";
+import type {
+  MeetingResult,
+  WebSearchResult,
+  ReevaluationOutput,
+  PortfolioAnalysis,
+  NewsCuration,
+  CuratedArticle,
+} from "./types.js";
 
 export const stockPickSchema = z.object({
   ticker: z.string(),
@@ -183,4 +190,34 @@ export const portfolioAnalysisSchema = rawPortfolioSchema.transform((raw) => ({
 
 export function validatePortfolioAnalysis(data: unknown): PortfolioAnalysis {
   return portfolioAnalysisSchema.parse(data) as PortfolioAnalysis;
+}
+
+// --- News Curation Contract (Phase 15: CURA-02 / CURA-05) ---
+// 第1層: 構造検証（curatedArticleRawSchema / rawNewsCurationSchema / validateRawNewsCuration）。
+// コア契約（id/market/importance）は厳格検証、それ以外は passthrough + デフォルト補完（D-09）。
+// 配列長のハード制約（.min/.max）は書かない — 件数の妥当性は resolveNewsCuration の
+// ソフトクランプに委ねる（D-03〜D-05, Pitfall 1）。
+
+const curatedArticleRawSchema = z
+  .object({
+    id: z.string().min(1),
+    market: z.enum(["us", "japan", "global"]),
+    importance: z.enum(["high", "medium", "low"]),
+    commentary: z.string().optional().default(""),
+    tickers: z.array(z.string()).optional().default([]),
+  })
+  .passthrough();
+
+const rawNewsCurationSchema = z
+  .object({
+    leadIn: z.string().optional().default(""),
+    articles: z.array(curatedArticleRawSchema).optional().default([]),
+  })
+  .passthrough();
+
+export type RawNewsCuration = z.infer<typeof rawNewsCurationSchema>;
+
+/** 第1層: 構造検証。不正enum値・型不一致はここでthrowする（D-09）。 */
+export function validateRawNewsCuration(data: unknown): RawNewsCuration {
+  return rawNewsCurationSchema.parse(data);
 }

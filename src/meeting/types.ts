@@ -122,3 +122,22 @@ export interface PortfolioAnalysis {
   readonly holdings: ReadonlyArray<HoldingEvaluation>;
   readonly rebalanceActions: ReadonlyArray<string>;
 }
+
+export interface CuratedArticle {
+  readonly id: string;
+  readonly title: string;
+  readonly url: string;
+  readonly source: string;
+  readonly publishedAt: string; // ISO 8601, tmp/news.jsonのプールから解決済み（Date型ではない — Pitfall 3）
+  readonly market: "us" | "japan" | "global";
+  readonly importance: "high" | "medium" | "low";
+  readonly commentary: string;
+  readonly tickers: ReadonlyArray<string>;
+}
+
+export interface NewsCuration {
+  readonly date: string;
+  readonly generatedAt: string;
+  readonly leadIn: string; // CURA-09: 「今日の市場を動かすもの」リード文
+  readonly articles: ReadonlyArray<CuratedArticle>;
+}
