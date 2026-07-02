@@ -54,7 +54,7 @@ function formatTickerPillsHtml(a: CuratedArticle): string {
       const label = name ? `${symbol} ${name}` : symbol;
       return `<span class="ticker-pill">${escapeHtml(label)}</span>`;
     })
-    .join("");
+    .join(" ");
 }
 
 function safeHref(url: string): string | null {
