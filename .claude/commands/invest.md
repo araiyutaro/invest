@@ -1560,8 +1560,11 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 - `/Users/arai/invest/tmp/portfolio.json` -- 全内容（12銘柄の株価データ）
 - `/Users/arai/invest/tmp/meeting-result.json` -- 全内容（ミーティング統合結果）
 - `/Users/arai/invest/src/portfolio/holdings.ts` -- PORTFOLIO_HOLDINGS 定数を取得
+- `/Users/arai/invest/tmp/news.json` -- 全内容（フィルタ済みニュース記事プール。news-curator のプロンプトに埋め込む）
 
-**1つの Agent ツールを呼び出してください:**
+**以下2つの Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
+
+**Agent 1: ポートフォリオマネージャー**
 
 - name: `portfolio-analyst`
 - model: `opus`
@@ -1628,12 +1631,67 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     - rebalanceActions は具体的なアクション（銘柄名と方向を明示）を2-5項目
     - overallComment はポートフォリオ全体の状況を俯瞰したコメント
 
+**Agent 2: ニュースキュレーター**
+
+- name: `news-curator`
+- model: `opus`
+- prompt: 以下の内容を含めてください
+
+    あなたは個人投資家（保有ポートフォリオを持つ読者）のための編集者です。以下の記事プールから、市場全体へのインパクトを主軸に重要記事を10〜15件程度厳選し、日本語の解説コメント付きでニュースダイジェストを編んでください。
+
+    ## 記事プール (tmp/news.json、URL以外の全フィールド)
+    [tmp/news.json の各記事から id, title, summary, source, publishedAt, ticker の6フィールドのみを埋め込む。url と category は含めないこと]
+
+    ## 選定・重要度の基準
+    - 市場全体へのインパクト（マクロ・金利・為替・地政学・セクター動向・決算インパクト等）を主軸に high/medium/low を判定すること
+    - **ポートフォリオ保有銘柄・監視中銘柄に直接関係するニュースは優先度を上げること**（個人投資家の意思決定支援というツールの目的に合致）
+    - articles は Agent 自身が判断した重要度順（high→medium→low、同格内は任意）で並べること。TS側では再ソートしない
+
+    ## 市場分類（market）の判定例
+    - Fed金融政策・米経済指標 → `us`
+    - 日銀・円相場 → `japan`
+    - 原油・地政学・世界経済 → `global`
+    - 個別企業のニュースは、その企業の上場市場（米国上場なら `us`、日本上場なら `japan`）で判定すること
+
+    ## tickerNames（会社名）のルール
+    - tickerNames の会社名は**英語正式名で統一**すること（例: `NVDA` → `NVIDIA`。カタカナ表記や日本語社名は不可）
+
+    以下のJSONフォーマット**のみ**を出力してください。他のテキストは一切出力しないでください。
+    マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
+
+    **重要: フィールド名は以下の通り正確に使用すること。独自のフィールド名に変えてはならない。title/url/source/publishedAt は出力しないこと（TS側が tmp/news.json から記事IDを照合して解決するため、ID参照方式を徹底すること。URLやタイトルを直接出力してはならない）。**
+
+    {
+      "leadIn": "リード文（今日のニュース全体を俯瞰する2-3文）",
+      "articles": [
+        {
+          "id": "n07",
+          "market": "us",
+          "importance": "high",
+          "commentary": "この記事がなぜ重要かの日本語解説（1-2文）",
+          "tickers": ["NVDA"],
+          "tickerNames": { "NVDA": "NVIDIA" }
+        }
+      ]
+    }
+
+    **フィールド名のルール（厳守）:**
+    - "id" は tmp/news.json に実在する記事IDのみを使用すること（存在しないIDや推測IDは不可）
+    - "market" は `us` / `japan` / `global` の小文字英語enumのみ（「米国株」「日本株」等の日本語表記や数値rankは不可）
+    - "importance" は `high` / `medium` / `low` の小文字英語enumのみ
+    - "commentary" は必須・空文字不可（空の場合はその記事がドロップされる）
+    - "leadIn" はトップレベル必須（欠落するとリード文が空になる）
+    - title / url / source / publishedAt は出力しないこと
+
 **Step 3d 完了後の処理:**
 
 エージェントの応答を JSON としてパースし、以下のファイルに保存してください:
 - `portfolio-analyst` の出力 -> `/Users/arai/invest/tmp/portfolio-analysis.json`
+- `news-curator` の出力 -> `/Users/arai/invest/tmp/news-curation.json`
 
 出力が有効な JSON でない場合は、エージェントを1回リトライしてください。2回目も失敗した場合は「警告: ポートフォリオ分析の生成に失敗しました。フォールバック表示で続行します。」とユーザーに表示して続行してください（portfolio-analysis.json を作成しない）。
+
+`news-curator` の出力が有効な JSON でない場合は、エージェントを1回リトライしてください。2回目も失敗した場合は「警告: ニュースキュレーションの生成に失敗しました。フォールバック表示で続行します。」とユーザーに表示して続行してください（tmp/news-curation.json を作成しない）。
 
 「ポートフォリオ分析完了」とユーザーに表示してください。
 
@@ -1718,6 +1776,58 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 ```bash
 echo '[STEP:report-generation:OK]'
+```
+
+---
+
+### Step 3e: ニュースダイジェスト生成
+
+「ニュースダイジェストを生成中...」とユーザーに表示してください。
+
+以下のBashコマンドで ニュースダイジェスト生成 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.newsDigestStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
+以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/write-news-digest.ts
+```
+
+スクリプトの終了コードに関わらず、Step 4 へ進んでください（fail-soft, D-09）。
+
+終了コードが 0 の場合:
+```bash
+echo '[STEP:news-digest:OK]'
+```
+
+終了コードが非0の場合:
+```bash
+echo '[STEP:news-digest:FAIL:キュレーション生成またはHTML書き出しに失敗（詳細はログのconsole.error出力を参照）]'
+```
+
+**`[PIPELINE:FAIL]` は絶対に出力しないこと** — この失敗は既存3レポート・デプロイをブロックしない（OPS-04）。ニュースダイジェスト生成の失敗を理由にパイプラインを停止してはならない。
+
+終了コードが 0 の場合は「ニュースダイジェスト生成完了: docs/{date}/news-digest.html (4紙目)」、非0の場合は「警告: ニュースダイジェスト生成に失敗しましたが、パイプラインは続行します（フォールバックページを表示）」とユーザーに表示してください。
+
+以下のBashコマンドで ニュースダイジェスト生成完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.newsDigestEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
 ```
 
 ---
@@ -1888,6 +1998,7 @@ console.log('Step 3: WebSearch+レポート');
 console.log('  WebSearch+再評価        ' + fmt(m.webSearchEnd - m.webSearchStart));
 console.log('  ポートフォリオ分析      ' + fmt(m.portfolioEnd - m.portfolioStart));
 console.log('  レポート生成            ' + fmt(m.reportEnd - m.reportStart));
+console.log('  ニュースダイジェスト    ' + fmt(m.newsDigestEnd - m.newsDigestStart));
 console.log('Step 4: デプロイ           ' + fmt(m.deployEnd - m.deployStart));
 console.log('──────────────────────────────');
 console.log('Total:                    ' + (totalMs ? fmt(totalMs) : '(計測中)'));
