@@ -1780,6 +1780,58 @@ echo '[STEP:report-generation:OK]'
 
 ---
 
+### Step 3e: ニュースダイジェスト生成
+
+「ニュースダイジェストを生成中...」とユーザーに表示してください。
+
+以下のBashコマンドで ニュースダイジェスト生成 の計測タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.newsDigestStart = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
+以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/write-news-digest.ts
+```
+
+スクリプトの終了コードに関わらず、Step 4 へ進んでください（fail-soft, D-09）。
+
+終了コードが 0 の場合:
+```bash
+echo '[STEP:news-digest:OK]'
+```
+
+終了コードが非0の場合:
+```bash
+echo '[STEP:news-digest:FAIL:キュレーション生成またはHTML書き出しに失敗（詳細はログのconsole.error出力を参照）]'
+```
+
+**`[PIPELINE:FAIL]` は絶対に出力しないこと** — この失敗は既存3レポート・デプロイをブロックしない（OPS-04）。ニュースダイジェスト生成の失敗を理由にパイプラインを停止してはならない。
+
+終了コードが 0 の場合は「ニュースダイジェスト生成完了: docs/{date}/news-digest.html (4紙目)」、非0の場合は「警告: ニュースダイジェスト生成に失敗しましたが、パイプラインは続行します（フォールバックページを表示）」とユーザーに表示してください。
+
+以下のBashコマンドで ニュースダイジェスト生成完了 タイムスタンプを記録してください:
+
+```bash
+node -e "
+const fs = require('fs');
+let m = {};
+try { m = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', 'utf-8')); } catch(e) {}
+m.newsDigestEnd = Date.now();
+fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
+"
+```
+
+---
+
 ## Step 4: 自動デプロイ（GitHub Pages）
 
 ```bash
@@ -1946,6 +1998,7 @@ console.log('Step 3: WebSearch+レポート');
 console.log('  WebSearch+再評価        ' + fmt(m.webSearchEnd - m.webSearchStart));
 console.log('  ポートフォリオ分析      ' + fmt(m.portfolioEnd - m.portfolioStart));
 console.log('  レポート生成            ' + fmt(m.reportEnd - m.reportStart));
+console.log('  ニュースダイジェスト    ' + fmt(m.newsDigestEnd - m.newsDigestStart));
 console.log('Step 4: デプロイ           ' + fmt(m.deployEnd - m.deployStart));
 console.log('──────────────────────────────');
 console.log('Total:                    ' + (totalMs ? fmt(totalMs) : '(計測中)'));
