@@ -4,8 +4,8 @@ milestone: v2.4
 milestone_name: News Curation Report
 status: executing
 stopped_at: Phase 17 context gathered
-last_updated: "2026-07-02T08:57:05.265Z"
-last_activity: 2026-07-02 -- Phase 17 planning complete
+last_updated: "2026-07-02T09:24:59.739Z"
+last_activity: 2026-07-02 -- Phase 17 execution started
 progress:
   total_phases: 3
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-02)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 17 — pipeline integration & orchestration
+**Current focus:** Phase 17 — pipeline-integration-orchestration
 
 ## Current Position
 
-Phase: 17
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-07-02 -- Phase 17 planning complete
+Phase: 17 (pipeline-integration-orchestration) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 17
+Last activity: 2026-07-02 -- Phase 17 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
