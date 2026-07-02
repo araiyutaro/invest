@@ -112,3 +112,7 @@ None - no external service configuration required.
 ---
 *Phase: 16-report-generator-html-rendering*
 *Completed: 2026-07-02*
+
+## Self-Check: PASSED
+
+All created/modified files verified present (`src/meeting/types.ts`, `src/meeting/schemas.ts`, `src/meeting/schemas.test.ts`, `src/scripts/report-utils.ts`, `src/scripts/report-utils.test.ts`, this SUMMARY.md). All task commits (`e04e4a5`, `c261e00`) and the metadata commit (`9b98b52`) verified present in git log.
