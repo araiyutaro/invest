@@ -104,3 +104,16 @@ None - no external service configuration required.
 ---
 *Phase: 15-curation-contract-schema*
 *Completed: 2026-07-02*
+
+## Self-Check: PASSED
+
+- FOUND: src/meeting/types.ts
+- FOUND: src/meeting/schemas.ts
+- FOUND: src/meeting/schemas.test.ts
+- FOUND: .planning/phases/15-curation-contract-schema/15-02-SUMMARY.md
+- FOUND: a8913a4 (test: validateRawNewsCuration RED)
+- FOUND: d638cd9 (feat: validateRawNewsCuration GREEN)
+- FOUND: 9f73005 (test: resolveNewsCuration RED)
+- FOUND: f8fd33f (feat: resolveNewsCuration GREEN)
+- FOUND: c22b63c (docs: plan metadata commit)
+- `npm test` full suite: 158 passed (10 files), including 17 new tests in schemas.test.ts
