@@ -6,8 +6,6 @@ vi.mock("node:fs/promises", () => ({
   mkdir: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.spyOn(process, "exit").mockImplementation((() => {}) as never);
-
 const validMeetingResultJson = JSON.stringify({ date: "2026-06-24" });
 
 const validRawCurationJson = JSON.stringify({
@@ -52,6 +50,7 @@ describe("write-news-digest main()", () => {
     (fsMock.writeFile as ReturnType<typeof vi.fn>).mockClear();
     (fsMock.mkdir as ReturnType<typeof vi.fn>).mockClear();
     (fsMock.readFile as ReturnType<typeof vi.fn>).mockClear();
+    vi.spyOn(process, "exit").mockImplementation((() => {}) as never);
   });
 
   afterEach(() => {
