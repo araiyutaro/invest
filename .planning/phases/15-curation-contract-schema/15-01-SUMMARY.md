@@ -107,3 +107,14 @@ None - no external service configuration required.
 ---
 *Phase: 15-curation-contract-schema*
 *Completed: 2026-07-02*
+
+## Self-Check: PASSED
+
+- FOUND: src/data/news/article-id.ts
+- FOUND: src/data/news/article-id.test.ts
+- FOUND: .planning/phases/15-curation-contract-schema/15-01-SUMMARY.md
+- FOUND: 424b155 (test: assignArticleIds RED)
+- FOUND: 07f717a (feat: assignArticleIds GREEN)
+- FOUND: cfe6b3b (test: collect-data ID integration RED)
+- FOUND: 997b078 (feat: collect-data ID integration GREEN)
+- FOUND: 54e5d37 (docs: plan completion commit)
