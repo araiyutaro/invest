@@ -6,6 +6,7 @@ import { fetchAllFinnhubNews } from "../data/news/finnhub.js";
 import { fetchGoogleNewsJapan } from "../data/news/google-news.js";
 import { fetchAllRssNews } from "../data/news/rss-sources.js";
 import { filterNewsArticles } from "../data/news/filter.js";
+import { assignArticleIds } from "../data/news/article-id.js";
 import { PORTFOLIO_HOLDINGS } from "../portfolio/holdings.js";
 import { fetchPortfolioData } from "../portfolio/data.js";
 
@@ -55,9 +56,10 @@ export async function main() {
     if (finalArticles.length < 20) {
       console.log(`⚠ フィルタ後の記事が${finalArticles.length}件です（MIN=20未満）`);
     }
+    const idArticles = assignArticleIds(finalArticles);
     await writeFile(
       join(TMP_DIR, "news.json"),
-      JSON.stringify(finalArticles, null, 2),
+      JSON.stringify(idArticles, null, 2),
       "utf-8",
     );
   } catch (e) {
