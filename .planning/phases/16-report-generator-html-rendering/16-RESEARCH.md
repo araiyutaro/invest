@@ -382,14 +382,14 @@ const curatedArticleRawSchema = z
 
 **If this table is empty:** N/A — 上記3件が存在する。
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **`generateNewsDigestHtml`のシグネチャに日付引数を追加すべきか**
+1. **RESOLVED: `generateNewsDigestHtml`のシグネチャに日付引数を追加すべきか** — 16-02-PLAN.mdで `generateNewsDigestHtml(curation: NewsCuration | null, date: string): string` を採用済み
    - What we know: `curation === null`時、`NewsCuration`型に`date`フィールドが存在しないため、HTMLシェルのタイトル（「News Digest - YYYY-MM-DD」, D-13）に使う日付情報がない。`generatePortfolioReportHtml`は`MeetingResult`という別の入力から日付を取得している。
    - What's unclear: news-digest.tsが`MeetingResult`全体を受け取るべきか（他レポートとの整合性重視）、それとも`date: string`単独の第2引数を追加すべきか（疎結合重視、Phase 17のnullフォールバック呼び出し規約とも整合しやすい）。
    - Recommendation: `generateNewsDigestHtml(curation: NewsCuration | null, date: string): string`という疎結合シグネチャを推奨。Phase 17側は既に`meetingResult.date`を保持しているため呼び出し側での引き渡しコストはゼロ。plannerがタスク分解時にこのシグネチャをテストの最初のケースとして明示すること。
 
-2. **`tickerNames`が空オブジェクト（Agent未対応時）の場合の表示**
+2. **RESOLVED: `tickerNames`が空オブジェクト（Agent未対応時）の場合の表示** — 低リスク確定。16-02-PLAN.mdのテストfixtureに「tickerNames完全欠落」ケースを含めることで対応
    - What we know: Phase 17（Agentプロンプト改修）が完了するまで、`tickerNames`は実運用データとして常に空のまま届く可能性が高い（Phase 15で書かれた`resolveNewsCuration`は`item.tickerNames`をそのまま透過するのみで、生成はしない）。
    - What's unclear: 会社名が一切ない状態（全記事がシンボルのみ表示）でもD-09（ピル形タグ）のレイアウトとして違和感がないか。
    - Recommendation: テストfixtureに「tickerNames完全欠落」ケースを必ず含め、シンボルのみのレンダリングがD-09のレイアウト要件を満たすことを確認する。ビジュアル上の問題ではない（低リスク）ため、ブロッカーにはしない。
