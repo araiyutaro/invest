@@ -9,10 +9,10 @@
 ### News Curation (CURA)
 
 - [ ] **CURA-01**: ニュースキュレーションHTML（news-digest.html）が4紙目のレポートとして docs/YYYY-MM-DD/ に生成される
-- [ ] **CURA-02**: AIキュレーションステップがフィルタ済み記事プール（20〜80件）から重要記事10〜15件をID参照方式で選定する（URLはTS側で照合、幻覚URL防止）
+- [x] **CURA-02**: AIキュレーションステップがフィルタ済み記事プール（20〜80件）から重要記事10〜15件をID参照方式で選定する（URLはTS側で照合、幻覚URL防止）
 - [ ] **CURA-03**: 各記事に見出し・ソース名・公開時刻・元記事へのリンクが表示される
 - [ ] **CURA-04**: 各記事に日本語の「なぜ重要か」解説コメント（1〜2文）が付与される
-- [ ] **CURA-05**: 記事が市場別（米国株 / 日本株 / グローバル）にグルーピングされる（zod enumで分類値を制約）
+- [x] **CURA-05**: 記事が市場別（米国株 / 日本株 / グローバル）にグルーピングされる（zod enumで分類値を制約）
 - [ ] **CURA-06**: 各グループ内で記事が重要度順に配列される
 - [ ] **CURA-07**: 各記事に重要度バッジ（High / Medium / Low）が表示される（重要度順配列と同一のスコアから導出）
 - [ ] **CURA-08**: 各記事に関連ティッカータグが表示される（既存tickerフィールド + キュレーション時のタイトル/サマリーからの抽出）
@@ -53,10 +53,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | CURA-01 | Phase 17 | Pending |
-| CURA-02 | Phase 15 | Pending |
+| CURA-02 | Phase 15 | Complete |
 | CURA-03 | Phase 16 | Pending |
 | CURA-04 | Phase 16 | Pending |
-| CURA-05 | Phase 15 | Pending |
+| CURA-05 | Phase 15 | Complete |
 | CURA-06 | Phase 16 | Pending |
 | CURA-07 | Phase 16 | Pending |
 | CURA-08 | Phase 16 | Pending |

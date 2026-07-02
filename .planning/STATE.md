@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.4
 milestone_name: News Curation Report
-status: executing
-stopped_at: Phase 15 context gathered
-last_updated: "2026-07-02T04:59:22.502Z"
+status: ready_to_plan
+stopped_at: Phase 15 complete (2/2) — ready to discuss Phase 16
+last_updated: 2026-07-02T05:18:37.200Z
 last_activity: 2026-07-02 -- Phase 15 execution started
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 2
-  completed_plans: 0
+  completed_plans: 2
   percent: 0
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-02)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 15 — curation-contract-schema
+**Current focus:** Phase 16 — report generator (html rendering)
 
 ## Current Position
 
-Phase: 15 (curation-contract-schema) — EXECUTING
-Plan: 1 of 2
-Status: Executing Phase 15
-Last activity: 2026-07-02 -- Phase 15 execution started
+Phase: 16
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-07-02
 
 Progress: [░░░░░░░░░░] 0%
 
