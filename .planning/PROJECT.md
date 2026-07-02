@@ -14,7 +14,7 @@
 
 v2.0〜v2.3で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、そしてニュース/分析/運用安定性/レポートUIの総合底上げを完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、モバイル対応・インラインチャート付きのレポートをGitHub Pagesへ自動デプロイする。
 
-**Next milestone:** v2.4 News Curation Report（進行中 — Phase 15完了: キュレーション出力契約のzodスキーマ（記事ID参照方式・市場enum・ソフト件数制約、CURA-02/CURA-05）を実装。次はPhase 16 Report Generator）
+**Next milestone:** v2.4 News Curation Report（進行中 — Phase 16完了: news-digest.html本文のピュア関数レンダラー（市場別グルーピング・重要度バッジ・会社名併記ティッカーピル・リード文、Bloomberg風ダークテーマ、CURA-03/04/06/07/08/09・UI-03）を実装。次はPhase 17 Pipeline Integration & Orchestration）
 
 ## Current Milestone: v2.4 News Curation Report
 
@@ -129,4 +129,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-02 — Phase 15 (Curation Contract & Schema) complete*
+*Last updated: 2026-07-02 — Phase 16 (Report Generator HTML Rendering) complete*
