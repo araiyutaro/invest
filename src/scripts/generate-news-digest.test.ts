@@ -45,7 +45,7 @@ const articleJpMedium: CuratedArticle = {
 const validCuration: NewsCuration = {
   date: baseDate,
   generatedAt: "2026-07-02T07:00:00.000Z",
-  leadIn: "米国株の決算シーズンが本格化し、ハイテク株の動向が焦点。",
+  leadIn: "決算シーズンが本格化し、ハイテク企業の動向が焦点。",
   articles: [articleUsLow, articleUsHigh, articleJpMedium], // global市場は0件(D-06検証用)
 };
 
