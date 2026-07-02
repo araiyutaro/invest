@@ -88,7 +88,9 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
   3. 記事選定件数が10〜15件の範囲外（フィルタ済みプールが少数/大量の場合）でもパイプラインを停止させず、ソフトクランプまたはtruncateされた結果を返す
   4. fixture JSON（正常系・異常系: 件数過不足、不正enum値、不正ID参照）に対するスキーマ単体テストが全てパスする
 
-**Plans**: TBD
+**Plans**: 2 plans (Wave 1, parallel)
+- [ ] 15-01-PLAN.md — 記事ID付与純関数 (assignArticleIds) と collect-data 統合 (CURA-02)
+- [ ] 15-02-PLAN.md — キュレーション契約スキーマ・型・解決関数 (validateRawNewsCuration / resolveNewsCuration) (CURA-02, CURA-05)
 
 ### Phase 16: Report Generator (HTML Rendering)
 
@@ -153,7 +155,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 13. Operational Stability | v2.3 | 1/1 | Complete | 2026-06-30 |
 | 14. Report UI | v2.3 | 5/5 | Complete | 2026-07-01 |
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
-| 15. Curation Contract & Schema | v2.4 | 0/TBD | Not started | - |
+| 15. Curation Contract & Schema | v2.4 | 0/2 | Planned | - |
 | 16. Report Generator (HTML Rendering) | v2.4 | 0/TBD | Not started | - |
 | 17. Pipeline Integration & Orchestration | v2.4 | 0/TBD | Not started | - |
 | 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |
