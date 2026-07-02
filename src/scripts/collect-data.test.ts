@@ -320,6 +320,30 @@ describe("news filter integration (INTG-01/FILT-03/FILT-04)", () => {
     expect(parsed).toHaveLength(80);
   });
 
+  it("news.json 書き出し内容の各要素に連番 id が付与される (CURA-02 / D-01)", async () => {
+    const article1 = makeArticle({ title: "Article 1", url: "https://example.com/1" });
+    const article2 = makeArticle({ title: "Article 2", url: "https://example.com/2" });
+
+    filterMock.mockReturnValue({
+      articles: [article1, article2],
+      stats: { raw: 2, afterUrlDedup: 2, afterTitleDedup: 2, afterCrossLangDedup: 2, afterRelevance: 2, final: 2 },
+    });
+
+    const { main } = await import("./collect-data.js");
+    await main();
+
+    const newsJsonCall = writeFileMock.mock.calls.find((call) =>
+      String(call[0]).includes("news.json"),
+    );
+    expect(newsJsonCall).toBeDefined();
+    const parsed = JSON.parse(newsJsonCall![1] as string);
+    expect(parsed).toHaveLength(2);
+    expect(parsed[0].id).toBe("n01");
+    expect(parsed[1].id).toBe("n02");
+    expect(parsed[0].title).toBe("Article 1");
+    expect(parsed[1].title).toBe("Article 2");
+  });
+
   it("フィルタ後20件未満の場合、警告が出力されるがそのまま使用される (FILT-04 MIN)", async () => {
     filterMock.mockReturnValue({
       articles: Array.from({ length: 10 }, (_, i) =>
