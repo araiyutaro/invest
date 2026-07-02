@@ -127,3 +127,7 @@ None -- no external service configuration required.
 ---
 *Phase: 16-report-generator-html-rendering*
 *Completed: 2026-07-02*
+
+## Self-Check: PASSED
+
+All created files verified present (`src/scripts/generate-news-digest.ts`, `src/scripts/generate-news-digest.test.ts`, this SUMMARY.md). All task commits (`8cf2888` RED, `01fd919` GREEN) and the metadata commit (`919e6e2`) verified present in git log.
