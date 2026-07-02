@@ -133,6 +133,7 @@ export interface CuratedArticle {
   readonly importance: "high" | "medium" | "low";
   readonly commentary: string;
   readonly tickers: ReadonlyArray<string>;
+  readonly tickerNames?: Readonly<Record<string, string>>; // symbol -> 会社名の任意マップ（D-04, 加法的）
 }
 
 export interface NewsCuration {
