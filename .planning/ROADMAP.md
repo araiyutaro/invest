@@ -89,9 +89,10 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
   4. 各記事に関連ティッカータグが表示され、ページ冒頭に「今日の市場を動かすもの」の2〜3文のリード文が表示される
   5. news-digest.htmlが既存3レポートと同じダークテーマCSS・モバイル対応・レポート間ナビゲーションを持ち、キュレーションデータがnullの場合もグレースフルなフォールバック表示になる
 
-**Plans**: 2 plans (Wave 1 → Wave 2)
+**Plans**: 3 plans (Wave 1 → Wave 2; gap closure Wave 1)
 - [x] 16-01-PLAN.md — 契約拡張（CuratedArticle.tickerNames）+ アクセントカラー追加（#8b5cf6） (CURA-08, UI-03)
 - [x] 16-02-PLAN.md — news-digest レンダラー generateNewsDigestHtml（TDD: 3値フォールバック・市場別グルーピング・重要度バッジ・ティッカーピル・リード文・安全なhref） (CURA-03, CURA-04, CURA-06, CURA-07, CURA-08, CURA-09, UI-03)
+- [ ] 16-03-PLAN.md — ギャップクローズ: .ticker-pill/.news-meta CSS 定義追加 + 複数ティッカーピルの区切り修正（検証 Truth #5 ギャップ） (CURA-08)
 **UI hint**: yes
 
 ### Phase 17: Pipeline Integration & Orchestration
