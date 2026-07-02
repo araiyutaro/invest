@@ -96,3 +96,7 @@ None - no external service configuration required.
 ---
 *Phase: 16-report-generator-html-rendering*
 *Completed: 2026-07-02*
+
+## Self-Check: PASSED
+
+All claimed files found on disk (src/scripts/generate-news-digest.test.ts, src/scripts/report-utils.ts, src/scripts/generate-news-digest.ts, 16-03-SUMMARY.md). All claimed commits found in git log (98b4da2, cbecaec, 5ac6512).
