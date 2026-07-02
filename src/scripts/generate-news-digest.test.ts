@@ -28,6 +28,26 @@ const articleUsLow: CuratedArticle = {
   tickers: ["AAPL"], // tickerNames欠落 -> シンボルのみにフォールバック(D-04)
 };
 
+const articleUsMultiTicker: CuratedArticle = {
+  id: "us-multi",
+  title: "半導体大手2社、AI投資拡大で連携強化",
+  url: "https://example.com/news/multi",
+  source: "Reuters",
+  publishedAt: "2026-07-02T06:00:00.000Z",
+  market: "us",
+  importance: "high",
+  commentary: "AIインフラ投資の加速により両社の連携が深まる見通し。",
+  tickers: ["NVDA", "MSFT"],
+  tickerNames: { NVDA: "エヌビディア", MSFT: "マイクロソフト" },
+};
+
+const multiTickerCuration: NewsCuration = {
+  date: baseDate,
+  generatedAt: "2026-07-02T07:00:00.000Z",
+  leadIn: "半導体・AIインフラ関連の連携強化が相次ぐ。",
+  articles: [articleUsMultiTicker],
+};
+
 const articleJpMedium: CuratedArticle = {
   id: "jp-1",
   title: "トヨタ自動車、増産計画を発表",
@@ -205,5 +225,18 @@ describe("generateNewsDigestHtml", () => {
 
     expect(html).not.toContain("javascript:");
     expect(html).toContain(articleBadScheme.title);
+  });
+
+  it("CURA-08: 複数ティッカー記事は区切りをもってピル描画され、ピルCSSが定義される(gap closure)", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const html = generateNewsDigestHtml(multiTickerCuration, baseDate);
+
+    expect(html).toContain("NVDA エヌビディア");
+    expect(html).toContain("MSFT マイクロソフト");
+    // 隣接ピルが区切りなしで連結され社名と次シンボルが判読不能にならないこと
+    expect(html).not.toContain('</span><span class="ticker-pill">');
+    // .ticker-pill / .news-meta のCSS定義がgenerateBaseStyles経由で出力に含まれること
+    expect(html).toContain(".ticker-pill");
+    expect(html).toContain(".news-meta");
   });
 });
