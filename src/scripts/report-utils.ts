@@ -2,6 +2,7 @@ const ACCENT_VARIANTS: Record<string, { light: string; lighter: string }> = {
   "#3b82f6": { light: "#60a5fa", lighter: "#93c5fd" },
   "#f59e0b": { light: "#fbbf24", lighter: "#fcd34d" },
   "#10b981": { light: "#34d399", lighter: "#6ee7b7" },
+  "#8b5cf6": { light: "#a78bfa", lighter: "#c4b5fd" },
 };
 
 export function escapeHtml(text: string): string {
