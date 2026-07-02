@@ -76,22 +76,6 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 
 ## Phase Details
 
-### Phase 15: Curation Contract & Schema
-
-**Goal**: AIキュレーションの出力契約（記事ID参照方式・市場enum・ソフト件数制約）がzodスキーマとして定義され、幻覚URLと不正な市場分類を構造的に防止する
-**Depends on**: Phase 14.1 (v2.3完了)
-**Requirements**: CURA-02, CURA-05
-**Success Criteria** (what must be TRUE):
-
-  1. `newsCurationSchema`が記事IDのみを受理する構造になっており、LLMがタイトル/URLを自由生成しても、TS側の実データ照合なしにはHTMLへ反映されない設計になっている
-  2. market分類フィールドがzod enum（`us` / `japan` / `global`）で制約され、範囲外の値を含むJSONはバリデーションで検出される
-  3. 記事選定件数が10〜15件の範囲外（フィルタ済みプールが少数/大量の場合）でもパイプラインを停止させず、ソフトクランプまたはtruncateされた結果を返す
-  4. fixture JSON（正常系・異常系: 件数過不足、不正enum値、不正ID参照）に対するスキーマ単体テストが全てパスする
-
-**Plans**: 2 plans (Wave 1, parallel)
-- [x] 15-01-PLAN.md — 記事ID付与純関数 (assignArticleIds) と collect-data 統合 (CURA-02)
-- [x] 15-02-PLAN.md — キュレーション契約スキーマ・型・解決関数 (validateRawNewsCuration / resolveNewsCuration) (CURA-02, CURA-05)
-
 ### Phase 16: Report Generator (HTML Rendering)
 
 **Goal**: Phase 15の契約に基づき、news-digest.htmlの本文が記事一覧・市場別グルーピング・重要度・関連ティッカー・リード文を含む形で、既存3レポートと同一のBloomberg風ダークテーマ・ナビゲーションで描画される
@@ -105,7 +89,9 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
   4. 各記事に関連ティッカータグが表示され、ページ冒頭に「今日の市場を動かすもの」の2〜3文のリード文が表示される
   5. news-digest.htmlが既存3レポートと同じダークテーマCSS・モバイル対応・レポート間ナビゲーションを持ち、キュレーションデータがnullの場合もグレースフルなフォールバック表示になる
 
-**Plans**: TBD
+**Plans**: 2 plans (Wave 1 → Wave 2)
+- [ ] 16-01-PLAN.md — 契約拡張（CuratedArticle.tickerNames）+ アクセントカラー追加（#8b5cf6） (CURA-08, UI-03)
+- [ ] 16-02-PLAN.md — news-digest レンダラー generateNewsDigestHtml（TDD: 3値フォールバック・市場別グルーピング・重要度バッジ・ティッカーピル・リード文・安全なhref） (CURA-03, CURA-04, CURA-06, CURA-07, CURA-08, CURA-09, UI-03)
 **UI hint**: yes
 
 ### Phase 17: Pipeline Integration & Orchestration
@@ -156,7 +142,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 14. Report UI | v2.3 | 5/5 | Complete | 2026-07-01 |
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
-| 16. Report Generator (HTML Rendering) | v2.4 | 0/TBD | Not started | - |
+| 16. Report Generator (HTML Rendering) | v2.4 | 0/2 | Planned | - |
 | 17. Pipeline Integration & Orchestration | v2.4 | 0/TBD | Not started | - |
 | 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |
 
