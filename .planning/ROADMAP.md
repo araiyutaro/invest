@@ -90,7 +90,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
   5. news-digest.htmlが既存3レポートと同じダークテーマCSS・モバイル対応・レポート間ナビゲーションを持ち、キュレーションデータがnullの場合もグレースフルなフォールバック表示になる
 
 **Plans**: 2 plans (Wave 1 → Wave 2)
-- [ ] 16-01-PLAN.md — 契約拡張（CuratedArticle.tickerNames）+ アクセントカラー追加（#8b5cf6） (CURA-08, UI-03)
+- [x] 16-01-PLAN.md — 契約拡張（CuratedArticle.tickerNames）+ アクセントカラー追加（#8b5cf6） (CURA-08, UI-03)
 - [ ] 16-02-PLAN.md — news-digest レンダラー generateNewsDigestHtml（TDD: 3値フォールバック・市場別グルーピング・重要度バッジ・ティッカーピル・リード文・安全なhref） (CURA-03, CURA-04, CURA-06, CURA-07, CURA-08, CURA-09, UI-03)
 **UI hint**: yes
 
@@ -142,7 +142,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 14. Report UI | v2.3 | 5/5 | Complete | 2026-07-01 |
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
-| 16. Report Generator (HTML Rendering) | v2.4 | 0/2 | Planned | - |
+| 16. Report Generator (HTML Rendering) | v2.4 | 1/2 | In Progress|  |
 | 17. Pipeline Integration & Orchestration | v2.4 | 0/TBD | Not started | - |
 | 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |
 

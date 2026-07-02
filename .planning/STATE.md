@@ -4,8 +4,8 @@ milestone: v2.4
 milestone_name: News Curation Report
 status: executing
 stopped_at: Phase 16 context gathered
-last_updated: "2026-07-02T06:30:11.049Z"
-last_activity: 2026-07-02 -- Phase 16 planning complete
+last_updated: "2026-07-02T06:33:08.824Z"
+last_activity: 2026-07-02 -- Phase 16 execution started
 progress:
   total_phases: 3
   completed_phases: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-02)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 16 — report generator (html rendering)
+**Current focus:** Phase 16 — report-generator-html-rendering
 
 ## Current Position
 
-Phase: 16
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-07-02 -- Phase 16 planning complete
+Phase: 16 (report-generator-html-rendering) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 16
+Last activity: 2026-07-02 -- Phase 16 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
