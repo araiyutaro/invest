@@ -69,7 +69,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 
 **Milestone Goal:** AIが厳選したニュースダイジェスト（news-digest.html）を4紙目のレポートとして日次パイプラインに追加する。既存 filter.ts のフィルタ済み記事プール（20〜80件）からAIが重要記事10〜15件をID参照方式で選定し、市場別グルーピング・重要度順・日本語解説コメント付きで、既存3レポートと同じBloomberg風ダークテーマに統合する。
 
-- [ ] **Phase 15: Curation Contract & Schema** - AIキュレーションの出力契約（ID参照方式・市場enum・ソフト件数制約）をzodスキーマとして定義し、幻覚URL・不正市場値を構造的に防止する
+- [x] **Phase 15: Curation Contract & Schema** - AIキュレーションの出力契約（ID参照方式・市場enum・ソフト件数制約）をzodスキーマとして定義し、幻覚URL・不正市場値を構造的に防止する (completed 2026-07-02)
 - [ ] **Phase 16: Report Generator (HTML Rendering)** - Phase 15の契約に基づき、news-digest.htmlの本文（記事一覧・市場別グルーピング・重要度バッジ・ティッカータグ・リード文）を既存ダークテーマで描画するピュア関数を実装する
 - [ ] **Phase 17: Pipeline Integration & Orchestration** - キュレーションAgentステップと生成ロジックを日次パイプラインへfail-soft統合し、news-digest.htmlが4紙目として自動生成される
 - [ ] **Phase 18: Index/Nav Integration & Validation** - index.htmlのnews-digest.htmlリンクをファイル実在時のみ条件付きで出し分け、欠落日の404リンクを防止する
@@ -89,8 +89,8 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
   4. fixture JSON（正常系・異常系: 件数過不足、不正enum値、不正ID参照）に対するスキーマ単体テストが全てパスする
 
 **Plans**: 2 plans (Wave 1, parallel)
-- [ ] 15-01-PLAN.md — 記事ID付与純関数 (assignArticleIds) と collect-data 統合 (CURA-02)
-- [ ] 15-02-PLAN.md — キュレーション契約スキーマ・型・解決関数 (validateRawNewsCuration / resolveNewsCuration) (CURA-02, CURA-05)
+- [x] 15-01-PLAN.md — 記事ID付与純関数 (assignArticleIds) と collect-data 統合 (CURA-02)
+- [x] 15-02-PLAN.md — キュレーション契約スキーマ・型・解決関数 (validateRawNewsCuration / resolveNewsCuration) (CURA-02, CURA-05)
 
 ### Phase 16: Report Generator (HTML Rendering)
 
@@ -155,7 +155,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 13. Operational Stability | v2.3 | 1/1 | Complete | 2026-06-30 |
 | 14. Report UI | v2.3 | 5/5 | Complete | 2026-07-01 |
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
-| 15. Curation Contract & Schema | v2.4 | 0/2 | Planned | - |
+| 15. Curation Contract & Schema | v2.4 | 2/2 | Complete   | 2026-07-02 |
 | 16. Report Generator (HTML Rendering) | v2.4 | 0/TBD | Not started | - |
 | 17. Pipeline Integration & Orchestration | v2.4 | 0/TBD | Not started | - |
 | 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |

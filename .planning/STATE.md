@@ -4,8 +4,8 @@ milestone: v2.4
 milestone_name: News Curation Report
 status: executing
 stopped_at: Phase 15 context gathered
-last_updated: "2026-07-02T04:46:50.170Z"
-last_activity: 2026-07-02 -- Phase 15 planning complete
+last_updated: "2026-07-02T04:59:22.502Z"
+last_activity: 2026-07-02 -- Phase 15 execution started
 progress:
   total_phases: 4
   completed_phases: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-02)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 15 (Curation Contract & Schema) — ready to plan
+**Current focus:** Phase 15 — curation-contract-schema
 
 ## Current Position
 
-Phase: 15 of 18 (Curation Contract & Schema)
-Plan: — (not yet planned)
-Status: Ready to execute
-Last activity: 2026-07-02 -- Phase 15 planning complete
+Phase: 15 (curation-contract-schema) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 15
+Last activity: 2026-07-02 -- Phase 15 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
