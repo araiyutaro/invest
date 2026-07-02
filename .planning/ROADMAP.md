@@ -107,7 +107,9 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
   3. キュレーションステップを意図的に失敗させても（例: 不正JSON出力）、他の3レポート（daily-report / meeting-minutes / portfolio-report）は正常に生成されデプロイが完了する
   4. 失敗時にログへ`[STEP:news-digest:FAIL:...]`形式の専用マーカーが記録され、成功時は`[STEP:news-digest:OK]`が記録される
 
-**Plans**: TBD
+**Plans**: 2 plans (Wave 1 → Wave 2)
+- [ ] 17-01-PLAN.md — write-news-digest.ts CLIオーケストレーター（TDD: 正常/欠損/不正の3シナリオ、D-08フォールバック常時書き出し・D-10 exit codeシグナル） (CURA-01, OPS-04)
+- [ ] 17-02-PLAN.md — invest.md配線: Step 3d news-curator 2体並列追加（D-01〜D-07）+ Step 3e fail-soft起動・[STEP:news-digest:*]マーカー・metrics/timing（D-08〜D-11） (CURA-01, OPS-04)
 
 ### Phase 18: Index/Nav Integration & Validation
 
@@ -144,7 +146,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
 | 16. Report Generator (HTML Rendering) | v2.4 | 3/3 | Complete    | 2026-07-02 |
-| 17. Pipeline Integration & Orchestration | v2.4 | 0/TBD | Not started | - |
+| 17. Pipeline Integration & Orchestration | v2.4 | 0/2 | Not started | - |
 | 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |
 
 ---
