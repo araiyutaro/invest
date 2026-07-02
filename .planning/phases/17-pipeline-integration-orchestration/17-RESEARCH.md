@@ -453,14 +453,16 @@ D-03's "URL以外の全フィールド" is explicit about exactly 6 fields to em
 
 **If this table is empty:** N/A — see rows above.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Exact placement of the new Bash block relative to Step 3c's existing "生成結果を確認" confirmation display**
+> 両設問ともプランニング時に解決済み: Q1 は独立見出し `### Step 3e` を採用（17-02 Task 2）、Q2 は TDD テスト `write-news-digest.test.ts` を作成する方針を採用（17-01 Task 1/2 — 推奨のマニュアルスモークより厳格側に倒した。Task 3 のスモーク手順は保持）。
+
+1. **RESOLVED — Exact placement of the new Bash block relative to Step 3c's existing "生成結果を確認" confirmation display**
    - What we know: D-10 requires the new CLI script to run "generate-report.ts の後に別コマンドで起動する" and CONTEXT.md's Integration Points note it must be "Step 3c後 or Step 4前: 専用CLI起動... generate-report.ts 実行後、update-index.ts 実行前であること."
    - What's unclear: Whether it belongs textually inside the existing "### Step 3c: HTMLレポート生成" section (after its current `[STEP:report-generation:OK]` echo) or as a new, separate "### Step 3e" heading before "## Step 4."
    - Recommendation: A separate `### Step 3e: ニュースダイジェスト生成` heading is cleaner for STEP-marker clarity (this phase introduces its own `[STEP:news-digest:*]` pair, distinct from `report-generation`) and matches this file's existing convention of one heading per STEP-marker-scoped unit of work. This is a low-risk, discretionary formatting choice for the planner.
 
-2. **Whether `write-news-digest.ts` needs its own `.test.ts` covering the D-08 fallback path end-to-end, or whether existing Phase 15/16 unit tests already provide sufficient coverage**
+2. **RESOLVED — Whether `write-news-digest.ts` needs its own `.test.ts` covering the D-08 fallback path end-to-end, or whether existing Phase 15/16 unit tests already provide sufficient coverage**
    - What we know: `resolveNewsCuration`/`validateRawNewsCuration` (17 tests) and `generateNewsDigestHtml` (12+1 tests) are both already unit-tested in isolation. `write-news-digest.ts` itself has zero existing test coverage (it doesn't exist yet).
    - What's unclear: Given this project's TDD convention (per user's global CLAUDE.md instructions and this project's own established pattern of `*.test.ts` for every `src/scripts/*.ts` file), the planner should decide whether `main()`'s file-I/O orchestration (not the already-tested pure functions it calls) needs its own fixture-based test — e.g., using `mock-fs`-style techniques or temp directories to verify "absent `tmp/news-curation.json` → fallback HTML written + exit 1."
    - Recommendation: Given `generate-report.ts` itself has no dedicated `.test.ts` (its `main()` is validated only via manual/end-to-end runs, per the codebase's actual current state — confirmed no `generate-report.test.ts` exists), a similarly light-touch approach (manual `npx tsx` verification of the 3 required scenarios — normal day, malformed JSON, missing file — per Success Criterion #3) is consistent with existing project precedent and is likely sufficient; a plan requiring full fixture-driven unit tests for `main()`'s I/O orchestration would be *exceeding* this codebase's established testing rigor for CLI orchestrator scripts specifically (as opposed to the pure functions they call, which ARE always unit-tested).
