@@ -205,6 +205,7 @@ const curatedArticleRawSchema = z
     importance: z.enum(["high", "medium", "low"]),
     commentary: z.string().optional().default(""),
     tickers: z.array(z.string()).optional().default([]),
+    tickerNames: z.record(z.string(), z.string()).optional().default({}),
   })
   .passthrough();
 
@@ -274,6 +275,7 @@ export function resolveNewsCuration(
       importance: item.importance,
       commentary: item.commentary,
       tickers: source.ticker ? [...new Set([source.ticker, ...item.tickers])] : item.tickers,
+      tickerNames: item.tickerNames,
     });
   }
 

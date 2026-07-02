@@ -108,6 +108,7 @@ const makeRawArticle = (
   importance: "high",
   commentary: "重要な理由の説明。",
   tickers: [],
+  tickerNames: {},
   ...overrides,
 });
 
@@ -229,6 +230,29 @@ describe("resolveNewsCuration", () => {
     };
     const result = resolveNewsCuration(raw, pool, DATE, GENERATED_AT);
     expect(result.articles[0]?.tickers).toEqual(["AAPL", "MSFT"]);
+  });
+
+  it("tickerNames透過: raw articleのtickerNamesが解決後のCuratedArticleにそのまま透過される（D-04）", () => {
+    const pool = [makePoolEntry({ id: "n01" })];
+    const raw: RawNewsCuration = {
+      leadIn: "",
+      articles: [
+        makeRawArticle({ id: "n01", tickers: ["NVDA"], tickerNames: { NVDA: "エヌビディア" } }),
+      ],
+    };
+    const result = resolveNewsCuration(raw, pool, DATE, GENERATED_AT);
+    expect(result.articles[0]?.tickerNames).toEqual({ NVDA: "エヌビディア" });
+  });
+
+  it("tickerNames省略時: デフォルトの空オブジェクト{}になる", () => {
+    const pool = [makePoolEntry({ id: "n01" })];
+    const rawJson = {
+      leadIn: "",
+      articles: [{ id: "n01", market: "us", importance: "high", commentary: "説明。" }],
+    };
+    const validated = validateRawNewsCuration(rawJson);
+    const result = resolveNewsCuration(validated, pool, DATE, GENERATED_AT);
+    expect(result.articles[0]?.tickerNames).toEqual({});
   });
 
   it("resolveNewsCurationはいかなる入力でもthrowしない（不明ID+空commentary+16件超が同時発生しても）", () => {

@@ -26,5 +26,13 @@ describe("report-utils", () => {
 
       expect(styles).toContain("#0f0f1a");
     });
+
+    it("emits the purple accent variant (light/lighter) for news-digest (D-10)", () => {
+      const styles = generateBaseStyles("#8b5cf6");
+
+      expect(styles).toContain("#8b5cf6");
+      expect(styles).toContain("#a78bfa");
+      expect(styles).toContain("#c4b5fd");
+    });
   });
 });
