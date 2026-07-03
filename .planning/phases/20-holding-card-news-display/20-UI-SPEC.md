@@ -52,9 +52,11 @@ Exceptions: 上記はすべてプロジェクト既存のrem値（0.15rem, 0.4re
 | ニュース見出し（記事タイトルリンク） | 1rem (16px, body継承) | 400 (regular) | 1.5 |
 | メタ行（ソース名・JST日時） | 0.85rem (13.6px) | 400 (regular) | 1.5 |
 | 空状態テキスト（「本日の関連ニュースなし」） | 0.85rem (13.6px) | 400 (regular) | 1.5 |
-| マッチ方式バッジ（「社名一致」） | 0.7rem (11.2px) | 500 (medium) | 1.2 |
+| マッチ方式バッジ（「社名一致」） | 0.7rem (11.2px) | 400 (regular) | 1.2 |
 
-既存プロジェクトはh1(1.8rem)〜h4(1rem)まで複数サイズを持つ確立済み階層があるが、Phase 20が新規に導入するのは上表の2ウェイト（400/600、バッジのみ例外的に500）のみ。
+既存プロジェクトはh1(1.8rem)〜h4(1rem)まで複数サイズを持つ確立済み階層があるが、Phase 20が新規に導入するのは上表の**2ウェイト（400/600）のみ**。バッジも400とし、視覚的区別は font-size(0.7rem)・ピル形状・背景色で行う（D-07 のノイズ最小原則 — バッジは監査用の控えめな要素であり、ウェイトによる強調は不要）。
+
+**視覚的焦点の宣言:** カード全体の視覚的最優先は従来どおり銘柄シンボル見出し（`<h4>` #a5b4fc）と判断バッジ（decision色）であり、ニュースサブセクションは非アクセント色（グレー系メタ+リンク青）による**意図的な二次階層**に留める。ニュース要素がカードの第一印象を奪ってはならない。
 
 ---
 
@@ -119,7 +121,7 @@ executor向けの具体的なHTML構造契約。`formatHoldingEvaluationsHtml()`
     <li style="padding:0.4rem 0;border-top:1px solid #2a2a3e;background:transparent;border-radius:0;margin-bottom:0;">
       <a href="{escapeHtml(url)}" target="_blank" rel="noopener noreferrer">{escapeHtml(title)}</a>
       <!-- matchType が "name" | "alias" の場合のみ以下を出力 -->
-      <span style="display:inline-block;background:#2a2a3e;color:#9ca3af;font-size:0.7rem;font-weight:500;padding:0.15rem 0.4rem;margin-left:0.4rem;border-radius:999px;">社名一致</span>
+      <span style="display:inline-block;background:#2a2a3e;color:#9ca3af;font-size:0.7rem;padding:0.15rem 0.4rem;margin-left:0.4rem;border-radius:999px;">社名一致</span>
       <p style="color:#888;font-size:0.85rem;margin:0.15rem 0 0;">{escapeHtml(source)} ・ {formatPublishedAtJst(publishedAt)}</p>
     </li>
     <!-- 最大5件、holding-news.jsonの供給順をそのまま維持（並べ替え・絞り込み禁止 — CONTEXT.md D-04/D-05） -->
