@@ -4,8 +4,8 @@ milestone: v2.5
 milestone_name: Portfolio News Intelligence
 status: executing
 stopped_at: Phase 22 context gathered
-last_updated: "2026-07-03T11:41:22.233Z"
-last_activity: 2026-07-03 -- Phase 22 planning complete
+last_updated: "2026-07-03T11:42:19.162Z"
+last_activity: 2026-07-03 -- Phase 22 execution started
 progress:
   total_phases: 5
   completed_phases: 3
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-03 after v2.4 milestone)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 22 — portfolio analyst re evaluation
+**Current focus:** Phase 22 — portfolio-analyst-re-evaluation
 
 ## Current Position
 
-Phase: 22
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-07-03 -- Phase 22 planning complete
+Phase: 22 (portfolio-analyst-re-evaluation) — EXECUTING
+Plan: 1 of 4
+Status: Executing Phase 22
+Last activity: 2026-07-03 -- Phase 22 execution started
 
 ## Performance Metrics
 
