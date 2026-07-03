@@ -5,6 +5,7 @@ import {
   webSearchResultSchema,
   validateWebSearchResult,
   holdingEvaluationSchema,
+  portfolioAnalysisSchema,
 } from "./schemas.js";
 import type { NewsArticlePoolEntry, RawNewsCuration } from "./schemas.js";
 
@@ -510,5 +511,80 @@ describe("holdingEvaluationSchema", () => {
     });
     expect(result).not.toHaveProperty("decisionChanged");
     expect(result).not.toHaveProperty("previousDecision");
+  });
+
+  it("寛容boolean: urgent が文字列 \"true\" でも true に矯正される（WR-01）", () => {
+    const result = holdingEvaluationSchema.parse({ ...minimalInput, urgent: "true" });
+    expect(result.urgent).toBe(true);
+  });
+
+  it("寛容boolean: urgency が文字列 \"false\" でも false に矯正される（WR-01）", () => {
+    const result = holdingEvaluationSchema.parse({ ...minimalInput, urgency: "false" });
+    expect(result.urgent).toBe(false);
+  });
+});
+
+describe("portfolioAnalysisSchema（per-holding fail-soft, WR-01）", () => {
+  const validHolding = {
+    symbol: "PLTR",
+    nameJa: "パランティア",
+    decision: "保持",
+    rationale: "堅調な成長が続いている。",
+  };
+
+  const basePortfolio = {
+    date: "2026-07-03",
+    generatedAt: "2026-07-03T00:00:00.000Z",
+    overallComment: "テスト",
+    rebalanceActions: [],
+  };
+
+  it("enum外decisionの1銘柄のみdropされ、残りの銘柄は保持される + console.warn が呼ばれる", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const result = portfolioAnalysisSchema.parse({
+      ...basePortfolio,
+      holdings: [
+        validHolding,
+        { ...validHolding, symbol: "MRNA", decision: "売却" }, // enum外
+        { ...validHolding, symbol: "JOBY" },
+      ],
+    });
+    expect(result.holdings).toHaveLength(2);
+    expect(result.holdings.map((h) => h.symbol)).toEqual(["PLTR", "JOBY"]);
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining("MRNA"),
+      expect.anything(),
+    );
+    warnSpy.mockRestore();
+  });
+
+  it("非オブジェクト要素（文字列・null）はdropされ、parse全体はthrowしない", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const result = portfolioAnalysisSchema.parse({
+      ...basePortfolio,
+      holdings: [validHolding, "not-an-object", null],
+    });
+    expect(result.holdings).toHaveLength(1);
+    expect(result.holdings[0]?.symbol).toBe("PLTR");
+    expect(warnSpy).toHaveBeenCalledTimes(2);
+    warnSpy.mockRestore();
+  });
+
+  it("urgent の文字列型ドリフト（\"true\"）はdropではなく矯正され、銘柄が残る（WR-01）", () => {
+    const result = portfolioAnalysisSchema.parse({
+      ...basePortfolio,
+      holdings: [{ ...validHolding, urgent: "true" }],
+    });
+    expect(result.holdings).toHaveLength(1);
+    expect(result.holdings[0]?.urgent).toBe(true);
+  });
+
+  it("strip保証: fail-soft経路でも decisionChanged/previousDecision はstripされる（D-11不変）", () => {
+    const result = portfolioAnalysisSchema.parse({
+      ...basePortfolio,
+      holdings: [{ ...validHolding, decisionChanged: true, previousDecision: "買増" }],
+    });
+    expect(result.holdings[0]).not.toHaveProperty("decisionChanged");
+    expect(result.holdings[0]).not.toHaveProperty("previousDecision");
   });
 });

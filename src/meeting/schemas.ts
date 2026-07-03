@@ -190,6 +190,13 @@ export function validateReevaluationOutput(data: unknown): ReevaluationOutput {
 
 const decisionEnum = z.enum(["保持", "買増", "一部売却", "全売却"]);
 
+// urgent系boolean（LLM出力）の寛容パーサ（WR-01）: 文字列 "true"/"false" の型ドリフトを
+// boolean に矯正する。それ以外の型の不正は rawHoldingSchema の parse 失敗として
+// lenientHoldingsSchema の要素単位 drop に委ねる。
+const lenientBoolean = z
+  .union([z.boolean(), z.enum(["true", "false"]).transform((v) => v === "true")])
+  .optional();
+
 const rawHoldingSchema = z.object({
   symbol: z.string(),
   nameJa: z.string().optional(),
@@ -200,10 +207,10 @@ const rawHoldingSchema = z.object({
   riskNote: z.string().optional(),
   keyMetric: z.string().optional(),
   riskLevel: z.string().optional(),
-  urgent: z.boolean().optional(),
-  urgency: z.boolean().optional(), // alias for urgent
-  isUrgent: z.boolean().optional(), // alias for urgent
-  urgentFlag: z.boolean().optional(), // alias for urgent
+  urgent: lenientBoolean,
+  urgency: lenientBoolean, // alias for urgent
+  isUrgent: lenientBoolean, // alias for urgent
+  urgentFlag: lenientBoolean, // alias for urgent
 }).passthrough();
 
 export const holdingEvaluationSchema = rawHoldingSchema.transform((raw) => {
@@ -219,12 +226,41 @@ export const holdingEvaluationSchema = rawHoldingSchema.transform((raw) => {
   };
 });
 
+type HoldingEvaluationParsed = z.infer<typeof holdingEvaluationSchema>;
+
+// holdings要素のフェイルソフト化（WR-01。keyArticlesのD-12前例と同型）: 1銘柄の型不正
+// （enum外decision・非オブジェクト要素等）が portfolioAnalysisSchema.parse 全体のthrow
+// （＝ポートフォリオレポート全体のフォールバック落ち）に波及しないよう、要素単位で
+// safeParse し、不正要素のみ console.warn 付きで drop する。
+// strip保証（明示的オブジェクトリテラル、...rawなし）と urgent の alias-transform 意味論は
+// holdingEvaluationSchema 側のまま不変。
+const lenientHoldingsSchema = z.array(z.unknown()).transform((items) =>
+  items
+    .map((item, index) => {
+      const parsed = holdingEvaluationSchema.safeParse(item);
+      if (parsed.success) {
+        return parsed.data;
+      }
+      const symbol =
+        typeof item === "object" && item !== null && !Array.isArray(item)
+          ? (item as Record<string, unknown>).symbol
+          : undefined;
+      const label = typeof symbol === "string" && symbol !== "" ? symbol : `index ${index}`;
+      console.warn(
+        `[portfolio-analysis] 不正なholdingをdrop (${label}):`,
+        parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; "),
+      );
+      return null;
+    })
+    .filter((h): h is HoldingEvaluationParsed => h !== null),
+);
+
 const rawPortfolioSchema = z.object({
   date: z.string(),
   generatedAt: z.string().optional(),
   overallComment: z.string().optional(),
   portfolioSummary: z.string().optional(),
-  holdings: z.array(holdingEvaluationSchema),
+  holdings: lenientHoldingsSchema,
   rebalanceActions: z.array(z.string()).optional(),
 }).passthrough();
 

@@ -201,12 +201,16 @@ describe("portfolioAnalysisSchema", () => {
     expect(() => portfolioAnalysisSchema.parse(validAnalysis)).not.toThrow();
   });
 
-  it("decision must be one of 保持/買増/一部売却/全売却", () => {
+  it("decision must be one of 保持/買増/一部売却/全売却 — enum外の銘柄はdropされconsole.warnされる（WR-01 fail-soft、throwしない）", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const invalid = {
       ...validAnalysis,
       holdings: [{ ...validAnalysis.holdings[0], decision: "ホールド" }],
     };
-    expect(() => portfolioAnalysisSchema.parse(invalid)).toThrow();
+    const result = portfolioAnalysisSchema.parse(invalid);
+    expect(result.holdings).toHaveLength(0);
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 
   it("riskNote is optional", () => {
