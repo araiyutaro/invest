@@ -58,17 +58,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NEWS-04 | TBD | Pending |
-| PORT-01 | TBD | Pending |
-| PORT-02 | TBD | Pending |
-| PORT-03 | TBD | Pending |
-| PORT-04 | TBD | Pending |
-| PORT-05 | TBD | Pending |
-| UI-05 | TBD | Pending |
-| UI-06 | TBD | Pending |
-| UI-07 | TBD | Pending |
-| UI-08 | TBD | Pending |
-| OPS-05 | TBD | Pending |
+| NEWS-04 | Phase 19 | Pending |
+| PORT-01 | Phase 19 | Pending |
+| PORT-02 | Phase 21 | Pending |
+| PORT-03 | Phase 22 | Pending |
+| PORT-04 | Phase 22 | Pending |
+| PORT-05 | Phase 22 | Pending |
+| UI-05 | Phase 20 | Pending |
+| UI-06 | Phase 20 | Pending |
+| UI-07 | Phase 22 | Pending |
+| UI-08 | Phase 23 | Pending |
+| OPS-05 | Phase 21 | Pending |
 
 ---
-*Last updated: 2026-07-03 — requirements defined (roadmap pending)*
+*Last updated: 2026-07-03 — roadmap created (Phases 19-23), 11/11 requirements mapped*
+</content>
