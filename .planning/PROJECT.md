@@ -14,7 +14,7 @@
 
 v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、そしてAI厳選ニュースダイジェスト（news-digest.html）の4紙目追加を完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、4レポート（Daily Report / Meeting Minutes / Portfolio Report / News Digest）をGitHub Pagesへ自動デプロイする。ニュースキュレーションはID参照方式で幻覚URLを構造的に防止し、fail-soft設計により失敗時も既存3レポートの生成・デプロイに影響しない。
 
-**Next milestone:** v2.5 Portfolio News Intelligence（Phase 19 完了 — finnhub ticker汚染バグ修正（NEWS-04）+ 保有銘柄別ニュース供給（PORT-01: buildHoldingNewsMap → tmp/holding-news.json → portfolio-analyst プロンプト注入）完了。次は Phase 20: Holding-Card News Display）
+**Next milestone:** v2.5 Portfolio News Intelligence（Phase 20 完了 — 保有銘柄カード関連ニュース表示（UI-05/UI-06: resolvePortfolioHoldingNews によるID参照解決 + normalizeHoldingSymbol キー正規化 + 0件時の明示的空状態、generate-report.ts 配線済み）。実データでのブラウザ目視確認は 20-HUMAN-UAT.md で追跡中。次は Phase 21: Portfolio WebSearch Research）
 
 ## Current Milestone: v2.5 Portfolio News Intelligence
 
@@ -147,4 +147,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-03 — Phase 19 (Data Foundation & Holding-News Supply) complete*
+*Last updated: 2026-07-03 — Phase 20 (Holding-Card News Display) complete*
