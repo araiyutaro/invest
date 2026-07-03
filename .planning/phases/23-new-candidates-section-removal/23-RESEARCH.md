@@ -346,7 +346,7 @@ against the actual source files (`generate-portfolio-report.ts`, `generate-repor
 **This table is empty:** All claims in this research were verified directly in the codebase — no
 user confirmation needed.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 None. All code locations, test locations, and the invest.md preservation point were directly
 verified in this session. The only remaining choices (test numbering scheme, commit split) are
