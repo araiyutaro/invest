@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { validateRawNewsCuration, resolveNewsCuration } from "./schemas.js";
+import {
+  validateRawNewsCuration,
+  resolveNewsCuration,
+  webSearchResultSchema,
+  validateWebSearchResult,
+} from "./schemas.js";
 import type { NewsArticlePoolEntry, RawNewsCuration } from "./schemas.js";
 
 const validRawCuration = {
@@ -292,5 +297,130 @@ describe("resolveNewsCuration", () => {
       ],
     };
     expect(() => resolveNewsCuration(raw, pool, DATE, GENERATED_AT)).not.toThrow();
+  });
+});
+
+// --- webSearchResultSchema (Phase 21: PORT-02 / D-12 alias-transform hardening) ---
+
+describe("webSearchResultSchema", () => {
+  it("正常系: 正準フィールドのみの入力がthrowせず通過し、6フィールドが正準形で返る", () => {
+    const canonical = {
+      ticker: "PLTR",
+      researchSummary: "AI需要拡大で成長加速。",
+      positiveFindings: ["売上前年比40%増"],
+      negativeFindings: ["バリュエーション割高"],
+      keyArticles: [{ title: "Palantir Q1 Earnings", summary: "AI Platform部門が急成長" }],
+      researchedAt: "2026-07-03T07:00:00.000Z",
+    };
+    expect(() => webSearchResultSchema.parse(canonical)).not.toThrow();
+    const result = webSearchResultSchema.parse(canonical);
+    expect(result).toEqual(canonical);
+  });
+
+  it("エイリアス受理: summary→researchSummary が解決される", () => {
+    const result = webSearchResultSchema.parse({
+      ticker: "NVDA",
+      summary: "エイリアス経由のサマリー",
+    });
+    expect(result.researchSummary).toBe("エイリアス経由のサマリー");
+  });
+
+  it("エイリアス受理: findings/positives→positiveFindings が解決される", () => {
+    const viaFindings = webSearchResultSchema.parse({
+      ticker: "NVDA",
+      findings: ["ポジティブ材料A"],
+    });
+    expect(viaFindings.positiveFindings).toEqual(["ポジティブ材料A"]);
+
+    const viaPositives = webSearchResultSchema.parse({
+      ticker: "NVDA",
+      positives: ["ポジティブ材料B"],
+    });
+    expect(viaPositives.positiveFindings).toEqual(["ポジティブ材料B"]);
+  });
+
+  it("エイリアス受理: negatives/concerns→negativeFindings が解決される", () => {
+    const viaNegatives = webSearchResultSchema.parse({
+      ticker: "NVDA",
+      negatives: ["リスク材料A"],
+    });
+    expect(viaNegatives.negativeFindings).toEqual(["リスク材料A"]);
+
+    const viaConcerns = webSearchResultSchema.parse({
+      ticker: "NVDA",
+      concerns: ["リスク材料B"],
+    });
+    expect(viaConcerns.negativeFindings).toEqual(["リスク材料B"]);
+  });
+
+  it("エイリアス受理: articles→keyArticles が解決される", () => {
+    const result = webSearchResultSchema.parse({
+      ticker: "NVDA",
+      articles: [{ title: "記事タイトル", summary: "記事サマリー" }],
+    });
+    expect(result.keyArticles).toEqual([{ title: "記事タイトル", summary: "記事サマリー" }]);
+  });
+
+  it("エイリアス受理: timestamp/date→researchedAt が解決される", () => {
+    const viaTimestamp = webSearchResultSchema.parse({
+      ticker: "NVDA",
+      timestamp: "2026-07-03T08:00:00.000Z",
+    });
+    expect(viaTimestamp.researchedAt).toBe("2026-07-03T08:00:00.000Z");
+
+    const viaDate = webSearchResultSchema.parse({
+      ticker: "NVDA",
+      date: "2026-07-03",
+    });
+    expect(viaDate.researchedAt).toBe("2026-07-03");
+  });
+
+  it("欠落耐性: ticker以外の必須フィールド省略時、文字列は''、配列は[]にデフォルト補完される", () => {
+    const result = webSearchResultSchema.parse({ ticker: "EE" });
+    expect(result).toEqual({
+      ticker: "EE",
+      researchSummary: "",
+      positiveFindings: [],
+      negativeFindings: [],
+      keyArticles: [],
+      researchedAt: "",
+    });
+  });
+
+  it("未知フィールド許容: 追加の未知トップレベルフィールドを含んでもthrowしない（passthrough）", () => {
+    const withUnknown = {
+      ticker: "NVDA",
+      researchSummary: "サマリー",
+      unknownTopLevelField: "無視されるはず",
+    };
+    expect(() => webSearchResultSchema.parse(withUnknown)).not.toThrow();
+  });
+
+  it("フォールバックJSON: Step 3-Pのフォールバック形状がthrowせず通過する", () => {
+    const fallback = {
+      ticker: "EE",
+      researchSummary: "リサーチ失敗",
+      positiveFindings: [],
+      negativeFindings: [],
+      keyArticles: [],
+      researchedAt: "2026-07-03T09:00:00.000Z",
+    };
+    expect(() => webSearchResultSchema.parse(fallback)).not.toThrow();
+    const result = webSearchResultSchema.parse(fallback);
+    expect(result.researchSummary).toBe("リサーチ失敗");
+  });
+
+  it("後方互換: validateWebSearchResultのシグネチャと戻り型（WebSearchResult）は不変", () => {
+    const canonical = {
+      ticker: "PLTR",
+      researchSummary: "サマリー",
+      positiveFindings: [],
+      negativeFindings: [],
+      keyArticles: [],
+      researchedAt: "2026-07-03T07:00:00.000Z",
+    };
+    const result = validateWebSearchResult(canonical);
+    expect(result.ticker).toBe("PLTR");
+    expect(result.researchSummary).toBe("サマリー");
   });
 });
