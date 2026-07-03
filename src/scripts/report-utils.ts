@@ -189,6 +189,15 @@ export function generateBaseStyles(accentColor: string): string {
       font-size: 0.85rem;
       margin-bottom: 0.5rem;
     }
+    .news-card a {
+      color: #93c5fd;
+    }
+    .news-card a:visited {
+      color: #c4b5fd;
+    }
+    .news-card a:hover {
+      color: #bfdbfe;
+    }
     @media (max-width: 768px) {
       body { padding: 1rem; }
       .container { max-width: 100%; }

@@ -208,7 +208,8 @@ describe("generateNewsDigestHtml", () => {
 
     expect(html).toContain("<!DOCTYPE html>");
     expect(html).toContain("生成できませんでした");
-    expect(html).not.toContain("news-card");
+    // CSSセレクタ(.news-card)はbase stylesに常在するため、記事カード要素の不在はclass属性で判定する
+    expect(html).not.toContain('class="agent-card news-card"');
   });
 
   it("フォールバック(空配列): 「厳選記事なし」を表示し「生成できませんでした」は含まない(D-06後半, Pitfall 2)", async () => {
@@ -238,5 +239,16 @@ describe("generateNewsDigestHtml", () => {
     // .ticker-pill / .news-meta のCSS定義がgenerateBaseStyles経由で出力に含まれること
     expect(html).toContain(".ticker-pill");
     expect(html).toContain(".news-meta");
+  });
+
+  it("記事リンクの色: ダーク背景で判読可能な淡色リンクCSS(未訪問/訪問済み)が定義される", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const html = generateNewsDigestHtml(validCuration, baseDate);
+
+    // ブラウザデフォルト(濃青/濃紫)は#0f0f1a背景で判読不能のため、淡色を明示定義すること
+    expect(html).toContain(".news-card a {");
+    expect(html).toContain(".news-card a:visited {");
+    expect(html).toContain("#93c5fd");
+    expect(html).toContain("#c4b5fd");
   });
 });
