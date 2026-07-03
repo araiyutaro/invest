@@ -21,6 +21,13 @@ findings:
   info: 5
   total: 8
 status: issues_found
+fixes:
+  fixed_at: 2026-07-03T12:20:00Z
+  fix_scope: critical_warning
+  fixed:
+    - WR-01
+    - WR-02
+    - WR-03
 ---
 
 # Phase 22: Code Review Report
@@ -49,6 +56,8 @@ Phase 22（Portfolio-Analyst Re-Evaluation）の実装 11 ファイルを standa
 
 ### WR-01: holdings 1 銘柄の型ドリフトで portfolio レポート全体がフォールバックに落ちる（per-holding fail-soft なし）
 
+**fixed: true** — `lenientBoolean`（"true"/"false" 文字列を boolean に矯正）を urgent 系 4 エイリアスに適用し、holdings を `z.array(z.unknown()).transform()` の要素単位 safeParse に変更（不正銘柄のみ drop + console.warn、keyArticles の D-12 パターンと同型）。strip 保証（明示的オブジェクトリテラル、`...raw` なし）と alias-transform 意味論は不変。テスト 7 件追加・1 件を fail-soft 仕様に更新（commit `5f13df4`）。
+
 **File:** `src/meeting/schemas.ts:193-229`
 **Issue:** `rawHoldingSchema` の `urgent`/`urgency`/`isUrgent`/`urgentFlag` は `z.boolean()` 厳格、`decision`/`action` は enum 厳格。LLM が 12 銘柄中 1 銘柄でも `"urgent": "true"`（文字列）や `"decision": "売却"`（enum 外）を出力すると `portfolioAnalysisSchema.parse` 全体が throw し、`loadPortfolioAnalysis` が null を返して**ポートフォリオレポート全体**が「本日のポートフォリオ分析は生成されませんでした」にフォールバックする。本フェーズは keyArticles に要素単位フェイルソフト（D-12）を導入した設計思想を持つが、holdings 配列には同じ保護がない。urgent はこのフェーズで新設された 4 つの boolean フィールドであり、型ドリフト面が拡大している。invest.md のプロンプト厳守指示とリトライ 1 回が唯一の緩和策。
 **Fix:** boolean エイリアスに寛容パーサを適用する:
@@ -61,6 +70,8 @@ const lenientBoolean = z
 さらに理想的には holdings を `z.array(z.unknown()).transform()` で要素単位に safeParse し、不正銘柄のみ drop + console.warn する（keyArticles の `toKeyArticle` パターンと同型）。
 
 ### WR-02: 前日スナップショットに日付ガードがなく、同日再実行で decisionChanged の意味が壊れる
+
+**fixed: true** — invest.md Step 3d の退避スニペットに JST 日付ガードを追加（`prev.date === todayJst` の場合は退避スキップ・既存 prev 保持）。防御の重ね掛けとして `generate-report.ts` に純関数 `resolvePrevHoldingsForDiff` を新設し、`prev.date === current.date` の場合は null（= D-14 の decisionChanged undefined 意味論）+ console.warn とした。ユニットテスト 4 件追加（commit `bee5303`）。
 
 **File:** `.claude/commands/invest.md:1699-1716`, `src/scripts/generate-report.ts:114-119`
 **Issue:** Step 3d の退避スクリプトは `tmp/portfolio-analysis.json` を無条件に `prev-portfolio-analysis.json` へコピーする。パイプラインを同日に再実行すると（このパイプラインは fail-soft 設計で再実行が想定運用）、**同日の 1 回目の結果**が「前日データ」として退避され、`attachDecisionChanges` は同日比較になる。結果: (a) 実際の前日からの判断変更バッジが消える、(b) 同日 2 回の LLM 実行の揺らぎが「判断変更: 前日 → 当日」と誤表示される。`prev.date` と当日日付の比較はスナップショット側にも `generate-report.ts` 側にも存在しない。また portfolio-analyst 失敗日には `portfolio-analysis.json` が古い日付のまま残るため、翌日は 2 日前のデータが「前日」として比較される（こちらは許容範囲だが無警告）。
@@ -76,6 +87,8 @@ if (prev.date === today) {
 防御の重ね掛けとして `generate-report.ts` 側でも `prevPortfolioAnalysis?.date === meetingResult.date` の場合に null 扱い + console.warn を検討。
 
 ### WR-03: loadRound1/2/3 の per-file catch がサイレント（console.warn なし、D-15 不変条件と不整合）
+
+**fixed: true** — 3 ローダーの per-file catch にファイル名 + エラーメッセージ付き console.warn を追加（loadPrevPortfolioAnalysis の D-15 規約と同形式）。malformed ファイルが drop され正常ファイルが残ることを検証するテストを 3 件追加（commit `393f5b0`）。
 
 **File:** `src/scripts/report-data-loaders.ts:21-23, 43-45, 65-67`
 **Issue:** 本フェーズの Test 44/45 は `loadWebSearchResults`/`loadReevalResults` の per-file catch が console.warn を出すこと（Pitfall 7 負債回収, D-15）を検証しているが、同一ファイル内の `loadRound1Results`/`loadRound2Results`/`loadRound3Results` の per-file catch は `catch { return null; }` のままサイレント。Round ファイル 1 つが malformed だと、該当アナリストが meeting-minutes から**無警告で消える**。「loaders must console.warn (not silent) on catch」というフェーズ不変条件に対し、同ファイル内で規律が分裂している（既存コードだが、本フェーズで同ファイルを触っており回収機会があった）。
