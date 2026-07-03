@@ -354,14 +354,14 @@ This block only runs when `EXIT_CODE != 0` (the top-level `claude` CLI invocatio
 
 **All other claims in this research were verified directly against the current codebase** (file paths and line numbers cited throughout) or are direct quotes/values from `21-CONTEXT.md` (already a locked, user-reviewed artifact) — no other `[ASSUMED]`-only claims exist in this document.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Whether Step 3-P should live as a numbered sub-step of "Step 3" (e.g., "Step 3-P") or get its own top-level "Step 2.5"/"Step 3-pre" heading.**
+1. RESOLVED: **Whether Step 3-P should live as a numbered sub-step of "Step 3" (e.g., "Step 3-P") or get its own top-level "Step 2.5"/"Step 3-pre" heading.**
    - What we know: `invest.md`'s existing structure uses `### Step 3a/3b/3c/3d/3e` as sibling sub-headings under `## Step 3: WebSearch リサーチ & レポート生成`. D-01 places the new step content between Step 3.0 and Step 3a in document order.
    - What's unclear: Whether "Step 3-P" (matching CONTEXT.md's own suggested naming) reads more naturally than inserting it as an unlettered continuation of Step 3.0, or whether renumbering existing Step 3a→3b etc. is warranted (CONTEXT.md explicitly defers this to Claude's discretion).
    - Recommendation: Use `### Step 3-P: 保有銘柄WebSearchリサーチ（12銘柄並列）` as its own H3, positioned exactly where diagrammed above — avoids renumbering every subsequent step (3a stays 3a, etc.), minimizing diff surface on a 2026-line file.
 
-2. **Whether the alias-transform hardening (D-12) should be a backport into the shared `webSearchResultSchema` or a phase-local new schema.**
+2. RESOLVED: **Whether the alias-transform hardening (D-12) should be a backport into the shared `webSearchResultSchema` or a phase-local new schema.**
    - What we know: Both `tmp/websearch/{ticker}.json` (candidates, existing) and `tmp/portfolio-research/{symbol}.json` (holdings, this phase) target the identical `WebSearchResult` TS type. A shared schema backport benefits both call sites for the cost of touching one existing file.
    - What's unclear: Whether backporting introduces any regression risk for the existing candidates loader's test suite (`schemas.test.ts` currently has no tests exercising `webSearchResultSchema`/`validateWebSearchResult` directly, per the `describe()` block grep — only `validateRawNewsCuration`/`resolveNewsCuration` are covered there).
    - Recommendation: Backport (Pattern 4), but the plan must include new unit tests for `webSearchResultSchema`'s alias-transform behavior specifically (none currently exist), since this is genuinely new test surface, not a modification of covered code.
