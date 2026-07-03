@@ -85,7 +85,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 保有銘柄ごとのニュースとWebSearchリサーチを踏まえた売却・保有再考をポートフォリオ分析に復活させ、レポートを保有銘柄の意思決定に集中させる（v1.0「Web調査後の再評価」フローのv2.x再実装）。
 
 - [x] **Phase 19: Data Foundation & Holding-News Supply** — finnhub.tsティッカー汚染バグ修正 + 決定論的な保有銘柄別ニュース抽出をportfolio-analystへ供給 (completed 2026-07-03)
-- [ ] **Phase 20: Holding-Card News Display** — 保有銘柄カードへのID参照方式ニュース表示（見出し・ソース・リンク、0件時の正常描画）
+- [x] **Phase 20: Holding-Card News Display** — 保有銘柄カードへのID参照方式ニュース表示（見出し・ソース・リンク、0件時の正常描画） (completed 2026-07-03)
 - [ ] **Phase 21: Portfolio WebSearch Research** — 保有銘柄ごとのWebSearchリサーチをfail-softな新設パイプラインステップとして実行
 - [ ] **Phase 22: Portfolio-Analyst Re-Evaluation** — ニュース・リサーチを踏まえた判断根拠、緊急度フラグ、前日比較の決定論的判断変化検出
 - [ ] **Phase 23: New-Candidates Section Removal** — ポートフォリオレポートから新規組入候補セクションを削除（成功・フォールバック両パス）
@@ -114,7 +114,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
   2. 関連ニュースが0件の保有銘柄（日本株の小型株等）も、エラーやレイアウト崩れなく通常のカードとして描画され、「本日の関連ニュースなし」等の明示的な空状態が表示される
 **Plans**: 2 plans
   - [x] 20-01-PLAN.md — 決定論的データ層: resolvePortfolioHoldingNews リゾルバー・fail-soft ローダー・共通ヘルパー汎化
-  - [ ] 20-02-PLAN.md — 保有銘柄カードのニュースサブセクション描画（空状態含む）とパイプライン配線
+  - [x] 20-02-PLAN.md — 保有銘柄カードのニュースサブセクション描画（空状態含む）とパイプライン配線
 **UI hint**: yes
 
 ### Phase 21: Portfolio WebSearch Research
@@ -171,7 +171,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete    | 2026-07-03 |
 | 18. Index/Nav Integration & Validation | v2.4 | 2/2 | Complete    | 2026-07-03 |
 | 19. Data Foundation & Holding-News Supply | v2.5 | 3/3 | Complete    | 2026-07-03 |
-| 20. Holding-Card News Display | v2.5 | 1/2 | In Progress|  |
+| 20. Holding-Card News Display | v2.5 | 2/2 | Complete   | 2026-07-03 |
 | 21. Portfolio WebSearch Research | v2.5 | 0/? | Not started | - |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 0/? | Not started | - |
 | 23. New-Candidates Section Removal | v2.5 | 0/? | Not started | - |
