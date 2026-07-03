@@ -99,3 +99,12 @@ None - no external service configuration required.
 ---
 *Phase: 19-data-foundation-holding-news-supply*
 *Completed: 2026-07-03*
+
+## Self-Check: PASSED
+
+- FOUND: src/data/news/finnhub.ts
+- FOUND: src/data/news/finnhub.test.ts
+- FOUND: .planning/phases/19-data-foundation-holding-news-supply/19-01-SUMMARY.md
+- FOUND commit: a5c312d (test)
+- FOUND commit: 35c7012 (fix)
+- FOUND commit: 614ca8f (docs)
