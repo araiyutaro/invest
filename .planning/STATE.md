@@ -4,8 +4,8 @@ milestone: v2.5
 milestone_name: Portfolio News Intelligence
 status: executing
 stopped_at: Phase 23 UI-SPEC approved
-last_updated: "2026-07-03T23:53:13.489Z"
-last_activity: 2026-07-03 -- Phase 23 planning complete
+last_updated: "2026-07-03T23:54:09.425Z"
+last_activity: 2026-07-03 -- Phase 23 execution started
 progress:
   total_phases: 5
   completed_phases: 4
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-03 after v2.4 milestone)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 23 — new candidates section removal
+**Current focus:** Phase 23 — New-Candidates Section Removal
 
 ## Current Position
 
-Phase: 23
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-07-03 -- Phase 23 planning complete
+Phase: 23 (New-Candidates Section Removal) — EXECUTING
+Plan: 1 of 1
+Status: Executing Phase 23
+Last activity: 2026-07-03 -- Phase 23 execution started
 
 ## Performance Metrics
 

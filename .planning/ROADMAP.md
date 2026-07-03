@@ -88,7 +88,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 - [x] **Phase 20: Holding-Card News Display** — 保有銘柄カードへのID参照方式ニュース表示（見出し・ソース・リンク、0件時の正常描画） (completed 2026-07-03)
 - [x] **Phase 21: Portfolio WebSearch Research** — 保有銘柄ごとのWebSearchリサーチをfail-softな新設パイプラインステップとして実行 (completed 2026-07-03)
 - [x] **Phase 22: Portfolio-Analyst Re-Evaluation** — ニュース・リサーチを踏まえた判断根拠、緊急度フラグ、前日比較の決定論的判断変化検出 (completed 2026-07-03)
-- [ ] **Phase 23: New-Candidates Section Removal** — ポートフォリオレポートから新規組入候補セクションを削除（成功・フォールバック両パス）
+- [x] **Phase 23: New-Candidates Section Removal** — ポートフォリオレポートから新規組入候補セクションを削除（成功・フォールバック両パス） (completed 2026-07-03)
 
 ## Phase Details
 
@@ -151,7 +151,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
   1. ポートフォリオレポートHTMLに「新規組入候補」セクションが、通常パス（portfolioAnalysis 有り）・フォールバックパス（portfolioAnalysis === null）の両方で存在しない
   2. portfolio-analyst への文脈情報としての highlightedStocks の受け渡しは維持されている（プロンプト入力からは削除されない）
 **Plans**: 1 plan
-- [ ] 23-01-PLAN.md — formatNewCandidatesHtml 削除(両パス)+未使用 import 除去 / Test 30 反転・Test 31 拡張(TDD)+受け渡し維持 grep 検証 (Wave 1)
+- [x] 23-01-PLAN.md — formatNewCandidatesHtml 削除(両パス)+未使用 import 除去 / Test 30 反転・Test 31 拡張(TDD)+受け渡し維持 grep 検証 (Wave 1)
 **UI hint**: yes
 
 ## Progress
@@ -181,7 +181,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 20. Holding-Card News Display | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete    | 2026-07-03 |
-| 23. New-Candidates Section Removal | v2.5 | 0/? | Not started | - |
+| 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete   | 2026-07-03 |
 
 ---
 *Roadmap created: 2026-06-24*
