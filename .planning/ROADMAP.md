@@ -123,7 +123,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
   3. 既存3レポート（daily-report / meeting-minutes / portfolio-report）のリンク描画ロジックには回帰がない
 
 **Plans**: 2 plans
-- [ ] 18-01-PLAN.md — TDD: fs実在からNews Digestリンクを全エントリ毎回導出（実装）
+- [x] 18-01-PLAN.md — TDD: fs実在からNews Digestリンクを全エントリ毎回導出（実装）
 - [ ] 18-02-PLAN.md — update-index.ts単体ライブ実行で実機検証（human-verifyチェックポイント）
 **UI hint**: yes
 
@@ -149,7 +149,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
 | 16. Report Generator (HTML Rendering) | v2.4 | 3/3 | Complete    | 2026-07-02 |
 | 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete    | 2026-07-03 |
-| 18. Index/Nav Integration & Validation | v2.4 | 0/2 | Planned | - |
+| 18. Index/Nav Integration & Validation | v2.4 | 1/2 | In Progress|  |
 
 ---
 *Roadmap created: 2026-06-24*
