@@ -84,7 +84,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 
 保有銘柄ごとのニュースとWebSearchリサーチを踏まえた売却・保有再考をポートフォリオ分析に復活させ、レポートを保有銘柄の意思決定に集中させる（v1.0「Web調査後の再評価」フローのv2.x再実装）。
 
-- [ ] **Phase 19: Data Foundation & Holding-News Supply** — finnhub.tsティッカー汚染バグ修正 + 決定論的な保有銘柄別ニュース抽出をportfolio-analystへ供給
+- [x] **Phase 19: Data Foundation & Holding-News Supply** — finnhub.tsティッカー汚染バグ修正 + 決定論的な保有銘柄別ニュース抽出をportfolio-analystへ供給 (completed 2026-07-03)
 - [ ] **Phase 20: Holding-Card News Display** — 保有銘柄カードへのID参照方式ニュース表示（見出し・ソース・リンク、0件時の正常描画）
 - [ ] **Phase 21: Portfolio WebSearch Research** — 保有銘柄ごとのWebSearchリサーチをfail-softな新設パイプラインステップとして実行
 - [ ] **Phase 22: Portfolio-Analyst Re-Evaluation** — ニュース・リサーチを踏まえた判断根拠、緊急度フラグ、前日比較の決定論的判断変化検出
@@ -103,7 +103,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 **Plans**: 3 plans
 - [x] 19-01-PLAN.md — finnhub.ts index-as-ticker バグ修正 + NEWS-04 回帰テスト (Wave 1)
 - [x] 19-02-PLAN.md — 決定論的な保有銘柄別ニュース抽出モジュール(TDD) + matchAliases (Wave 1)
-- [ ] 19-03-PLAN.md — collect-data 統合(holding-news.json) + portfolio-analyst プロンプト入力セクション (Wave 2)
+- [x] 19-03-PLAN.md — collect-data 統合(holding-news.json) + portfolio-analyst プロンプト入力セクション (Wave 2)
 
 ### Phase 20: Holding-Card News Display
 **Goal**: レポート閲覧者が各保有銘柄カード上で、その判断根拠となった関連ニュースを直接確認できる
@@ -168,7 +168,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 16. Report Generator (HTML Rendering) | v2.4 | 3/3 | Complete    | 2026-07-02 |
 | 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete    | 2026-07-03 |
 | 18. Index/Nav Integration & Validation | v2.4 | 2/2 | Complete    | 2026-07-03 |
-| 19. Data Foundation & Holding-News Supply | v2.5 | 2/3 | In Progress|  |
+| 19. Data Foundation & Holding-News Supply | v2.5 | 3/3 | Complete   | 2026-07-03 |
 | 20. Holding-Card News Display | v2.5 | 0/? | Not started | - |
 | 21. Portfolio WebSearch Research | v2.5 | 0/? | Not started | - |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 0/? | Not started | - |
