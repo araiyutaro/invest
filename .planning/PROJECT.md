@@ -14,7 +14,7 @@
 
 v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、そしてAI厳選ニュースダイジェスト（news-digest.html）の4紙目追加を完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、4レポート（Daily Report / Meeting Minutes / Portfolio Report / News Digest）をGitHub Pagesへ自動デプロイする。ニュースキュレーションはID参照方式で幻覚URLを構造的に防止し、fail-soft設計により失敗時も既存3レポートの生成・デプロイに影響しない。
 
-**Next milestone:** v2.5 Portfolio News Intelligence（Phase 20 完了 — 保有銘柄カード関連ニュース表示（UI-05/UI-06: resolvePortfolioHoldingNews によるID参照解決 + normalizeHoldingSymbol キー正規化 + 0件時の明示的空状態、generate-report.ts 配線済み）。実データでのブラウザ目視確認は 20-HUMAN-UAT.md で追跡中。次は Phase 21: Portfolio WebSearch Research）
+**Next milestone:** v2.5 Portfolio News Intelligence（Phase 21 完了 — 保有12銘柄のWebSearchリサーチを invest.md Step 3-P として新設（社名併記+日本語クエリ・エンティティ確認指示・tmp/portfolio-research/ 分離保存・[STEP:portfolio-research:*] fail-softマーカー・pipeline-metrics計測）。webSearchResultSchema の alias-transform 硬化 + validate-portfolio-research.ts 12ファイル契約検証 + Daily Report隔離テスト完備。コードレビュー Critical 1/Warning 7 は全件自動修正済み（252テスト green）。ライブ実行確認（12ファイル生成・EE/NXTスポットチェック・マーカー動作）は 21-HUMAN-UAT.md で追跡中。次は Phase 22: Portfolio-Analyst Re-Evaluation）
 
 ## Current Milestone: v2.5 Portfolio News Intelligence
 
@@ -67,11 +67,12 @@ v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 - ✓ ニュースキュレーションHTML（news-digest.html）を4紙目のレポートとして生成・index.htmlへ条件付きリンク統合 — v2.4 (Phases 15-18, CURA-01〜09 / UI-03 / UI-04 / OPS-04 全12要件、ライブ検証+本番デプロイ済み)
 - ✓ finnhub.ts の汎用ニュース ticker 汚染バグ修正（index-as-ticker） — v2.5 (Phase 19, NEWS-04)
 - ✓ 保有銘柄別関連ニュースの決定論的抽出と portfolio-analyst への入力供給（buildHoldingNewsMap → tmp/holding-news.json → プロンプト注入） — v2.5 (Phase 19, PORT-01)
+- ✓ 保有12銘柄のWebSearchリサーチをfail-softな新設パイプラインステップ（Step 3-P）として実行し tmp/portfolio-research/{symbol}.json へ分離保存（[STEP:portfolio-research:*]マーカー可視化 + 12ファイル契約検証） — v2.5 (Phase 21, PORT-02/OPS-05。ライブ実行確認は21-HUMAN-UAT.mdで追跡)
 
 ### Active
 
 - [ ] 保有銘柄別ニュースの判断根拠への必須反映（供給は Phase 19 で完了、反映は Phase 22） — v2.5
-- [ ] 保有銘柄ごとのWebSearchリサーチと売却・保有判断の再評価 — v2.5
+- [ ] 保有銘柄ごとのWebSearchリサーチ結果を踏まえた売却・保有判断の再評価（リサーチ実行は Phase 21 で完了、再評価反映は Phase 22） — v2.5
 - [ ] 保有銘柄カードへの関連ニュース表示（見出し・ソース・リンク） — v2.5
 - [ ] ポートフォリオレポートから新規組入候補セクションを削除 — v2.5
 
@@ -147,4 +148,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-03 — Phase 20 (Holding-Card News Display) complete*
+*Last updated: 2026-07-03 — Phase 21 (Portfolio WebSearch Research) complete*
