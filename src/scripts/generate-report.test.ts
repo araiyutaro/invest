@@ -617,5 +617,11 @@ describe("3-report output", () => {
     expect(readdirMock).toHaveBeenCalledWith(expect.stringContaining("websearch"));
     expect(readdirMock).toHaveBeenCalledWith(expect.stringContaining("reeval"));
     expect(readdirMock).not.toHaveBeenCalledWith(expect.stringContaining("portfolio-research"));
+
+    // readdir経由だけでなくreadFile直読みの退行も検出する（WR-07: 構造的隔離の完全性）
+    const readFileMock = fsMock.readFile as ReturnType<typeof vi.fn>;
+    for (const call of readFileMock.mock.calls) {
+      expect(String(call[0])).not.toContain("portfolio-research");
+    }
   });
 });
