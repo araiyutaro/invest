@@ -4,8 +4,8 @@ milestone: v2.5
 milestone_name: Portfolio News Intelligence
 status: executing
 stopped_at: Phase 20 UI-SPEC approved (rev.2, 6/6)
-last_updated: "2026-07-03T07:11:55.919Z"
-last_activity: 2026-07-03 -- Phase 20 planning complete
+last_updated: "2026-07-03T08:19:28.515Z"
+last_activity: 2026-07-03 -- Phase 20 execution started
 progress:
   total_phases: 5
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-03 after v2.4 milestone)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 20 — holding card news display
+**Current focus:** Phase 20 — holding-card-news-display
 
 ## Current Position
 
-Phase: 20
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-07-03 -- Phase 20 planning complete
+Phase: 20 (holding-card-news-display) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 20
+Last activity: 2026-07-03 -- Phase 20 execution started
 
 ## Performance Metrics
 

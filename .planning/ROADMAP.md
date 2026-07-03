@@ -113,7 +113,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
   1. 各保有銘柄カードに、tmp/news.json をID参照方式で照合解決した関連ニュース（見出し・ソース名・元記事リンク）が銘柄あたり3〜5件の上限付きで表示される（幻覚URLが構造的に発生しない）
   2. 関連ニュースが0件の保有銘柄（日本株の小型株等）も、エラーやレイアウト崩れなく通常のカードとして描画され、「本日の関連ニュースなし」等の明示的な空状態が表示される
 **Plans**: 2 plans
-  - [ ] 20-01-PLAN.md — 決定論的データ層: resolvePortfolioHoldingNews リゾルバー・fail-soft ローダー・共通ヘルパー汎化
+  - [x] 20-01-PLAN.md — 決定論的データ層: resolvePortfolioHoldingNews リゾルバー・fail-soft ローダー・共通ヘルパー汎化
   - [ ] 20-02-PLAN.md — 保有銘柄カードのニュースサブセクション描画（空状態含む）とパイプライン配線
 **UI hint**: yes
 
@@ -171,7 +171,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete    | 2026-07-03 |
 | 18. Index/Nav Integration & Validation | v2.4 | 2/2 | Complete    | 2026-07-03 |
 | 19. Data Foundation & Holding-News Supply | v2.5 | 3/3 | Complete    | 2026-07-03 |
-| 20. Holding-Card News Display | v2.5 | 0/? | Not started | - |
+| 20. Holding-Card News Display | v2.5 | 1/2 | In Progress|  |
 | 21. Portfolio WebSearch Research | v2.5 | 0/? | Not started | - |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 0/? | Not started | - |
 | 23. New-Candidates Section Removal | v2.5 | 0/? | Not started | - |
