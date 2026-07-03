@@ -139,7 +139,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 **Plans**: 4 plans
 - [x] 22-01-PLAN.md — 型・スキーマ契約: HoldingEvaluation 拡張 + urgent alias-transform 硬化 + decisionChanged/previousDecision strip (Wave 1)
 - [x] 22-02-PLAN.md — invest.md Step 3d: 前日退避スニペット + リサーチ/前日判断セクション + urgent 契約・rationale 300文字化 (Wave 1)
-- [ ] 22-03-PLAN.md — decision-diff.ts(TDD): 決定論的 attachDecisionChanges（前日スナップショット等値比較・undefined区別） (Wave 2)
+- [x] 22-03-PLAN.md — decision-diff.ts(TDD): 決定論的 attachDecisionChanges（前日スナップショット等値比較・undefined区別） (Wave 2)
 - [ ] 22-04-PLAN.md — レポート生成層: loadPrevPortfolioAnalysis + main() 配線 + Pitfall7 backfill + 緊急/判断変化バッジ (Wave 3)
 **UI hint**: yes
 
@@ -179,7 +179,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 19. Data Foundation & Holding-News Supply | v2.5 | 3/3 | Complete    | 2026-07-03 |
 | 20. Holding-Card News Display | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete    | 2026-07-03 |
-| 22. Portfolio-Analyst Re-Evaluation | v2.5 | 2/4 | In Progress|  |
+| 22. Portfolio-Analyst Re-Evaluation | v2.5 | 3/4 | In Progress|  |
 | 23. New-Candidates Section Removal | v2.5 | 0/? | Not started | - |
 
 ---
