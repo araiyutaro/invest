@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.5
 milestone_name: Portfolio News Intelligence
-status: executing
-stopped_at: Phase 19 context gathered
-last_updated: "2026-07-03T05:44:59.350Z"
+status: ready_to_plan
+stopped_at: Phase 19 complete (3/3) — ready to discuss Phase 20
+last_updated: 2026-07-03T06:06:51.388Z
 last_activity: 2026-07-03 -- Phase 19 execution started
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
+  completed_plans: 3
   percent: 0
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-03 after v2.4 milestone)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 19 — data-foundation-holding-news-supply
+**Current focus:** Phase 20 — holding card news display
 
 ## Current Position
 
-Phase: 19 (data-foundation-holding-news-supply) — EXECUTING
-Plan: 1 of 3
-Status: Executing Phase 19
-Last activity: 2026-07-03 -- Phase 19 execution started
+Phase: 20
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-07-03
 
 ## Performance Metrics
 

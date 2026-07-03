@@ -8,11 +8,11 @@
 
 ### Data Integrity (NEWS)
 
-- [ ] **NEWS-04**: 汎用ニュース記事の ticker フィールドに配列インデックスが混入する finnhub.ts のバグが修正され、ticker が Finnhub カンパニーニュース由来の正当な値のみを持つ（ticker一致ロジックの信頼できる土台）
+- [x] **NEWS-04**: 汎用ニュース記事の ticker フィールドに配列インデックスが混入する finnhub.ts のバグが修正され、ticker が Finnhub カンパニーニュース由来の正当な値のみを持つ（ticker一致ロジックの信頼できる土台）
 
 ### Portfolio News Analysis (PORT)
 
-- [ ] **PORT-01**: portfolio-analyst が保有銘柄ごとの関連ニュース（tmp/news.json から ticker 一致で決定論的に抽出、優先度スコア順・銘柄あたり上限付き）を入力として受け取る
+- [x] **PORT-01**: portfolio-analyst が保有銘柄ごとの関連ニュース（tmp/news.json から ticker 一致で決定論的に抽出、優先度スコア順・銘柄あたり上限付き）を入力として受け取る
 - [ ] **PORT-02**: 保有銘柄ごとに WebSearch による最新材料リサーチ（決算・訴訟・規制変更・大型契約・ガイダンス変更等）が実行され、結果が既存 Daily Report 用ディレクトリとは分離された専用領域（tmp/portfolio-research/）に保存される
 - [ ] **PORT-03**: 保有銘柄の売却・保有判断（rationale）が、関連ニュース・リサーチ結果が存在する場合にその内容へ明示的に言及する（ニュースを踏まえた再考であることがレポート上で確認できる）
 - [ ] **PORT-04**: 決算ミス・訴訟・規制変更・大型契約・ガイダンス引下げ等の重大材料を検知した保有銘柄に緊急度フラグ（urgent）が付与される
@@ -58,8 +58,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NEWS-04 | Phase 19 | Pending |
-| PORT-01 | Phase 19 | Pending |
+| NEWS-04 | Phase 19 | Complete |
+| PORT-01 | Phase 19 | Complete |
 | PORT-02 | Phase 21 | Pending |
 | PORT-03 | Phase 22 | Pending |
 | PORT-04 | Phase 22 | Pending |
