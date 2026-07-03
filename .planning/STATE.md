@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.5
 milestone_name: Portfolio News Intelligence
-status: ready_to_plan
-stopped_at: Phase 20 complete (2/2) — ready to discuss Phase 21
-last_updated: 2026-07-03T08:47:35.802Z
-last_activity: 2026-07-03 -- Phase 20 execution started
+status: planning
+stopped_at: Phase 21 context gathered
+last_updated: "2026-07-03T08:55:50.350Z"
+last_activity: 2026-07-03
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 5
   completed_plans: 5
-  percent: 20
+  percent: 40
 ---
 
 # Project State
@@ -96,8 +96,8 @@ Human-UAT / 実行時検証待ち項目。いずれも静的解析では確認�
 
 ## Session Continuity
 
-Last session: 2026-07-03T06:34:57.587Z
-Stopped at: Phase 20 UI-SPEC approved (rev.2, 6/6)
+Last session: 2026-07-03T08:55:50.341Z
+Stopped at: Phase 21 context gathered
 Resume with: `/gsd-plan-phase 19`
 
 ## Operator Next Steps
