@@ -96,3 +96,11 @@ None - no external service configuration required.
 ---
 *Phase: 21-portfolio-websearch-research*
 *Completed: 2026-07-03*
+
+## Self-Check: PASSED
+
+- FOUND: `.claude/commands/invest.md`
+- FOUND: `.planning/phases/21-portfolio-websearch-research/21-02-SUMMARY.md`
+- FOUND commit: `a6228c8` (Task 1)
+- FOUND commit: `95656d0` (Task 2)
+- FOUND commit: `d3f550f` (plan metadata commit)
