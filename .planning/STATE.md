@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.4
 milestone_name: News Curation Report
-status: planning
-stopped_at: Phase 18 context gathered
-last_updated: "2026-07-03T00:55:50.128Z"
+status: ready_to_plan
+stopped_at: Phase 17 complete (2/2) — ready to discuss Phase 18
+last_updated: 2026-07-03T00:56:25.407Z
 last_activity: 2026-07-03
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 5
-  completed_plans: 5
+  completed_plans: 7
   percent: 67
 ---
 
@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-02)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 18 — index/nav integration & validation
+**Current focus:** Phase 18 — index nav integration validation
 
 ## Current Position
 
