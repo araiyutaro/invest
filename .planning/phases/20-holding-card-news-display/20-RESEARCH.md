@@ -58,7 +58,7 @@
 
 実装は3つの独立した層に分解できる: (1) `src/portfolio/holding-news.ts` への `resolvePortfolioHoldingNews()` 純粋関数追加（HoldingNewsFile + 記事プール → 銘柄別解決済みニュース配列。ID未検出はログしてスキップ、既存の `HoldingNewsEntry`/`HoldingNewsMatchType` 型をそのまま再利用）、(2) `report-data-loaders.ts` への `loadHoldingNews()` / `loadNewsPool()` の追加（`loadPortfolioAnalysis()` と同じ fail-soft try/catch シェイプだが、LLM出力ではないため zod は不要）、(3) `generate-portfolio-report.ts` の `formatHoldingEvaluationsHtml()` 拡張とレンダリング用ヘルパー追加（既存 `generate-news-digest.ts` の `safeHref`/日時フォーマットロジックを report-utils.ts に汎化・再利用）。`generatePortfolioReportHtml()` のシグネチャ変更は、`generate-daily-report.ts` が `marketData` 引数を追加した際に採用した「デフォルト値付き追加引数で後方互換を保つ」パターン（Test 35 で検証済み）を踏襲することで、既存テストを壊さずに進められる。
 
-**Primary recommendation:** `resolvePortfolioHoldingNews()` は `src/portfolio/holding-news.ts` に配置し（型の凝集性を優先、news-digest の schemas.ts 配置とは異なる判断だが根拠は Architecture Patterns 参照）、`generatePortfolioReportHtml` の第3引数に `resolvedHoldingNews: Record<string, ReadonlyArray<ResolvedHoldingNewsItem>> = {}` をデフォルト値付きで追加し、`formatHoldingEvaluationsHtml` 内で銘柄ごとに `resolvedHoldingNews[h.symbol] ?? []` を参照して常時「関連ニュース」見出し + リストまたは空状態文言を描画する。
+**Primary recommendation:** `resolvePortfolioHoldingNews()` は `src/portfolio/holding-news.ts` に配置し（型の凝集性を優先、news-digest の schemas.ts 配置とは異なる判断だが根拠は Architecture Patterns 参照）、`generatePortfolioReportHtml` の第3引数に `resolvedHoldingNews: Record<string, ReadonlyArray<ResolvedHoldingNewsItem>> = {}` をデフォルト値付きで追加し、`formatHoldingEvaluationsHtml` 内で銘柄ごとに `resolvedHoldingNews[normalizeHoldingSymbol(h.symbol)] ?? []` を参照して常時「関連ニュース」見出し + リストまたは空状態文言を描画する（キー正規化については Open Questions Q2 RESOLVED を参照）。
 
 ## Architectural Responsibility Map
 
@@ -125,13 +125,14 @@
    │  3. 見つからないIDは console.warn + スキップ（D-10 幻覚防止の最終ガード）
    │  4. 見つかった記事から {id, title, source, url, publishedAt, matchType} を合成
    │     （score は破棄 — D-06 内部値のため非表示）
-   ▼  Record<symbol, ResolvedHoldingNewsItem[]>
+   │  5. 結果キーは normalizeHoldingSymbol(symbol) で正規化（Q2 RESOLVED）
+   ▼  Record<normalizedSymbol, ResolvedHoldingNewsItem[]>
 [generate-report.ts:101 Promise.all] ── EXTEND: 2ファイル追加読込 + resolve呼び出し
    ▼
 [generate-portfolio-report.ts]
    │  generatePortfolioReportHtml(result, portfolioAnalysis, resolvedHoldingNews = {})
    │  formatHoldingEvaluationsHtml(holdings, resolvedHoldingNews)
-   │    各 holding について resolvedHoldingNews[h.symbol] ?? [] を取得
+   │    各 holding について resolvedHoldingNews[normalizeHoldingSymbol(h.symbol)] ?? [] を取得
    │    ├─ 0件 → 「関連ニュース」見出し + ミュートグレー「本日の関連ニュースなし」(D-08)
    │    └─ 1-5件 → 「関連ニュース」見出し + <ul> (見出しリンク/ソース/JST日時/社名一致バッジ) (D-01,D-02,D-06,D-07)
    ▼
@@ -145,7 +146,7 @@ docs/YYYY-MM-DD/portfolio-report.html （静的HTML、GitHub Pagesへ配信）
 ```
 src/
 ├── portfolio/
-│   ├── holding-news.ts        # 既存(Phase 19) + NEW: resolvePortfolioHoldingNews(), ResolvedHoldingNewsItem型
+│   ├── holding-news.ts        # 既存(Phase 19) + NEW: resolvePortfolioHoldingNews(), normalizeHoldingSymbol(), ResolvedHoldingNewsItem型
 │   ├── holding-news.test.ts   # 既存 + NEW: resolver向けdescribeブロック追加
 │   └── holdings.ts            # 変更なし（PORTFOLIO_HOLDINGS）
 ├── data/news/
@@ -192,10 +193,16 @@ export interface ResolvedHoldingNewsItem {
   readonly matchType: HoldingNewsMatchType;
 }
 
+/** 銘柄シンボル正規化の単一情報源（Q2 RESOLVED）。リゾルバーのキー生成と参照側が同一関数を共有し表記揺れによるキー不一致を排除する。 */
+export function normalizeHoldingSymbol(symbol: string): string {
+  return symbol.trim().toUpperCase();
+}
+
 /**
  * holding-news.json（銘柄別ID参照）を news.json プールと照合し、
  * 描画に必要な全フィールドを解決する。存在しないIDはそのエントリのみdropし、
  * console.warnでログする（D-10）。いかなる入力でもthrowしない。
+ * 結果マップのキーは normalizeHoldingSymbol で正規化する（Q2 RESOLVED）。
  */
 export function resolvePortfolioHoldingNews(
   holdingNews: HoldingNewsFile,
@@ -221,13 +228,13 @@ export function resolvePortfolioHoldingNews(
         matchType: entry.matchType,
       });
     }
-    result[symbol] = resolved;
+    result[normalizeHoldingSymbol(symbol)] = resolved;
   }
   return result;
 }
 ```
 
-**なぜ `schemas.ts` ではなく `holding-news.ts` に置くか:** `resolveNewsCuration` が schemas.ts にあるのは、raw（LLM出力）のzod検証と解決処理が1ファイルで密結合しているため。本フェーズのholding-news.jsonは自社TS生成物でzod raw検証が不要なため、その密結合の理由が存在しない。一方 `HoldingNewsFile`/`HoldingNewsEntry`/`HoldingNewsMatchType` という関連型は既に holding-news.ts に定義済みであり、解決関数もこのドメインモジュールに置くほうが型の凝集性が高い。プランナーはこの判断を採用するか、news-digest踏襲でschemas.tsに置くか、フェーズ計画時に明示的に選択すること（Claude's Discretion領域）。
+**なぜ `schemas.ts` ではなく `holding-news.ts` に置くか:** `resolveNewsCuration` が schemas.ts にあるのは、raw（LLM出力）のzod検証と解決処理が1ファイルで密結合しているため。本フェーズのholding-news.jsonは自社TS生成物でzod raw検証が不要なため、その密結合の理由が存在しない。一方 `HoldingNewsFile`/`HoldingNewsEntry`/`HoldingNewsMatchType` という関連型は既に holding-news.ts に定義済みであり、解決関数もこのドメインモジュールに置くほうが型の凝集性が高い。→ Open Questions Q1 で RESOLVED（holding-news.ts 配置に確定）。
 
 ### Pattern 2: fail-softローダー（自社生成JSON向け・zodなし簡易版）
 
@@ -295,6 +302,7 @@ export function generatePortfolioReportHtml(
 - **`resolvedHoldingNews`未指定時にセクションごと省略:** D-08で明示的に禁止。デフォルト値`{}`でも「関連ニュースなし」の空状態は必ず描画されなければならない。
 - **`holding-news.json`のscoreフィールドをHTMLに埋め込む:** D-06で「優先度スコアは内部値のため非表示」と明記。ResolvedHoldingNewsItem型にscoreを含めないことで構造的に防止する。
 - **safeHrefを経由しない生URL埋め込み:** news-digestで既に`javascript:`/`data:`スキーム対策として`safeHref`が実装済み。本フェーズも同じ関数を再利用し、独自のURL検証ロジックを再実装しない。
+- **参照側で生の h.symbol をキーにする:** resolvedHoldingNews のキーは normalizeHoldingSymbol 済みのため、参照側も必ず normalizeHoldingSymbol(h.symbol) で引き当てる（Q2 RESOLVED）。生キー参照は表記揺れ時のサイレント0件を招く。
 
 ## Don't Hand-Roll
 
@@ -306,7 +314,7 @@ export function generatePortfolioReportHtml(
 | HTMLエスケープ | 独自のエスケープ関数 | 既存の`escapeHtml`（report-utils.ts） | プロジェクト全体で統一済みのXSS対策関数 |
 | 優先度スコア計算 | 新規のスコアリングロジック | 既存の`calculatePriorityScore`（filter.ts）— ただしPhase 19で既に適用済みのため、本フェーズでは呼び出し不要（holding-news.json生成時に既に確定済み） | 二重計算・二重ソートは表示順の不整合を招く（D-05: 供給順をそのまま踏襲、再ソート禁止） |
 
-**Key insight:** 本フェーズで「新規に作るべきロジック」は実質1つ（`resolvePortfolioHoldingNews`のID解決ループ）のみであり、それ以外は全て既存の稼働中コードの再利用・汎化で完結する。これは v2.5 リサーチ SUMMARY.md が結論づけた「この機能の全パーツに直接の稼働前例が存在する」という評価の具体的な現れである。
+**Key insight:** 本フェーズで「新規に作るべきロジック」は実質2つ（`resolvePortfolioHoldingNews`のID解決ループ + `normalizeHoldingSymbol` の軽量正規化）のみであり、それ以外は全て既存の稼働中コードの再利用・汎化で完結する。これは v2.5 リサーチ SUMMARY.md が結論づけた「この機能の全パーツに直接の稼働前例が存在する」という評価の具体的な現れである。
 
 ## Common Pitfalls
 
@@ -317,9 +325,9 @@ export function generatePortfolioReportHtml(
 **Warning signs:** 日本株保有銘柄（8522.T, 5885.T, 5576.T, 7711.T）のカードだけ「関連ニュース」の文字列自体がHTMLに出現しない。
 
 ### Pitfall 2: `holding.symbol`と`resolvedHoldingNews`のキーの不一致
-**What goes wrong:** `PortfolioAnalysis.holdings[].symbol`（例: "8522.T"）と`HoldingNewsFile`のキー（Phase 19で`PORTFOLIO_HOLDINGS`の`symbol`から生成、同じく"8522.T"）は本来同一のはずだが、portfolio-analystがLLM出力でsymbol表記を微妙に変える可能性（例: "8522" と "8522.T"の不一致）はゼロではない。
-**Why it happens:** `HoldingEvaluation.symbol`はLLM(`portfolio-analyst`)が出力するフィールドであり、`portfolioAnalysisSchema`のpassthrough/transform層で正規化されていない限り表記揺れのリスクが残る。
-**How to avoid:** `resolvedHoldingNews[h.symbol] ?? []`のようにキー不一致時は静かに空配列へフォールバックする設計にする（これ自体はD-08の空状態表示と自然に合流するため、追加の分岐は不要）。ただし念のため、`schemas.ts`の`portfolioAnalysisSchema`が`symbol`フィールドをどう検証しているか実装前に確認し、必要なら軽い正規化（末尾の空白除去等）を検討する。
+**What goes wrong:** `PortfolioAnalysis.holdings[].symbol`（例: "8522.T"）と`HoldingNewsFile`のキー（Phase 19で`PORTFOLIO_HOLDINGS`の`symbol`から生成、同じく"8522.T"）は本来同一のはずだが、portfolio-analystがLLM出力でsymbol表記を微妙に変える可能性（例: "8522" と "8522.T"の不一致、前後空白、大小文字）はゼロではない。
+**Why it happens:** `HoldingEvaluation.symbol`はLLM(`portfolio-analyst`)が出力するフィールドであり、`portfolioAnalysisSchema`のpassthrough/transform層で正規化されていない（実コード確認済み: `rawHoldingSchema.symbol` は `z.string()` のみ、transform も `symbol: raw.symbol` で無変換 — schemas.ts:151,166）。
+**How to avoid:** **Q2 RESOLVED の決定を適用する** — `normalizeHoldingSymbol(symbol)`（trim + toUpperCase）をリゾルバーのキー生成と参照側（`resolvedHoldingNews[normalizeHoldingSymbol(h.symbol)] ?? []`）の**両方**に適用し、同一正規化でキー一致を構造的に保証する。`?? []`はキー不在時にD-08の空状態表示へ安全に合流するための最終フォールバック。
 **Warning signs:** ライブラン時に、Finnhubの`ticker`一致が確認できているはずの銘柄（例:MRNA）のカードで「本日の関連ニュースなし」が表示される。
 
 ### Pitfall 3: `NewsArticleWithId`の`publishedAt`型の嘘（Date型 vs 実行時string）
@@ -346,6 +354,7 @@ export function generatePortfolioReportHtml(
 // Source: 既存の generate-news-digest.ts の formatArticleCardHtml / formatMarketGroupsHtml パターンを
 // 保有銘柄カードのコンテキストに適合させた設計案
 import { escapeHtml, safeHref, formatPublishedAtJst } from "./report-utils.js"; // safeHref/formatPublishedAtJstは本フェーズでgenerate-news-digest.tsから移設
+import { normalizeHoldingSymbol } from "../portfolio/holding-news.js";
 import type { ResolvedHoldingNewsItem } from "../portfolio/holding-news.js";
 
 function formatHoldingNewsItemHtml(item: ResolvedHoldingNewsItem): string {
@@ -387,7 +396,8 @@ function formatHoldingEvaluationsHtml(
     const riskHtml = h.riskNote
       ? `<p style="color:#f59e0b;font-size:0.85rem;">リスク: ${escapeHtml(h.riskNote)}</p>`
       : "";
-    const newsHtml = formatHoldingNewsSectionHtml(resolvedHoldingNews[h.symbol] ?? []); // D-08/Pitfall2: キー不在も安全にフォールバック
+    // Q2 RESOLVED / Pitfall2: 参照側も normalizeHoldingSymbol でキーを正規化しリゾルバー側とキー一致を保証
+    const newsHtml = formatHoldingNewsSectionHtml(resolvedHoldingNews[normalizeHoldingSymbol(h.symbol)] ?? []);
     return `<div class="agent-card" style="border-left-color:${color};">
       <h4>${escapeHtml(h.symbol)}${h.nameJa ? ` -- ${escapeHtml(h.nameJa)}` : ""} <span style="float:right;color:${color};font-weight:bold;">${escapeHtml(h.decision)}</span></h4>
       <p>${escapeHtml(h.rationale)}</p>
@@ -415,22 +425,20 @@ function formatHoldingEvaluationsHtml(
 
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|-----------------|
-| A1 | `resolvePortfolioHoldingNews()` を `schemas.ts` ではなく `holding-news.ts` に配置すべき、という判断は本リサーチの推奨であり、CONTEXT.mdの「Claude's Discretion」領域である（ユーザーによるロック済み決定ではない） | Architecture Patterns Pattern 1 | 低リスク。プランナーが `schemas.ts` 配置を選んでも実装ロジック自体は同一のため、フェーズの成否には影響しない |
-| A2 | `HoldingEvaluation.symbol` と `HoldingNewsFile` のキー（`PORTFOLIO_HOLDINGS`由来）が常に完全一致するという前提（Pitfall 2で軽減策は提示済みだが、`portfolioAnalysisSchema`の`symbol`フィールドの正規化有無は本リサーチでは未確認） | Common Pitfalls #2 | 中リスク。表記揺れがあれば特定銘柄のニュースが静かに0件表示になるが、D-08の空状態設計により「エラー」としては顕在化しない（Pitfall 4系のsilent degradation） |
+| A1 | `resolvePortfolioHoldingNews()` を `schemas.ts` ではなく `holding-news.ts` に配置すべき、という判断は本リサーチの推奨であり、CONTEXT.mdの「Claude's Discretion」領域である（ユーザーによるロック済み決定ではない） | Architecture Patterns Pattern 1 | 低リスク。プランナーが `schemas.ts` 配置を選んでも実装ロジック自体は同一のため、フェーズの成否には影響しない。→ Q1 RESOLVED（holding-news.ts に確定） |
+| A2 | `HoldingEvaluation.symbol` と `HoldingNewsFile` のキー（`PORTFOLIO_HOLDINGS`由来）が常に完全一致するという前提。実コード確認の結果 `portfolioAnalysisSchema` の symbol は無正規化（`z.string()` のみ、schemas.ts:151,166）で表記揺れリスクが残ることが判明 | Common Pitfalls #2 | **解消済み（Q2 RESOLVED）**。normalizeHoldingSymbol をリゾルバー側キー生成と参照側の両方に適用し、キー一致を構造的に保証する設計に確定。silent degradation リスクは軽減された |
 
-**このテーブルが示す通り:** 本リサーチの技術的主張（型定義・関数シグネチャ・既存コードの挙動）はすべて直接のファイル読み取りにより`[VERIFIED: codebase]`である。ユーザー確認が必要な項目は実質A2の1点（プランナーが計画時に`portfolioAnalysisSchema`のsymbol検証を確認することを推奨）のみ。
+**このテーブルが示す通り:** 本リサーチの技術的主張（型定義・関数シグネチャ・既存コードの挙動）はすべて直接のファイル読み取りにより`[VERIFIED: codebase]`である。ユーザー確認が必要だった A2（symbol 正規化）は Q2 RESOLVED として設計決定済み。
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`resolvePortfolioHoldingNews()`の配置場所（`holding-news.ts` vs `schemas.ts`）**
    - What we know: 両モジュールとも技術的に配置可能。型的凝集性は`holding-news.ts`が優れる。v2.4前例の一貫性は`schemas.ts`が優れる
-   - What's unclear: プランナー/実装者がどちらの一貫性原則を優先するか
-   - Recommendation: `holding-news.ts`配置を第一候補として計画するが、レビュー時に異論があれば`schemas.ts`へ移すのは低コスト（純粋関数のため）
+   - **RESOLVED:** `holding-news.ts` に配置する。関連型（HoldingNewsFile/HoldingNewsEntry/HoldingNewsMatchType）が同ファイルに定義済みで型的凝集性が高く、holding-news.json は自社TS生成物で zod raw 検証が不要なため schemas.ts の密結合理由が存在しない（Assumption A1 の第一候補を採用）。20-01 Task 1 / 20-02 Task 2 の import 元に反映済み
 
 2. **`HoldingEvaluation.symbol`表記の正規化有無**
-   - What we know: `portfolioAnalysisSchema`の該当箇所は未確認（本フェーズのスコープ外調査）
-   - What's unclear: LLM出力の`symbol`が`PORTFOLIO_HOLDINGS`の`symbol`と常に完全一致する保証があるか
-   - Recommendation: 実装開始前に`schemas.ts`の`portfolioAnalysisSchema`定義（`symbol`フィールド周辺）を1分程度で確認し、必要ならtrim等の軽い正規化を`resolvedHoldingNews`参照側に追加する
+   - What we know: `portfolioAnalysisSchema`の該当箇所を実コード確認した結果、`rawHoldingSchema.symbol` は `z.string()` のみ（schemas.ts:151）、`holdingEvaluationSchema.transform` も `symbol: raw.symbol`（schemas.ts:166）で**正規化なし**。LLM(portfolio-analyst)出力の symbol は表記揺れ（"8522" vs "8522.T"、前後空白、大小文字）が起こり得る
+   - **RESOLVED:** 銘柄シンボル正規化の単一情報源 `normalizeHoldingSymbol(symbol) = symbol.trim().toUpperCase()` を `holding-news.ts` に追加し、**リゾルバー側のキー生成**（`result[normalizeHoldingSymbol(symbol)] = ...`）と**参照側の引き当て**（`resolvedHoldingNews[normalizeHoldingSymbol(h.symbol)] ?? []`）の**両方**に同一関数を適用する。これによりキー生成と参照が構造的に一致し、表記揺れによるサイレント0件表示を排除する。米国ティッカーは大文字、日本株は数値+".T" のため trim+toUpperCase は内部文字を変えず安全に正準化できる。`?? []` はキー不在時の最終フォールバックとして D-08 空状態に合流。20-01 Task 1（キー生成 + normalizeHoldingSymbol export + 単体/正規化キーテスト）と 20-02 Task 1（参照側適用 + キー正規化テスト）に反映済み
 
 ## Environment Availability
 
@@ -450,9 +458,11 @@ function formatHoldingEvaluationsHtml(
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
 |--------|----------|-----------|--------------------|-------------|
 | UI-05 | `resolvePortfolioHoldingNews`が正常IDを正しく解決し、見出し/ソース/URL/公開日時/matchTypeを持つオブジェクトを返す | unit | `npx vitest run src/portfolio/holding-news.test.ts -t "resolvePortfolioHoldingNews"` | ❌ Wave 0（describeブロック新規追加） |
+| UI-05 | `normalizeHoldingSymbol`が trim + 大文字化で正準キーを生成し、リゾルバー結果キーが正規化される | unit | `npx vitest run src/portfolio/holding-news.test.ts -t "normalizeHoldingSymbol"` | ❌ Wave 0（Q2 RESOLVED対応） |
 | UI-05 | 存在しないIDはそのエントリのみdropし、console.warnを呼ぶ（他エントリの解決は継続） | unit | `npx vitest run src/portfolio/holding-news.test.ts -t "不明な記事ID"` | ❌ Wave 0 |
 | UI-05 | 銘柄間のID混入防止: holdingNewsでHII配下にのみ列挙された記事IDが、MRNAの解決結果に含まれない | unit | `npx vitest run src/portfolio/holding-news.test.ts -t "銘柄間"` | ❌ Wave 0（Pitfall 5対応、D-10必須項目） |
 | UI-05 | `formatHoldingEvaluationsHtml`が見出しリンク・ソース名・JST日時・「社名一致」バッジ(name/alias一致時のみ)をHTMLに含める | unit | `npx vitest run src/scripts/generate-report.test.ts -t "Portfolio Report"` | ❌ Wave 0（既存describeブロックにテスト追加） |
+| UI-05 | 参照側キー正規化: resolvedHoldingNewsのキーが正規化済み、h.symbolが表記揺れでも該当ニュースが描画される | unit | `npx vitest run src/scripts/generate-report.test.ts -t "Portfolio Report"` | ❌ Wave 0（Q2 RESOLVED対応） |
 | UI-05 | リンクの`href`が`escapeHtml`済み、`target="_blank" rel="noopener noreferrer"`を持つ | unit | `npx vitest run src/scripts/generate-report.test.ts -t "rel.*noopener"` | ❌ Wave 0 |
 | UI-05 | `generatePortfolioReportHtml`が3引数目省略時（既存2引数呼び出し）でも正常にHTML生成される（後方互換） | unit | `npx vitest run src/scripts/generate-report.test.ts -t "Test 25"` | ✅（既存Test 25-32が無変更でパスすることを確認するリグレッションチェック） |
 | UI-06 | 関連ニュース0件銘柄でも「関連ニュース」見出しとミュートグレーの「本日の関連ニュースなし」が描画される | unit | `npx vitest run src/scripts/generate-report.test.ts -t "関連ニュースなし"` | ❌ Wave 0 |
@@ -465,8 +475,8 @@ function formatHoldingEvaluationsHtml(
 - **Phase gate:** `npm test` が green であることを `/gsd:verify-work` 前に確認
 
 ### Wave 0 Gaps
-- [ ] `src/portfolio/holding-news.test.ts` に `resolvePortfolioHoldingNews` 向け describe ブロック追加 — UI-05 の解決ロジック・銘柄間ID混入防止（Pitfall 5）をカバー
-- [ ] `src/scripts/generate-report.test.ts` の `describe("Portfolio Report", ...)` にニュースサブセクション向けテスト追加（0件/複数件/バッジ/リンク属性） — UI-05/UI-06 をカバー
+- [ ] `src/portfolio/holding-news.test.ts` に `resolvePortfolioHoldingNews` / `normalizeHoldingSymbol` 向け describe ブロック追加 — UI-05 の解決ロジック・正規化キー生成・銘柄間ID混入防止（Pitfall 5）をカバー
+- [ ] `src/scripts/generate-report.test.ts` の `describe("Portfolio Report", ...)` にニュースサブセクション向けテスト追加（0件/複数件/バッジ/リンク属性/キー正規化） — UI-05/UI-06 をカバー
 - [ ] `src/scripts/report-data-loaders.test.ts` — 現状ファイル自体が存在しない（`ls`で不在確認済み）。`loadHoldingNews()`/`loadNewsPool()`のfail-soft挙動をテストする新規ファイルとして作成が必要
 - [ ] フレームワークインストール: 不要（vitest既に導入済み）
 
@@ -492,6 +502,7 @@ function formatHoldingEvaluationsHtml(
 | `javascript:`/`data:`スキームURLによるXSS（news.json内のurlフィールドが万一汚染された場合の最終防衛線） | Tampering | 既存の`safeHref()`（`http://`/`https://`のみ許可）を再利用（Don't Hand-Roll参照） |
 | HTML属性/テキストへのタグインジェクション（記事タイトル・ソース名にHTML特殊文字が含まれる場合） | Tampering | 既存の`escapeHtml()`を全出力箇所（title/source/matchTypeバッジ含む）で徹底適用 |
 | Reverse tabnabbing（`target="_blank"`のみでrel属性欠落） | Tampering | `rel="noopener noreferrer"`を全外部リンクに付与（既存news-digest実装の踏襲、D-03で明記） |
+| symbol表記揺れによるサイレント0件（正しいニュースが消える情報欠落） | Denial of Service (silent) | `normalizeHoldingSymbol`をキー生成・参照の両側に適用し構造的にキー一致（Q2 RESOLVED） |
 
 ## Sources
 
@@ -520,3 +531,4 @@ function formatHoldingEvaluationsHtml(
 
 **Research date:** 2026-07-03
 **Valid until:** 30日（安定した内部リファクタリングであり、外部API/ライブラリの陳腐化リスクなし。ただしPhase 19のholding-news.json形状が変更された場合は再調査が必要）
+</content>
