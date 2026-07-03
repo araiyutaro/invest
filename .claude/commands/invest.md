@@ -1561,6 +1561,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 - `/Users/arai/invest/tmp/meeting-result.json` -- 全内容（ミーティング統合結果）
 - `/Users/arai/invest/src/portfolio/holdings.ts` -- PORTFOLIO_HOLDINGS 定数を取得
 - `/Users/arai/invest/tmp/news.json` -- 全内容（フィルタ済みニュース記事プール。news-curator のプロンプトに埋め込む）
+- `/Users/arai/invest/tmp/holding-news.json` -- 全内容（保有銘柄別ニュースID参照。tmp/news.json と突き合わせて全文解決する）
 
 **以下2つの Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
 
@@ -1583,6 +1584,18 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     ## 保有銘柄一覧（全12銘柄、必ず全銘柄を評価すること）
     [PORTFOLIO_HOLDINGS の全12銘柄: symbol, name, nameJa, sector]
+
+    （tmp/holding-news.json が存在する場合のみ以下を含めること）
+    ## 保有銘柄別関連ニュース
+    [tmp/holding-news.json の各銘柄（全12銘柄、必ず全銘柄を列挙すること）について以下の手順で解決して展開する:
+    1. 銘柄の記事ID配列（id, matchType, score）の各 id を tmp/news.json と照合し、該当記事の title・summary・source・publishedAt を解決する
+    2. 銘柄ごとに見出し「### {symbol}（{nameJa}）」を付け、解決した記事を「- {publishedAt} [{source}] {title}: {summary}」の形式で列挙する
+    3. 記事ID配列が空の銘柄には記事を列挙せず、「本日の関連ニュースなし（ニュース不在は問題なしを意味しない）」と明記する。0件銘柄であってもこの見出し自体を省略してはならない]
+
+    **重要: URL・タイトル・本文を推測・創作してはならない。必ず tmp/news.json 内に実在する記事IDと照合し、解決できた内容のみを使用すること。このセクションには URL を一切出力しないこと。**
+
+    **重要: 関連ニュースがない銘柄は、保有銘柄データ・本日のミーティング結果など既存の材料のみで判断すること。ニュースに言及してはならず、列挙されていないニュースを推測・創作しないこと。**
+    （tmp/holding-news.json が存在しない場合はこのセクション全体を省略）
 
     ## 判断基準
     - 保持: 現状維持が最善
