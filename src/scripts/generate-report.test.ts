@@ -597,4 +597,25 @@ describe("3-report output", () => {
       expect(String(call[0])).toContain("/docs/");
     }
   });
+
+  it("Test 39: Daily Report ローダー(loadWebSearchResults/loadReevalResults)はportfolio-research/を一切参照しない（Pitfall 1, PORT-02構造的隔離）", async () => {
+    const fsMock = await import("node:fs/promises");
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    const readdirMock = fsMock.readdir as ReturnType<typeof vi.fn>;
+    expect(readdirMock).toHaveBeenCalledWith(expect.stringContaining("websearch"));
+    expect(readdirMock).toHaveBeenCalledWith(expect.stringContaining("reeval"));
+    expect(readdirMock).not.toHaveBeenCalledWith(expect.stringContaining("portfolio-research"));
+  });
 });
