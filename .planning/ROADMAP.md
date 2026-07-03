@@ -146,7 +146,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
 | 16. Report Generator (HTML Rendering) | v2.4 | 3/3 | Complete    | 2026-07-02 |
-| 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete   | 2026-07-03 |
+| 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete    | 2026-07-03 |
 | 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |
 
 ---
