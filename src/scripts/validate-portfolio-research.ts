@@ -24,7 +24,12 @@ export async function validate() {
     try {
       const raw = await readFile(join(PORTFOLIO_RESEARCH_DIR, file), "utf-8");
       const data = JSON.parse(raw) as unknown;
-      webSearchResultSchema.parse(data);
+      const parsed = webSearchResultSchema.parse(data);
+      // ファイル名の symbol と JSON 内の ticker を突合（Pitfall 5: エンティティ衝突対策）。
+      // ファイル名は `/` を `-` に置換する規約（Step 3a 踏襲）のため、比較前に同じ正規化を適用する。
+      if (parsed.ticker.replaceAll("/", "-") !== symbol) {
+        throw new Error(`ticker不一致: ファイル=${symbol}, JSON=${parsed.ticker}`);
+      }
       console.log(`  OK: ${symbol}`);
     } catch (error) {
       failed += 1;
