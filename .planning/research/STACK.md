@@ -1,104 +1,93 @@
 # Stack Research
 
-**Domain:** AI-curated news digest HTML report (news-digest.html) — 4th daily report added to an existing multi-agent investment analysis pipeline
-**Researched:** 2026-07-02
-**Confidence:** HIGH
+**Domain:** Portfolio news intelligence additions to an existing Claude Code multi-agent investment pipeline (v2.5)
+**Researched:** 2026-07-03
+**Confidence:** HIGH (verified against existing codebase behavior + official Anthropic docs; MEDIUM on the Claude Code CLI concurrency ceiling, which is community-reported rather than a documented hard limit)
 
 ## Recommended Stack
 
 ### Core Technologies
 
-**ZERO new runtime dependencies are needed.** The existing stack fully covers this feature. Verified by reading the actual codebase (not assumed):
+No new runtime technologies are required. All five v2.5 features are built entirely from capabilities already present in this repository and the Claude Code CLI it runs inside.
 
-| Technology | Version (installed) | Purpose | Why Recommended |
+| Technology | Version | Purpose | Why Recommended |
 |------------|---------|---------|-----------------|
-| TypeScript + tsx | `typescript@^5.9.3`, `tsx@^4.21.0` | Report generator script (`generate-news-digest.ts`) | Identical pattern to the 3 existing generators (`generate-daily-report.ts`, `generate-meeting-minutes.ts`, `generate-portfolio-report.ts`) — no reason to deviate |
-| Claude Code `Agent` tool (built-in, no package) | N/A | Single AI curation call: select 10-15 articles from the 20-80 filtered set, group by market, write Japanese commentary | Same mechanism already used for the 5 analysts and for the one-off "Portfolio Analysis" agent (`invest.md` Step 3d) — a single non-analyst Agent invocation is an established pattern, not a new capability |
-| `zod@^4.3.6` (installed) | 4.x (latest published: 4.4.3) | Validate the curation agent's JSON output before it reaches the report generator | Every AI JSON output in this pipeline is validated via a zod schema in `src/meeting/schemas.ts` (e.g. `meetingResultSchema`, `analystRound1OutputSchema`). A `newsCurationResultSchema` following the same shape is the correct, consistent approach — do not skip validation for this report just because it's new |
-| tmp/*.json handoff (file convention, no package) | N/A | Claude Code Agent (curation) → TS report generator boundary | Explicitly the only supported TS↔Claude boundary in this project (`tmp/*.json ハンドオフ境界` decision in PROJECT.md) — stdout is not reliably captured. Curation output should be written to `tmp/news-curation.json`, mirroring `tmp/meeting-result.json` |
+| Claude Code `Agent` tool (parallel subagent invocation) | Claude Code CLI, current (2026) | Spawn one research subagent per portfolio holding, in parallel, from `.claude/commands/invest.md` | Already the established pattern in this repo — Round 1/2/3 spawn 5 agents in parallel per round, and the existing Step 3a (`websearch-{ticker}`) already spawns one parallel `Agent` per `highlightedStocks` ticker using `model: sonnet`. Extending that exact pattern to the 12 `PORTFOLIO_HOLDINGS` tickers is a scope change, not a new mechanism. |
+| Claude Code `WebSearch` tool (used inside subagents) | Built into Claude Code CLI | Per-holding research: earnings, lawsuits, regulation, contracts | Already proven working in this codebase's Step 3a/3b (WebSearch → JSON research summary → reevaluation round). No `allowed-tools` frontmatter change needed at the command level — subagents spawned via `Agent` get their own tool access independent of the parent command's `allowed-tools: [Bash, Agent]` list, which is why WebSearch/WebFetch already work inside `websearch-{ticker}` subagents today despite not being declared at the top of `invest.md`. |
+| zod | ^4.3.6 (already installed, unchanged) | Validate/normalize LLM JSON output for the new holding-news and holding-research contracts | Already the project's sole validation library (`src/meeting/schemas.ts`). Extend the same file with new schemas rather than introducing a second validation approach. |
 
-### Supporting Libraries (already installed, reused as-is)
+### Supporting Libraries
 
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| `src/scripts/report-utils.ts` (internal, not a package) | n/a | `escapeHtml`, `markdownToHtml`, `generateBaseStyles`, `scoreColor`, `verdictColor` | Reuse directly for news-digest.html to guarantee identical dark-theme styling and to avoid re-implementing HTML escaping (XSS-relevant since article titles/summaries are external, untrusted text) |
-| `src/scripts/report-charts.ts` (internal pure SVG-string generator) | n/a | Pure SVG-string chart helpers | Not needed for this feature (no chart requirement in scope) — noted only to confirm the "no external chart library" pattern extends here too if a future milestone wants a source/market-mix chart |
-| `fast-xml-parser@^5.5.6` | 5.x | RSS parsing | Already used by the existing news collection step (upstream of `filter.ts`); curation consumes `filter.ts`'s already-filtered output, so no new parsing is needed |
-| `dotenv@^17.3.1` | 17.x | Env vars | No new env vars anticipated — curation runs inside the same Claude Code Agent context, not a separate external API |
+No new libraries needed. Reuse:
+
+| Library/Module (existing) | Purpose | When to Use |
+|---------|---------|-------------|
+| `src/data/news/article-id.ts` (`assignArticleIds`) | Short `n01`-style IDs already assigned to every `tmp/news.json` entry | Reuse the existing ID for each per-holding news item when rendering the holding card link — do not invent a second ID scheme. `formatHoldingEvaluationsHtml` can look up `id → {title, url, source}` from the same pool the news-digest curator already uses. |
+| `src/data/news/types.ts` (`RawNewsArticle.ticker`) | Per-article ticker tag set only by Finnhub company-news (v2.3) | Use `article.ticker === holding.symbol` for exact per-holding matching — see "What NOT to Use" for its coverage gap. |
+| Node's native `fetch` (already used in `finnhub.ts`) | Any additional HTTP calls | If a future feature needs another HTTP call, keep using native `fetch` — no axios/node-fetch anywhere in this codebase today. |
 
 ### Development Tools
 
-| Tool | Purpose | Notes |
-|------|---------|-------|
-| `vitest@^4.0.18` | TDD for `generate-news-digest.ts`, the new zod schema, and any pure grouping/ordering helper functions | Follow existing test-alongside-source convention (`generate-report.test.ts`, `report-utils.test.ts`) — write `generate-news-digest.test.ts` and a schema validation test against fixture data before implementation, per project's TDD rule |
+No new dev tools. Continue using `vitest` (already a devDependency) for the new zod schema tests and for a regression test on the `finnhub.ts` ticker bug fix.
 
 ## Installation
 
 ```bash
-# No installation needed — zero new dependencies.
-# All required packages (typescript, tsx, zod, fast-xml-parser, vitest) are already in package.json.
+# No installation required for this milestone.
+# All five v2.5 features are implemented with the existing dependency set:
+#   dotenv, fast-xml-parser, tsx, typescript, yahoo-finance2, zod (deps)
+#   @types/node, vitest (devDeps)
 ```
-
-## New Source Files Needed (not packages — first-party code following existing patterns)
-
-This is the "genuinely missing" piece: not a library gap, but new files that don't exist yet, each following a pattern already present in the repo:
-
-| File | Pattern to Follow | Purpose |
-|------|--------------------|---------|
-| `src/scripts/generate-news-digest.ts` | `src/scripts/generate-portfolio-report.ts` (simplest existing generator — single data source, no multi-round aggregation) | Reads `tmp/news-curation.json`, renders `news-digest.html` string, reuses `report-utils.ts` helpers |
-| `newsCurationResultSchema` — add to `src/meeting/schemas.ts` (or a new `src/news-curation/schemas.ts` if kept separate from meeting types) | `meetingResultSchema` / `analystRound1OutputSchema` in `src/meeting/schemas.ts` | Validates AI curation output: array of 10-15 items with fields such as `{ ticker/topic, market: "米国株"\|"日本株"\|"グローバル", importanceRank, headline, commentary (Japanese), sourceUrl, sourceName }` before it's trusted by the HTML generator |
-| New Step in `.claude/commands/invest.md` (after news collection/filter, before HTML report generation — e.g. inserted as its own step prior to "Step 3c: HTMLレポート生成") | Step 3d "ポートフォリオ分析" — a single embedded-prompt Agent call, not a 5-way parallel round | Curation prompt embedded inline (not read from `src/agents/*.ts`, since curation is not one of the 5 analyst personas per the "5+1構成を維持" constraint) — takes the filtered articles (from `tmp/news.json` post-`filter.ts`) as input, writes `tmp/news-curation.json` |
-| Edit to `src/scripts/generate-report.ts` | Existing `Promise.all([...writeFile...])` block that writes the 3 current reports | Add a `generateNewsDigestHtml(...)` call + `writeFile(join(dateDir, "news-digest.html"), ...)` alongside the 3 existing writes |
-| Edit to `src/scripts/update-index.ts` | Existing nav-entry logic for the 3 reports | Add the 4th report link to `docs/index.html` month-accordion entries — do not hand-edit `docs/index.html` directly per the project's explicit constraint ("エントリの追加は update-index.ts が行う") |
 
 ## Alternatives Considered
 
 | Recommended | Alternative | When to Use Alternative |
 |-------------|-------------|--------------------------|
-| Single embedded-prompt Agent call in `invest.md` (mirrors Portfolio Analysis, Step 3d) | A 6th named analyst persona in `src/agents/` with its own system-prompt file | Only if curation logic needed to be reused across multiple pipeline steps or needed a stable identity/role like the 5 analysts. Out of scope per PROJECT.md constraint ("5+1構成を維持…キュレーションは既存パイプライン内のステップとして実装") |
-| zod schema validation of curation output | Trusting raw Claude JSON output unvalidated | Never — every other AI output in this codebase is validated (`validateMeetingResult`, `validateWebSearchResult`, `validateReevaluationOutput`). Skipping validation for curation would be an inconsistency, not a simplification |
-| Reuse `report-utils.ts` (`escapeHtml`, `generateBaseStyles`) | New standalone CSS/escaping for news-digest.html | Only if the digest needed a genuinely different visual language than the other 3 reports — not the case, since the goal is explicitly "既存3レポートと同じBloomberg風ダークテーマ・ナビゲーション" (PROJECT.md) |
-| Plain string-template HTML generation (existing pattern) | A templating library (e.g. `mustache`, `handlebars`, `ejs`) | Only if HTML generation logic became deeply nested/conditional across many report variants — the existing 3 generators show plain TS template literals scale fine at this project's complexity; introducing a template engine would be an inconsistent one-off |
+| Reuse `tmp/news.json` + Finnhub company-news (already fetched) for per-holding news | Add a new news API (NewsAPI.org, Alpha Vantage News, Benzinga) dedicated to per-holding coverage | Only if Finnhub company-news + WebSearch prove insufficient in practice for JP holdings after a few days of live data — would require a new API key/secret and a new fetch module, which conflicts with the project's zero-new-deps convention and duplicates what Feature 2 (WebSearch) already does. |
+| Declare all 12 `websearch-{ticker}` Agent calls in a single parallel message (extending the existing Step 3a pattern) | Add `p-limit`/`bottleneck` npm package to throttle concurrency in TS code | Only relevant if pipeline runs move from Claude Code's own orchestration into a TS-driven agentic loop (e.g., using the Agent SDK directly instead of slash-command markdown). Not applicable here — concurrency is controlled by how many `Agent` calls appear in one Claude Code message, not by TS code. |
+| Extend `src/meeting/schemas.ts` with new schemas (`holdingResearchSchema`, or extend `holdingEvaluationSchema` with `relatedNews`) | Create a separate `schemas-portfolio-news.ts` file | Only if the file grows past the project's ~800-line file-size ceiling (currently ~300 lines) — not close to that yet. |
+| `article.ticker === holding.symbol` exact match for per-holding news injection | Fuzzy company-name matching (holding.name / nameJa substring match against title/summary) for tickers with no `ticker` field | Only as a deliberate fallback for JP holdings if empty news sections prove unacceptable in review — fuzzy matching risks false positives (e.g., "Bank of Nagoya" matching unrelated regional-bank articles) and breaks the project's existing "structural prevention of hallucination/misattribution" convention (ID-reference pattern, Finnhub-ticker-is-ground-truth). Prefer explicit empty state over fuzzy guesses. |
 
 ## What NOT to Use
 
 | Avoid | Why | Use Instead |
 |-------|-----|--------------|
-| External LLM API (OpenAI, Gemini, Anthropic API directly) for curation | PROJECT.md constraint: "Claude Code エコシステム内で完結"; Gemini was explicitly removed in v2.0 ("Gemini API 依存は v2.0 Phase 4 で完全除去済み") | Claude Code's own `Agent` tool, invoked from `invest.md`, exactly like the 5 analysts and moderator |
-| A new HTML templating engine (EJS/Handlebars/etc.) | Inconsistent with existing plain-TS-template-literal generators; adds a dependency for no architectural gain at this scale | Plain TypeScript template literals, mirroring `generate-portfolio-report.ts` |
-| A new chart/visualization library for a "topic mix" or "source breakdown" chart | Not in scope (feature spec has no chart requirement); PROJECT.md explicitly settled on pure SVG-string generation with zero external chart libraries | If a future milestone wants a chart, extend `report-charts.ts` with a new pure-SVG-string function, not a new library |
-| ML/LLM-based per-article relevance scoring as a *new* mechanism feeding curation | PROJECT.md Out of Scope: "ML/LLMベース関連性スコアリング — 1記事ごとのAPI呼び出しはコスト非現実的" | The existing `filter.ts` (denylist + Jaccard dedup + recency scoring) already narrows ~160→20-80 articles. The *new* curation Agent call operates once on that pre-filtered batch (a single call, not per-article), which is a different and cost-acceptable pattern — do not conflate the two or add per-article scoring calls |
-| MinHash/LSH or other heavy dedup for curation-stage article selection | PROJECT.md Out of Scope: "MinHash/LSH重複排除 — 160件/日にはJaccardで十分" | If the curation Agent needs to avoid near-duplicate picks among the 20-80 candidates, reuse the existing `jaccardSimilarity` / `normalizeTitle` / `tokenize` exports from `src/data/news/filter.ts` rather than adding a new dedup library — but note the AI Agent doing the selection can generally avoid duplicates via its own reasoning, since it sees full context, unlike the earlier mechanical filter stage |
+| A new News API for per-holding coverage | Finnhub company-news (v2.3, per-ticker) already exists and is the "土台" (foundation) called out in `.planning/PROJECT.md`; adding another API means a new secret, a new fetch module, and duplicate effort with Feature 2 (WebSearch), which already covers exactly the "material events" (earnings, lawsuits, regulation, contracts) this milestone wants | Reuse `fetchAllFinnhubNews`'s `company` array (once the `.map(toRawArticle)` bug is fixed) + the new per-holding WebSearch step |
+| `article.ticker` as the *sole* signal for "does this holding have news today" | **Verified gap:** `collect-data.ts` only passes `usTickers` (US-listed symbols) into `fetchAllFinnhubNews`; the 4 JP holdings (`8522.T`, `5885.T`, `5576.T`, `7711.T`) never get Finnhub company-news, and no other news source (`google-news.ts`, RSS) tags a `ticker` field at all. A ticker-only per-holding news feed will silently show zero articles for 1/3 of the portfolio. | Treat per-holding ticker-tagged news (Feature 1) as US-holding enrichment on top of a WebSearch research pass (Feature 2) that covers all 12 holdings uniformly — do not rely on Feature 1 alone for JP holdings, and render an explicit "関連ニュースなし" state rather than fabricating a match. |
+| `axios` / `node-fetch` | Zero usages in the current codebase; `finnhub.ts` and all other fetchers use native `fetch()`, which has been available in Node without a flag since Node 18 | Native `fetch()` |
+| `p-limit`, `bottleneck`, or any TS-level concurrency limiter for the 12 WebSearch subagents | Subagent concurrency is controlled by Claude Code's own orchestration (how many `Agent` tool calls are issued in one message from the command markdown), not by TS code — there is no TS process spawning these agents to rate-limit | If concurrency needs tuning, batch the `Agent` calls across two markdown-level parallel blocks instead (see Stack Patterns below) |
+| Renaming/aliasing the old `Task` tool syntax in `invest.md` | Claude Code renamed `Task` → `Agent` in a recent CLI release; `invest.md` already uses `Agent` correctly throughout | Keep using `Agent` as already done |
+| A second ID scheme for holding-news links | The project already has a working, hallucination-proof ID-reference pattern (`n01`…`n99` via `assignArticleIds`, consumed by `news-curator`/`resolveNewsCuration`) | Reuse the same `id` field when wiring up `<a>` links on holding cards — do not have the `portfolio-analyst` subagent emit raw URLs (same rationale that drove the CURA-02 "ID参照方式" decision for news-digest) |
 
 ## Stack Patterns by Variant
 
-**If the curation step needs deterministic re-runs for testing (TDD):**
-- Write `generate-news-digest.test.ts` against a fixture `NewsCurationResult` object (bypassing the Agent call entirely), the same way `generate-daily-report.test.ts` tests against a fixture `MeetingResult`
-- Because the AI call itself is not unit-testable; only the deterministic TS rendering logic is — this matches how the rest of the pipeline is tested
+**If spawning 12 parallel `websearch-holding-{ticker}` Agents in one message risks hitting Claude Code's practical concurrency ceiling:**
+- The ~10-simultaneous-subagent figure reported in the community (GitHub issue [#15487](https://github.com/anthropics/claude-code/issues/15487)) is **not a documented hard API limit** — it's a practical/coordination-overhead observation, and this pipeline already runs unattended overnight via launchd with a generous time budget.
+- Recommend firing all 12 in a single parallel message first (matches the existing 5-agent-per-round precedent exactly, just larger N) and only split into two batches of 6 (sequential parallel blocks, mirroring how Round 1 → Round 2 → Round 3 are already sequenced) if live runs show truncated/dropped results.
+- Because fail-soft is already a house convention (per `.planning/PROJECT.md` Key Decisions), a per-holding WebSearch failure should fall back to the existing `{"ticker": "...", "researchSummary": "リサーチ失敗", ...}` shape (already defined in `invest.md` Step 3a) rather than blocking the pipeline — this pattern needs no new code, just reuse.
 
-**If the article count from `filter.ts` is at the low end (MIN=20):**
-- The curation prompt should instruct the Agent to select "10-15, or fewer if insufficient quality articles exist" rather than forcing exactly 10-15
-- Because forcing a fixed count when only 20 candidates exist risks including low-relevance filler; this mirrors the existing philosophy of flexible supply ("アナリストへの記事供給数柔軟化（MIN=20/MAX=80）")
+**If the `portfolio-analyst` subagent needs both per-holding news AND per-holding WebSearch research injected into one prompt:**
+- Keep them as two distinct, TS-computed sections in the prompt (as `invest.md` already does for `moderator-tickers.json` vs `websearch/*.json`): a `## 保有銘柄別ニュース` block built by a small pure TS function filtering `tmp/news.json` by `ticker === holding.symbol`, and a `## 保有銘柄別WebSearchリサーチ` block reading `tmp/holding-research/{symbol}.json`. Do not merge them into a single schema — they have different provenance (TS-extracted fact vs LLM-summarized research) and different failure modes.
 
 ## Version Compatibility
 
 | Package A | Compatible With | Notes |
 |-----------|-----------------|-------|
-| `zod@^4.3.6` | Existing `src/meeting/schemas.ts` patterns (`.object()`, `.enum()`, `.array()`, `.regex()`) | No API changes needed; latest published zod is 4.4.3 but no upgrade is required or in scope for this feature — the installed 4.x range already supports everything needed |
-| `typescript@^5.9.3` / `tsx@^4.21.0` | `module: "ES2022"`, `moduleResolution: "bundler"` (tsconfig.json) | New files must use `.js` extension in relative imports (ESM convention already followed throughout `src/`, e.g. `from "./report-utils.js"`) |
-| Node.js (runtime) | v24.3.0 (local dev environment) | No Node API surface needed beyond what's already used (`node:fs/promises`, `node:path`, `node:url`) |
+| `zod@4.3.6` (installed) | Existing `.object().passthrough().transform()` patterns in `src/meeting/schemas.ts` | No API changes needed; `npm view zod version` currently reports `4.4.3` as latest — a minor bump is optional/cosmetic for this milestone, not required by any new schema needs (no v4.4-only API is needed here). |
+| Claude Code CLI `Agent` tool + `WebSearch` tool | Already co-used successfully in `invest.md` Step 3a (existing feature, not new) | Confirms no CLI version gate blocks reusing this mechanism at a larger fan-out (12 holdings vs the current small `highlightedStocks` count, typically 1-3). |
+| Anthropic `web_search` server tool (API-level reference, informs subagent behavior) | `max_uses` unset by default in Claude Code's built-in WebSearch (not user-configurable per the slash-command markdown level); errors surface as `too_many_requests`/`unavailable` inside a `web_search_tool_result_error`, not a thrown exception | Design the holding-research subagent's JSON fallback (already the `invest.md` Step 3a convention) to also catch "WebSearch produced no results" gracefully — an empty `positiveFindings`/`negativeFindings` array is a valid, expected output on a slow-news day. |
 
 ## Sources
 
-- Direct codebase inspection (HIGH confidence — ground truth, not training data):
-  - `/Users/arai/invest/package.json` — confirmed full dependency list, no gaps
-  - `/Users/arai/invest/src/scripts/generate-report.ts`, `generate-daily-report.ts` — confirmed report-generator pattern and multi-file write orchestration
-  - `/Users/arai/invest/src/meeting/schemas.ts` — confirmed zod validation pattern for all AI JSON outputs
-  - `/Users/arai/invest/src/data/news/filter.ts`, `src/data/news/types.ts` — confirmed `RawNewsArticle` / `NewsFilterResult` shape that curation will consume, and the existing dedup helpers available for reuse
-  - `/Users/arai/invest/.claude/commands/invest.md` — confirmed pipeline orchestration pattern (Bash + Agent tool calls, tmp/*.json handoff, embedded one-off prompts like "Step 3d: ポートフォリオ分析" as the closest analog to the new curation step)
-  - `/Users/arai/invest/.planning/PROJECT.md` — confirmed explicit constraints (5+1 agent structure, tmp/*.json boundary, no external LLM APIs, no chart libraries, no ML relevance scoring, no MinHash/LSH)
-- `npm view zod version` / `npm view fast-xml-parser version` / `npm view vitest version` (executed 2026-07-02, live npm registry) — confirmed installed versions are current/compatible; no forced upgrades needed for this feature — HIGH confidence
+- `/Users/arai/invest/.claude/commands/invest.md` (lines 1243–1700) — existing Step 3a/3b WebSearch + reevaluation pattern for `highlightedStocks`, the direct precedent to extend to `PORTFOLIO_HOLDINGS`
+- `/Users/arai/invest/src/data/news/finnhub.ts` — confirmed the `.map(toRawArticle)` ticker-corruption bug (line 43: `Array.prototype.map` passes the array index as the second positional arg, which `toRawArticle`'s optional `ticker` parameter silently accepts)
+- `/Users/arai/invest/src/scripts/collect-data.ts` — confirmed only `usTickers` are passed to `fetchAllFinnhubNews`, meaning JP holdings never receive Finnhub company-news
+- `/Users/arai/invest/src/meeting/schemas.ts` — existing zod v4 patterns (`passthrough`, `transform`, ID-resolution via `resolveNewsCuration`) to extend for the new contracts; also confirmed a pre-existing workaround (line 277-282) that already treats numeric-index ticker values from the finnhub bug as non-string and drops them, evidence the corruption has been a live, silently-tolerated issue
+- `/Users/arai/invest/src/data/news/article-id.ts` — existing hallucination-proof ID-reference convention to reuse for holding-card news links
+- [Web search tool — Anthropic API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool) — HIGH confidence, official docs, verified `max_uses`, domain filtering, and error-code behavior (`too_many_requests`, `max_uses_exceeded`, `unavailable`)
+- [anthropics/claude-code issue #15487 — maxParallelAgents feature request](https://github.com/anthropics/claude-code/issues/15487) — MEDIUM confidence, community-reported ~10-subagent practical ceiling, not an official documented hard limit
+- `npm view zod version` — confirmed latest is `4.4.3` vs installed `4.3.6` (HIGH confidence, direct registry query)
 
 ---
-*Stack research for: AI-curated news digest report (news-digest.html), v2.4 milestone*
-*Researched: 2026-07-02*
+*Stack research for: Portfolio News Intelligence (v2.5) additions to an existing Claude Code + TypeScript investment pipeline*
+*Researched: 2026-07-03*

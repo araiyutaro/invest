@@ -1,200 +1,206 @@
 # Feature Research
 
-**Domain:** AI-curated financial news digest (daily HTML report, personal investment tool)
-**Researched:** 2026-07-02
-**Confidence:** MEDIUM
+**Domain:** Portfolio news intelligence — per-holding news feed + WebSearch re-evaluation for a daily AI investment report (personal tool)
+**Researched:** 2026-07-03
+**Confidence:** MEDIUM-HIGH
 
-Scope note: This research covers only the NEW feature — `news-digest.html`, the 4th daily
-report (v2.4 milestone, CURA-01). It assumes the existing filtered article pool (20-80
-articles/day, deduped, denylist-filtered, from `src/data/news/filter.ts`) as the sole input.
-Fields available per article from `RawNewsArticle`: `title`, `summary`, `source`, `url`,
-`publishedAt`, `category`, `ticker?`. There is no existing "importance" signal beyond
-`priorityScore` (recency + portfolio-ticker bonus used for supply ordering to analysts) — the
-digest's importance ranking must be produced fresh by the curation step; it cannot be reused
-as-is since recency ≠ importance.
+Scope note: This research covers only the NEW features targeted by v2.5 — (1) per-holding
+news supply to `portfolio-analyst`, (2) WebSearch-based per-holding research + buy/hold/sell
+re-evaluation, (3) related-news display on holding cards, (4) removal of the new-candidates
+section from the portfolio report. It assumes as given: the existing `portfolio-analyst`
+single-agent JSON contract (`tmp/portfolio-analysis.json`, `HoldingEvaluation` with
+`symbol/nameJa/decision/rationale/riskNote?`), the existing Finnhub per-ticker company-news
+collection (`fetchCompanyNews` in `src/data/news/finnhub.ts`), and the existing ID-reference
+anti-hallucination pattern proven in the v2.4 news-digest feature
+(`validateRawNewsCuration` / `resolveNewsCuration` in `src/meeting/schemas.ts`).
 
-This supersedes the previous FEATURES.md content (v2.2 News Quality milestone, dated
-2026-06-26), which covered dedup/relevance-filter features that are now already shipped
-(v2.2/v2.3) and out of scope for this research pass.
+This supersedes the previous FEATURES.md content (v2.4 News Curation Report milestone, dated
+2026-07-02), which covered the `news-digest.html` curation feature, now shipped and out of
+scope for this research pass.
+
+This is largely a **restoration + adaptation** project, not greenfield feature discovery: the
+target behavior existed in v1.0 (`git show ba01275^:src/portfolio/runner.ts` and
+`src/data/research.ts`, both deleted during the v2.0 Gemini→Claude Code migration) and is
+being rebuilt on the v2.x architecture (single opus subagent + zod-validated JSON handoff,
+not the old 5-agent multi-round TS orchestration loop). The v1.0 code is therefore treated
+here as a **HIGH-confidence internal precedent** for expected behavior/content, while general
+industry practice (S&P Capital IQ-style material-event monitoring, IMPORTANT/noise flags,
+priority-tiered news alerts) is used as MEDIUM-confidence supporting evidence that the
+approach matches how professional tools shape this problem.
 
 ## Feature Landscape
 
 ### Table Stakes (Users Expect These)
 
-Features users assume exist in any curated news digest. Missing these = the digest reads as
-a raw article dump, not a "curated" product.
+Features a "news-informed hold/sell decision" is expected to contain. Missing these = the
+re-evaluation reads as generic commentary, not news-driven.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Per-article headline + source + timestamp | Every digest format studied (Bloomberg Five Things, Axios, TLDR, Morning Brew) leads each item with what/who/when before commentary | LOW | Already available directly from `RawNewsArticle` (title, source, publishedAt) — no new data collection needed |
-| Link to original article | Digest is a curation layer, not a replacement; readers expect to click through to verify or read more. Also mitigates AI-hallucination risk (see Pitfalls below) by anchoring every claim to a checkable source | LOW | `url` field already present; render as anchor tag |
-| "Why it matters" / commentary per article | Axios's Smart Brevity ("Why it matters", "The bottom line") and Bloomberg's framing both center on explaining significance, not just repeating the headline — this is the entire value-add of curation over a raw feed | MEDIUM | Requires a new AI generation step (1-2 sentence Japanese commentary per selected article); this is the CURA-01 core deliverable per PROJECT.md |
-| Section grouping (by market/theme) | Every reviewed format groups items (Morning Brew's Markets section, Axios's categorized items, TLDR's themed sections) — an unsorted list of 10-15 unrelated headlines is harder to scan | LOW-MEDIUM | Milestone already specifies US / Japan / Global grouping — requires the curation step to assign a market tag per article (new small classification task) |
-| Importance-based ordering within section | Bloomberg "Five Things", Axios, TLDR all rank by significance, not just recency — readers scan top-to-bottom expecting most important first | MEDIUM | Requires the AI curation step to produce a rank/score, not just a selection; recency-based `priorityScore` from filter.ts is an insufficient proxy (recency ≠ importance) |
-| Concise item count (10-15, not all 20-80) | Every studied format is explicitly a *reduction* of the raw feed (TLDR: "5 minutes per edition"; Axios: "six or so items"; Bloomberg: literally "Five Things") — curation value comes from what's excluded as much as what's included | LOW | Already specified in milestone scope (10-15 of 20-80) |
-| Consistent visual identity with other 3 reports | User already has Bloomberg-style dark theme + nav across daily/meeting/portfolio reports; a 4th report with a different look would break the "single product" feel | LOW | Reuse existing CSS/layout partials from `report-utils.ts` / existing report generators rather than building new styling |
-| Publish/generation date visible | All reviewed digests are dated editions (Bloomberg "5 things to start your day" is date-stamped) — readers need to know freshness, especially since input articles are filtered to a 24h window | LOW | Reuse existing date-header pattern from other 3 reports |
+| Per-holding news matched by ticker | Core premise of the milestone — a decision can't be "news-informed" without the news being scoped to that specific holding. Finnhub `company-news` already provides this per ticker | LOW | Data already collected (`fetchCompanyNews`, 24h window) — this is a wiring task (filter `tmp/news.json` by `ticker === symbol`), blocked only by the finnhub.ts ticker-contamination bug (see Dependencies) |
+| Related news on the holding card (headline + source + link) | Reader needs to verify *what* triggered a decision without leaving the report; matches the existing `news-digest.html` UX precedent and the general "link out, don't paraphrase-only" pattern this codebase already follows for anti-hallucination | LOW-MEDIUM | Reuse the ID-reference resolution pattern (`resolveNewsCuration`) — agent selects article IDs from the pool, TS resolves the real `url`/`source`/`title`, never trusts LLM-echoed URLs |
+| Decision must be explicitly grounded in supplied news when news exists | v1.0's re-evaluation prompt required agents to state "did the news change your prior judgment" — without this, injecting news is decorative rather than decision-driving | LOW | Prompt-level requirement in `portfolio-analyst`; add a "news considered" field or require rationale to reference the specific development when `relatedNewsIds` is non-empty |
+| Graceful no-news handling per holding | Not every one of the 12 holdings will have fresh Finnhub company-news every day (small/mid-cap coverage is uneven) — a holding with zero matched articles must still render a normal card, not an error or empty section | LOW | Same null-tolerant pattern already used for `portfolioAnalysis === null` fallback in `generate-portfolio-report.ts`; apply at holding-card granularity |
+| Materiality/urgency signal on the decision | v1.0 explicitly instructed agents to flag "決算ミス、訴訟、規制変更、大型契約" (earnings miss, lawsuit, regulatory change, major contract) as high-urgency; general industry tools (S&P Capital IQ dashboards, IR-monitoring alert tools) converge on the same binary/tiered materiality signal — without it, a reader can't tell "routine mention" from "act now" | LOW-MEDIUM | Add an `urgent: boolean` or `urgency: "high"/"normal"` field to `HoldingEvaluation`; drive it from an explicit prompt rule (earnings miss / lawsuit / regulatory change / major contract / guidance cut → urgent), not free-text only |
+| New-candidates section removed from `portfolio-report.html` | Explicit milestone requirement — the report should read as "what should I do with what I already own," not double as a discovery feed (that's Daily Report's job) | LOW | Delete `formatNewCandidatesHtml` call site in the renderer only; **do not** strip `highlightedStocks` context from the `portfolio-analyst` prompt — PROJECT.md explicitly keeps that as background context for the agent's own judgment |
 
 ### Differentiators (Competitive Advantage)
 
-Features that set this digest apart from a generic newsletter clone. Should tie back to the
-project's Core Value (multi-angle AI-assisted daily decision support for a single power user).
+Features that set this report apart from a plain news ticker bolted onto a portfolio list.
+These align directly with the milestone's Core Value: news-driven re-evaluation, not just
+news display.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Related tickers / portfolio relevance tag per article | Bloomberg terminal news and Seeking Alpha both tag articles with affected tickers; for this user (own portfolio + watchlist), flagging "this affects your holding X" turns a generic digest into a personalized one — directly serves Core Value ("individual investor decision support") | LOW-MEDIUM | `ticker` field already exists on some articles (Finnhub company news); for articles without an explicit ticker, the AI curation step can extract tickers mentioned in title/summary as a lightweight step (no new API calls) |
-| Impact/importance badge (e.g., High/Medium impact) | Gives at-a-glance visual triage beyond ordinal position — useful for a single reader scanning quickly before market open, echoes Axios's scannable "Smart Brevity" design philosophy | LOW | Derived directly from the same importance score already needed for ordering; just needs a 3-tier bucketing + badge styling, no extra AI calls |
-| Cross-report thematic link (digest ↔ daily report/meeting minutes) | Existing pipeline already does previous-day report injection for analyst memory (ANLQ-01, v2.3); the digest can note "この記事は本日のミーティングで議論された [テーマ] に関連" to bridge the 4 reports into one coherent daily narrative | MEDIUM | Requires digest generation step to run after/alongside meeting analysis and cross-reference topics — nice-to-have, not required for v1; depends on meeting output being available at digest-generation time |
-| Short top-of-page lede/overview paragraph | Bloomberg Five Things and Morning Brew both open with a 2-3 sentence "here's what's moving markets today" framing before the itemized list — gives context for someone who reads only the top | LOW-MEDIUM | One additional short AI-generated paragraph synthesizing the day's digest; cheap since it reuses the already-curated article set |
+| WebSearch-based per-holding research + re-evaluation round | The single highest-value feature in this milestone — Finnhub's 24h company-news window misses slower-breaking developments (analyst days, filings, competitor moves) that WebSearch catches. v1.0 proved this pattern works (`researchStock` + `getPostResearchPortfolioReview`) and it's the literal reason this milestone exists | HIGH | v1.0 called Gemini's `googleSearch` grounding directly from TS; v2.x has no direct-API AI layer anymore (removed Phase 4) — must be re-implemented as a Claude Code subagent step using the `WebSearch` tool, either as N per-ticker calls or one `portfolio-analyst` invocation with WebSearch granted. 12 holdings × research adds real wall-clock time to the daily pipeline — flag for architecture-phase parallelization design |
+| Decision-change tracking vs. previous day | Directly answers "did anything change since yesterday" — the single most actionable question a daily holder cares about. v1.0 asked this explicitly ("先ほどの判断を変更すべき銘柄はあるか"); v2.x already has a proven, shipped precedent for exactly this cross-session pattern (ANLQ-01: prior-day `highlightedStocks` injected into Round 1 prompts) | MEDIUM | Reuse the ANLQ-01 pattern: read yesterday's `tmp/portfolio-analysis.json` (or an archived copy), inject each holding's prior `decision` into the `portfolio-analyst` prompt, require the agent to state explicitly whether today's decision differs and why. Needs a `previousDecision`/`decisionChanged` field on `HoldingEvaluation` for the renderer to visually flag changes |
+| Urgency-flagged card styling (visual differentiation) | A wall of 12 uniformly-styled cards buries the one holding that actually needs attention today; a red/amber accent on urgent cards mirrors the existing `decisionColor` pattern already used for 保持/買増/一部売却/全売却 | LOW | Purely a rendering concern once the `urgency` field exists — extend `formatHoldingEvaluationsHtml`'s existing color-by-decision logic with a secondary badge/border for urgent items |
+| Staleness-aware relevance within the holding card | Not all matched company-news is equally worth surfacing — a 20-hour-old routine analyst-note mention shouldn't outrank a 2-hour-old earnings/lawsuit item. The pipeline already computes recency-weighted priority (NEWS-02, 6h-recency scoring) at the pool level | LOW | Inherit existing `priorityScore` ordering when building the per-holding candidate list fed to the agent; let the agent (not TS) do final selection via the same ID-reference curation approach used for news-digest, capped at a small per-holding limit (see Anti-Features) |
 
 ### Anti-Features (Commonly Requested, Often Problematic)
 
-Features that seem good but create problems for this specific project (personal daily tool,
-single AI curation pass, existing cost/complexity constraints already documented in
-PROJECT.md Out of Scope).
+Features that seem like natural additions here but would create problems or duplicate
+existing product boundaries.
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|------------------|-------------|
-| Per-article sentiment score / numeric AI confidence score | Looks quantitative and "data-driven," common in fintech news products | Adds a fabricated precision (a "73% bullish" score from an LLM reads as more authoritative than it is) — high hallucination/false-precision risk for a personal decision tool; PROJECT.md already rejected "ML/LLMベース関連性スコアリング" per-article as cost/complexity-not-worth-it | Keep impact tagging qualitative (High/Medium/Low) tied to the same importance judgment already needed for ordering — no separate scoring subsystem |
-| Full-length AI paraphrase/rewrite of each article body | Seems like it saves the reader a click | Multiplies hallucination surface area (research shows AI-labeled news articles are markedly more likely to contain a hallucinated claim than human-written ones) for content the user could otherwise read at the source; also duplicates effort already done well by existing analyst Round 1/2 prose in the other 3 reports | Keep commentary short (1-2 sentence "why it matters"), always link to source, let the reader click through for full text |
-| Real-time/intraday digest updates | "Fresher is better" instinct | PROJECT.md already explicitly rejects real-time streaming ("日次バッチで十分"); this is a daily personal tool run once via launchd at 8am — intraday updates would require a second pipeline run and duplicate infra | Single daily generation, same cadence as the other 3 reports |
-| New dedicated news fetching/scoring pipeline for the digest | Tempting to fetch a differently-curated article set optimized for "digest-worthiness" | PROJECT.md explicitly scopes this milestone to reuse the existing filtered pipeline output ("新規取得ロジックは不要") — building a parallel fetch path duplicates the news pipeline (Finnhub + Google News + RSS + filter.ts) for no proven benefit | Curation step selects from the same `NewsFilterResult.articles` already produced for the 5 analysts |
-| Reader personalization controls (topic filters, mute keywords, saved articles) | Feels like a "real newsletter product" feature | This is a single-user personal tool with no auth/settings infrastructure; adding stateful preferences is out of proportion to a static daily HTML report generator deployed to GitHub Pages | None needed — the digest is already implicitly personalized via portfolio-ticker awareness in the existing pipeline |
-| Multi-language toggle (EN/JP switch) | Source articles are a mix of English and Japanese | Existing 3 reports and the whole product are Japanese-language by convention (per PROJECT.md, analyst prose is Japanese); a toggle adds UI/generation complexity with no stated user need (single Japanese-speaking user) | All curated commentary in Japanese regardless of source article language, same as the existing analyst reports handle mixed-language input today |
+| Full v1.0 multi-round meeting revival for portfolio (5 analysts × Round 1 → Round 2 → research → post-research review, per old `runner.ts`) | "Just restore what v1.0 had" feels like the safest, most faithful restoration | v2.x deliberately collapsed portfolio analysis into a single `portfolio-analyst` opus subagent for cost/speed; reviving the full 5-agent × 2-round loop *and* adding WebSearch research across 12 tickers would multiply daily pipeline runtime far beyond what a single-subagent design costs, for marginal quality gain over one well-prompted opus agent | Keep the single `portfolio-analyst` agent; give it the news context + WebSearch research results as richer input, not a second meeting layer |
+| Real-time / intraday news alerts on holdings | "What if something urgent happens mid-day, not just at the 8am run" feels valuable for a "sell decision" use case | Explicitly out of scope per PROJECT.md ("リアルタイム株価ストリーミングは日次バッチで十分") — this is a daily batch report tool, not a monitoring/alerting service; adding push/polling infra is a different product class | Daily urgency flag in the next morning's report is the intended cadence; if a genuinely time-critical gap emerges later, treat as a separate milestone, not folded into this one |
+| Per-article ML/LLM relevance/sentiment scoring for every matched news item | Feels like it would make ranking "smarter" than reusing the existing denylist + recency scoring | Explicitly out of scope per PROJECT.md ("ML/LLMベース関連性スコアリング...API呼び出しはコスト非現実的") — per-article LLM calls at ~160 articles/day is not economical, and this was already rejected for the general news pipeline | Let the single `portfolio-analyst`/research agent do qualitative selection over the pre-filtered, recency-scored candidate pool in one call — same pattern as `news-curator`'s ID-based selection, no per-article scoring pass |
+| Unbounded article count per holding card | "Show everything so nothing is missed" feels safer than curating | Some tickers (especially ones with heavy Finnhub company-news coverage) can generate 8-10+ routine articles/day; rendering all of them buries the one material item and bloats 12 cards into an unreadable report | Cap at a small number per holding (e.g., 3-5, mirroring the news-digest's 10-15/day precedent scaled down to single-ticker granularity); let the agent pick top-N via ID reference, note "+N more" only if truly needed |
+| Reintroducing "new addition candidates" *inside* the re-evaluation flow (e.g., agent recommends new buys during holding re-evaluation) | Since the agent already sees `highlightedStocks` as context, it's tempting to let it surface new opportunities inline | This is precisely the scope creep the milestone explicitly removes — mixing "what to do with what I own" and "what should I newly buy" back together defeats the stated goal of focusing the Portfolio Report on held positions | Keep `highlightedStocks` as background context only (may inform a holding's sector-relative view), but no rendered "candidates" output from this report; that remains Daily Report's exclusive job |
 
 ## Feature Dependencies
 
 ```
-[Table Stakes: Per-article headline/source/link]
-    └──requires──> [existing filter.ts output] (already built, no dependency risk)
+[finnhub.ts ticker-contamination bugfix]
+    └──blocks──> [Per-holding news matched by ticker]
+                     └──requires──> [Related news on holding card]
+                     └──enhances──> [WebSearch per-holding research + re-evaluation]
 
-[Table Stakes: "Why it matters" commentary]
-    └──requires──> [New: AI curation/selection step]
-                       └──requires──> [existing filtered article pool as input]
+[ID-reference resolution pattern (schemas.ts, proven in news-digest)]
+    └──requires──> [Related news on holding card]  (prevents hallucinated URLs)
 
-[Table Stakes: Importance-based ordering]
-    └──requires──> [New: AI curation step producing an importance judgment]
-                       └──enhances──> [Differentiator: Impact/importance badge] (same score, different rendering)
+[ANLQ-01 prior-day injection pattern (already shipped)]
+    └──requires──> [Decision-change tracking vs. previous day]
 
-[Table Stakes: Section grouping (US/Japan/Global)]
-    └──requires──> [New: AI curation step producing a market classification per article]
+[Decision-change tracking] ──enhances──> [Urgency-flagged card styling]
+[WebSearch per-holding research] ──enhances──> [Materiality/urgency signal on decision]
 
-[Differentiator: Related tickers tag]
-    └──partially satisfied by──> [existing `ticker` field on Finnhub company-news articles]
-    └──requires (for full coverage)──> [New: lightweight ticker extraction within curation step]
-
-[Differentiator: Top-of-page lede paragraph]
-    └──requires──> [New: AI curation step's selected+ranked article set as input]
-    └──enhances──> [overall digest, not required for MVP]
-
-[Table Stakes: Consistent visual identity]
-    └──requires──> [existing report-utils.ts / CSS / dark theme partials]
-
-[Differentiator: Cross-report thematic link]
-    └──requires──> [Table Stakes: "Why it matters" commentary]
-    └──requires──> [meeting analysis output being available at digest-generation time]
-    └──conflicts with──> [pipeline step ordering if digest generation is scheduled independently of the meeting]
+[New-candidates section removal] ──conflicts──> [Reintroducing candidates inline] (anti-feature)
 ```
 
 ### Dependency Notes
 
-- **All table-stakes content features (commentary, ordering, grouping) require a single new
-  "AI curation step":** rather than three separate AI calls, the curation prompt should
-  produce selection + ranking + market classification + commentary in one structured pass
-  over the filtered article pool. This keeps cost proportional to the existing pipeline (one
-  additional Claude Code step, not three).
-- **Importance ordering and impact badge share the same underlying score:** design the
-  curation step to output a single importance judgment (e.g., ordinal rank or 3-tier label)
-  and derive both list order and badge from it — avoid computing two different "importance"
-  signals that could disagree.
-- **Related tickers tag is only a *partial* free win:** articles from Finnhub company-news
-  already carry `ticker`, but Google News/RSS articles do not. Full ticker coverage requires
-  the curation step to also extract mentioned tickers from title/summary text — a small
-  additional instruction in the same prompt, not a new pipeline stage.
-- **Cross-report thematic link conflicts with independent scheduling:** if news-digest.html
-  generation runs before or in parallel with the meeting (rather than after), it cannot
-  reference meeting themes. This is a good reason to treat it as a v2+ feature rather than
-  building pipeline-ordering complexity into v1.
-- **Visual identity reuse is a hard dependency, not optional:** the existing dark-theme CSS,
-  navigation, and date-header patterns already live in `report-utils.ts` / existing report
-  generators (`generate-report.ts`, `generate-portfolio-report.ts`) — this dependency should
-  be treated as "reuse, don't rebuild" given the SHA256 checksum protection already in place
-  on other generated docs (OPS-02, v2.3).
+- **finnhub.ts bugfix blocks per-holding news supply:** `fetchNewsByCategory`'s
+  `.map(toRawArticle)` (finnhub.ts:43) implicitly passes the array index as `toRawArticle`'s
+  second positional argument (`ticker`), because `Array.prototype.map` calls the callback
+  with `(item, index, array)`. This silently pollutes general/merger news articles with a
+  numeric-string `ticker` field (e.g., `"0"`, `"1"`, `"2"`...), which would cause false
+  ticker-matches once per-holding filtering is wired up (e.g., a general article at index 3
+  incorrectly "matching" a holding whose symbol coincidentally equals `"3"`, or — more
+  commonly — every general-category article at index N getting miscounted as belonging to
+  whichever portfolio ticker happens to be processed Nth). This must be fixed before ticker
+  matching logic is trustworthy; it is a data-integrity prerequisite, not an independent
+  feature.
+- **Related news on holding card requires the ID-reference pattern:** Same anti-hallucination
+  rationale as `news-digest.html` — the agent must reference article IDs from the trusted
+  `tmp/news.json` pool, and TS resolves the real `url`/`source`/`title` server-side. Free-text
+  URL generation by the agent is a proven hallucination risk in this codebase and must not be
+  reintroduced for holding cards.
+- **Decision-change tracking requires the ANLQ-01 pattern:** The pipeline already reads
+  yesterday's meeting output and injects it into today's Round 1 prompts (Phase 12). The same
+  mechanism (read prior `tmp/portfolio-analysis.json`, inject prior `decision` per holding)
+  is the lowest-risk way to implement decision-change tracking, since it's already validated
+  in production for the Daily Report side of the pipeline.
+- **WebSearch research enhances per-holding news, doesn't replace it:** Finnhub company-news
+  (fast, structured, ID-referenceable) and WebSearch (broader but unstructured, higher latency,
+  harder to anti-hallucinate against) serve different roles — the former is the reliable
+  "related articles" list on the card; the latter is the "did anything change my view" research
+  input that isn't necessarily rendered as clickable article links.
+- **New-candidates removal conflicts with reintroducing candidates inline:** These are the same
+  scope-creep risk from two angles (removing a section vs. accidentally recreating it inside
+  the new re-evaluation output) — the roadmap phase that implements re-evaluation should
+  explicitly exclude "candidate" language from the `portfolio-analyst` output schema to avoid
+  drift back toward the old dual-purpose report.
 
 ## MVP Definition
 
-### Launch With (v1)
+### Launch With (v1 = this milestone, v2.5)
 
-Minimum viable digest — what's needed to validate "AI-curated digest is more useful than the
-raw filtered feed."
+All four target features from PROJECT.md are core, not stretch — this is a small, well-scoped
+milestone restoring a previously-validated capability, not exploratory feature discovery.
 
-- [ ] Single AI curation step selecting 10-15 articles from the existing filtered pool (20-80) — this is the entire point of "curation"; without a real reduction it's just a re-listing
-- [ ] Per-article: headline, source, published time, link to original — non-negotiable table stakes, near-zero cost since data already exists
-- [ ] Per-article Japanese "why it matters" commentary (1-2 sentences) — the core value-add distinguishing this from a plain article list; this is literally what CURA-01 specifies
-- [ ] Market grouping (US / Japan / Global) — explicitly scoped in PROJECT.md milestone target features
-- [ ] Importance-ordered within each group — without ranking, "curated" reduces to "randomly selected," undermining trust
-- [ ] Reuse existing Bloomberg dark-theme layout, nav, and deploy flow (docs/YYYY-MM-DD/news-digest.html) — required for product coherence and explicitly stated in milestone scope
+- [ ] finnhub.ts ticker-contamination fix — blocking prerequisite for all ticker-matching logic
+- [ ] Per-holding news supply to `portfolio-analyst` (ticker-matched from `tmp/news.json`) — the data foundation; without it, nothing else in this milestone has real input
+- [ ] Related news on holding cards (headline/source/link, ID-referenced, capped 3-5/holding) — the visible, user-facing half of "news-informed"
+- [ ] WebSearch-based per-holding research + re-evaluation (decision change + urgency flags for earnings miss/lawsuit/regulatory change/major contract) — the reasoning half of "news-informed"; this is the milestone's actual differentiator and must not be deferred
+- [ ] New-candidates section removed from `portfolio-report.html` (context to `portfolio-analyst` retained) — small, isolated, unblocks focus
 
-### Add After Validation (v1.x)
+### Add After Validation (v1.x, still within v2.5 if scope allows)
 
-Features to add once the core digest is shipped and the user has used it for real daily
-decisions for a few weeks.
+- [ ] Decision-change tracking vs. previous day (`previousDecision`/`decisionChanged` field + card badge) — high value but has its own dependency chain (prior-day file read); reasonable to land as a fast-follow phase within v2.5 rather than blocking the WebSearch re-evaluation phase
+- [ ] Parallelization/runtime tuning of the 12-ticker WebSearch research step — only needed if the naive implementation (sequential or simple `Promise.all`) pushes the daily pipeline past an acceptable runtime; validate the simple approach first
 
-- [ ] Impact/importance badge (visual High/Medium/Low tag) — add once the underlying importance score from v1's ranking has proven reliable/trustworthy in practice
-- [ ] Related-tickers tag per article (including extraction beyond the existing `ticker` field) — add once basic digest format is validated; nice-to-have personalization layer
-- [ ] Top-of-page lede/overview paragraph — add if user finds jumping straight into the list per section lacks context; cheap to add later since it only needs the already-curated set
+### Future Consideration (v2.6+)
 
-### Future Consideration (v2+)
-
-Features to defer until the digest itself has proven valuable in daily use.
-
-- [ ] Cross-report thematic linking to meeting minutes/daily report — defer because it introduces pipeline-ordering dependencies (digest must run after meeting analysis) that add operational complexity to a currently-working launchd pipeline; validate the standalone digest first
-- [ ] Historical digest archive/search — defer; the existing index.html monthly accordion navigation may already suffice, revisit only if browsing 4 reports/day becomes unwieldy over months
+- [ ] XREP-01 — cross-reference news-digest themes discussed in the daily meeting back onto holding cards (already flagged as deferred in PROJECT.md due to pipeline-ordering dependency; requires news-digest to run before portfolio analysis, currently the reverse or independent)
+- [ ] Historical urgency-flag audit trail / weekly rollup of flagged events — would need persistent storage beyond daily `tmp/`/`docs/` snapshots, no current infrastructure for it
+- [ ] Position-sizing-aware rebalance suggestions — blocked on data availability, not implementation choice: PROJECT.md notes "保有比率データはありません" (no holding-percentage data exists), so rebalance actions must stay qualitative regardless of how good the news/research input becomes
 
 ## Feature Prioritization Matrix
 
 | Feature | User Value | Implementation Cost | Priority |
-|---------|------------|---------------------|----------|
-| AI curation/selection (10-15 of 20-80) | HIGH | MEDIUM | P1 |
-| Per-article headline/source/link | HIGH | LOW | P1 |
-| "Why it matters" Japanese commentary | HIGH | MEDIUM | P1 |
-| Market grouping (US/Japan/Global) | HIGH | LOW-MEDIUM | P1 |
-| Importance ordering within group | HIGH | MEDIUM | P1 |
-| Reuse existing dark theme/nav/deploy | HIGH | LOW | P1 |
-| Impact/importance badge | MEDIUM | LOW | P2 |
-| Related tickers tag | MEDIUM | LOW-MEDIUM | P2 |
-| Top-of-page lede paragraph | MEDIUM | LOW-MEDIUM | P2 |
-| Cross-report thematic linking | LOW-MEDIUM | MEDIUM-HIGH | P3 |
-| Sentiment/confidence numeric scores | LOW | MEDIUM | Reject (anti-feature) |
-| Full article paraphrase/rewrite | LOW | MEDIUM | Reject (anti-feature) |
+|---------|------------|----------------------|----------|
+| finnhub.ts ticker bugfix | HIGH (blocks everything) | LOW | P1 |
+| Per-holding news supply | HIGH | LOW | P1 |
+| Related news on holding card | HIGH | MEDIUM | P1 |
+| WebSearch research + re-evaluation | HIGH | HIGH | P1 |
+| New-candidates section removal | MEDIUM | LOW | P1 |
+| Urgency/materiality flag | HIGH | LOW-MEDIUM | P1 |
+| Decision-change tracking | MEDIUM-HIGH | MEDIUM | P2 |
+| WebSearch runtime parallelization | MEDIUM | MEDIUM | P2 (only if needed) |
+| XREP-01 theme cross-reference | LOW-MEDIUM | MEDIUM | P3 |
+| Urgency audit trail / rollup | LOW | HIGH (needs new storage) | P3 |
 
 **Priority key:**
-- P1: Must have for launch (v1 of news-digest.html)
-- P2: Should have, add when possible (v1.x)
-- P3: Nice to have, future consideration (v2+)
+- P1: Must have for v2.5 launch
+- P2: Should have, add when possible within v2.5 or as immediate fast-follow
+- P3: Nice to have, explicitly deferred (v2.6+ per PROJECT.md)
 
-## Competitor Feature Analysis
+## Competitor / Precedent Feature Analysis
 
-| Feature | Bloomberg Five Things / Axios | TLDR / Morning Brew | Our Approach |
-|---------|-------------------------------|----------------------|--------------|
-| Item count | Bloomberg: literally 5 items; Axios: ~6 items per newsletter (Smart Brevity discipline) | TLDR: enough for "5 minutes"; sectioned by theme | 10-15 items — larger than a consumer newsletter because this is a single power-user tool wanting fuller market coverage, still a major reduction from 20-80 |
-| Significance framing | Axios: explicit "Why it matters" labeled block; Bloomberg: narrative framing, less labeled | TLDR: terse 2-3 sentence summary, less explicit "why" framing | Adopt Axios-style explicit "why it matters" commentary per article — clearest, most scannable pattern found, matches CURA-01's "解説コメント" requirement |
-| Grouping | Bloomberg groups by region edition (Americas/Asia); Axios groups by topic | TLDR groups by theme (Big Tech, Science, Misc) | Group by market (US/Japan/Global) — matches this tool's existing US+Japan stock dual focus better than a topic-based grouping |
-| Personalization | None of the reviewed newsletter formats personalize to an individual portfolio (they're mass-market products) | Same — no personalization | Ticker-relevance tagging tied to the user's own portfolio — a genuine differentiator vs. all reviewed newsletter formats, since this tool already has portfolio context the mass-market products lack |
-| Source transparency | Both link out to full articles; neither replaces the source | Both link out; TLDR explicitly avoids long-form paraphrase | Always link to original `url`; keep commentary short — directly mitigates AI hallucination risk noted in research (AI-labeled news articles show markedly higher hallucination rates than human-written ones per recent academic study) |
+Since this is a single-user personal tool, "competitors" here means (a) this project's own
+proven v1.0 implementation and (b) general industry patterns from professional research
+platforms, used to sanity-check that the restored design matches how the domain actually
+solves this problem.
+
+| Feature | v1.0 (this project, deleted in v2.0) | Industry pattern (S&P Capital IQ-style / IR-monitoring tools) | Our v2.5 Approach |
+|---------|----------------------------------------|----------------------------------------------------------------|---------------------|
+| Per-holding news scoping | Not ticker-matched from a pool — relied on a separate Gemini `googleSearch`-grounded research call per ticker | Portfolio-scoped dashboards with per-company monitoring, alerts filtered to tracked tickers | Ticker-match against the *existing* filtered news pool (Finnhub company-news) first — cheaper and faster than a fresh search per holding — then layer WebSearch research on top |
+| Re-evaluation trigger | Explicit second round: "先ほどの判断を変更すべき銘柄はあるか" after research | Event-driven re-review triggers on earnings/filings/rating changes | Same explicit re-evaluation instruction, executed within a single `portfolio-analyst` call rather than a second agent round |
+| Materiality signal | Free-text instruction to flag "決算ミス、訴訟、規制変更、大型契約" | Binary IMPORTANT flag / High-Medium-Low priority tiers common across monitoring tools | Structured `urgency` field (not just prose) so the renderer can visually distinguish urgent holdings — an improvement over v1.0's free-text-only approach |
+| Anti-hallucination for linked news | Not applicable (v1.0 had no clickable per-article links on holdings — only prose research summaries) | N/A (professional tools use first-party structured news feeds, not LLM-generated links) | ID-reference resolution against `tmp/news.json` (proven in-house pattern from `news-digest.html`) — this is a v2.x-only improvement over both v1.0 and generic prose-summary approaches |
 
 ## Sources
 
-- [Bloomberg "5 things to start your day"](https://link.mail.bloombergbusiness.com/public/14190293) — MEDIUM confidence (WebSearch, cross-checked across multiple Bloomberg newsletter pages; note the "Five Things" newsletter itself was retired in Oct 2024 in favor of "Markets Daily," but the format pattern is well documented across years of archived editions)
-- [Bloomberg Five Things You Need to Know — Americas edition](https://www.bloomberg.com/news/newsletters/2024-10-07/five-things-you-need-to-know-to-start-your-day-americas) — MEDIUM confidence
-- [Axios Smart Brevity / "Why it matters" methodology](https://writewithai.substack.com/p/axios-newsletter-template-for-content) — MEDIUM confidence (third-party analysis of a well-documented, publicly discussed Axios methodology; not primary source but consistent across multiple independent write-ups)
-- [Axios Macro newsletter launch](https://www.axios.com/press-past-releases/axios-launches-axios-macro-newsletter) — MEDIUM confidence (Axios press release, primary source for format description)
-- [Morning Brew newsletter deep dive — Markets section](https://theaudiencers.com/deep-dive-into-the-morning-brew-newsletter-andy-griffiths/) — LOW-MEDIUM confidence (third-party analysis, single-source pattern description)
-- [TLDR Newsletter Review 2026](https://www.readless.app/blog/tldr-newsletter-review-2026) — LOW-MEDIUM confidence (third-party review, WebSearch only, not independently cross-verified against a raw TLDR archive)
-- [arXiv: AI use in American newspapers is widespread, uneven, and rarely disclosed](https://arxiv.org/pdf/2510.18774) — MEDIUM confidence (academic paper, primary source on AI-generated news hallucination rates)
-- [AI hallucination risk in financial services](https://launchlemonade.app/blog/ai-hallucination-risk-in-financial-services-what-your-firm-needs-to-know) — LOW-MEDIUM confidence (industry blog, corroborates directionally but not independently verified)
-- Codebase inspection: `/Users/arai/invest/src/data/news/filter.ts`, `/Users/arai/invest/src/data/news/types.ts`, `/Users/arai/invest/src/report/`, `/Users/arai/invest/.planning/PROJECT.md` — HIGH confidence (direct source reading, defines actual available data fields and existing pipeline constraints)
+- Internal precedent (HIGH confidence, primary source for this milestone): `git show
+  ba01275^:src/portfolio/runner.ts`, `git show ba01275^:src/data/research.ts` (v1.0
+  implementation, deleted in v2.0 Gemini removal)
+- Internal precedent (HIGH confidence): `src/scripts/write-news-digest.ts`,
+  `src/meeting/schemas.ts` (ID-reference anti-hallucination pattern, shipped v2.4)
+- Internal precedent (HIGH confidence): `.claude/commands/invest.md` lines ~94-172 (ANLQ-01
+  prior-day injection pattern, shipped Phase 12) and lines ~1569-1632 (`portfolio-analyst`
+  current prompt contract)
+- Internal precedent (HIGH confidence): `src/data/news/finnhub.ts` (confirmed
+  `.map(toRawArticle)` index-contamination bug at line 43 by direct code inspection)
+- `.planning/PROJECT.md` (milestone target features, constraints, out-of-scope decisions)
+- [AI Portfolio Analysis: How AI Reviews Your Entire Portfolio at Once — Barebone AI](https://barebone.ai/resources/ai-portfolio-analysis-5-agents) — MEDIUM confidence, supports news-triggered alert pattern
+- [Designing Agentic AI-Based Screening for Portfolio Investment (arXiv)](https://arxiv.org/pdf/2603.23300) — MEDIUM confidence, supports multi-signal (fundamentals + sentiment/news) buy/sell agent deliberation pattern
+- [Top 10 Investment Research Tools (Visualping)](https://visualping.io/blog/investment-research-tools) — MEDIUM confidence, supports binary IMPORTANT-flag / material-vs-noise distinction pattern
+- [FactSet News & Research](https://www.factset.com/solutions/data/news-and-research) and S&P Capital IQ material-event dashboard pattern (via Visualping article) — MEDIUM confidence, supports per-company monitoring dashboards with material-event alerts
+- WebSearch results on staleness/relevance ranking in stock dashboards — LOW-MEDIUM confidence (generic dashboard advice, not portfolio-news-specific); used only to corroborate that priority-tiering and recency-awareness are standard, not to source specific thresholds (thresholds already exist in-house via NEWS-02)
 
 ---
-*Feature research for: AI-curated financial news digest (news-digest.html, v2.4 milestone)*
-*Researched: 2026-07-02*
+*Feature research for: portfolio news intelligence (per-holding news + WebSearch re-evaluation)*
+*Researched: 2026-07-03*
