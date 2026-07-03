@@ -14,7 +14,24 @@
 
 v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、そしてAI厳選ニュースダイジェスト（news-digest.html）の4紙目追加を完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、4レポート（Daily Report / Meeting Minutes / Portfolio Report / News Digest）をGitHub Pagesへ自動デプロイする。ニュースキュレーションはID参照方式で幻覚URLを構造的に防止し、fail-soft設計により失敗時も既存3レポートの生成・デプロイに影響しない。
 
-**Next milestone:** 未定（`/gsd-new-milestone` で定義。持ち越し候補: XREP-01 ダイジェスト記事とミーティングテーマの関連注記）
+**Next milestone:** v2.5 Portfolio News Intelligence（要件定義中）
+
+## Current Milestone: v2.5 Portfolio News Intelligence
+
+**Goal:** 保有銘柄ごとのニュースとWebSearchリサーチを踏まえた売却・保有再考をポートフォリオ分析に復活させ、レポートを保有銘柄の意思決定に集中させる（v1.0の「Web調査後の再評価」フローのv2.x再実装）
+
+**Target features:**
+- 保有銘柄別ニュース供給 — tmp/news.json からticker一致で抽出し portfolio-analyst に注入、判断根拠へ必須反映
+- WebSearch銘柄別リサーチ復活 — 保有銘柄ごとの最新材料調査と初期判断の再評価（判断変更・緊急情報の指摘）
+- 保有銘柄カードに関連ニュース表示 — 見出し・ソース・元記事リンク（ID参照方式の前例踏襲で幻覚URL防止）
+- 新規組入候補セクション削除 — formatNewCandidatesHtml をレンダラーから削除（portfolio-analyst への文脈情報は維持）
+- ticker汚染バグ修正 — finnhub.ts:43 の配列インデックス混入を修正（本機能のデータ土台）
+
+**Key context:**
+- v2.3実装済みのFinnhubポートフォリオティッカー別ニュース取得が土台（供給パイプの接続が主作業）
+- v1.0の実装前例は git 履歴 `ba01275^:src/portfolio/runner.ts`（研究→再評価フロー）と `src/data/research.ts`（銘柄別リサーチ）に残存
+- WebSearch追加で日次パイプライン実行時間が増加（12銘柄分、並列化設計はフェーズで詰める）
+- fail-soft原則踏襲: リサーチ失敗時もポートフォリオレポート自体は生成継続
 
 ## Requirements
 
@@ -51,9 +68,13 @@ v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 
 ### Active
 
-（なし — v2.4 全要件検証・出荷済み。次マイルストーン定義時に追加）
+- [ ] 保有銘柄別ニュースの portfolio-analyst への供給と判断根拠への反映 — v2.5
+- [ ] 保有銘柄ごとのWebSearchリサーチと売却・保有判断の再評価 — v2.5
+- [ ] 保有銘柄カードへの関連ニュース表示（見出し・ソース・リンク） — v2.5
+- [ ] ポートフォリオレポートから新規組入候補セクションを削除 — v2.5
+- [ ] finnhub.ts の汎用ニュース ticker 汚染バグ修正 — v2.5
 
-候補（v2.5+ 持ち越し）:
+持ち越し候補（v2.6+）:
 - XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（パイプライン順序依存が生じるためコア検証後に導入）
 
 ### Out of Scope
@@ -125,4 +146,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-03 after v2.4 milestone*
+*Last updated: 2026-07-03 — milestone v2.5 Portfolio News Intelligence started*

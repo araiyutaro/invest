@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v2.4
-milestone_name: News Curation Report
-status: Awaiting next milestone
-stopped_at: Phase 18 complete — milestone v2.4 all phases done
-last_updated: "2026-07-03T02:01:33.675Z"
-last_activity: 2026-07-03 — Milestone v2.4 completed and archived
+milestone: v2.5
+milestone_name: Portfolio News Intelligence
+status: planning
+last_updated: "2026-07-03T04:09:19.251Z"
+last_activity: 2026-07-03
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 9
-  completed_plans: 9
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -21,14 +20,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-03 after v2.4 milestone)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Planning next milestone (v2.4 shipped 2026-07-03)
+**Current focus:** v2.5 Portfolio News Intelligence — defining requirements
 
 ## Current Position
 
-Phase: Milestone v2.4 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-07-03 — Milestone v2.4 completed and archived
+Status: Defining requirements
+Last activity: 2026-07-03 — Milestone v2.5 started
 
 ## Performance Metrics
 
