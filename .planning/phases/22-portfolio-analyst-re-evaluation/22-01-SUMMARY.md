@@ -92,4 +92,16 @@ None - plan executed exactly as written. `22-PATTERNS.md`, referenced in the pla
 - 22-02 (prompt integration) and 22-03 (decision-diff) can now rely on `HoldingEvaluation.urgent`/`previousDecision`/`decisionChanged` being present on the type
 - 22-04 (report rendering) is aware it must add `urgent: false` to its test fixtures (already planned) before its own type-checks will pass
 - No blockers for downstream plans
+
+## Self-Check: PASSED
+
+All created/modified files and commit hashes verified present:
+- `src/meeting/types.ts` - FOUND
+- `src/meeting/schemas.ts` - FOUND
+- `src/meeting/schemas.test.ts` - FOUND
+- `.planning/phases/22-portfolio-analyst-re-evaluation/22-01-SUMMARY.md` - FOUND
+- `662996e` (Task 1 feat) - FOUND
+- `9b9f9c9` (Task 2 RED test) - FOUND
+- `a120a74` (Task 2 GREEN feat) - FOUND
+- `59e7c3d` (docs summary) - FOUND
 </content>
