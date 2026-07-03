@@ -1,16 +1,26 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { webSearchResultSchema } from "../meeting/schemas.js";
+import { PORTFOLIO_HOLDINGS } from "../portfolio/holdings.js";
 
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
 const PORTFOLIO_RESEARCH_DIR = join(TMP_DIR, "portfolio-research");
 
 export async function validate() {
   const files = (await readdir(PORTFOLIO_RESEARCH_DIR)).filter((f) => f.endsWith(".json"));
+  // D-11の契約: 失敗銘柄も含め12銘柄全てのファイルが必ず存在する。
+  // ディレクトリ内の実在ファイルではなく PORTFOLIO_HOLDINGS 由来の期待リストを検査することで、
+  // ファイル不足（リサーチ全滅による0ファイルを含む）を偽陽性なく失敗として検知する。
+  const expected = PORTFOLIO_HOLDINGS.map((h) => `${h.symbol.replaceAll("/", "-")}.json`);
   let failed = 0;
 
-  for (const file of files) {
+  for (const file of expected) {
     const symbol = file.replace(/\.json$/, "");
+    if (!files.includes(file)) {
+      failed += 1;
+      console.log(`  FAIL: ${symbol} — ファイルが存在しません`);
+      continue;
+    }
     try {
       const raw = await readFile(join(PORTFOLIO_RESEARCH_DIR, file), "utf-8");
       const data = JSON.parse(raw) as unknown;
@@ -22,7 +32,7 @@ export async function validate() {
     }
   }
 
-  console.log(`Validation complete: ${files.length - failed}/${files.length} passed`);
+  console.log(`Validation complete: ${expected.length - failed}/${expected.length} passed`);
 
   if (failed > 0) {
     process.exit(1);
