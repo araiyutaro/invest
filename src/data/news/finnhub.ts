@@ -40,7 +40,7 @@ async function fetchNewsByCategory(
   const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
   return items
     .filter((item) => item.datetime * 1000 > oneDayAgo)
-    .map(toRawArticle);
+    .map((item) => toRawArticle(item));
 }
 
 async function fetchCompanyNews(
