@@ -124,7 +124,9 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 **Success Criteria** (what must be TRUE):
   1. 12銘柄それぞれについてWebSearchによる最新材料リサーチ（決算・訴訟・規制変更・大型契約・ガイダンス変更等）が実行され、結果が tmp/portfolio-research/{symbol}.json という Daily Report 用ディレクトリ（tmp/websearch/）とは分離された専用領域に保存される
   2. 一部または全部の銘柄でWebSearchリサーチが失敗しても、ポートフォリオレポートを含む4レポート全ての生成・デプロイが継続し、専用の [STEP:portfolio-research:*] マーカーで失敗が可視化される
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 21-01-PLAN.md — TS/スキーマ層: webSearchResultSchema alias-transform 硬化 + validate-portfolio-research.ts + Daily Report 隔離テスト (PORT-02)
+- [ ] 21-02-PLAN.md — invest.md オーケストレーション: Step 3-P 保有12銘柄WebSearchリサーチ（社名併記クエリ・エンティティ確認・fail-soft マーカー・metrics）(PORT-02, OPS-05)
 
 ### Phase 22: Portfolio-Analyst Re-Evaluation
 **Goal**: 保有銘柄の売却・保有判断が、ニュース・リサーチ結果を踏まえた再考であることがレポート上で確認でき、重大材料と前日からの判断変化が視覚的に強調される
