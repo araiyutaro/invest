@@ -1,4 +1,4 @@
-import { escapeHtml, scoreColor, verdictColor, generateBaseStyles, safeHref, formatPublishedAtJst } from "./report-utils.js";
+import { escapeHtml, generateBaseStyles, safeHref, formatPublishedAtJst } from "./report-utils.js";
 import { normalizeHoldingSymbol } from "../portfolio/holding-news.js";
 import type { ResolvedHoldingNewsItem } from "../portfolio/holding-news.js";
 import type { MeetingResult, PortfolioAnalysis, HoldingEvaluation } from "../meeting/types.js";
@@ -99,39 +99,6 @@ function formatRebalanceActionsHtml(actions: ReadonlyArray<string>): string {
     <ul>${items}</ul>`;
 }
 
-function formatNewCandidatesHtml(result: MeetingResult): string {
-  if (result.highlightedStocks.length === 0) return "";
-
-  const rows = result.highlightedStocks.map((s) => {
-    const agentCells = s.agentScores
-      .map((a) => `<td style="text-align:center;color:${scoreColor(a.score)}"><strong>${a.score}</strong><br><span style="font-size:0.75rem;color:#888;">${escapeHtml(a.reason)}</span></td>`)
-      .join("");
-
-    return `<tr>
-      <td><strong>${escapeHtml(s.ticker)}</strong><br><span style="font-size:0.8rem;color:#888;">${escapeHtml(s.summary)}</span></td>
-      ${agentCells}
-      <td style="text-align:center;"><strong style="color:${scoreColor(s.averageScore)}">${s.averageScore}</strong></td>
-      <td style="text-align:center;"><span style="color:${verdictColor(s.verdict)};font-weight:bold;">${escapeHtml(s.verdict)}</span></td>
-    </tr>`;
-  }).join("\n");
-
-  const agentHeaders = result.highlightedStocks[0]?.agentScores
-    .map((a) => `<td style="text-align:center;font-size:0.8rem;">${escapeHtml(a.agentRole)}</td>`)
-    .join("") ?? "";
-
-  return `<h2>新規組入候補（Daily Report より転載）</h2>
-    <p>Daily Reportのアナリストミーティングで推奨された銘柄です。スコアリングマトリクスを参考に投資判断してください。</p>
-    <table>
-      <tr>
-        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;">銘柄</td>
-        ${agentHeaders.replace(/(<td)/g, '$1 style="background:#2a2a3e;font-weight:bold;color:#93c5fd;"')}
-        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">平均</td>
-        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">判定</td>
-      </tr>
-      ${rows}
-    </table>`;
-}
-
 export function generatePortfolioReportHtml(
   result: MeetingResult,
   portfolioAnalysis: PortfolioAnalysis | null,
@@ -139,8 +106,6 @@ export function generatePortfolioReportHtml(
 ): string {
   const styles = generateBaseStyles("#10b981");
   const timestamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
-
-  const newCandidatesHtml = formatNewCandidatesHtml(result);
 
   if (portfolioAnalysis === null) {
     return `<!DOCTYPE html>
@@ -158,7 +123,6 @@ export function generatePortfolioReportHtml(
     <div class="agent-card">
       <p>本日のポートフォリオ分析は生成されませんでした。</p>
     </div>
-    ${newCandidatesHtml}
   </div>
 </body>
 </html>`;
@@ -183,7 +147,6 @@ export function generatePortfolioReportHtml(
     ${overallCommentHtml}
     ${holdingEvaluationsHtml}
     ${rebalanceActionsHtml}
-    ${newCandidatesHtml}
   </div>
 </body>
 </html>`;

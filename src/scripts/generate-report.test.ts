@@ -357,12 +357,11 @@ describe("Portfolio Report", () => {
     expect(html).toContain("POWLを一部売却し利益確定");
   });
 
-  it("Test 30: HTML に highlightedStocks の新規組入候補セクションが含まれる (PORT-01)", async () => {
+  it("Test 30: HTML に新規組入候補セクションが含まれない (UI-08、通常パス)", async () => {
     const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
     const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
-    expect(html).toContain("新規組入候補");
-    expect(html).toContain("PLTR");
-    expect(html).toContain("8.2");
+    expect(html).not.toContain("新規組入候補");
+    expect(html).not.toContain("Daily Reportのアナリストミーティングで推奨された銘柄です");
   });
 
   it("Test 31: portfolioAnalysis が null の場合フォールバック HTML を返す", async () => {
@@ -371,6 +370,7 @@ describe("Portfolio Report", () => {
     expect(html).toContain("<!DOCTYPE html>");
     expect(html).toContain("Portfolio Report");
     expect(html).not.toContain("保有銘柄 個別評価");
+    expect(html).not.toContain("新規組入候補");
   });
 
   it("Test 32: decision バッジに正しい色が使われる", async () => {
