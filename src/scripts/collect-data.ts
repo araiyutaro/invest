@@ -29,6 +29,7 @@ export async function main() {
     `市場データ収集完了 (指数: ${marketData.indices.length}件, セクター: ${marketData.sectors.length}件)`,
   );
 
+  let idArticles: ReturnType<typeof assignArticleIds> = [];
   try {
     console.log("ニュース収集中...");
     const usTickers = PORTFOLIO_HOLDINGS
@@ -57,13 +58,19 @@ export async function main() {
     if (finalArticles.length < 20) {
       console.log(`⚠ フィルタ後の記事が${finalArticles.length}件です（MIN=20未満）`);
     }
-    const idArticles = assignArticleIds(finalArticles);
+    idArticles = assignArticleIds(finalArticles);
     await writeFile(
       join(TMP_DIR, "news.json"),
       JSON.stringify(idArticles, null, 2),
       "utf-8",
     );
+  } catch (e) {
+    console.error("ニュース収集失敗（続行）:", e);
+    idArticles = [];
+    await writeFile(join(TMP_DIR, "news.json"), "[]", "utf-8");
+  }
 
+  try {
     const holdingNews = buildHoldingNewsMap(idArticles, PORTFOLIO_HOLDINGS);
     await writeFile(
       join(TMP_DIR, "holding-news.json"),
@@ -71,8 +78,6 @@ export async function main() {
       "utf-8",
     );
   } catch (e) {
-    console.error("ニュース収集失敗（続行）:", e);
-    await writeFile(join(TMP_DIR, "news.json"), "[]", "utf-8");
     console.error("保有銘柄別ニュース抽出失敗（続行）:", e);
     const emptyHoldingNews = Object.fromEntries(
       PORTFOLIO_HOLDINGS.map((h) => [h.symbol, []]),

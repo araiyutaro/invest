@@ -5,7 +5,7 @@ import type { PortfolioHolding } from "./holdings.js";
 /** 1銘柄あたりの供給上限（D-09） */
 const MAX_ARTICLES_PER_HOLDING = 5;
 
-/** マッチ方式。ticker一致 > 社名一致 > エイリアス一致 の優先順位を持つ (D-10)。 */
+/** マッチ方式。切り捨て時は ticker一致 > 社名・エイリアス一致（同格、優先度スコア降順）の優先順位を持つ (D-10)。 */
 export type HoldingNewsMatchType = "ticker" | "name" | "alias";
 
 /**
