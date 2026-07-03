@@ -7,6 +7,7 @@ import { fetchGoogleNewsJapan } from "../data/news/google-news.js";
 import { fetchAllRssNews } from "../data/news/rss-sources.js";
 import { filterNewsArticles } from "../data/news/filter.js";
 import { assignArticleIds } from "../data/news/article-id.js";
+import { buildHoldingNewsMap } from "../portfolio/holding-news.js";
 import { PORTFOLIO_HOLDINGS } from "../portfolio/holdings.js";
 import { fetchPortfolioData } from "../portfolio/data.js";
 
@@ -62,9 +63,25 @@ export async function main() {
       JSON.stringify(idArticles, null, 2),
       "utf-8",
     );
+
+    const holdingNews = buildHoldingNewsMap(idArticles, PORTFOLIO_HOLDINGS);
+    await writeFile(
+      join(TMP_DIR, "holding-news.json"),
+      JSON.stringify(holdingNews, null, 2),
+      "utf-8",
+    );
   } catch (e) {
     console.error("ニュース収集失敗（続行）:", e);
     await writeFile(join(TMP_DIR, "news.json"), "[]", "utf-8");
+    console.error("保有銘柄別ニュース抽出失敗（続行）:", e);
+    const emptyHoldingNews = Object.fromEntries(
+      PORTFOLIO_HOLDINGS.map((h) => [h.symbol, []]),
+    );
+    await writeFile(
+      join(TMP_DIR, "holding-news.json"),
+      JSON.stringify(emptyHoldingNews, null, 2),
+      "utf-8",
+    );
   }
 
   try {
