@@ -1,5 +1,6 @@
 import { calculatePriorityScore } from "../data/news/filter.js";
 import type { NewsArticleWithId } from "../data/news/article-id.js";
+import type { NewsArticlePoolEntry } from "../meeting/schemas.js";
 import type { PortfolioHolding } from "./holdings.js";
 
 /** 1銘柄あたりの供給上限（D-09） */
@@ -19,6 +20,68 @@ export interface HoldingNewsEntry {
 
 /** 保有銘柄シンボルをキーとする holding-news マップ。全銘柄のキーを必ず持つ (D-08)。 */
 export type HoldingNewsFile = Record<string, ReadonlyArray<HoldingNewsEntry>>;
+
+/**
+ * 銘柄シンボル正規化の単一情報源（Open Questions Q2 RESOLVED）。
+ * trim + toUpperCase のみを行い、内部文字は変えない（例: " 8522.t " → "8522.T", "mrna" → "MRNA"）。
+ * resolvePortfolioHoldingNews のキー生成と Wave 2 の参照側（generate-portfolio-report.ts）が
+ * 同じ関数でキーを生成することで、LLM(portfolio-analyst)出力の HoldingEvaluation.symbol の
+ * 表記揺れ（schemas.ts の symbol は z.string() のみで無正規化）によるキー不一致を構造的に防ぐ。
+ * 米国ティッカーは大文字、日本株は数値+".T" のため trim+toUpperCase で安全に正準化できる。
+ */
+export function normalizeHoldingSymbol(symbol: string): string {
+  return symbol.trim().toUpperCase();
+}
+
+/**
+ * resolvePortfolioHoldingNews が返す解決済みニュース項目。
+ * score は含めない (D-06: 優先度スコアは内部値のため非表示。型に含めないことで構造的に防止)。
+ */
+export interface ResolvedHoldingNewsItem {
+  readonly id: string;
+  readonly title: string;
+  readonly source: string;
+  readonly url: string;
+  readonly publishedAt: string; // JSON往復後は必ずstring（Pitfall 3と同じ注意）
+  readonly matchType: HoldingNewsMatchType;
+}
+
+/**
+ * holding-news.json（銘柄別ID参照, Phase 19生成）と news.json（記事プール）を照合し、
+ * 各銘柄の解決済みニュース項目を返す。
+ * pool に存在しないIDのエントリは drop され console.warn が出る (D-10: 幻覚URL防止の最終ガード)。
+ * 銘柄間のID混入を防ぐため Object.entries(holdingNews) を起点にループし、プールを独立再フィルタ
+ * しない (Pitfall 5)。throw しない。結果マップのキーは normalizeHoldingSymbol で正規化される。
+ */
+export function resolvePortfolioHoldingNews(
+  holdingNews: HoldingNewsFile,
+  pool: ReadonlyArray<NewsArticlePoolEntry>,
+): Record<string, ReadonlyArray<ResolvedHoldingNewsItem>> {
+  const poolById = new Map(pool.map((a) => [a.id, a]));
+  const result: Record<string, ReadonlyArray<ResolvedHoldingNewsItem>> = {};
+
+  for (const [symbol, entries] of Object.entries(holdingNews)) {
+    const resolved: ResolvedHoldingNewsItem[] = [];
+    for (const entry of entries) {
+      const article = poolById.get(entry.id);
+      if (!article) {
+        console.warn(`[holding-news] 不明な記事IDをdrop: ${entry.id} (symbol=${symbol})`);
+        continue;
+      }
+      resolved.push({
+        id: article.id,
+        title: article.title,
+        source: article.source,
+        url: article.url,
+        publishedAt: article.publishedAt,
+        matchType: entry.matchType,
+      });
+    }
+    result[normalizeHoldingSymbol(symbol)] = resolved;
+  }
+
+  return result;
+}
 
 interface HoldingArticleMatch {
   readonly article: NewsArticleWithId;

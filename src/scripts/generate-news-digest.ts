@@ -1,4 +1,4 @@
-import { escapeHtml, generateBaseStyles } from "./report-utils.js";
+import { escapeHtml, generateBaseStyles, safeHref, formatPublishedAtJst } from "./report-utils.js";
 import type { NewsCuration, CuratedArticle } from "../meeting/types.js";
 
 const MARKET_ORDER: ReadonlyArray<{ value: CuratedArticle["market"]; label: string }> = [
@@ -28,19 +28,6 @@ function importanceBadgeHtml(importance: CuratedArticle["importance"]): string {
   return `<span style="color:${importanceColor(importance)};font-weight:bold;">${IMPORTANCE_LABELS[importance]}</span>`;
 }
 
-function formatPublishedAtJst(publishedAtIso: string): string {
-  // D-02: 実行時刻に依存する相対時刻APIは使わない -- publishedAt文字列からのみ絶対時刻を導出(アーカイブ整合性)
-  const d = new Date(publishedAtIso);
-  return d.toLocaleString("ja-JP", {
-    timeZone: "Asia/Tokyo",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-}
-
 function sortByImportance(articles: ReadonlyArray<CuratedArticle>): CuratedArticle[] {
   // CURA-06/D-07: ネイティブ安定ソート(ES2019+仕様保証)、イミュータブル
   return [...articles].sort((a, b) => IMPORTANCE_ORDER[a.importance] - IMPORTANCE_ORDER[b.importance]);
@@ -55,11 +42,6 @@ function formatTickerPillsHtml(a: CuratedArticle): string {
       return `<span class="ticker-pill">${escapeHtml(label)}</span>`;
     })
     .join(" ");
-}
-
-function safeHref(url: string): string | null {
-  // T-16-02-03: javascript:/data: 等の非http(s)スキームはリンク化しない(最終防衛線)
-  return url.startsWith("http://") || url.startsWith("https://") ? url : null;
 }
 
 function formatArticleCardHtml(a: CuratedArticle): string {

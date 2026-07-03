@@ -1,11 +1,15 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   buildHoldingNewsMap,
   matchesTicker,
   matchesHoldingByName,
+  normalizeHoldingSymbol,
+  resolvePortfolioHoldingNews,
+  type HoldingNewsFile,
 } from "./holding-news.js";
 import type { NewsArticleWithId } from "../data/news/article-id.js";
 import type { PortfolioHolding } from "./holdings.js";
+import type { NewsArticlePoolEntry } from "../meeting/schemas.js";
 
 const makeArticleWithId = (
   overrides: Partial<NewsArticleWithId> & { id: string },
@@ -16,6 +20,16 @@ const makeArticleWithId = (
   url: "https://example.com/article",
   publishedAt: new Date(),
   category: "japan_market",
+  ...overrides,
+});
+
+const makePoolEntry = (
+  overrides: Partial<NewsArticlePoolEntry> & { id: string },
+): NewsArticlePoolEntry => ({
+  title: "デフォルトタイトル",
+  url: "https://example.com/article",
+  source: "TestSource",
+  publishedAt: "2026-07-03T00:00:00.000Z",
   ...overrides,
 });
 
@@ -199,6 +213,114 @@ describe("buildHoldingNewsMap 上限5件切り捨て (D-09, D-10)", () => {
     ];
     const result = buildHoldingNewsMap(articles, ALL_12_HOLDINGS);
     expect(result.MRNA.map((e) => e.id)).toEqual(["new", "old"]);
+  });
+});
+
+describe("normalizeHoldingSymbol (Q2 RESOLVED)", () => {
+  it("前後空白を除去し大文字化する（正規化）", () => {
+    expect(normalizeHoldingSymbol(" 8522.t ")).toBe("8522.T");
+  });
+
+  it("内部文字は変えない（正規化）", () => {
+    expect(normalizeHoldingSymbol("8522.T")).toBe("8522.T");
+  });
+
+  it("小文字ティッカーを大文字化する", () => {
+    expect(normalizeHoldingSymbol("mrna")).toBe("MRNA");
+  });
+
+  it("前後空白のみのティッカーも大文字化する", () => {
+    expect(normalizeHoldingSymbol(" hii ")).toBe("HII");
+  });
+});
+
+describe("resolvePortfolioHoldingNews (D-06, D-09, D-10, Pitfall 5)", () => {
+  it("正常解決: pool に存在するIDは title/source/url/publishedAt/matchType に解決される（score は含まない）", () => {
+    const holdingNews: HoldingNewsFile = {
+      MRNA: [{ id: "n01", matchType: "ticker", score: 9.5 }],
+    };
+    const pool = [
+      makePoolEntry({ id: "n01", title: "Moderna announces earnings", source: "Reuters", url: "https://example.com/n01", publishedAt: "2026-07-03T01:00:00.000Z" }),
+    ];
+    const result = resolvePortfolioHoldingNews(holdingNews, pool);
+    expect(result.MRNA).toEqual([
+      {
+        id: "n01",
+        title: "Moderna announces earnings",
+        source: "Reuters",
+        url: "https://example.com/n01",
+        publishedAt: "2026-07-03T01:00:00.000Z",
+        matchType: "ticker",
+      },
+    ]);
+    expect(result.MRNA[0]).not.toHaveProperty("score");
+  });
+
+  it("正規化キー生成: holdingNews のキーが前後空白/小文字を含んでも結果キーは正規化される", () => {
+    const holdingNews: HoldingNewsFile = {
+      " 8522.t ": [{ id: "n02", matchType: "name", score: 5 }],
+    };
+    const pool = [makePoolEntry({ id: "n02" })];
+    const result = resolvePortfolioHoldingNews(holdingNews, pool);
+    expect(Object.keys(result)).toEqual(["8522.T"]);
+    expect(result["8522.T"]).toHaveLength(1);
+  });
+
+  it("未知IDのdrop: pool に存在しないIDのエントリは除外され console.warn が呼ばれる。他の解決可能エントリは影響を受けない", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const holdingNews: HoldingNewsFile = {
+      MRNA: [
+        { id: "unknown-id", matchType: "ticker", score: 9 },
+        { id: "n01", matchType: "ticker", score: 8 },
+      ],
+    };
+    const pool = [makePoolEntry({ id: "n01" })];
+    const result = resolvePortfolioHoldingNews(holdingNews, pool);
+    expect(result.MRNA).toHaveLength(1);
+    expect(result.MRNA[0].id).toBe("n01");
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("銘柄間のID混入防止: holdingNews で HII 配下にのみ列挙された記事IDが MRNA の解決結果に含まれない", () => {
+    const holdingNews: HoldingNewsFile = {
+      MRNA: [],
+      HII: [{ id: "nX", matchType: "ticker", score: 7 }],
+    };
+    // pool 側の ticker フィールドは MRNA だが、holdingNews では HII 配下にのみ列挙されている
+    const pool = [makePoolEntry({ id: "nX", ticker: "MRNA" })];
+    const result = resolvePortfolioHoldingNews(holdingNews, pool);
+    expect(result.MRNA).toEqual([]);
+    expect(result.HII).toHaveLength(1);
+    expect(result.HII[0].id).toBe("nX");
+  });
+
+  it("供給順の維持: 各銘柄の解決結果は holdingNews の供給順のまま（並べ替えなし）", () => {
+    const holdingNews: HoldingNewsFile = {
+      MRNA: [
+        { id: "n03", matchType: "name", score: 1 },
+        { id: "n01", matchType: "ticker", score: 9 },
+        { id: "n02", matchType: "ticker", score: 5 },
+      ],
+    };
+    const pool = [
+      makePoolEntry({ id: "n01" }),
+      makePoolEntry({ id: "n02" }),
+      makePoolEntry({ id: "n03" }),
+    ];
+    const result = resolvePortfolioHoldingNews(holdingNews, pool);
+    expect(result.MRNA.map((e) => e.id)).toEqual(["n03", "n01", "n02"]);
+  });
+
+  it("throw しない: 空 holdingNews / 空 pool / 全ID未検出でも throw しない", () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    expect(() => resolvePortfolioHoldingNews({}, [])).not.toThrow();
+    expect(resolvePortfolioHoldingNews({}, [])).toEqual({});
+
+    const holdingNews: HoldingNewsFile = { MRNA: [{ id: "gone", matchType: "ticker", score: 1 }] };
+    expect(() => resolvePortfolioHoldingNews(holdingNews, [])).not.toThrow();
+    expect(resolvePortfolioHoldingNews(holdingNews, [])).toEqual({ MRNA: [] });
+    vi.restoreAllMocks();
   });
 });
 
