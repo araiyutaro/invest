@@ -87,7 +87,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 - [x] **Phase 19: Data Foundation & Holding-News Supply** — finnhub.tsティッカー汚染バグ修正 + 決定論的な保有銘柄別ニュース抽出をportfolio-analystへ供給 (completed 2026-07-03)
 - [x] **Phase 20: Holding-Card News Display** — 保有銘柄カードへのID参照方式ニュース表示（見出し・ソース・リンク、0件時の正常描画） (completed 2026-07-03)
 - [x] **Phase 21: Portfolio WebSearch Research** — 保有銘柄ごとのWebSearchリサーチをfail-softな新設パイプラインステップとして実行 (completed 2026-07-03)
-- [ ] **Phase 22: Portfolio-Analyst Re-Evaluation** — ニュース・リサーチを踏まえた判断根拠、緊急度フラグ、前日比較の決定論的判断変化検出
+- [x] **Phase 22: Portfolio-Analyst Re-Evaluation** — ニュース・リサーチを踏まえた判断根拠、緊急度フラグ、前日比較の決定論的判断変化検出 (completed 2026-07-03)
 - [ ] **Phase 23: New-Candidates Section Removal** — ポートフォリオレポートから新規組入候補セクションを削除（成功・フォールバック両パス）
 
 ## Phase Details
@@ -140,7 +140,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 - [x] 22-01-PLAN.md — 型・スキーマ契約: HoldingEvaluation 拡張 + urgent alias-transform 硬化 + decisionChanged/previousDecision strip (Wave 1)
 - [x] 22-02-PLAN.md — invest.md Step 3d: 前日退避スニペット + リサーチ/前日判断セクション + urgent 契約・rationale 300文字化 (Wave 1)
 - [x] 22-03-PLAN.md — decision-diff.ts(TDD): 決定論的 attachDecisionChanges（前日スナップショット等値比較・undefined区別） (Wave 2)
-- [ ] 22-04-PLAN.md — レポート生成層: loadPrevPortfolioAnalysis + main() 配線 + Pitfall7 backfill + 緊急/判断変化バッジ (Wave 3)
+- [x] 22-04-PLAN.md — レポート生成層: loadPrevPortfolioAnalysis + main() 配線 + Pitfall7 backfill + 緊急/判断変化バッジ (Wave 3)
 **UI hint**: yes
 
 ### Phase 23: New-Candidates Section Removal
@@ -179,7 +179,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 19. Data Foundation & Holding-News Supply | v2.5 | 3/3 | Complete    | 2026-07-03 |
 | 20. Holding-Card News Display | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete    | 2026-07-03 |
-| 22. Portfolio-Analyst Re-Evaluation | v2.5 | 3/4 | In Progress|  |
+| 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete   | 2026-07-03 |
 | 23. New-Candidates Section Removal | v2.5 | 0/? | Not started | - |
 
 ---
