@@ -232,6 +232,31 @@ describe("resolveNewsCuration", () => {
     expect(result.articles[0]?.tickers).toEqual(["AAPL", "MSFT"]);
   });
 
+  it("数値ticker除外: プールのtickerが数値（finnhub merger/business記事の実データ形状）の場合はマージせず、tickersは文字列のみになる", () => {
+    // tmp/news.json の merger/business カテゴリは ticker に数値インデックス（0〜9）を持つ。
+    // 型宣言（ticker?: string）と実データの不一致により、数値がtickersへ混入すると
+    // レンダラーの escapeHtml が text.replace TypeError で落ちる（2026-07-03 ライブ検証で検出）。
+    const pool = [
+      makePoolEntry({ id: "n01", ticker: 4 as unknown as string }),
+      makePoolEntry({ id: "n02", ticker: 0 as unknown as string }),
+    ];
+    const raw: RawNewsCuration = {
+      leadIn: "",
+      articles: [
+        makeRawArticle({ id: "n01", tickers: ["LMT"] }),
+        makeRawArticle({ id: "n02", tickers: [] }),
+      ],
+    };
+    const result = resolveNewsCuration(raw, pool, DATE, GENERATED_AT);
+    expect(result.articles[0]?.tickers).toEqual(["LMT"]);
+    expect(result.articles[1]?.tickers).toEqual([]);
+    for (const a of result.articles) {
+      for (const t of a.tickers) {
+        expect(typeof t).toBe("string");
+      }
+    }
+  });
+
   it("tickerNames透過: raw articleのtickerNamesが解決後のCuratedArticleにそのまま透過される（D-04）", () => {
     const pool = [makePoolEntry({ id: "n01" })];
     const raw: RawNewsCuration = {
