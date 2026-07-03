@@ -377,6 +377,97 @@ describe("Portfolio Report", () => {
     expect(html).toContain("#3b82f6"); // 買増 = blue
     expect(html).toContain("#f59e0b"); // 一部売却 = amber
   });
+
+  it("Test 33: resolvedHoldingNews が空の場合も「関連ニュース」見出し + 「本日の関連ニュースなし」で正常描画される (UI-06/D-08)", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {});
+    expect(html).toContain("関連ニュース");
+    expect(html).toContain("本日の関連ニュースなし");
+  });
+
+  it("Test 34: name一致の記事に「社名一致」バッジと記事タイトルが描画される (UI-05/D-07)", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {
+      MRNA: [
+        {
+          id: "n1",
+          title: "モデルナ社が新工場建設を発表",
+          source: "Reuters",
+          url: "https://example.com/n1",
+          publishedAt: "2026-06-24T00:00:00Z",
+          matchType: "name",
+        },
+      ],
+    });
+    expect(html).toContain("社名一致");
+    expect(html).toContain("モデルナ社が新工場建設を発表");
+  });
+
+  it("Test 35: ニュース見出しリンクが target=_blank rel=noopener noreferrer を持つ (D-03)", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {
+      MRNA: [
+        {
+          id: "n1",
+          title: "モデルナ社が新工場建設を発表",
+          source: "Reuters",
+          url: "https://example.com/n1",
+          publishedAt: "2026-06-24T00:00:00Z",
+          matchType: "name",
+        },
+      ],
+    });
+    expect(html).toContain('target="_blank" rel="noopener noreferrer"');
+  });
+
+  it("Test 36: ticker一致の記事には「社名一致」バッジが付かない (D-07)", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {
+      MRNA: [
+        {
+          id: "n2",
+          title: "MRNA株価が急伸",
+          source: "Bloomberg",
+          url: "https://example.com/n2",
+          publishedAt: "2026-06-24T01:00:00Z",
+          matchType: "ticker",
+        },
+      ],
+    });
+    expect(html).toContain("MRNA株価が急伸");
+    expect(html).not.toContain("社名一致");
+  });
+
+  it("Test 37: resolvedHoldingNews のキーは正規化済みで、h.symbol の表記揺れがあっても該当ニュースが引き当たる（Q2 RESOLVED / Pitfall 2）", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const portfolioAnalysisWithWhitespaceSymbol = {
+      ...validPortfolioAnalysis,
+      holdings: validPortfolioAnalysis.holdings.map((h) =>
+        h.symbol === "MRNA" ? { ...h, symbol: " mrna " } : h,
+      ),
+    };
+    const html = generatePortfolioReportHtml(validMeetingResult, portfolioAnalysisWithWhitespaceSymbol, {
+      MRNA: [
+        {
+          id: "n3",
+          title: "表記揺れでも引き当たるニュース",
+          source: "TestSource",
+          url: "https://example.com/n3",
+          publishedAt: "2026-06-24T02:00:00Z",
+          matchType: "ticker",
+        },
+      ],
+    });
+    expect(html).toContain("表記揺れでも引き当たるニュース");
+  });
+
+  it("Test 38: generatePortfolioReportHtml は第3引数省略の2引数呼び出しでも後方互換で動作する", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html).toContain("<!DOCTYPE html>");
+    expect(html).toContain("関連ニュース");
+    expect(html).toContain("本日の関連ニュースなし");
+  });
 });
 
 describe("3-report output", () => {
