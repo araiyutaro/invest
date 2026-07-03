@@ -1696,6 +1696,25 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 「ポートフォリオ分析を実行中...」とユーザーに表示してください。
 
+次に、以下のBashコマンドで前日のポートフォリオ判断データを退避してください（portfolio-analyst が本日の tmp/portfolio-analysis.json を上書きする前に必ず実行すること）:
+
+```bash
+node -e "
+const fs = require('fs');
+try {
+  const prev = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/portfolio-analysis.json', 'utf-8'));
+  if (Array.isArray(prev.holdings) && prev.holdings.length > 0) {
+    fs.writeFileSync('/Users/arai/invest/tmp/prev-portfolio-analysis.json', JSON.stringify(prev, null, 2));
+    console.log('[前日データ] ' + prev.holdings.length + '銘柄分の前日判断を保存');
+  } else {
+    console.log('前日データなし');
+  }
+} catch(e) {
+  console.log('前日データなし');
+}
+"
+```
+
 まず以下のファイルを Read ツールで読み込んでください:
 
 - `/Users/arai/invest/tmp/portfolio.json` -- 全内容（12銘柄の株価データ）
@@ -1703,6 +1722,8 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 - `/Users/arai/invest/src/portfolio/holdings.ts` -- PORTFOLIO_HOLDINGS 定数を取得
 - `/Users/arai/invest/tmp/news.json` -- 全内容（フィルタ済みニュース記事プール。news-curator のプロンプトに埋め込む）
 - `/Users/arai/invest/tmp/holding-news.json` -- 全内容（保有銘柄別ニュースID参照。tmp/news.json と突き合わせて全文解決する）
+- `/Users/arai/invest/tmp/portfolio-research/{symbol}.json` -- 12銘柄分（存在する場合のみ。researchSummary/positiveFindings/negativeFindingsのみ使用、keyArticlesは埋め込まない）
+- `/Users/arai/invest/tmp/prev-portfolio-analysis.json` -- 全内容（前日のポートフォリオ判断。存在する場合のみ）
 
 **以下2つの Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
 
