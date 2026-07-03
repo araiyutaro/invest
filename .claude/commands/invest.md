@@ -1378,9 +1378,9 @@ rm -rf /Users/arai/invest/tmp/portfolio-research && mkdir -p /Users/arai/invest/
 echo '[STEP:portfolio-research:OK]'
 ```
 
-1銘柄でも失敗した場合（失敗したティッカーを列挙、例: EE, NXT, 5576.T）:
+1銘柄でも失敗した場合、以下のプレースホルダ `{N}` と `{失敗ティッカー}` を**実際の値に置き換えてから**実行してください（`{N}` = 失敗銘柄数、`{失敗ティッカー}` = 実際に失敗したティッカーをカンマ区切りで列挙。このブロックをそのままコピペ実行してはいけません）:
 ```bash
-echo '[STEP:portfolio-research:FAIL:3/12銘柄失敗（EE, NXT, 5576.T）]'
+echo '[STEP:portfolio-research:FAIL:{N}/12銘柄失敗（{失敗ティッカー}）]'
 ```
 
 **`[PIPELINE:FAIL]` は絶対に出力しないこと** — この失敗は4レポート・デプロイをブロックしない。
