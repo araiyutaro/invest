@@ -100,7 +100,10 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
   1. データ収集パイプライン実行後、tmp/news.json の一般記事・M&A記事の ticker フィールドが、複数の配列インデックス位置で検証しても常に undefined である（配列インデックス混入がない）
   2. tmp/news.json と12銘柄の保有リストから、ticker一致による決定論的な保有銘柄別ニュースマッピング（優先度スコア順・銘柄あたり上限付き）が生成され、ユニットテストでカバーされている
   3. portfolio-analyst のプロンプトに、保有銘柄ごとの関連ニュースが明示的な入力セクションとして含まれている
-**Plans**: TBD
+**Plans**: 3 plans
+- [ ] 19-01-PLAN.md — finnhub.ts index-as-ticker バグ修正 + NEWS-04 回帰テスト (Wave 1)
+- [ ] 19-02-PLAN.md — 決定論的な保有銘柄別ニュース抽出モジュール(TDD) + matchAliases (Wave 1)
+- [ ] 19-03-PLAN.md — collect-data 統合(holding-news.json) + portfolio-analyst プロンプト入力セクション (Wave 2)
 
 ### Phase 20: Holding-Card News Display
 **Goal**: レポート閲覧者が各保有銘柄カード上で、その判断根拠となった関連ニュースを直接確認できる
