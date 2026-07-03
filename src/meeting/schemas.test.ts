@@ -361,6 +361,49 @@ describe("webSearchResultSchema", () => {
     expect(result.keyArticles).toEqual([{ title: "記事タイトル", summary: "記事サマリー" }]);
   });
 
+  it("keyArticlesフェイルソフト: summary欠落の記事は''補完され、銘柄全体のparseは失敗しない", () => {
+    const result = webSearchResultSchema.parse({
+      ticker: "EE",
+      keyArticles: [{ title: "タイトルのみの記事", url: "https://example.com/article" }],
+    });
+    expect(result.keyArticles).toEqual([{ title: "タイトルのみの記事", summary: "" }]);
+  });
+
+  it("keyArticlesフェイルソフト: title/summary両方欠落（headline等の発明キー）でも空文字補完で受理される", () => {
+    const result = webSearchResultSchema.parse({
+      ticker: "EE",
+      keyArticles: [{ headline: "発明されたキー" }, { title: "正常な記事", summary: "正常なサマリー" }],
+    });
+    expect(result.keyArticles).toEqual([
+      { title: "", summary: "" },
+      { title: "正常な記事", summary: "正常なサマリー" },
+    ]);
+  });
+
+  it("keyArticlesフェイルソフト: オブジェクトでない不正要素はthrowせず除外される", () => {
+    const result = webSearchResultSchema.parse({
+      ticker: "EE",
+      keyArticles: ["文字列要素", null, 42, ["配列要素"], { title: "残る記事", summary: "サマリー" }],
+    });
+    expect(result.keyArticles).toEqual([{ title: "残る記事", summary: "サマリー" }]);
+  });
+
+  it("keyArticlesフェイルソフト: 型不正のtitle/summary（数値等）は''に補完される", () => {
+    const result = webSearchResultSchema.parse({
+      ticker: "EE",
+      keyArticles: [{ title: "タイトル", summary: 123 }],
+    });
+    expect(result.keyArticles).toEqual([{ title: "タイトル", summary: "" }]);
+  });
+
+  it("articlesエイリアスにも記事単位のフェイルソフトが同様に適用される", () => {
+    const result = webSearchResultSchema.parse({
+      ticker: "EE",
+      articles: [{ title: "タイトルのみ" }, "不正要素"],
+    });
+    expect(result.keyArticles).toEqual([{ title: "タイトルのみ", summary: "" }]);
+  });
+
   it("エイリアス受理: timestamp/date→researchedAt が解決される", () => {
     const viaTimestamp = webSearchResultSchema.parse({
       ticker: "NVDA",

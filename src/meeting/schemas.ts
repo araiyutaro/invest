@@ -109,6 +109,31 @@ export function validateMeetingResult(data: unknown): MeetingResult {
   return meetingResultSchema.parse(data) as MeetingResult;
 }
 
+// keyArticles要素のフェイルソフト化（D-12）: 1記事のフィールド欠落・型不正・非オブジェクト要素が
+// 銘柄ファイル全体のparse失敗（＝当該銘柄のリサーチ結果の丸ごとFAIL）に波及しないよう、
+// 要素単位で補完・除外する。出力形状は {title, summary}[] のまま不変（D-09）。
+// - title / summary が欠落または非文字列 → "" に補完
+// - オブジェクトでない要素（文字列・null・配列等） → 除外
+const toKeyArticle = (item: unknown): { title: string; summary: string } | null => {
+  if (typeof item !== "object" || item === null || Array.isArray(item)) {
+    return null;
+  }
+  const record = item as Record<string, unknown>;
+  return {
+    title: typeof record.title === "string" ? record.title : "",
+    summary: typeof record.summary === "string" ? record.summary : "",
+  };
+};
+
+const lenientKeyArticlesSchema = z
+  .array(z.unknown())
+  .optional()
+  .transform((items) =>
+    items
+      ?.map(toKeyArticle)
+      .filter((article): article is { title: string; summary: string } => article !== null),
+  );
+
 // rawWebSearchResultSchema: エージェント生成JSONの信頼境界（D-12）。ticker以外は全て
 // optionalとし、正準フィールドと発明されがちなエイリアスを併記してpassthroughする。
 // tmp/websearch/{ticker}.json（既存候補銘柄）と tmp/portfolio-research/{symbol}.json
@@ -124,12 +149,8 @@ const rawWebSearchResultSchema = z
     negativeFindings: z.array(z.string()).optional(),
     negatives: z.array(z.string()).optional(), // alias for negativeFindings
     concerns: z.array(z.string()).optional(), // alias for negativeFindings
-    keyArticles: z
-      .array(z.object({ title: z.string(), summary: z.string() }))
-      .optional(),
-    articles: z
-      .array(z.object({ title: z.string(), summary: z.string() }))
-      .optional(), // alias for keyArticles
+    keyArticles: lenientKeyArticlesSchema,
+    articles: lenientKeyArticlesSchema, // alias for keyArticles
     researchedAt: z.string().optional(),
     timestamp: z.string().optional(), // alias for researchedAt
     date: z.string().optional(), // alias for researchedAt
