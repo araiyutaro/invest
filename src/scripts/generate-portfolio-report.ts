@@ -1,4 +1,6 @@
-import { escapeHtml, scoreColor, verdictColor, generateBaseStyles } from "./report-utils.js";
+import { escapeHtml, scoreColor, verdictColor, generateBaseStyles, safeHref, formatPublishedAtJst } from "./report-utils.js";
+import { normalizeHoldingSymbol } from "../portfolio/holding-news.js";
+import type { ResolvedHoldingNewsItem } from "../portfolio/holding-news.js";
 import type { MeetingResult, PortfolioAnalysis, HoldingEvaluation } from "../meeting/types.js";
 
 function decisionColor(decision: string): string {
@@ -18,7 +20,34 @@ function formatOverallCommentHtml(comment: string): string {
     </div>`;
 }
 
-function formatHoldingEvaluationsHtml(holdings: ReadonlyArray<HoldingEvaluation>): string {
+function formatHoldingNewsItemHtml(item: ResolvedHoldingNewsItem): string {
+  const href = safeHref(item.url);
+  const titleHtml = href
+    ? `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>`
+    : escapeHtml(item.title);
+  const badge = item.matchType !== "ticker" // D-07: name/alias一致のみ
+    ? ` <span style="display:inline-block;background:#2a2a3e;color:#9ca3af;font-size:0.7rem;padding:0.15rem 0.4rem;margin-left:0.4rem;border-radius:999px;">社名一致</span>`
+    : "";
+  return `<li style="padding:0.4rem 0;border-top:1px solid #2a2a3e;background:transparent;border-radius:0;margin-bottom:0;">
+      ${titleHtml}${badge}
+      <p style="color:#888;font-size:0.85rem;margin:0.15rem 0 0;">${escapeHtml(item.source)} ・ ${escapeHtml(formatPublishedAtJst(item.publishedAt))}</p>
+    </li>`;
+}
+
+function formatHoldingNewsSectionHtml(items: ReadonlyArray<ResolvedHoldingNewsItem>): string {
+  // D-08: 見出しは常時表示。0件でもセクション自体は省略しない
+  const heading = `<p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p>`;
+  if (items.length === 0) {
+    return `<div style="margin-top:0.8rem;">${heading}<p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>`;
+  }
+  const rows = items.map(formatHoldingNewsItemHtml).join("\n");
+  return `<div style="margin-top:0.8rem;">${heading}<ul style="list-style:none;padding-left:0;margin:0;">${rows}</ul></div>`;
+}
+
+function formatHoldingEvaluationsHtml(
+  holdings: ReadonlyArray<HoldingEvaluation>,
+  resolvedHoldingNews: Record<string, ReadonlyArray<ResolvedHoldingNewsItem>>,
+): string {
   if (holdings.length === 0) return "";
 
   const cards = holdings.map((h) => {
@@ -26,10 +55,12 @@ function formatHoldingEvaluationsHtml(holdings: ReadonlyArray<HoldingEvaluation>
     const riskHtml = h.riskNote
       ? `<p style="color:#f59e0b;font-size:0.85rem;">リスク: ${escapeHtml(h.riskNote)}</p>`
       : "";
-    return `<div class="agent-card" style="border-left-color:${color};">
+    const newsHtml = formatHoldingNewsSectionHtml(resolvedHoldingNews[normalizeHoldingSymbol(h.symbol)] ?? []); // Q2 RESOLVED: 参照側もnormalizeHoldingSymbolでキー一致（Pitfall 2 の silent 0件を構造的に防ぐ）
+    return `<div class="agent-card news-card" style="border-left-color:${color};">
       <h4>${escapeHtml(h.symbol)}${h.nameJa ? ` -- ${escapeHtml(h.nameJa)}` : ""} <span style="float:right;color:${color};font-weight:bold;">${escapeHtml(h.decision)}</span></h4>
       <p>${escapeHtml(h.rationale)}</p>
       ${riskHtml}
+      ${newsHtml}
     </div>`;
   }).join("\n");
 
@@ -78,7 +109,11 @@ function formatNewCandidatesHtml(result: MeetingResult): string {
     </table>`;
 }
 
-export function generatePortfolioReportHtml(result: MeetingResult, portfolioAnalysis: PortfolioAnalysis | null): string {
+export function generatePortfolioReportHtml(
+  result: MeetingResult,
+  portfolioAnalysis: PortfolioAnalysis | null,
+  resolvedHoldingNews: Record<string, ReadonlyArray<ResolvedHoldingNewsItem>> = {},
+): string {
   const styles = generateBaseStyles("#10b981");
   const timestamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
 
@@ -107,7 +142,7 @@ export function generatePortfolioReportHtml(result: MeetingResult, portfolioAnal
   }
 
   const overallCommentHtml = formatOverallCommentHtml(portfolioAnalysis.overallComment);
-  const holdingEvaluationsHtml = formatHoldingEvaluationsHtml(portfolioAnalysis.holdings);
+  const holdingEvaluationsHtml = formatHoldingEvaluationsHtml(portfolioAnalysis.holdings, resolvedHoldingNews);
   const rebalanceActionsHtml = formatRebalanceActionsHtml(portfolioAnalysis.rebalanceActions);
 
   return `<!DOCTYPE html>
