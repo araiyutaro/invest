@@ -296,12 +296,14 @@ const validPortfolioAnalysis = {
       decision: "保持" as const,
       rationale: "mRNAパイプライン評価待ち",
       riskNote: "競合リスク",
+      urgent: false,
     },
     {
       symbol: "HII",
       nameJa: "ハンティントン・インガルス",
       decision: "買増" as const,
       rationale: "防衛予算増額で安定成長",
+      urgent: false,
     },
     {
       symbol: "POWL",
@@ -309,6 +311,7 @@ const validPortfolioAnalysis = {
       decision: "一部売却" as const,
       rationale: "バリュエーション割高",
       riskNote: "PE56倍は持続不可能",
+      urgent: false,
     },
   ],
   rebalanceActions: [
@@ -468,6 +471,45 @@ describe("Portfolio Report", () => {
     expect(html).toContain("関連ニュース");
     expect(html).toContain("本日の関連ニュースなし");
   });
+
+  it("Test 40: urgent: true の銘柄カードに赤系「⚠ 緊急」バッジが表示される (D-16/UI-07)", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const analysisWithUrgent = {
+      ...validPortfolioAnalysis,
+      holdings: validPortfolioAnalysis.holdings.map((h, i) => (i === 0 ? { ...h, urgent: true } : h)),
+    };
+    const html = generatePortfolioReportHtml(validMeetingResult, analysisWithUrgent);
+    expect(html).toContain("⚠ 緊急");
+    expect(html).toContain("#ef4444");
+  });
+
+  it("Test 41: decisionChanged === true の銘柄カードにアンバー系「判断変更」バッジが表示される (D-17/UI-07)", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const analysisWithChange = {
+      ...validPortfolioAnalysis,
+      holdings: validPortfolioAnalysis.holdings.map((h, i) =>
+        i === 0 ? { ...h, decisionChanged: true, previousDecision: "保持" as const } : h),
+    };
+    const html = generatePortfolioReportHtml(validMeetingResult, analysisWithChange);
+    expect(html).toContain("判断変更: 保持 →");
+  });
+
+  it("Test 42: decisionChanged === undefined ではバッジが描画されない（false と区別、D-14）", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis); // no decisionChanged field at all
+    expect(html).not.toContain("判断変更:");
+  });
+
+  it("Test 43: urgent/変化バッジが表示されても border-left の decision 色は維持される (D-18)", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const analysisWithBoth = {
+      ...validPortfolioAnalysis,
+      holdings: validPortfolioAnalysis.holdings.map((h, i) =>
+        i === 0 ? { ...h, urgent: true, decisionChanged: true, previousDecision: "保持" as const } : h),
+    };
+    const html = generatePortfolioReportHtml(validMeetingResult, analysisWithBoth);
+    expect(html).toContain("border-left-color:#10b981"); // 保持 = green, unchanged despite urgent/changed
+  });
 });
 
 describe("3-report output", () => {
@@ -623,5 +665,68 @@ describe("3-report output", () => {
     for (const call of readFileMock.mock.calls) {
       expect(String(call[0])).not.toContain("portfolio-research");
     }
+
+    // prev-portfolio-analysis.json も並列ロードされる（PORT-05配線、既存の隔離アサーションは維持）
+    expect(readFileMock).toHaveBeenCalledWith(
+      expect.stringContaining("prev-portfolio-analysis.json"),
+      expect.any(String),
+    );
   });
+
+  it("Test 44: loadWebSearchResults の per-file catch が失敗ファイルで console.warn を呼ぶ（Pitfall 7負債回収, D-15）", async () => {
+    const fsMock = await import("node:fs/promises");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      if (String(path).includes("websearch")) {
+        return Promise.resolve("not valid json{{{");
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("websearch")) {
+        return Promise.resolve(["bad.json"]);
+      }
+      return Promise.resolve([]);
+    });
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("Test 45: loadReevalResults の per-file catch が失敗ファイルで console.warn を呼ぶ（Pitfall 7負債回収, D-15）", async () => {
+    const fsMock = await import("node:fs/promises");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      if (String(path).includes("reeval")) {
+        return Promise.resolve("not valid json{{{");
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("reeval")) {
+        return Promise.resolve(["bad.json"]);
+      }
+      return Promise.resolve([]);
+    });
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
 });

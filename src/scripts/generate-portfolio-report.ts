@@ -44,6 +44,26 @@ function formatHoldingNewsSectionHtml(items: ReadonlyArray<ResolvedHoldingNewsIt
   return `<div style="margin-top:0.8rem;">${heading}<ul style="list-style:none;padding-left:0;margin:0;">${rows}</ul></div>`;
 }
 
+/** urgent: true の銘柄に赤系「⚠ 緊急」バッジを表示する (D-16/UI-07)。false/未設定なら空文字。 */
+function formatUrgentBadgeHtml(urgent: boolean): string {
+  if (!urgent) return "";
+  return ` <span style="display:inline-block;background:#ef4444;color:#fff;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">⚠ 緊急</span>`;
+}
+
+/**
+ * decisionChanged === true の銘柄にアンバー系「判断変更: {前日} → {当日}」バッジを表示する (D-17/UI-07)。
+ * 条件は必ず `!== true` の早期returnにする — undefined（比較不能）と false（変化なし）を
+ * どちらも非表示にする（truthyチェック禁止、D-14）。
+ */
+function formatDecisionChangedBadgeHtml(
+  decisionChanged: boolean | undefined,
+  previousDecision: string | undefined,
+  decision: string,
+): string {
+  if (decisionChanged !== true) return "";
+  return ` <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">判断変更: ${escapeHtml(previousDecision ?? "?")} → ${escapeHtml(decision)}</span>`;
+}
+
 function formatHoldingEvaluationsHtml(
   holdings: ReadonlyArray<HoldingEvaluation>,
   resolvedHoldingNews: Record<string, ReadonlyArray<ResolvedHoldingNewsItem>>,
@@ -56,8 +76,11 @@ function formatHoldingEvaluationsHtml(
       ? `<p style="color:#f59e0b;font-size:0.85rem;">リスク: ${escapeHtml(h.riskNote)}</p>`
       : "";
     const newsHtml = formatHoldingNewsSectionHtml(resolvedHoldingNews[normalizeHoldingSymbol(h.symbol)] ?? []); // Q2 RESOLVED: 参照側もnormalizeHoldingSymbolでキー一致（Pitfall 2 の silent 0件を構造的に防ぐ）
+    const urgentBadge = formatUrgentBadgeHtml(h.urgent);
+    const changedBadge = formatDecisionChangedBadgeHtml(h.decisionChanged, h.previousDecision, h.decision);
+    // border-left-color は decisionColor(h.decision) のまま — バッジ有無で上書きしない (D-18)
     return `<div class="agent-card news-card" style="border-left-color:${color};">
-      <h4>${escapeHtml(h.symbol)}${h.nameJa ? ` -- ${escapeHtml(h.nameJa)}` : ""} <span style="float:right;color:${color};font-weight:bold;">${escapeHtml(h.decision)}</span></h4>
+      <h4>${escapeHtml(h.symbol)}${h.nameJa ? ` -- ${escapeHtml(h.nameJa)}` : ""}${urgentBadge}${changedBadge} <span style="float:right;color:${color};font-weight:bold;">${escapeHtml(h.decision)}</span></h4>
       <p>${escapeHtml(h.rationale)}</p>
       ${riskHtml}
       ${newsHtml}

@@ -84,6 +84,21 @@ export async function loadPortfolioAnalysis(): Promise<PortfolioAnalysis | null>
 }
 
 /**
+ * tmp/prev-portfolio-analysis.json（前日のポートフォリオ判断スナップショット）を fail-soft で読み込む。
+ * 欠損/パース失敗は初回実行・スキップ日などの想定内エッジケースのため console.warn を使う
+ * （loadPortfolioAnalysis の console.error とは severity を区別、D-15/Pitfall 7）。
+ */
+export async function loadPrevPortfolioAnalysis(): Promise<PortfolioAnalysis | null> {
+  try {
+    const raw = await readFile(join(TMP_DIR, "prev-portfolio-analysis.json"), "utf-8");
+    return portfolioAnalysisSchema.parse(JSON.parse(raw) as unknown) as PortfolioAnalysis;
+  } catch (error) {
+    console.warn("Prev portfolio analysis load failed (D-15/Pitfall 7):", error instanceof Error ? error.message : error);
+    return null;
+  }
+}
+
+/**
  * tmp/news.json（記事プール）を fail-soft で読み込む。自社TS生成物のため zod は使わず、
  * write-news-digest.ts と同じ型アサーションを用いる。欠損/パース失敗時は throw せず [] を返す。
  */
