@@ -1,5 +1,31 @@
 # Milestones
 
+## v2.4 News Curation Report (Shipped: 2026-07-03)
+
+**Phases completed:** 4 phases (15-18), 9 plans, 17 tasks
+**Timeline:** 2026-07-02 → 2026-07-03 (2 days)
+**Changes:** 17 files changed (+1,410 / -10) in src/, scripts/, .claude/, docs/index.html
+**Git range:** docs(15): capture phase context (398004e) → docs(phase-18): evolve PROJECT.md (3b8dbcf)
+
+**Delivered:** AIが厳選したニュースダイジェスト（news-digest.html）を4紙目のレポートとして日次パイプラインに追加。ID参照方式で幻覚URLを構造的に防止し、fail-soft設計で既存3レポートへの影響ゼロを保証。
+
+**Key accomplishments:**
+
+- ID参照方式のキュレーション契約を確立: `assignArticleIds`（n01〜n80の短い連番ID付与）+ zodによる二層バリデーション（`validateRawNewsCuration` 構造検証 → `resolveNewsCuration` プール参照解決）で幻覚URL・不正market値を構造的に防止（Phase 15）
+- `generateNewsDigestHtml(curation, date)` をTDDで実装: 市場別（米国株/日本株/グローバル）グルーピング・重要度順配列・High/Medium/Lowバッジ・ティッカーピル・リード文を既存3レポートと同一のBloomberg風ダークテーマで描画。null/empty/normalの3値フォールバックとXSS/tabnabbing対策済みリンクを完備（Phase 16）
+- invest.md Step 3d に news-curator（opus, 2体並列）を追加し、Step 3e で write-news-digest.ts を fail-soft 起動。news-digest.html が4紙目として自動生成され、キュレーション失敗時も `[STEP:news-digest:FAIL:*]` マーカー記録の上で既存3レポートの生成・デプロイが継続することをライブ検証（Phase 17）
+- docs/index.html の News Digest リンクを毎回 `fs.access()` 実在チェックから導出する方式に変更し、欠落日の404リンクを排除。118日分の実docsツリーでライブ実行検証（実在する2026-07-03のみリンク表示・既存3レポートリンクに回帰ゼロ）を人間承認の上、GitHub Pagesへ本番デプロイ（Phase 18）
+
+**Requirements:** 12/12 complete（CURA-01〜09, UI-03/04, OPS-04 — traceability全Complete）
+
+**Audit:** 個別マイルストーン監査はスキップ（Phase 18 VERIFICATION 3/3 passed・要件トレーサビリティ全Complete・UI-04ライブ検証+本番デプロイ済みのため）。pre-close artifact audit: all clear。
+
+**Known deferred items at close:** 1（XREP-01 ダイジェスト記事とミーティングテーマの関連注記 — v2.5+、see STATE.md Deferred Items）
+
+**Archive:** `.planning/milestones/v2.4-ROADMAP.md`, `.planning/milestones/v2.4-REQUIREMENTS.md`
+
+---
+
 ## v2.3 Analysis Quality & Operational Stability (Shipped: 2026-07-01)
 
 **Phases completed:** 5 phases (11-14.1), 12 plans, 25 tasks
