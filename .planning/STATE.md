@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v2.5
 milestone_name: Portfolio News Intelligence
 status: planning
-stopped_at: Phase 20 UI-SPEC approved
-last_updated: "2026-07-03T06:32:06.486Z"
+stopped_at: Phase 20 UI-SPEC approved (rev.2, 6/6)
+last_updated: "2026-07-03T06:34:57.596Z"
 last_activity: 2026-07-03
 progress:
   total_phases: 5
@@ -96,8 +96,8 @@ Human-UAT / 実行時検証待ち項目。いずれも静的解析では確認�
 
 ## Session Continuity
 
-Last session: 2026-07-03T06:32:06.476Z
-Stopped at: Phase 20 UI-SPEC approved
+Last session: 2026-07-03T06:34:57.587Z
+Stopped at: Phase 20 UI-SPEC approved (rev.2, 6/6)
 Resume with: `/gsd-plan-phase 19`
 
 ## Operator Next Steps
