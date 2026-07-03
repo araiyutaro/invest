@@ -93,3 +93,12 @@ None - no external service configuration required.
 ---
 *Phase: 18-index-nav-integration-validation*
 *Completed: 2026-07-03*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/update-index.ts
+- FOUND: src/scripts/update-index.test.ts
+- FOUND: .planning/phases/18-index-nav-integration-validation/18-01-SUMMARY.md
+- FOUND: 402724d (test commit)
+- FOUND: 02b5f06 (feat commit)
+- FOUND: cdc7911 (docs/summary commit)
