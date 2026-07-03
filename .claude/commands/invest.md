@@ -1696,14 +1696,17 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 「ポートフォリオ分析を実行中...」とユーザーに表示してください。
 
-次に、以下のBashコマンドで前日のポートフォリオ判断データを退避してください（portfolio-analyst が本日の tmp/portfolio-analysis.json を上書きする前に必ず実行すること）:
+次に、以下のBashコマンドで前日のポートフォリオ判断データを退避してください（portfolio-analyst が本日の tmp/portfolio-analysis.json を上書きする前に必ず実行すること。同日再実行の場合は date ガードにより退避をスキップし、既存の prev を保持する）:
 
 ```bash
 node -e "
 const fs = require('fs');
 try {
   const prev = JSON.parse(fs.readFileSync('/Users/arai/invest/tmp/portfolio-analysis.json', 'utf-8'));
-  if (Array.isArray(prev.holdings) && prev.holdings.length > 0) {
+  const todayJst = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  if (prev.date === todayJst) {
+    console.log('[前日データ] 同日データのため退避スキップ（既存の prev を保持）');
+  } else if (Array.isArray(prev.holdings) && prev.holdings.length > 0) {
     fs.writeFileSync('/Users/arai/invest/tmp/prev-portfolio-analysis.json', JSON.stringify(prev, null, 2));
     console.log('[前日データ] ' + prev.holdings.length + '銘柄分の前日判断を保存');
   } else {

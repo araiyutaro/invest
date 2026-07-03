@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { validateMeetingResult, validateWebSearchResult, validateReevaluationOutput } from "../meeting/schemas.js";
-import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnalysis } from "../meeting/types.js";
+import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnalysis, HoldingEvaluation } from "../meeting/types.js";
 import { generateDailyReportHtml } from "./generate-daily-report.js";
 import { generateMeetingMinutesHtml } from "./generate-meeting-minutes.js";
 import { generatePortfolioReportHtml } from "./generate-portfolio-report.js";
@@ -90,6 +90,29 @@ export function generateHtml(
   return generateDailyReportHtml(result, webSearchResults, reevalResults, marketData);
 }
 
+/**
+ * decision差分比較に使う前日holdingsを解決する（WR-02 同日ガード）。
+ * パイプラインの同日再実行などで prev スナップショットの date が当日分析の date と一致する場合、
+ * 同日比較は「前日からの判断変更」の意味論を壊す（実際の前日差分バッジが消える / 同日のLLM揺らぎが
+ * 判断変更として捏造される）ため、null（＝比較不能。D-14 の decisionChanged undefined 意味論）を返す。
+ * invest.md Step 3d の退避スニペット側の日付ガードと防御を重ね掛けする純関数（I/Oなし・throwなし）。
+ */
+export function resolvePrevHoldingsForDiff(
+  current: PortfolioAnalysis | null,
+  prev: PortfolioAnalysis | null,
+): ReadonlyArray<HoldingEvaluation> | null {
+  if (current === null || prev === null) {
+    return null;
+  }
+  if (prev.date === current.date) {
+    console.warn(
+      `Prev portfolio analysis has same date as current (${prev.date}) — decision diff skipped (WR-02 same-day guard)`,
+    );
+    return null;
+  }
+  return prev.holdings;
+}
+
 export async function main(): Promise<void> {
   console.log("レポート生成開始...");
 
@@ -115,7 +138,10 @@ export async function main(): Promise<void> {
     ? null
     : {
         ...portfolioAnalysis,
-        holdings: attachDecisionChanges(portfolioAnalysis.holdings, prevPortfolioAnalysis?.holdings ?? null),
+        holdings: attachDecisionChanges(
+          portfolioAnalysis.holdings,
+          resolvePrevHoldingsForDiff(portfolioAnalysis, prevPortfolioAnalysis),
+        ),
       };
 
   const dateDir = join(DOCS_DIR, meetingResult.date);

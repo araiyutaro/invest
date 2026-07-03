@@ -730,3 +730,32 @@ describe("3-report output", () => {
   });
 
 });
+
+describe("resolvePrevHoldingsForDiff (WR-02 同日ガード)", () => {
+  const prevAnalysis = { ...validPortfolioAnalysis, date: "2026-06-23" };
+
+  it("prev.date !== current.date（通常の前日データ）の場合は prev.holdings を返す", async () => {
+    const { resolvePrevHoldingsForDiff } = await import("./generate-report.js");
+    const result = resolvePrevHoldingsForDiff(validPortfolioAnalysis, prevAnalysis);
+    expect(result).toBe(prevAnalysis.holdings);
+  });
+
+  it("prev.date === current.date（同日再実行）の場合は null を返し console.warn する（WR-02）", async () => {
+    const { resolvePrevHoldingsForDiff } = await import("./generate-report.js");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const result = resolvePrevHoldingsForDiff(validPortfolioAnalysis, { ...validPortfolioAnalysis });
+    expect(result).toBeNull();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("prev === null の場合は null を返す（D-14: 比較不能）", async () => {
+    const { resolvePrevHoldingsForDiff } = await import("./generate-report.js");
+    expect(resolvePrevHoldingsForDiff(validPortfolioAnalysis, null)).toBeNull();
+  });
+
+  it("current === null の場合は null を返す", async () => {
+    const { resolvePrevHoldingsForDiff } = await import("./generate-report.js");
+    expect(resolvePrevHoldingsForDiff(null, prevAnalysis)).toBeNull();
+  });
+});
