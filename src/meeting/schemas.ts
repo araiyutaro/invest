@@ -274,7 +274,11 @@ export function resolveNewsCuration(
       market: item.market,
       importance: item.importance,
       commentary: item.commentary,
-      tickers: source.ticker ? [...new Set([source.ticker, ...item.tickers])] : item.tickers,
+      // finnhub由来のmerger/business記事はtickerが数値インデックスのため、文字列のみマージする
+      tickers:
+        typeof source.ticker === "string" && source.ticker !== ""
+          ? [...new Set([source.ticker, ...item.tickers])]
+          : item.tickers,
       tickerNames: item.tickerNames,
     });
   }
