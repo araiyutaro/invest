@@ -149,7 +149,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
 | 16. Report Generator (HTML Rendering) | v2.4 | 3/3 | Complete    | 2026-07-02 |
 | 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete    | 2026-07-03 |
-| 18. Index/Nav Integration & Validation | v2.4 | 2/2 | Complete   | 2026-07-03 |
+| 18. Index/Nav Integration & Validation | v2.4 | 2/2 | Complete    | 2026-07-03 |
 
 ---
 *Roadmap created: 2026-06-24*
