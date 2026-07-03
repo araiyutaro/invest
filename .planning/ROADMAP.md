@@ -71,7 +71,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 
 - [x] **Phase 15: Curation Contract & Schema** - AIキュレーションの出力契約（ID参照方式・市場enum・ソフト件数制約）をzodスキーマとして定義し、幻覚URL・不正市場値を構造的に防止する (completed 2026-07-02)
 - [x] **Phase 16: Report Generator (HTML Rendering)** - Phase 15の契約に基づき、news-digest.htmlの本文（記事一覧・市場別グルーピング・重要度バッジ・ティッカータグ・リード文）を既存ダークテーマで描画するピュア関数を実装する (completed 2026-07-02)
-- [ ] **Phase 17: Pipeline Integration & Orchestration** - キュレーションAgentステップと生成ロジックを日次パイプラインへfail-soft統合し、news-digest.htmlが4紙目として自動生成される
+- [x] **Phase 17: Pipeline Integration & Orchestration** - キュレーションAgentステップと生成ロジックを日次パイプラインへfail-soft統合し、news-digest.htmlが4紙目として自動生成される (completed 2026-07-03)
 - [ ] **Phase 18: Index/Nav Integration & Validation** - index.htmlのnews-digest.htmlリンクをファイル実在時のみ条件付きで出し分け、欠落日の404リンクを防止する
 
 ## Phase Details
@@ -109,7 +109,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 
 **Plans**: 2 plans (Wave 1 → Wave 2)
 - [x] 17-01-PLAN.md — write-news-digest.ts CLIオーケストレーター（TDD: 正常/欠損/不正の3シナリオ、D-08フォールバック常時書き出し・D-10 exit codeシグナル） (CURA-01, OPS-04)
-- [ ] 17-02-PLAN.md — invest.md配線: Step 3d news-curator 2体並列追加（D-01〜D-07）+ Step 3e fail-soft起動・[STEP:news-digest:*]マーカー・metrics/timing（D-08〜D-11） (CURA-01, OPS-04)
+- [x] 17-02-PLAN.md — invest.md配線: Step 3d news-curator 2体並列追加（D-01〜D-07）+ Step 3e fail-soft起動・[STEP:news-digest:*]マーカー・metrics/timing（D-08〜D-11） (CURA-01, OPS-04)
 
 ### Phase 18: Index/Nav Integration & Validation
 
@@ -146,7 +146,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 14.1. Close gap OPS-01/OPS-03 (INSERTED) | v2.3 | 2/2 | Complete | 2026-07-01 |
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
 | 16. Report Generator (HTML Rendering) | v2.4 | 3/3 | Complete    | 2026-07-02 |
-| 17. Pipeline Integration & Orchestration | v2.4 | 1/2 | In Progress|  |
+| 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete   | 2026-07-03 |
 | 18. Index/Nav Integration & Validation | v2.4 | 0/TBD | Not started | - |
 
 ---

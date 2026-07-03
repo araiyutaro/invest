@@ -8,7 +8,7 @@
 
 ### News Curation (CURA)
 
-- [ ] **CURA-01**: ニュースキュレーションHTML（news-digest.html）が4紙目のレポートとして docs/YYYY-MM-DD/ に生成される
+- [x] **CURA-01**: ニュースキュレーションHTML（news-digest.html）が4紙目のレポートとして docs/YYYY-MM-DD/ に生成される
 - [x] **CURA-02**: AIキュレーションステップがフィルタ済み記事プール（20〜80件）から重要記事10〜15件をID参照方式で選定する（URLはTS側で照合、幻覚URL防止）
 - [x] **CURA-03**: 各記事に見出し・ソース名・公開時刻・元記事へのリンクが表示される
 - [x] **CURA-04**: 各記事に日本語の「なぜ重要か」解説コメント（1〜2文）が付与される
@@ -25,7 +25,7 @@
 
 ### Operational Stability (OPS)
 
-- [ ] **OPS-04**: キュレーションステップの失敗時も既存3レポートの生成・デプロイが継続する（fail-soft設計、独自STEPマーカーによる失敗可視化）
+- [x] **OPS-04**: キュレーションステップの失敗時も既存3レポートの生成・デプロイが継続する（fail-soft設計、独自STEPマーカーによる失敗可視化）
 
 ## Future Requirements (v2.5+)
 
@@ -52,7 +52,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CURA-01 | Phase 17 | Pending |
+| CURA-01 | Phase 17 | Complete |
 | CURA-02 | Phase 15 | Complete |
 | CURA-03 | Phase 16 | Complete |
 | CURA-04 | Phase 16 | Complete |
@@ -63,7 +63,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CURA-09 | Phase 16 | Complete |
 | UI-03 | Phase 16 | Complete |
 | UI-04 | Phase 18 | Pending |
-| OPS-04 | Phase 17 | Pending |
+| OPS-04 | Phase 17 | Complete |
 
 ---
 *Last updated: 2026-07-02 — roadmap created (Phases 15-18)*
