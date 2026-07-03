@@ -150,7 +150,8 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 **Success Criteria** (what must be TRUE):
   1. ポートフォリオレポートHTMLに「新規組入候補」セクションが、通常パス（portfolioAnalysis 有り）・フォールバックパス（portfolioAnalysis === null）の両方で存在しない
   2. portfolio-analyst への文脈情報としての highlightedStocks の受け渡しは維持されている（プロンプト入力からは削除されない）
-**Plans**: TBD
+**Plans**: 1 plan
+- [ ] 23-01-PLAN.md — formatNewCandidatesHtml 削除(両パス)+未使用 import 除去 / Test 30 反転・Test 31 拡張(TDD)+受け渡し維持 grep 検証 (Wave 1)
 **UI hint**: yes
 
 ## Progress
