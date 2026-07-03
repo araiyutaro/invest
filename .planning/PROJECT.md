@@ -14,7 +14,7 @@
 
 v2.0〜v2.3で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、そしてニュース/分析/運用安定性/レポートUIの総合底上げを完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、モバイル対応・インラインチャート付きのレポートをGitHub Pagesへ自動デプロイする。
 
-**Next milestone:** v2.4 News Curation Report（進行中 — Phase 17完了: news-curator を Step 3d の2体並列 Agent として統合し、Step 3e で write-news-digest.ts を fail-soft 起動。news-digest.html が4紙目として自動生成・デプロイされることをライブ /invest 実行で実証（CURA-01・OPS-04 SATISFIED）。次はPhase 18 Index/Nav Integration & Validation）
+**Next milestone:** v2.4 News Curation Report（全4フェーズ完了 — Phase 18完了: index.html の日付エントリに news-digest.html の実在有無で News Digest リンクを条件付き導出（fs実在チェック、毎回strip→再導出）。118日付中、実在する 2026-07-03 のみリンク表示・404リンクゼロをライブ検証し本番デプロイ済み（UI-04 SATISFIED）。検証3/3 passed。残タスクは /gsd-complete-milestone によるアーカイブのみ）
 
 ## Current Milestone: v2.4 News Curation Report
 
@@ -61,10 +61,11 @@ v2.0〜v2.3で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 - ✓ レポートUIデザイン刷新（index.htmlヒーロー+月別アコーディオン）・モバイル対応・VIX/セクターインラインチャート追加 — v2.3 (Phase 14, UI-01/UI-02)
 - ✓ 自動実行のエラーリカバリ強化（EXIT_CODEの正確な捕捉、STEPマーカーのログ到達、失敗ステップ名付き通知） — v2.3 (Phase 13/14.1, OPS-01/OPS-03。Phase 14.1でrun.shの根本バグを実修正)
 - ✓ docs/index.html・portfolio.html のSHA256チェックサム保護（PROTECT_FILES配列化、grep -F厳密一致、照合失敗時のクラッシュ防止） — v2.3 (Phase 13/14.1, OPS-02)
+- ✓ ニュースキュレーションHTML（news-digest.html）を4紙目のレポートとして生成・index.htmlへ条件付きリンク統合 — v2.4 (Phase 15-18, CURA-01/OPS-04/UI-04。Validated in Phase 18: Index/Nav Integration & Validation)
 
 ### Active
 
-- ニュースキュレーションHTML（news-digest.html）を4紙目のレポートとして生成 — v2.4 (CURA-01系、詳細は REQUIREMENTS.md)
+（なし — v2.4 全要件検証済み。次マイルストーンで追加）
 
 ### Out of Scope
 
@@ -129,4 +130,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-03 — Phase 17 (Pipeline Integration & Orchestration) complete*
+*Last updated: 2026-07-03 — Phase 18 (Index/Nav Integration & Validation) complete — milestone v2.4 all phases done*
