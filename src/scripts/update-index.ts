@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { access, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PORTFOLIO_HOLDINGS } from "../portfolio/holdings.js";
@@ -32,6 +32,31 @@ function buildStandardLinks(date: string): ReportLink[] {
     { href: `${date}/meeting-minutes.html`, label: "Meeting Minutes" },
     { href: `${date}/portfolio-report.html`, label: "Portfolio Report" },
   ];
+}
+
+const NEWS_DIGEST_LABEL = "News Digest";
+
+async function newsDigestFileExists(date: string): Promise<boolean> {
+  try {
+    await access(join(DOCS_DIR, date, "news-digest.html"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Re-derives the News Digest link for a single entry strictly from fs state,
+ * every run (D-01/D-02). Never trusts a parsed "News Digest" link — always
+ * strips it first, then re-adds only if the file exists right now.
+ */
+async function withNewsDigestLink(entry: ReportEntry): Promise<ReportEntry> {
+  const baseLinks = entry.links.filter((l) => l.label !== NEWS_DIGEST_LABEL);
+  const exists = await newsDigestFileExists(entry.date);
+  const links = exists
+    ? [...baseLinks, { href: `${entry.date}/news-digest.html`, label: NEWS_DIGEST_LABEL }]
+    : baseLinks;
+  return { ...entry, links };
 }
 
 /**
@@ -188,8 +213,9 @@ export async function updateIndexHtml(date: string): Promise<void> {
 
   const newEntry: ReportEntry = { date, links: buildStandardLinks(date) };
   const merged = mergeEntry(existingEntries, newEntry);
+  const withDigestLinks = await Promise.all(merged.map(withNewsDigestLink));
 
-  const regionHtml = buildRegion(merged);
+  const regionHtml = buildRegion(withDigestLinks);
 
   const before = content.slice(0, regionStart);
   const after = content.slice(endIdx);
