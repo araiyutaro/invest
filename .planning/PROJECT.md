@@ -14,7 +14,7 @@
 
 v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、そしてAI厳選ニュースダイジェスト（news-digest.html）の4紙目追加を完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、4レポート（Daily Report / Meeting Minutes / Portfolio Report / News Digest）をGitHub Pagesへ自動デプロイする。ニュースキュレーションはID参照方式で幻覚URLを構造的に防止し、fail-soft設計により失敗時も既存3レポートの生成・デプロイに影響しない。
 
-**Next milestone:** v2.5 Portfolio News Intelligence（要件定義中）
+**Next milestone:** v2.5 Portfolio News Intelligence（Phase 19 完了 — finnhub ticker汚染バグ修正（NEWS-04）+ 保有銘柄別ニュース供給（PORT-01: buildHoldingNewsMap → tmp/holding-news.json → portfolio-analyst プロンプト注入）完了。次は Phase 20: Holding-Card News Display）
 
 ## Current Milestone: v2.5 Portfolio News Intelligence
 
@@ -65,14 +65,15 @@ v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 - ✓ 自動実行のエラーリカバリ強化（EXIT_CODEの正確な捕捉、STEPマーカーのログ到達、失敗ステップ名付き通知） — v2.3 (Phase 13/14.1, OPS-01/OPS-03。Phase 14.1でrun.shの根本バグを実修正)
 - ✓ docs/index.html・portfolio.html のSHA256チェックサム保護（PROTECT_FILES配列化、grep -F厳密一致、照合失敗時のクラッシュ防止） — v2.3 (Phase 13/14.1, OPS-02)
 - ✓ ニュースキュレーションHTML（news-digest.html）を4紙目のレポートとして生成・index.htmlへ条件付きリンク統合 — v2.4 (Phases 15-18, CURA-01〜09 / UI-03 / UI-04 / OPS-04 全12要件、ライブ検証+本番デプロイ済み)
+- ✓ finnhub.ts の汎用ニュース ticker 汚染バグ修正（index-as-ticker） — v2.5 (Phase 19, NEWS-04)
+- ✓ 保有銘柄別関連ニュースの決定論的抽出と portfolio-analyst への入力供給（buildHoldingNewsMap → tmp/holding-news.json → プロンプト注入） — v2.5 (Phase 19, PORT-01)
 
 ### Active
 
-- [ ] 保有銘柄別ニュースの portfolio-analyst への供給と判断根拠への反映 — v2.5
+- [ ] 保有銘柄別ニュースの判断根拠への必須反映（供給は Phase 19 で完了、反映は Phase 22） — v2.5
 - [ ] 保有銘柄ごとのWebSearchリサーチと売却・保有判断の再評価 — v2.5
 - [ ] 保有銘柄カードへの関連ニュース表示（見出し・ソース・リンク） — v2.5
 - [ ] ポートフォリオレポートから新規組入候補セクションを削除 — v2.5
-- [ ] finnhub.ts の汎用ニュース ticker 汚染バグ修正 — v2.5
 
 持ち越し候補（v2.6+）:
 - XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（パイプライン順序依存が生じるためコア検証後に導入）
@@ -146,4 +147,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-03 — milestone v2.5 Portfolio News Intelligence started*
+*Last updated: 2026-07-03 — Phase 19 (Data Foundation & Holding-News Supply) complete*
