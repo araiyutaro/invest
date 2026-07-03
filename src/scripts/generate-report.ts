@@ -6,8 +6,9 @@ import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnaly
 import { generateDailyReportHtml } from "./generate-daily-report.js";
 import { generateMeetingMinutesHtml } from "./generate-meeting-minutes.js";
 import { generatePortfolioReportHtml } from "./generate-portfolio-report.js";
-import { loadRound1Results, loadRound2Results, loadRound3Results, loadPortfolioAnalysis, loadNewsPool, loadHoldingNews } from "./report-data-loaders.js";
+import { loadRound1Results, loadRound2Results, loadRound3Results, loadPortfolioAnalysis, loadNewsPool, loadHoldingNews, loadPrevPortfolioAnalysis } from "./report-data-loaders.js";
 import { resolvePortfolioHoldingNews } from "../portfolio/holding-news.js";
+import { attachDecisionChanges } from "../portfolio/decision-diff.js";
 
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
 const DOCS_DIR = join(import.meta.dirname, "../../docs");
@@ -32,7 +33,8 @@ async function loadWebSearchResults(): Promise<ReadonlyArray<WebSearchResult>> {
           try {
             const raw = await readFile(join(websearchDir, f), "utf-8");
             return validateWebSearchResult(JSON.parse(raw) as unknown);
-          } catch {
+          } catch (error) {
+            console.warn(`WebSearch result load failed (${f}):`, error instanceof Error ? error.message : error);
             return null;
           }
         }),
@@ -54,7 +56,8 @@ async function loadReevalResults(): Promise<ReadonlyArray<ReevaluationOutput>> {
           try {
             const raw = await readFile(join(reevalDir, f), "utf-8");
             return validateReevaluationOutput(JSON.parse(raw) as unknown);
-          } catch {
+          } catch (error) {
+            console.warn(`Reevaluation result load failed (${f}):`, error instanceof Error ? error.message : error);
             return null;
           }
         }),
@@ -93,7 +96,7 @@ export async function main(): Promise<void> {
   const raw = await readFile(join(TMP_DIR, "meeting-result.json"), "utf-8");
   const meetingResult = validateMeetingResult(JSON.parse(raw) as unknown);
 
-  const [webSearchResults, reevalResults, round1Results, round2Results, round3Results, portfolioAnalysis, marketData, newsPool, holdingNews] = await Promise.all([
+  const [webSearchResults, reevalResults, round1Results, round2Results, round3Results, portfolioAnalysis, marketData, newsPool, holdingNews, prevPortfolioAnalysis] = await Promise.all([
     loadWebSearchResults(),
     loadReevalResults(),
     loadRound1Results(),
@@ -103,16 +106,24 @@ export async function main(): Promise<void> {
     loadMarketData(),
     loadNewsPool(),
     loadHoldingNews(),
+    loadPrevPortfolioAnalysis(),
   ]);
 
   const resolvedHoldingNews = resolvePortfolioHoldingNews(holdingNews, newsPool);
+
+  const enrichedPortfolioAnalysis: PortfolioAnalysis | null = portfolioAnalysis === null
+    ? null
+    : {
+        ...portfolioAnalysis,
+        holdings: attachDecisionChanges(portfolioAnalysis.holdings, prevPortfolioAnalysis?.holdings ?? null),
+      };
 
   const dateDir = join(DOCS_DIR, meetingResult.date);
   await mkdir(dateDir, { recursive: true });
 
   const dailyHtml = generateDailyReportHtml(meetingResult, webSearchResults, reevalResults, marketData);
   const minutesHtml = generateMeetingMinutesHtml(meetingResult, round1Results, round2Results, round3Results);
-  const portfolioHtml = generatePortfolioReportHtml(meetingResult, portfolioAnalysis, resolvedHoldingNews);
+  const portfolioHtml = generatePortfolioReportHtml(meetingResult, enrichedPortfolioAnalysis, resolvedHoldingNews);
 
   await Promise.all([
     writeFile(join(dateDir, "daily-report.html"), dailyHtml, "utf-8"),
