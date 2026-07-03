@@ -2149,6 +2149,7 @@ console.log('  Round 3 スコアリング    ' + fmt(m.round3End - m.round3Start
 console.log('  モデレーター最終統合    ' + fmt(m.moderatorFinalEnd - m.moderatorFinalStart));
 console.log('  バリデーション          ' + fmt(m.validationEnd - m.validationStart));
 console.log('Step 3: WebSearch+レポート');
+console.log('  ポートフォリオリサーチ  ' + fmt(m.portfolioResearchEnd - m.portfolioResearchStart));
 console.log('  WebSearch+再評価        ' + fmt(m.webSearchEnd - m.webSearchStart));
 console.log('  ポートフォリオ分析      ' + fmt(m.portfolioEnd - m.portfolioStart));
 console.log('  レポート生成            ' + fmt(m.reportEnd - m.reportStart));
