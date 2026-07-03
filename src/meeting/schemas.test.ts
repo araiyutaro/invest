@@ -4,6 +4,7 @@ import {
   resolveNewsCuration,
   webSearchResultSchema,
   validateWebSearchResult,
+  holdingEvaluationSchema,
 } from "./schemas.js";
 import type { NewsArticlePoolEntry, RawNewsCuration } from "./schemas.js";
 
@@ -465,5 +466,49 @@ describe("webSearchResultSchema", () => {
     const result = validateWebSearchResult(canonical);
     expect(result.ticker).toBe("PLTR");
     expect(result.researchSummary).toBe("サマリー");
+  });
+});
+
+describe("holdingEvaluationSchema", () => {
+  const minimalInput = {
+    symbol: "PLTR",
+    nameJa: "パランティア",
+    decision: "保持",
+    rationale: "堅調な成長が続いている。",
+  };
+
+  it("urgent省略時: デフォルトでfalseになる（D-08）", () => {
+    const result = holdingEvaluationSchema.parse(minimalInput);
+    expect(result.urgent).toBe(false);
+  });
+
+  it("エイリアス受理: urgent がそのまま true として解決される（D-10）", () => {
+    const result = holdingEvaluationSchema.parse({ ...minimalInput, urgent: true });
+    expect(result.urgent).toBe(true);
+  });
+
+  it("エイリアス受理: urgency→urgent が解決される（D-10）", () => {
+    const result = holdingEvaluationSchema.parse({ ...minimalInput, urgency: true });
+    expect(result.urgent).toBe(true);
+  });
+
+  it("エイリアス受理: isUrgent→urgent が解決される（D-10）", () => {
+    const result = holdingEvaluationSchema.parse({ ...minimalInput, isUrgent: true });
+    expect(result.urgent).toBe(true);
+  });
+
+  it("エイリアス受理: urgentFlag→urgent が解決される（D-10）", () => {
+    const result = holdingEvaluationSchema.parse({ ...minimalInput, urgentFlag: true });
+    expect(result.urgent).toBe(true);
+  });
+
+  it("strip: LLMが誤ってdecisionChanged/previousDecisionを出力してもtransform後には存在しない（D-11、PORT-05）", () => {
+    const result = holdingEvaluationSchema.parse({
+      ...minimalInput,
+      decisionChanged: true,
+      previousDecision: "買増",
+    });
+    expect(result).not.toHaveProperty("decisionChanged");
+    expect(result).not.toHaveProperty("previousDecision");
   });
 });
