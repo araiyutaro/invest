@@ -21,7 +21,7 @@
 ### UI Integration (UI)
 
 - [x] **UI-03**: news-digest.html が既存3レポートと同じBloomberg風ダークテーマ・モバイル対応CSS・レポート間ナビゲーションを備える
-- [ ] **UI-04**: index.html の日付エントリに news-digest.html へのリンクがファイル実在時のみ追加される（欠落日は404リンクを生成しない）
+- [x] **UI-04**: index.html の日付エントリに news-digest.html へのリンクがファイル実在時のみ追加される（欠落日は404リンクを生成しない）
 
 ### Operational Stability (OPS)
 
@@ -62,7 +62,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CURA-08 | Phase 16 | Complete |
 | CURA-09 | Phase 16 | Complete |
 | UI-03 | Phase 16 | Complete |
-| UI-04 | Phase 18 | Pending |
+| UI-04 | Phase 18 | Complete |
 | OPS-04 | Phase 17 | Complete |
 
 ---
