@@ -101,8 +101,8 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
   2. tmp/news.json と12銘柄の保有リストから、ticker一致による決定論的な保有銘柄別ニュースマッピング（優先度スコア順・銘柄あたり上限付き）が生成され、ユニットテストでカバーされている
   3. portfolio-analyst のプロンプトに、保有銘柄ごとの関連ニュースが明示的な入力セクションとして含まれている
 **Plans**: 3 plans
-- [ ] 19-01-PLAN.md — finnhub.ts index-as-ticker バグ修正 + NEWS-04 回帰テスト (Wave 1)
-- [ ] 19-02-PLAN.md — 決定論的な保有銘柄別ニュース抽出モジュール(TDD) + matchAliases (Wave 1)
+- [x] 19-01-PLAN.md — finnhub.ts index-as-ticker バグ修正 + NEWS-04 回帰テスト (Wave 1)
+- [x] 19-02-PLAN.md — 決定論的な保有銘柄別ニュース抽出モジュール(TDD) + matchAliases (Wave 1)
 - [ ] 19-03-PLAN.md — collect-data 統合(holding-news.json) + portfolio-analyst プロンプト入力セクション (Wave 2)
 
 ### Phase 20: Holding-Card News Display
@@ -168,7 +168,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 16. Report Generator (HTML Rendering) | v2.4 | 3/3 | Complete    | 2026-07-02 |
 | 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete    | 2026-07-03 |
 | 18. Index/Nav Integration & Validation | v2.4 | 2/2 | Complete    | 2026-07-03 |
-| 19. Data Foundation & Holding-News Supply | v2.5 | 0/? | Not started | - |
+| 19. Data Foundation & Holding-News Supply | v2.5 | 2/3 | In Progress|  |
 | 20. Holding-Card News Display | v2.5 | 0/? | Not started | - |
 | 21. Portfolio WebSearch Research | v2.5 | 0/? | Not started | - |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 0/? | Not started | - |
