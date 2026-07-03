@@ -93,3 +93,12 @@ None - no external service configuration required.
 ---
 *Phase: 23-new-candidates-section-removal*
 *Completed: 2026-07-04*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/generate-report.test.ts
+- FOUND: src/scripts/generate-portfolio-report.ts
+- FOUND: .planning/phases/23-new-candidates-section-removal/23-01-SUMMARY.md
+- FOUND commit: 261b1c1 (test)
+- FOUND commit: c9974a3 (feat)
+- FOUND commit: ccf6281 (docs)
