@@ -309,7 +309,7 @@ Not applicable — this phase is not a rename/refactor/migration. It is additive
 
 **Both assumptions are LOW risk and self-verifying via the TDD unit tests mandated by D-08** — if either is wrong, the planner's Wave 0 test-writing step will surface it immediately, not at live-execution or production time.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 None outstanding. CONTEXT.md's "Claude's Discretion" items are fully resolved by this research:
 - Sync vs async existence check → async `access()` (Standard Stack, Alternatives Considered)
