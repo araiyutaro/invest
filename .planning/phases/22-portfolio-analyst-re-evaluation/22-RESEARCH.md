@@ -432,17 +432,17 @@ const portfolioHtml = generatePortfolioReportHtml(meetingResult, enrichedPortfol
 
 **None of the above are HIGH-risk** — CONTEXT.md's 21 locked decisions cover the substantive design choices; these three items are implementation-detail interpretations where two direct-precedent readings both remain plausible and CONTEXT.md defers to Claude's discretion or my own line-level reading of the current file.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Does `formatHoldingEvaluationsHtml`'s signature change, or does it accept the enriched `HoldingEvaluation` via the existing `holdings` parameter?**
    - What we know: `HoldingEvaluation` (types.ts) is currently the exact array-element type of `PortfolioAnalysis.holdings`; if `previousDecision`/`decisionChanged` are added as optional fields directly to the `HoldingEvaluation` interface (rather than a wrapper type), no signature change is needed — the renderer just reads two new optional properties off the same objects it already receives.
    - What's unclear: CONTEXT.md D-21 leaves "TS付与フィールドと LLM出力フィールドの区別をどうコードで表現するか" to Claude's discretion — a stricter design could use a separate `EnrichedHoldingEvaluation extends HoldingEvaluation` interface to make the TS-vs-LLM field origin visible in the type system.
-   - Recommendation: Add the two optional fields directly to `HoldingEvaluation` (simpler, avoids a second type threading through 3 files) with a code comment marking them `// TS-attached, never present in raw LLM output` — matches this codebase's existing terseness (no branded types elsewhere in `types.ts`).
+   - RESOLVED: Add the two optional fields directly to `HoldingEvaluation` (simpler, avoids a second type threading through 3 files) with a code comment marking them `// TS-attached, never present in raw LLM output` — matches this codebase's existing terseness (no branded types elsewhere in `types.ts`). Adopted by 22-01 Task 1.
 
 2. **Should the `console.warn` backport to `loadWebSearchResults`/`loadReevalResults` (Pitfall 7 debt) happen in this phase's plan, or be flagged as a separate small task?**
    - What we know: CONTEXT.md D-15 explicitly assigns this to Phase 22 ("同種の修正で差分最小"), so it is in scope.
    - What's unclear: Whether it should be its own Wave/task or folded into the loader-modification task.
-   - Recommendation: Fold into the same task that adds `loadPrevPortfolioAnalysis()` — same file (`generate-report.ts`... actually the two functions live there, `loadPrevPortfolioAnalysis` lives in `report-data-loaders.ts` — planner should note these are two different files touched by one logical "loader hardening" task).
+   - RESOLVED: Fold into the same logical "loader hardening" work — `loadPrevPortfolioAnalysis()` lives in `report-data-loaders.ts` while `loadWebSearchResults`/`loadReevalResults` live in `generate-report.ts` (two different files, one logical concern). Adopted by 22-04 Tasks 1+2.
 
 ## Environment Availability
 

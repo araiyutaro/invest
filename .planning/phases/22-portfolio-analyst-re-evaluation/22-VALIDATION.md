@@ -1,8 +1,8 @@
 ---
 phase: 22
 slug: portfolio-analyst-re-evaluation
-status: draft
-nyquist_compliant: false
+status: ready
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-07-03
 ---
@@ -38,15 +38,15 @@ created: 2026-07-03
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| TBD | TBD | TBD | PORT-04 | — | urgent alias-transform（4表記+default false） | unit | `npx vitest run src/meeting/schemas.test.ts -t urgent` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | PORT-05 | — | decisionChanged/previousDecision の決定論的計算 | unit | `npx vitest run src/portfolio/decision-diff.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | PORT-05 | — | prev欠損・銘柄不一致 → undefined（false と区別） | unit | `npx vitest run src/portfolio/decision-diff.test.ts -t undefined` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | PORT-05 | — | LLM出力の decisionChanged/previousDecision を strip | unit | `npx vitest run src/meeting/schemas.test.ts -t strip` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | UI-07 | — | 緊急赤バッジ「⚠ 緊急」描画 | unit | `npx vitest run src/scripts/generate-report.test.ts -t 緊急` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | UI-07 | — | 変化アンバーバッジ（前日→当日）描画 | unit | `npx vitest run src/scripts/generate-report.test.ts -t 判断変更` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | UI-07 | — | border-left decision 色の維持（D-18） | unit | `npx vitest run src/scripts/generate-report.test.ts -t border` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | Pitfall 7 debt | — | loadWebSearchResults/loadReevalResults の catch に console.warn | unit | `npx vitest run src/scripts/generate-report.test.ts -t warn` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | PORT-05 | — | Test 39 隔離アサーションの prev-portfolio-analysis.json 対応 | unit | `npx vitest run src/scripts/generate-report.test.ts -t "Test 39"` | ✅（拡張のみ） | ⬜ pending |
+| 22-01-02 | 01 | 1 | PORT-04 | T-22-01 | urgent alias-transform（4表記+default false） | unit | `npx vitest run src/meeting/schemas.test.ts -t urgent` | ❌ W0 | ⬜ pending |
+| 22-03-01 | 03 | 2 | PORT-05 | — | decisionChanged/previousDecision の決定論的計算 | unit | `npx vitest run src/portfolio/decision-diff.test.ts` | ❌ W0 | ⬜ pending |
+| 22-03-01 | 03 | 2 | PORT-05 | — | prev欠損・銘柄不一致 → undefined（false と区別） | unit | `npx vitest run src/portfolio/decision-diff.test.ts -t undefined` | ❌ W0 | ⬜ pending |
+| 22-01-02 | 01 | 1 | PORT-05 | T-22-01 | LLM出力の decisionChanged/previousDecision を strip | unit | `npx vitest run src/meeting/schemas.test.ts -t strip` | ❌ W0 | ⬜ pending |
+| 22-04-03 | 04 | 3 | UI-07 | T-22-09 | 緊急赤バッジ「⚠ 緊急」描画 | unit | `npx vitest run src/scripts/generate-report.test.ts -t 緊急` | ❌ W0 | ⬜ pending |
+| 22-04-03 | 04 | 3 | UI-07 | T-22-09 | 変化アンバーバッジ（前日→当日）描画 | unit | `npx vitest run src/scripts/generate-report.test.ts -t 判断変更` | ❌ W0 | ⬜ pending |
+| 22-04-03 | 04 | 3 | UI-07 | — | border-left decision 色の維持（D-18） | unit | `npx vitest run src/scripts/generate-report.test.ts -t border` | ❌ W0 | ⬜ pending |
+| 22-04-02 | 04 | 3 | Pitfall 7 debt | — | loadWebSearchResults/loadReevalResults の catch に console.warn | unit | `npx vitest run src/scripts/generate-report.test.ts -t warn` | ❌ W0 | ⬜ pending |
+| 22-04-02 | 04 | 3 | PORT-05 | T-22-08 | Test 39 隔離アサーションの prev-portfolio-analysis.json 対応 | unit | `npx vitest run src/scripts/generate-report.test.ts -t "Test 39"` | ✅（拡張のみ） | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -74,11 +74,11 @@ created: 2026-07-03
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 30s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 30s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved 2026-07-03
