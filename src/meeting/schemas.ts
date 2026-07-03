@@ -109,19 +109,41 @@ export function validateMeetingResult(data: unknown): MeetingResult {
   return meetingResultSchema.parse(data) as MeetingResult;
 }
 
-export const webSearchResultSchema = z.object({
-  ticker: z.string(),
-  researchSummary: z.string(),
-  positiveFindings: z.array(z.string()),
-  negativeFindings: z.array(z.string()),
-  keyArticles: z.array(
-    z.object({
-      title: z.string(),
-      summary: z.string(),
-    }),
-  ),
-  researchedAt: z.string(),
-});
+// rawWebSearchResultSchema: エージェント生成JSONの信頼境界（D-12）。ticker以外は全て
+// optionalとし、正準フィールドと発明されがちなエイリアスを併記してpassthroughする。
+// tmp/websearch/{ticker}.json（既存候補銘柄）と tmp/portfolio-research/{symbol}.json
+// （本フェーズ）の両方が同一WebSearchResult形状を経由する共有バックポート。
+const rawWebSearchResultSchema = z
+  .object({
+    ticker: z.string(),
+    researchSummary: z.string().optional(),
+    summary: z.string().optional(), // alias for researchSummary
+    positiveFindings: z.array(z.string()).optional(),
+    findings: z.array(z.string()).optional(), // alias for positiveFindings
+    positives: z.array(z.string()).optional(), // alias for positiveFindings
+    negativeFindings: z.array(z.string()).optional(),
+    negatives: z.array(z.string()).optional(), // alias for negativeFindings
+    concerns: z.array(z.string()).optional(), // alias for negativeFindings
+    keyArticles: z
+      .array(z.object({ title: z.string(), summary: z.string() }))
+      .optional(),
+    articles: z
+      .array(z.object({ title: z.string(), summary: z.string() }))
+      .optional(), // alias for keyArticles
+    researchedAt: z.string().optional(),
+    timestamp: z.string().optional(), // alias for researchedAt
+    date: z.string().optional(), // alias for researchedAt
+  })
+  .passthrough();
+
+export const webSearchResultSchema = rawWebSearchResultSchema.transform((raw) => ({
+  ticker: raw.ticker,
+  researchSummary: raw.researchSummary ?? raw.summary ?? "",
+  positiveFindings: raw.positiveFindings ?? raw.positives ?? raw.findings ?? [],
+  negativeFindings: raw.negativeFindings ?? raw.negatives ?? raw.concerns ?? [],
+  keyArticles: raw.keyArticles ?? raw.articles ?? [],
+  researchedAt: raw.researchedAt ?? raw.timestamp ?? raw.date ?? "",
+}));
 
 export const reevaluationOutputSchema = z.object({
   agentId: z.string(),
