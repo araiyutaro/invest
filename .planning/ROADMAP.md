@@ -86,7 +86,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 
 - [x] **Phase 19: Data Foundation & Holding-News Supply** — finnhub.tsティッカー汚染バグ修正 + 決定論的な保有銘柄別ニュース抽出をportfolio-analystへ供給 (completed 2026-07-03)
 - [x] **Phase 20: Holding-Card News Display** — 保有銘柄カードへのID参照方式ニュース表示（見出し・ソース・リンク、0件時の正常描画） (completed 2026-07-03)
-- [ ] **Phase 21: Portfolio WebSearch Research** — 保有銘柄ごとのWebSearchリサーチをfail-softな新設パイプラインステップとして実行
+- [x] **Phase 21: Portfolio WebSearch Research** — 保有銘柄ごとのWebSearchリサーチをfail-softな新設パイプラインステップとして実行 (completed 2026-07-03)
 - [ ] **Phase 22: Portfolio-Analyst Re-Evaluation** — ニュース・リサーチを踏まえた判断根拠、緊急度フラグ、前日比較の決定論的判断変化検出
 - [ ] **Phase 23: New-Candidates Section Removal** — ポートフォリオレポートから新規組入候補セクションを削除（成功・フォールバック両パス）
 
@@ -125,8 +125,8 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
   1. 12銘柄それぞれについてWebSearchによる最新材料リサーチ（決算・訴訟・規制変更・大型契約・ガイダンス変更等）が実行され、結果が tmp/portfolio-research/{symbol}.json という Daily Report 用ディレクトリ（tmp/websearch/）とは分離された専用領域に保存される
   2. 一部または全部の銘柄でWebSearchリサーチが失敗しても、ポートフォリオレポートを含む4レポート全ての生成・デプロイが継続し、専用の [STEP:portfolio-research:*] マーカーで失敗が可視化される
 **Plans**: 2 plans
-- [ ] 21-01-PLAN.md — TS/スキーマ層: webSearchResultSchema alias-transform 硬化 + validate-portfolio-research.ts + Daily Report 隔離テスト (PORT-02)
-- [ ] 21-02-PLAN.md — invest.md オーケストレーション: Step 3-P 保有12銘柄WebSearchリサーチ（社名併記クエリ・エンティティ確認・fail-soft マーカー・metrics）(PORT-02, OPS-05)
+- [x] 21-01-PLAN.md — TS/スキーマ層: webSearchResultSchema alias-transform 硬化 + validate-portfolio-research.ts + Daily Report 隔離テスト (PORT-02)
+- [x] 21-02-PLAN.md — invest.md オーケストレーション: Step 3-P 保有12銘柄WebSearchリサーチ（社名併記クエリ・エンティティ確認・fail-soft マーカー・metrics）(PORT-02, OPS-05)
 
 ### Phase 22: Portfolio-Analyst Re-Evaluation
 **Goal**: 保有銘柄の売却・保有判断が、ニュース・リサーチ結果を踏まえた再考であることがレポート上で確認でき、重大材料と前日からの判断変化が視覚的に強調される
@@ -174,7 +174,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 18. Index/Nav Integration & Validation | v2.4 | 2/2 | Complete    | 2026-07-03 |
 | 19. Data Foundation & Holding-News Supply | v2.5 | 3/3 | Complete    | 2026-07-03 |
 | 20. Holding-Card News Display | v2.5 | 2/2 | Complete    | 2026-07-03 |
-| 21. Portfolio WebSearch Research | v2.5 | 0/? | Not started | - |
+| 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete   | 2026-07-03 |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 0/? | Not started | - |
 | 23. New-Candidates Section Removal | v2.5 | 0/? | Not started | - |
 
