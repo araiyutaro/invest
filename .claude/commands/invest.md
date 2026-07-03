@@ -1373,6 +1373,8 @@ rm -rf /Users/arai/invest/tmp/portfolio-research && mkdir -p /Users/arai/invest/
 {"ticker": "...", "researchSummary": "リサーチ失敗", "positiveFindings": [], "negativeFindings": [], "keyArticles": [], "researchedAt": "..."}
 ```
 
+**フォールバックJSONの `"..."` は必ず実際の値に置き換えて保存してください**: `ticker` には該当銘柄の symbol（例: `"EE"`、`.T` サフィックスもそのまま）、`researchedAt` には現在時刻の ISO8601 タイムスタンプ（例: `"2026-06-24T08:00:00Z"`）を設定すること。`"..."` のまま保存してはいけません（Phase 22 の銘柄照合が壊れます）。
+
 12/12銘柄が成功した場合:
 ```bash
 echo '[STEP:portfolio-research:OK]'
