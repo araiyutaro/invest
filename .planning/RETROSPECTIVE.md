@@ -2,6 +2,44 @@
 
 *A living document updated after each milestone. Lessons feed forward into future planning.*
 
+## Milestone: v2.4 — News Curation Report
+
+**Shipped:** 2026-07-03
+**Phases:** 4 (15-18) | **Plans:** 9 | **Tasks:** 17
+
+### What Was Built
+- キュレーション契約: 記事プールへの短い連番ID付与（assignArticleIds, n01〜n80）+ zod二層バリデーション（構造検証→プール参照解決）で幻覚URL・不正market値を構造的に防止 (Phase 15)
+- news-digestレンダラー: generateNewsDigestHtml ピュア関数（市場別グルーピング・重要度順・High/Medium/Lowバッジ・ティッカーピル・リード文・null/empty/normal 3値フォールバック・XSS/tabnabbing対策） (Phase 16)
+- パイプライン統合: invest.md Step 3d news-curator（opus 2体並列）+ Step 3e write-news-digest.ts fail-soft起動、専用 [STEP:news-digest:*] マーカー (Phase 17)
+- index統合: News Digestリンクを fs.access() 実在チェックから毎回導出（strip→再導出で自己修復）、118日分ライブ検証+本番デプロイ (Phase 18)
+
+### What Worked
+- ID参照方式（AgentはIDのみコピー、URLはTS側で照合）が幻覚URL問題を設計段階で消した — LLM出力の検証をzodスキーマとプール照合の二層に分けたことでエラー原因の切り分けも容易に
+- 契約→レンダリング→統合→index/nav の4フェーズ分割でリスククラスタが自然に分離され、各フェーズがTDDで完結
+- fail-soft設計のライブ検証（キュレーション意図的失敗→3レポート継続）で「失敗しても本流を止めない」を実証してからクローズ
+- Phase 18のライブ実行検証: フル/invest再実行なしで update-index.ts 単体実行 + 実docsツリー118日分のgrep検証という低コスト高確度の手法
+
+### What Was Inefficient
+- Phase 16 で検証ギャップ（.ticker-pill CSS未定義・複数ピル連結）が発覚し 16-03 ギャップクローズプランが必要になった — レンダラーのHTML出力とCSS定義の対応はプラン時に突合すべきだった
+- 17-01 SUMMARY.md の one_liner 抽出が壊れており（バグリスト先頭行が返る）、マイルストーンアーカイブの自動生成成果リストに混入した（手動修正）
+- v2.4-MILESTONE-AUDIT.md を作成せずクローズ（要件12/12 Complete・ライブ検証済みで代替判断）— 監査駆動クローズのv2.3プロセスからは後退
+
+### Patterns Established
+- LLM選定ステップは「ID参照 + TS側解決」を標準形とする（keyArticles → news-curation で2例目、再利用可能なパターンとして確立）
+- 新規レポート追加時は fail-soft 分離（独自try/catch + 専用STEPマーカー）を必須とし、既存レポートのhard-fail文言を流用しない
+- 生成ファイルへのリンクは「実在チェックから毎回導出」（キャッシュ・パース済み状態を信頼しない）
+
+### Key Lessons
+1. LLMの出力面積を最小化する（IDのみ選定させる）ことが、後段のバリデーションよりも効果的な幻覚対策になる。
+2. レンダラー実装時はHTMLクラス名とCSS定義の対応表をプランに含める（Phase 16の検証ギャップの根本原因）。
+3. マイルストーン監査の省略は要件トレーサビリティ全Complete + 最終フェーズのライブ検証済みという強い証拠がある場合に限る。
+
+### Cost Observations
+- Model mix: executor/reviewer系サブエージェント委譲 + news-curator本番はopus 2体並列
+- Notable: Phase 18-02（5min）のような「単体スクリプトのライブ実行 + grep検証」プランは、フルパイプライン再実行に比べ大幅に安価で確度が高い
+
+---
+
 ## Milestone: v2.3 — Analysis Quality & Operational Stability
 
 **Shipped:** 2026-07-01
@@ -52,9 +90,11 @@
 | v2.1 | 3 | 3レポート構成復元 + 自動デプロイ |
 | v2.2 | 3 | ニュース品質フィルタ（TDDピュア関数モジュール）+ パイプライン計測 |
 | v2.3 | 5 | 監査駆動のギャップクローズ（Phase 14.1挿入）で誤判定を実修正 |
+| v2.4 | 4 | ID参照方式によるLLM幻覚の構造的防止 + fail-soft統合のライブ実証 |
 
 ### Top Lessons (Verified Across Milestones)
 
 1. TS↔Claude のハンドオフは stdout ではなく tmp/*.json ファイル境界を経由する（v2.2で確立、v2.3で継続有効）。
 2. 新規npm依存を足さずネイティブTypeScript/SVGで実装する方針が品質と保守性を両立（v2.2 Jaccard、v2.3 SVGチャート）。
 3. 「実装済み」の主張は実コード検証で裏取りする（v2.3で顕在化した教訓）。
+4. LLM出力は選定範囲を最小化（ID参照）し、実データはTS側で解決する（v2.0 keyArticles → v2.4 news-curation で確立）。
