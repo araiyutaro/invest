@@ -100,3 +100,12 @@ None - no external service configuration required.
 ---
 *Phase: 19-data-foundation-holding-news-supply*
 *Completed: 2026-07-03*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/collect-data.ts
+- FOUND: .claude/commands/invest.md
+- FOUND: .planning/phases/19-data-foundation-holding-news-supply/19-03-SUMMARY.md
+- FOUND commit: 2f7eea3 (feat, Task 1)
+- FOUND commit: 901340c (feat, Task 2)
+- FOUND commit: c91de2e (docs, plan metadata)
