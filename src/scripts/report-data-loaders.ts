@@ -18,7 +18,9 @@ export async function loadRound1Results(): Promise<ReadonlyArray<AnalystRound1Ou
           try {
             const raw = await readFile(join(roundDir, f), "utf-8");
             return analystRound1OutputSchema.parse(JSON.parse(raw) as unknown) as AnalystRound1Output;
-          } catch {
+          } catch (error) {
+            // WR-03/D-15: サイレントdropはアナリストが議事録から無警告で消えるため、必ずwarnを出す
+            console.warn(`Round 1 result load failed (${f}):`, error instanceof Error ? error.message : error);
             return null;
           }
         }),
@@ -40,7 +42,9 @@ export async function loadRound2Results(): Promise<ReadonlyArray<AnalystRound2Ou
           try {
             const raw = await readFile(join(roundDir, f), "utf-8");
             return analystRound2OutputSchema.parse(JSON.parse(raw) as unknown) as AnalystRound2Output;
-          } catch {
+          } catch (error) {
+            // WR-03/D-15: サイレントdropはアナリストが議事録から無警告で消えるため、必ずwarnを出す
+            console.warn(`Round 2 result load failed (${f}):`, error instanceof Error ? error.message : error);
             return null;
           }
         }),
@@ -62,7 +66,9 @@ export async function loadRound3Results(): Promise<ReadonlyArray<AnalystRound3Ou
           try {
             const raw = await readFile(join(roundDir, f), "utf-8");
             return analystRound3OutputSchema.parse(JSON.parse(raw) as unknown) as AnalystRound3Output;
-          } catch {
+          } catch (error) {
+            // WR-03/D-15: サイレントdropはアナリストが議事録から無警告で消えるため、必ずwarnを出す
+            console.warn(`Round 3 result load failed (${f}):`, error instanceof Error ? error.message : error);
             return null;
           }
         }),
