@@ -113,6 +113,22 @@ export interface HoldingEvaluation {
   readonly decision: "保持" | "買増" | "一部売却" | "全売却";
   readonly rationale: string;
   readonly riskNote?: string;
+  /**
+   * LLM出力（alias-transform正規化済み: urgent/urgency/isUrgent/urgentFlagの表記揺れを吸収）。
+   * 省略時は false（D-08/D-10）。決算ミス・訴訟・規制変更・大型契約・ガイダンス引下げ等の
+   * 重大材料を確認した場合のみ true とする運用。
+   */
+  readonly urgent: boolean;
+  /**
+   * TS側で付与（前日スナップショットとの決定論的比較、D-11）。
+   * LLMの生出力には決して存在しない（schemas.ts の transform で strip される）。
+   */
+  readonly previousDecision?: "保持" | "買増" | "一部売却" | "全売却";
+  /**
+   * TS側で付与（D-11）。undefined = 前日データ欠損等で比較不能、false = 比較した結果変化なし。
+   * 「比較できなかった」と「変化がなかった」を区別する（D-14）。
+   */
+  readonly decisionChanged?: boolean;
 }
 
 export interface PortfolioAnalysis {

@@ -200,6 +200,10 @@ const rawHoldingSchema = z.object({
   riskNote: z.string().optional(),
   keyMetric: z.string().optional(),
   riskLevel: z.string().optional(),
+  urgent: z.boolean().optional(),
+  urgency: z.boolean().optional(), // alias for urgent
+  isUrgent: z.boolean().optional(), // alias for urgent
+  urgentFlag: z.boolean().optional(), // alias for urgent
 }).passthrough();
 
 export const holdingEvaluationSchema = rawHoldingSchema.transform((raw) => {
@@ -210,6 +214,7 @@ export const holdingEvaluationSchema = rawHoldingSchema.transform((raw) => {
     nameJa: raw.nameJa ?? "",
     decision: raw.decision ?? raw.action ?? "保持",
     rationale: raw.rationale ?? raw.reason ?? "",
+    urgent: raw.urgent ?? raw.urgency ?? raw.isUrgent ?? raw.urgentFlag ?? false,
     ...(riskNote !== undefined ? { riskNote } : {}),
   };
 });
