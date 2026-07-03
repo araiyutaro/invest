@@ -623,5 +623,68 @@ describe("3-report output", () => {
     for (const call of readFileMock.mock.calls) {
       expect(String(call[0])).not.toContain("portfolio-research");
     }
+
+    // prev-portfolio-analysis.json も並列ロードされる（PORT-05配線、既存の隔離アサーションは維持）
+    expect(readFileMock).toHaveBeenCalledWith(
+      expect.stringContaining("prev-portfolio-analysis.json"),
+      expect.any(String),
+    );
   });
+
+  it("Test 44: loadWebSearchResults の per-file catch が失敗ファイルで console.warn を呼ぶ（Pitfall 7負債回収, D-15）", async () => {
+    const fsMock = await import("node:fs/promises");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      if (String(path).includes("websearch")) {
+        return Promise.resolve("not valid json{{{");
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("websearch")) {
+        return Promise.resolve(["bad.json"]);
+      }
+      return Promise.resolve([]);
+    });
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("Test 45: loadReevalResults の per-file catch が失敗ファイルで console.warn を呼ぶ（Pitfall 7負債回収, D-15）", async () => {
+    const fsMock = await import("node:fs/promises");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    const meetingResultJson = JSON.stringify(validMeetingResult);
+    (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("meeting-result.json")) {
+        return Promise.resolve(meetingResultJson);
+      }
+      if (String(path).includes("reeval")) {
+        return Promise.resolve("not valid json{{{");
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+    (fsMock.readdir as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+      if (String(path).includes("reeval")) {
+        return Promise.resolve(["bad.json"]);
+      }
+      return Promise.resolve([]);
+    });
+
+    const { main } = await import("./generate-report.js");
+    await main();
+
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
 });
