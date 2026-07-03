@@ -23,7 +23,7 @@
 - [x] **UI-05**: 各保有銘柄カードに判断の根拠となった関連ニュース（見出し・ソース名・元記事リンク）が表示される。リンクは ID 参照方式（TS 側で tmp/news.json と照合解決）で幻覚 URL を構造的に防止し、銘柄あたり 3〜5 件に上限を設ける
 - [x] **UI-06**: 関連ニュースが 0 件の保有銘柄（日本株等、ticker 付き記事が存在しない銘柄）も通常のカードとして正常に描画される（エラー・空セクション崩れなし）
 - [x] **UI-07**: 緊急度フラグ付き銘柄カードに視覚的強調（赤/アンバー系アクセント）が、判断が前日から変化した銘柄に変化バッジが表示される
-- [ ] **UI-08**: ポートフォリオレポートから「新規組入候補（Daily Report より転載）」セクションが削除される（成功パス・フォールバックパスの両方の呼び出し箇所。portfolio-analyst への文脈情報としての highlightedStocks は維持）
+- [x] **UI-08**: ポートフォリオレポートから「新規組入候補（Daily Report より転載）」セクションが削除される（成功パス・フォールバックパスの両方の呼び出し箇所。portfolio-analyst への文脈情報としての highlightedStocks は維持）
 
 ### Operational Stability (OPS)
 
@@ -67,7 +67,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UI-05 | Phase 20 | Complete |
 | UI-06 | Phase 20 | Complete |
 | UI-07 | Phase 22 | Complete |
-| UI-08 | Phase 23 | Pending |
+| UI-08 | Phase 23 | Complete |
 | OPS-05 | Phase 21 | Complete |
 
 ---
