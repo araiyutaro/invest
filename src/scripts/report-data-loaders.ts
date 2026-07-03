@@ -1,7 +1,9 @@
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { analystRound1OutputSchema, analystRound2OutputSchema, analystRound3OutputSchema, portfolioAnalysisSchema } from "../meeting/schemas.js";
+import type { NewsArticlePoolEntry } from "../meeting/schemas.js";
 import type { AnalystRound1Output, AnalystRound2Output, AnalystRound3Output, PortfolioAnalysis } from "../meeting/types.js";
+import type { HoldingNewsFile } from "../portfolio/holding-news.js";
 
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
 
@@ -78,5 +80,33 @@ export async function loadPortfolioAnalysis(): Promise<PortfolioAnalysis | null>
   } catch (error) {
     console.error('Portfolio analysis load failed:', error instanceof Error ? error.message : error);
     return null;
+  }
+}
+
+/**
+ * tmp/news.json（記事プール）を fail-soft で読み込む。自社TS生成物のため zod は使わず、
+ * write-news-digest.ts と同じ型アサーションを用いる。欠損/パース失敗時は throw せず [] を返す。
+ */
+export async function loadNewsPool(): Promise<ReadonlyArray<NewsArticlePoolEntry>> {
+  try {
+    const raw = await readFile(join(TMP_DIR, "news.json"), "utf-8");
+    return JSON.parse(raw) as ReadonlyArray<NewsArticlePoolEntry>;
+  } catch (error) {
+    console.error("News pool load failed:", error instanceof Error ? error.message : error);
+    return [];
+  }
+}
+
+/**
+ * tmp/holding-news.json（銘柄別ID参照, Phase 19生成）を fail-soft で読み込む。
+ * 欠損/パース失敗時は throw せず {} を返す (D-09: 欠損は全銘柄0件と同一扱い)。
+ */
+export async function loadHoldingNews(): Promise<HoldingNewsFile> {
+  try {
+    const raw = await readFile(join(TMP_DIR, "holding-news.json"), "utf-8");
+    return JSON.parse(raw) as HoldingNewsFile;
+  } catch (error) {
+    console.error("Holding news load failed:", error instanceof Error ? error.message : error);
+    return {};
   }
 }
