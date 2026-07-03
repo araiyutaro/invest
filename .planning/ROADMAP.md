@@ -136,7 +136,11 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
   1. 保有銘柄に関連ニュースやリサーチ結果が存在する場合、その銘柄の売却・保有判断（rationale）がその内容へ明示的に言及している
   2. 決算ミス・訴訟・規制変更・大型契約・ガイダンス引下げ等の重大材料を検知した保有銘柄に緊急度フラグ（urgent）が付与され、カード上に赤/アンバー系の視覚的強調として表示される
   3. 前日のポートフォリオ判断スナップショットとの差分がTS側で決定論的に計算され（LLM自己申告ではない）、判断が変化した銘柄のカードに変化バッジが表示される
-**Plans**: TBD
+**Plans**: 4 plans
+- [ ] 22-01-PLAN.md — 型・スキーマ契約: HoldingEvaluation 拡張 + urgent alias-transform 硬化 + decisionChanged/previousDecision strip (Wave 1)
+- [ ] 22-02-PLAN.md — invest.md Step 3d: 前日退避スニペット + リサーチ/前日判断セクション + urgent 契約・rationale 300文字化 (Wave 1)
+- [ ] 22-03-PLAN.md — decision-diff.ts(TDD): 決定論的 attachDecisionChanges（前日スナップショット等値比較・undefined区別） (Wave 2)
+- [ ] 22-04-PLAN.md — レポート生成層: loadPrevPortfolioAnalysis + main() 配線 + Pitfall7 backfill + 緊急/判断変化バッジ (Wave 3)
 **UI hint**: yes
 
 ### Phase 23: New-Candidates Section Removal
@@ -175,7 +179,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 19. Data Foundation & Holding-News Supply | v2.5 | 3/3 | Complete    | 2026-07-03 |
 | 20. Holding-Card News Display | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete    | 2026-07-03 |
-| 22. Portfolio-Analyst Re-Evaluation | v2.5 | 0/? | Not started | - |
+| 22. Portfolio-Analyst Re-Evaluation | v2.5 | 0/4 | Planned | - |
 | 23. New-Candidates Section Removal | v2.5 | 0/? | Not started | - |
 
 ---
