@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.5
 milestone_name: Portfolio News Intelligence
-status: executing
-stopped_at: Phase 21 context gathered
-last_updated: "2026-07-03T09:27:13.363Z"
+status: ready_to_plan
+stopped_at: Phase 21 complete (2/2) — ready to discuss Phase 22
+last_updated: 2026-07-03T09:56:41.363Z
 last_activity: 2026-07-03 -- Phase 21 execution started
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 7
   percent: 40
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-03 after v2.4 milestone)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 21 — Portfolio WebSearch Research
+**Current focus:** Phase 22 — portfolio analyst re evaluation
 
 ## Current Position
 
-Phase: 21 (Portfolio WebSearch Research) — EXECUTING
-Plan: 1 of 2
-Status: Executing Phase 21
-Last activity: 2026-07-03 -- Phase 21 execution started
+Phase: 22
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-07-03
 
 ## Performance Metrics
 
