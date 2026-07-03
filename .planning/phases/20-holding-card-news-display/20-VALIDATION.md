@@ -39,7 +39,7 @@ created: 2026-07-03
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
 | 20-01 T1 | 20-01 | 1 | UI-05 | T-20-01, T-20-05, T-20-07 | ID照合のみ解決・未知IDdrop・銘柄間ID混入防止・normalizeHoldingSymbolでキー正準化 | unit | `npx vitest run src/portfolio/holding-news.test.ts -t "resolvePortfolioHoldingNews"; npx vitest run src/portfolio/holding-news.test.ts -t "normalizeHoldingSymbol"` | ❌ Wave 0（describe新規追加） | ⬜ pending |
-| 20-01 T2 | 20-01 | 1 | UI-05 | T-20-02 | safeHref/formatPublishedAtJst 汎化（挙動不変リファクタ） | unit | `npx vitest run src/scripts/generate-report.test.ts -t "News Digest"; npx tsc --noEmit` | ✅（既存 news-digest テスト） | ⬜ pending |
+| 20-01 T2 | 20-01 | 1 | UI-05 | T-20-02 | safeHref/formatPublishedAtJst 汎化（挙動不変リファクタ） | unit | `npx vitest run src/scripts/generate-news-digest.test.ts; npx tsc --noEmit` | ✅（既存 news-digest テスト） | ⬜ pending |
 | 20-01 T3 | 20-01 | 1 | UI-06 | T-20-06 | fail-soft ローダー（[]/{}、no-throw、console.error） | unit | `npx vitest run src/scripts/report-data-loaders.test.ts` | ❌ Wave 0（新規ファイル） | ⬜ pending |
 | 20-02 T1 | 20-02 | 2 | UI-05, UI-06 | T-20-02, T-20-03, T-20-04, T-20-07 | escapeHtml/safeHref/rel=noopener・空状態常時描画・normalizeHoldingSymbol参照側キー正規化・後方互換 | unit | `npx vitest run src/scripts/generate-report.test.ts -t "Portfolio Report"` | ❌ Wave 0（既存describeに追加） | ⬜ pending |
 | 20-02 T2 | 20-02 | 2 | UI-05, UI-06 | T-20-01 | パイプライン配線（resolver経由の解決済みニュース供給・書き込み側不変） | integration | `npx tsc --noEmit; npm test` | ✅（既存 generate-report.test.ts） | ⬜ pending |
