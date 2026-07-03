@@ -72,7 +72,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 - [x] **Phase 15: Curation Contract & Schema** - AIキュレーションの出力契約（ID参照方式・市場enum・ソフト件数制約）をzodスキーマとして定義し、幻覚URL・不正市場値を構造的に防止する (completed 2026-07-02)
 - [x] **Phase 16: Report Generator (HTML Rendering)** - Phase 15の契約に基づき、news-digest.htmlの本文（記事一覧・市場別グルーピング・重要度バッジ・ティッカータグ・リード文）を既存ダークテーマで描画するピュア関数を実装する (completed 2026-07-02)
 - [x] **Phase 17: Pipeline Integration & Orchestration** - キュレーションAgentステップと生成ロジックを日次パイプラインへfail-soft統合し、news-digest.htmlが4紙目として自動生成される (completed 2026-07-03)
-- [ ] **Phase 18: Index/Nav Integration & Validation** - index.htmlのnews-digest.htmlリンクをファイル実在時のみ条件付きで出し分け、欠落日の404リンクを防止する
+- [x] **Phase 18: Index/Nav Integration & Validation** - index.htmlのnews-digest.htmlリンクをファイル実在時のみ条件付きで出し分け、欠落日の404リンクを防止する (completed 2026-07-03)
 
 ## Phase Details
 
@@ -124,7 +124,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 
 **Plans**: 2 plans
 - [x] 18-01-PLAN.md — TDD: fs実在からNews Digestリンクを全エントリ毎回導出（実装）
-- [ ] 18-02-PLAN.md — update-index.ts単体ライブ実行で実機検証（human-verifyチェックポイント）
+- [x] 18-02-PLAN.md — update-index.ts単体ライブ実行で実機検証（human-verifyチェックポイント）
 **UI hint**: yes
 
 ## Progress
@@ -149,7 +149,7 @@ Full details: `.planning/milestones/v2.3-ROADMAP.md`
 | 15. Curation Contract & Schema | v2.4 | 2/2 | Complete    | 2026-07-02 |
 | 16. Report Generator (HTML Rendering) | v2.4 | 3/3 | Complete    | 2026-07-02 |
 | 17. Pipeline Integration & Orchestration | v2.4 | 2/2 | Complete    | 2026-07-03 |
-| 18. Index/Nav Integration & Validation | v2.4 | 1/2 | In Progress|  |
+| 18. Index/Nav Integration & Validation | v2.4 | 2/2 | Complete   | 2026-07-03 |
 
 ---
 *Roadmap created: 2026-06-24*
