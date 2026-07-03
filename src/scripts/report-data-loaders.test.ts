@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { readFile } from "node:fs/promises";
-import { loadNewsPool, loadHoldingNews } from "./report-data-loaders.js";
+import { loadNewsPool, loadHoldingNews, loadPrevPortfolioAnalysis } from "./report-data-loaders.js";
 
 vi.mock("node:fs/promises", () => ({
   readFile: vi.fn(),
@@ -65,5 +65,38 @@ describe("loadHoldingNews", () => {
     expect(result).toEqual({});
     expect(errorSpy).toHaveBeenCalled();
     errorSpy.mockRestore();
+  });
+});
+
+describe("loadPrevPortfolioAnalysis", () => {
+  it("prev-portfolio-analysis.json を読めたら portfolioAnalysisSchema でパースした結果を返す", async () => {
+    const raw = JSON.stringify({
+      date: "2026-07-02",
+      generatedAt: "2026-07-02T00:00:00.000Z",
+      overallComment: "テスト",
+      holdings: [{ symbol: "MRNA", nameJa: "モデルナ", decision: "保持", rationale: "理由" }],
+      rebalanceActions: [],
+    });
+    vi.mocked(readFile).mockResolvedValueOnce(raw);
+    const result = await loadPrevPortfolioAnalysis();
+    expect(result?.holdings[0]?.symbol).toBe("MRNA");
+  });
+
+  it("欠損時（ENOENT）は throw せず null を返し console.warn が呼ばれる（D-15/Pitfall 7）", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockRejectedValueOnce(new Error("ENOENT"));
+    const result = await loadPrevPortfolioAnalysis();
+    expect(result).toBeNull();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("パース失敗時は throw せず null を返し console.warn が呼ばれる", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("not valid json{{{");
+    const result = await loadPrevPortfolioAnalysis();
+    expect(result).toBeNull();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 });
