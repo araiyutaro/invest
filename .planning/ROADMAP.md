@@ -102,7 +102,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 
 - [x] **Phase 24: Digest-Meeting Cross-Reference** — ニュースダイジェスト記事への当日ミーティング関連注記をTS側決定論的マッチングで付与（fail-soft） (completed 2026-07-04)
 - [x] **Phase 25: Urgency History Persistence** — 保有銘柄の緊急度フラグ・判断を data/urgency-history.json に日次追記（同日再実行ガード付き） (completed 2026-07-04)
-- [ ] **Phase 26: Weekly Urgency Rollup Display** — portfolio.html に直近7日間の緊急フラグ・判断変更履歴のロールアップセクションを追加
+- [x] **Phase 26: Weekly Urgency Rollup Display** — portfolio.html に直近7日間の緊急フラグ・判断変更履歴のロールアップセクションを追加 (completed 2026-07-04)
 
 ## Phase Details
 
@@ -144,7 +144,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 **Plans**: 3 plans (3 waves)
 - [x] 26-01-PLAN.md — 純関数集計モジュール src/portfolio/urgency-rollup.ts + テスト（TDD: 7日窓・記録隣接日decision比較・欠測日・0件・部分・イミュータビリティ・__proto__拒否、formatDateKeyShort、HIST-03）
 - [x] 26-02-PLAN.md — レンダラー formatWeeklyUrgencyRollupHtml + generatePortfolioReportHtml 第4引数 + null分岐両対応（3段階空状態・バッジ色・escapeHtml、HIST-03）
-- [ ] 26-03-PLAN.md — fail-soft loader loadUrgencyHistory + generate-report.ts 配線（第4引数供給、欠損/破損→{}、HIST-03）
+- [x] 26-03-PLAN.md — fail-soft loader loadUrgencyHistory + generate-report.ts 配線（第4引数供給、欠損/破損→{}、HIST-03）
 **UI hint**: yes
 
 ## Progress
@@ -177,7 +177,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 | 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
 | 24. Digest-Meeting Cross-Reference | v2.6 | 3/3 | Complete    | 2026-07-04 |
 | 25. Urgency History Persistence | v2.6 | 2/2 | Complete    | 2026-07-04 |
-| 26. Weekly Urgency Rollup Display | v2.6 | 2/3 | In Progress|  |
+| 26. Weekly Urgency Rollup Display | v2.6 | 3/3 | Complete   | 2026-07-04 |
 
 ---
 *Roadmap created: 2026-06-24*
