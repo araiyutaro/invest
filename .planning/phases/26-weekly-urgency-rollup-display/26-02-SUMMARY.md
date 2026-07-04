@@ -114,3 +114,12 @@ None — no external service configuration required. Zero new dependencies, zero
 ---
 *Phase: 26-weekly-urgency-rollup-display*
 *Completed: 2026-07-04*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/generate-portfolio-report.ts
+- FOUND: src/scripts/generate-report.test.ts
+- FOUND: .planning/phases/26-weekly-urgency-rollup-display/26-02-SUMMARY.md
+- FOUND commit: 8810afa (test - RED)
+- FOUND commit: 1830353 (feat - GREEN)
+- FOUND commit: dd37d58 (docs - SUMMARY)
