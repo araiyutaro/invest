@@ -141,7 +141,10 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
   1. ユーザーは portfolio.html で「今週の緊急フラグ履歴」等の週次ロールアップセクションを確認できる（新規ページの追加はなし）
   2. ロールアップは data/urgency-history.json の直近7日間のエントリから、銘柄ごとの緊急フラグ発生日・判断変更を集計して表示する
   3. 履歴データが0件または7日に満たない場合でも、セクションはエラーにならず適切な空状態・部分表示を示す
-**Plans**: TBD
+**Plans**: 3 plans (3 waves)
+- [ ] 26-01-PLAN.md — 純関数集計モジュール src/portfolio/urgency-rollup.ts + テスト（TDD: 7日窓・記録隣接日decision比較・欠測日・0件・部分・イミュータビリティ・__proto__拒否、formatDateKeyShort、HIST-03）
+- [ ] 26-02-PLAN.md — レンダラー formatWeeklyUrgencyRollupHtml + generatePortfolioReportHtml 第4引数 + null分岐両対応（3段階空状態・バッジ色・escapeHtml、HIST-03）
+- [ ] 26-03-PLAN.md — fail-soft loader loadUrgencyHistory + generate-report.ts 配線（第4引数供給、欠損/破損→{}、HIST-03）
 **UI hint**: yes
 
 ## Progress
