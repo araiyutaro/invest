@@ -2,6 +2,43 @@
 
 *A living document updated after each milestone. Lessons feed forward into future planning.*
 
+## Milestone: v2.6 — Digest-Meeting Cross-Reference & Urgency History
+
+**Shipped:** 2026-07-04
+**Phases:** 3 (24-26) | **Plans:** 8 | **Tasks:** 18
+
+### What Was Built
+- 相互参照: news-digest.html 記事への当日ミーティング関連注記を決定論的マッチャー（buildDigestCrossRefMap、ティッカー優先+テーマ照合、holding-news.ts設計を移植）で付与、fail-soft隔離+専用[STEP:digest-crossref:*]マーカー (Phase 24, XREP-01/02)
+- 履歴永続化: 純関数 urgency-history.ts（4フィールド抽出・日付キー上書きマージ・no-throw）+ fail-soft CLI write-urgency-history.ts → data/urgency-history.json を git 永続化 (Phase 25, HIST-01/02)
+- 週次ロールアップ: 純関数 computeWeeklyUrgencyRollup（7日窓・記録隣接日decision差分・__proto__安全）をTDDで構築 → formatWeeklyUrgencyRollupHtml で portfolio-report.html に描画（後方互換第4引数・null分岐両対応・3段階空状態）+ fail-soft loadUrgencyHistory 配線 (Phase 26, HIST-03)
+
+### What Worked
+- v2.5パターンの継続再利用: 決定論的TSマッチング（holding-news.ts→digest-crossref.ts）、fail-soft+専用STEPマーカー、foundation→UI分割（Phase 25永続化→26表示、v2.5のPhase 19→20と同型）で設計議論を最小化
+- **v2.5の教訓を実行: マイルストーン監査スキップの連鎖を止め、クローズ前に /gsd-audit-milestone を実行** — これがロールアップ1日遅れという静的検証困難なクロスフェーズ・タイミングの継ぎ目を発見し、クローズ前に修正できた（監査の実価値を実証）
+- コードレビューの徹底: Phase 26 で 3 Critical + 5 Warning（暦日不正anchor・非オブジェクトhistory・非文字列フィールドでのthrow）を全件ライブreproで再現→修正、「純関数: throwなし」契約を実際に満たすまでクローズしなかった（366→377テスト）
+- wave並列（executor worktree分離）+ 各wave後のマージバック・ポストマージゲートで逐次依存3フェーズを安全に実行
+
+### What Was Inefficient
+- Phase 26 の純関数モジュールが当初「throwなし」を宣言しながら3つの入力クラス（暦日不正・null history・非文字列フィールド）でthrowしていた — TDDのテストケースが正常系・shape不正キーに偏り、regex通過する暦日不正やroot shape不正を欠いていた。fail-soft契約を持つモジュールは「契約を破る入力」を最初からテスト行列に含めるべき
+- クロスフェーズ・タイミング（Step 3f書き込み vs Step 3c読み取りの順序）を Phase 25/26 のどの計画ドキュメントもフラグしなかった — 単一フェーズ内の検証では見えず、統合チェッカー（マイルストーン監査）で初めて表面化した
+- 旧フェーズディレクトリ（11-23等）の未コミット削除が作業ツリーに残存し続けている（v2.5でも指摘、未解消の恒常的ノイズ）
+
+### Patterns Established
+- fail-soft/no-throw契約を持つ純関数は、テスト行列に必ず「契約違反入力」（型不正・shape不正・regex通過するが意味的に不正な値）を含める
+- クロスフェーズのデータパスは、書き込みステップと読み取りステップの**パイプライン実行順序**まで含めて統合チェッカーで検証する（型の一致だけでなくタイミングの一致）
+- マイルストーンクローズ前の /gsd-audit-milestone は「省略可能な儀式」ではなく、単一フェーズ検証では捕捉できないクロスフェーズの継ぎ目を捕まえる実効的ゲートとして常時実行する
+
+### Key Lessons
+1. 「純関数: throwなし」と宣言したら、それを反証する入力クラス（calendar-invalid・null root・非文字列フィールド）を最初にテストへ書く。宣言と実装の乖離はレビューで必ず出る。
+2. クロスフェーズの正しさは「型が一致するか」だけでなく「実行順序が意図と一致するか」で決まる。データを書くステップが読むステップより前に走ることを、パイプライン定義（invest.md）レベルで確認する。
+3. マイルストーン監査は今回その価値を実証した（1日遅れの発見）。今後もスキップしない。
+
+### Cost Observations
+- Model mix: 設計・レビュー・監査の主導と全サブエージェント成果物の検証はopus（メインセッション）、executor/researcher/checker系はsonnet委譲
+- Notable: discuss→plan→execute の自動チェーン（--auto）で Phase 26 を一気通貫実行。コードレビュー→fixer→再検証ループが「純関数throwなし」契約の実効性を担保。マイルストーン監査の統合チェッカーがタイミング継ぎ目を検出し、クローズ前修正で技術的負債の持ち越しを回避
+
+---
+
 ## Milestone: v2.5 — Portfolio News Intelligence
 
 **Shipped:** 2026-07-04
@@ -132,11 +169,14 @@
 | v2.3 | 5 | 監査駆動のギャップクローズ（Phase 14.1挿入）で誤判定を実修正 |
 | v2.4 | 4 | ID参照方式によるLLM幻覚の構造的防止 + fail-soft統合のライブ実証 |
 | v2.5 | 5 | LLM信頼境界の標準化（TS側決定論的検出 + alias硬化 + スキーマstrip）とv2.4パターン再利用 |
+| v2.6 | 3 | 監査駆動クローズへ回帰 — 統合チェッカーがクロスフェーズのタイミング継ぎ目（Step 3f書込 vs Step 3c読取の順序）を検出、クローズ前に修正 |
 
 ### Top Lessons (Verified Across Milestones)
 
 1. TS↔Claude のハンドオフは stdout ではなく tmp/*.json ファイル境界を経由する（v2.2で確立、v2.3で継続有効）。
 2. 新規npm依存を足さずネイティブTypeScript/SVGで実装する方針が品質と保守性を両立（v2.2 Jaccard、v2.3 SVGチャート）。
-3. 「実装済み」の主張は実コード検証で裏取りする（v2.3で顕在化した教訓。v2.4/v2.5で監査を連続スキップしており、v2.6では監査駆動クローズへ回帰する）。
+3. 「実装済み」の主張は実コード検証で裏取りする（v2.3で顕在化。v2.4/v2.5で監査を連続スキップしたが、v2.6でクローズ前 /gsd-audit-milestone を実行し、その価値を再実証した — 1日遅れの継ぎ目を発見・修正）。
+4. クロスフェーズの正しさは型一致だけでなく「実行順序が意図と一致するか」で決まる。データを書くステップは読むステップより前に走る必要があり、これは単一フェーズ検証では見えずマイルストーン統合チェッカーで初めて表面化する（v2.6で確立）。
+5. fail-soft/no-throw契約を持つ純関数のテスト行列には、契約を破る入力（型不正・shape不正・regex通過するが意味的に不正な値）を必ず含める（v2.6 Phase 26で確立）。
 4. LLM出力は選定範囲を最小化（ID参照）し、実データはTS側で解決する（v2.0 keyArticles → v2.4 news-curation → v2.5 カードニュース/decisionChangedで確立）。
 5. 判断・状態遷移のフラグはLLM自己申告を信用せず、TS側の決定論的計算で付与しスキーマでLLM値をstripする（v2.5で確立）。
