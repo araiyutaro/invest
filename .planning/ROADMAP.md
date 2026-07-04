@@ -116,7 +116,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
   3. クロスリファレンス処理が例外を投げても、news-digest.html および既存3レポートの生成・デプロイパイプラインは正常に完了し、専用の STEP マーカーで失敗が可視化される
   4. 当日ミーティングで議論されていない記事は、注記なしで通常通り表示される（0件時のフォールバック、レイアウト崩れなし）
 **Plans**: 3 plans (3 waves)
-- [ ] 24-01-PLAN.md — 決定論マッチャー src/meeting/digest-crossref.ts（ティッカー優先+テーマ照合、純関数・no-throw、XREP-01）
+- [x] 24-01-PLAN.md — 決定論マッチャー src/meeting/digest-crossref.ts（ティッカー優先+テーマ照合、純関数・no-throw、XREP-01）
 - [ ] 24-02-PLAN.md — レンダラー拡張 generate-news-digest.ts + .digest-crossref-chip CSS（0注記時byte-identical、escapeHtml、XREP-01）
 - [ ] 24-03-PLAN.md — パイプライン fail-soft 隔離 write-news-digest.ts + invest.md Step 3e 専用STEPマーカー（XREP-02）
 **UI hint**: yes
@@ -170,7 +170,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 | 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete    | 2026-07-03 |
 | 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
-| 24. Digest-Meeting Cross-Reference | v2.6 | 0/3 | Planned | - |
+| 24. Digest-Meeting Cross-Reference | v2.6 | 1/3 | In Progress|  |
 | 25. Urgency History Persistence | v2.6 | 0/? | Not started | - |
 | 26. Weekly Urgency Rollup Display | v2.6 | 0/? | Not started | - |
 
