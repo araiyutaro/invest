@@ -136,11 +136,14 @@ function formatWeeklyUrgencyRollupHtml(rollup: WeeklyUrgencyRollup, totalHistory
   }
 
   const cards = rollup.symbols.map((s) => {
+    // WR-03: 他の全ての動的文字列（symbol/nameJa/decision）と同様、日付も escapeHtml を
+    // 通す（現状 isValidDateKey により数字とハイフンのみに限定されているため実害はないが、
+    // このモジュール単独では検証できないクロスモジュール不変条件に依存させない defense in depth）。
     const urgentHtml = s.urgentDates.length > 0
-      ? `<p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: ${s.urgentDates.map(formatDateKeyShort).join(", ")}</p>`
+      ? `<p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: ${s.urgentDates.map((d) => escapeHtml(formatDateKeyShort(d))).join(", ")}</p>`
       : "";
     const changesHtml = s.decisionChanges
-      .map((c) => `<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: ${formatDateKeyShort(c.date)} ${escapeHtml(c.from)} → ${escapeHtml(c.to)}</p>`)
+      .map((c) => `<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: ${escapeHtml(formatDateKeyShort(c.date))} ${escapeHtml(c.from)} → ${escapeHtml(c.to)}</p>`)
       .join("\n");
     return `<div class="agent-card">
       <h4>${escapeHtml(s.symbol)}${s.nameJa ? ` -- ${escapeHtml(s.nameJa)}` : ""}</h4>
