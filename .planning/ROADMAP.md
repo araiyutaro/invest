@@ -100,7 +100,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 
 ニュースダイジェストとミーティング分析の相互参照を実現し、緊急度フラグの履歴を永続化してポートフォリオの週次振り返りを可能にする。
 
-- [ ] **Phase 24: Digest-Meeting Cross-Reference** — ニュースダイジェスト記事への当日ミーティング関連注記をTS側決定論的マッチングで付与（fail-soft）
+- [x] **Phase 24: Digest-Meeting Cross-Reference** — ニュースダイジェスト記事への当日ミーティング関連注記をTS側決定論的マッチングで付与（fail-soft） (completed 2026-07-04)
 - [ ] **Phase 25: Urgency History Persistence** — 保有銘柄の緊急度フラグ・判断を data/urgency-history.json に日次追記（同日再実行ガード付き）
 - [ ] **Phase 26: Weekly Urgency Rollup Display** — portfolio.html に直近7日間の緊急フラグ・判断変更履歴のロールアップセクションを追加
 
@@ -118,7 +118,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 **Plans**: 3 plans (3 waves)
 - [x] 24-01-PLAN.md — 決定論マッチャー src/meeting/digest-crossref.ts（ティッカー優先+テーマ照合、純関数・no-throw、XREP-01）
 - [x] 24-02-PLAN.md — レンダラー拡張 generate-news-digest.ts + .digest-crossref-chip CSS（0注記時byte-identical、escapeHtml、XREP-01）
-- [ ] 24-03-PLAN.md — パイプライン fail-soft 隔離 write-news-digest.ts + invest.md Step 3e 専用STEPマーカー（XREP-02）
+- [x] 24-03-PLAN.md — パイプライン fail-soft 隔離 write-news-digest.ts + invest.md Step 3e 専用STEPマーカー（XREP-02）
 **UI hint**: yes
 
 ### Phase 25: Urgency History Persistence
@@ -170,7 +170,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 | 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete    | 2026-07-03 |
 | 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
-| 24. Digest-Meeting Cross-Reference | v2.6 | 2/3 | In Progress|  |
+| 24. Digest-Meeting Cross-Reference | v2.6 | 3/3 | Complete   | 2026-07-04 |
 | 25. Urgency History Persistence | v2.6 | 0/? | Not started | - |
 | 26. Weekly Urgency Rollup Display | v2.6 | 0/? | Not started | - |
 
