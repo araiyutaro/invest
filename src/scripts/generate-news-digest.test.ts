@@ -334,7 +334,8 @@ describe("crossref annotations (XREP-01, D-08/D-09/D-12)", () => {
     const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
     const html = generateNewsDigestHtml(validCuration, baseDate);
 
-    expect(html).not.toContain("digest-crossref-row");
+    // CSSは常在するため(.digest-crossref-row{...})、実描画要素の不在はclass属性で判定する
+    expect(html).not.toContain('class="digest-crossref-row"');
   });
 
   it("byte-identical(空配列マップキー): tickerMatches/themeMatchesが共に空のキーはchip行を描画しない", async () => {
@@ -344,7 +345,8 @@ describe("crossref annotations (XREP-01, D-08/D-09/D-12)", () => {
     };
     const html = generateNewsDigestHtml(crossRefCuration, baseDate, crossRefMap);
 
-    expect(html).not.toContain("digest-crossref-row");
+    // CSSは常在するため(.digest-crossref-row{...})、実描画要素の不在はclass属性で判定する
+    expect(html).not.toContain('class="digest-crossref-row"');
   });
 
   it("ティッカー一致(verdictあり): digest-crossref-row内に「🗣 ミーティング言及: NVDA」とverdict色付きstrongを含む", async () => {
