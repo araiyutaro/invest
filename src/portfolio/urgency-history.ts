@@ -27,7 +27,12 @@ export type UrgencyHistoryFile = Record<string, ReadonlyArray<HoldingUrgencySnap
 export function extractUrgencySnapshots(
   analysis: PortfolioAnalysis,
 ): ReadonlyArray<HoldingUrgencySnapshot> {
-  throw new Error("not implemented");
+  return analysis.holdings.map((h) => ({
+    symbol: normalizeHoldingSymbol(h.symbol),
+    nameJa: h.nameJa,
+    urgent: h.urgent,
+    decision: h.decision,
+  }));
 }
 
 /**
@@ -39,7 +44,7 @@ export function appendUrgencySnapshot(
   dateKey: string,
   snapshots: ReadonlyArray<HoldingUrgencySnapshot>,
 ): UrgencyHistoryFile {
-  throw new Error("not implemented");
+  return { ...history, [dateKey]: snapshots };
 }
 
 /**
@@ -47,5 +52,5 @@ export function appendUrgencySnapshot(
  * "__proto__" のような prototype-pollution 狙いのキーも構造的に拒否する。
  */
 export function isValidDateKey(dateKey: string): boolean {
-  throw new Error("not implemented");
+  return /^\d{4}-\d{2}-\d{2}$/.test(dateKey);
 }
