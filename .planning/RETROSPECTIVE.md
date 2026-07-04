@@ -2,6 +2,46 @@
 
 *A living document updated after each milestone. Lessons feed forward into future planning.*
 
+## Milestone: v2.5 — Portfolio News Intelligence
+
+**Shipped:** 2026-07-04
+**Phases:** 5 (19-23) | **Plans:** 12 | **Tasks:** 24
+
+### What Was Built
+- データ土台: finnhub.ts index-as-ticker汚染バグのTDD修正 + 決定論的な保有銘柄別ニュース抽出（holding-news.ts、ticker一致優先+社名フォールバック）→ portfolio-analystプロンプト注入 (Phase 19)
+- カード表示: 保有銘柄カードにID参照方式の関連ニュースサブセクション（安全リンク・0件空状態・社名一致バッジ） (Phase 20)
+- リサーチ復活: invest.md Step 3-P で保有12銘柄のWebSearchリサーチを並列実行、tmp/portfolio-research/ 分離保存 + fail-soft [STEP:portfolio-research:*] マーカー (Phase 21)
+- 再評価契約: urgent緊急度フラグ（alias硬化）+ TS側決定論的decisionChanged検出（decision-diff.ts）+ 赤「⚠ 緊急」/アンバー「判断変更」バッジ + independent-then-compareアンカリング対策 (Phase 22)
+- レポート集中化: 新規組入候補セクションを両パスから削除、highlightedStocksの文脈受け渡しは維持 (Phase 23)
+
+### What Worked
+- v2.4確立パターンの再利用が効いた: ID参照方式（カードニュース表示）・fail-soft分離+専用STEPマーカー（Step 3-P）を前例踏襲し、設計議論をほぼスキップできた
+- LLM出力の信頼境界設計: decisionChangedをLLM自己申告にせずTS側等値比較で付与し、TS専用フィールドはスキーマtransformで構造的にstrip — 幻覚対策をスキーマ層で完結
+- passthrough().transform() によるaliasゆらぎ吸収（urgent 4-alias、webSearchResult 8-alias）でハードエラーによるパイプライン停止を予防
+- Phase 21をPhase 19/20と独立依存に設計し、wave並列実行（executor worktree分離）が機能
+- コードレビュー→修正ループ: Phase 22 WR-01〜03（per-holding fail-soft・同日再実行ガード・ローダーwarn）、Phase 23 WR-01/02 を全件クローズしてから完了
+
+### What Was Inefficient
+- マイルストーン監査を2連続でスキップ（v2.4に続きv2.5も）— 要件トレーサビリティ全Completeを根拠としたが、v2.3で監査が誤判定を発見した実績を考えると省略の常態化はリスク
+- ライブ実行依存のHUMAN-UAT未消化が6件（Phase 20/21/22）残ったままのクローズ — WebSearch・LLM rationale実言及など静的検証不能な面積が増えており、クローズ前の1回のフルパイプライン実行を検討すべきだった
+- 旧フェーズディレクトリ（11-18）の削除が未コミットのまま作業ツリーに残存し、マイルストーンクローズと混線しかけた
+
+### Patterns Established
+- LLM出力に隣接する状態遷移フラグ（decisionChanged等）は「TS側決定論的計算 + スキーマでのLLM値strip」を標準形とする
+- 前日データ注入は「独立評価→その後比較」（independent-then-compare）の順でアンカリングを抑制し、同日再実行ガード付きで退避する
+- 新設のLLM向けデータ領域は既存領域と物理分離（tmp/portfolio-research/ vs tmp/websearch/）し、構造的隔離テストを付ける
+
+### Key Lessons
+1. LLM由来booleanフィールドはalias-transform硬化（複数エイリアス正準化+default）を最初から仕込む。ゆらぎは必ず起きる。
+2. HUMAN-UAT（ライブ実行検証）が3フェーズ分溜まる規模になったら、クローズ前に1回のフルパイプライン実行でまとめて消化する方が追跡コストより安い。
+3. マイルストーン監査スキップは連続させない。次回（v2.6）はクローズ前に /gsd-audit-milestone を実行する。
+
+### Cost Observations
+- Model mix: executor/reviewer系サブエージェント委譲 + portfolio-analyst/リサーチAgent本番はopus
+- Notable: 12銘柄WebSearchリサーチ追加で日次パイプライン実行時間が増加（並列実行で緩和）。165コミット/2日という高密度実行はwave並列（worktree分離）に支えられた
+
+---
+
 ## Milestone: v2.4 — News Curation Report
 
 **Shipped:** 2026-07-03
@@ -91,10 +131,12 @@
 | v2.2 | 3 | ニュース品質フィルタ（TDDピュア関数モジュール）+ パイプライン計測 |
 | v2.3 | 5 | 監査駆動のギャップクローズ（Phase 14.1挿入）で誤判定を実修正 |
 | v2.4 | 4 | ID参照方式によるLLM幻覚の構造的防止 + fail-soft統合のライブ実証 |
+| v2.5 | 5 | LLM信頼境界の標準化（TS側決定論的検出 + alias硬化 + スキーマstrip）とv2.4パターン再利用 |
 
 ### Top Lessons (Verified Across Milestones)
 
 1. TS↔Claude のハンドオフは stdout ではなく tmp/*.json ファイル境界を経由する（v2.2で確立、v2.3で継続有効）。
 2. 新規npm依存を足さずネイティブTypeScript/SVGで実装する方針が品質と保守性を両立（v2.2 Jaccard、v2.3 SVGチャート）。
-3. 「実装済み」の主張は実コード検証で裏取りする（v2.3で顕在化した教訓）。
-4. LLM出力は選定範囲を最小化（ID参照）し、実データはTS側で解決する（v2.0 keyArticles → v2.4 news-curation で確立）。
+3. 「実装済み」の主張は実コード検証で裏取りする（v2.3で顕在化した教訓。v2.4/v2.5で監査を連続スキップしており、v2.6では監査駆動クローズへ回帰する）。
+4. LLM出力は選定範囲を最小化（ID参照）し、実データはTS側で解決する（v2.0 keyArticles → v2.4 news-curation → v2.5 カードニュース/decisionChangedで確立）。
+5. 判断・状態遷移のフラグはLLM自己申告を信用せず、TS側の決定論的計算で付与しスキーマでLLM値をstripする（v2.5で確立）。
