@@ -14,7 +14,7 @@
 
 v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、AI厳選ニュースダイジェスト（news-digest.html）の4紙目追加、そして保有銘柄ごとのニュース・WebSearchリサーチを踏まえた売却・保有再考（v1.0「Web調査後の再評価」フローのv2.x再実装）を完了。ポートフォリオレポートは保有銘柄の意思決定に集中し、各保有銘柄カードにID参照方式の関連ニュース・緊急度フラグ（赤バッジ）・前日比の判断変化バッジ（TS側決定論的検出）を表示する。12銘柄のWebSearchリサーチは fail-soft な専用パイプラインステップ（Step 3-P）として実行され、失敗しても4レポートの生成・デプロイは継続する。
 
-**Next milestone:** v2.6 Digest-Meeting Cross-Reference & Urgency History（全フェーズ完了）。Phase 24（ダイジェスト-ミーティング相互参照）・Phase 25（緊急度履歴永続化 data/urgency-history.json）・Phase 26（週次緊急ロールアップ表示 HIST-03）完了。残タスク: Phase 20/21/22 の HUMAN-UAT ライブ実行確認（明朝の launchd 実行で消化可能、STATE.md Deferred Items で追跡）。v2.6 は /gsd-complete-milestone でアーカイブ可能。
+**Current state:** v2.6 Digest-Meeting Cross-Reference & Urgency History を **2026-07-04 に shipped・アーカイブ**（`.planning/milestones/v2.6-*`）。Phase 24（ダイジェスト-ミーティング相互参照 XREP-01/02）・Phase 25（緊急度履歴永続化 data/urgency-history.json HIST-01/02）・Phase 26（週次緊急ロールアップ表示 HIST-03）完了。監査で発見したロールアップ1日遅れは invest.md の Step 3f→Step 3c 再順序で解消済み。残タスク: Phase 24 および Phase 20/21/22 の HUMAN-UAT ライブ実行確認（明朝の launchd 実行で消化可能、STATE.md Deferred Items で追跡）。**次マイルストーンは未定**（`/gsd-new-milestone` で開始）。
 
 ## Current Milestone: v2.6 Digest-Meeting Cross-Reference & Urgency History
 
@@ -153,4 +153,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-04 — Phase 26 complete (Weekly Urgency Rollup Display, HIST-03) — v2.6 all phases complete*
+*Last updated: 2026-07-04 after v2.6 milestone (Digest-Meeting Cross-Reference & Urgency History) — shipped & archived*

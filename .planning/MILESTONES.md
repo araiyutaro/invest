@@ -1,5 +1,21 @@
 # Milestones
 
+## v2.6 Digest-Meeting Cross-Reference & Urgency History (Shipped: 2026-07-04)
+
+**Phases completed:** 3 phases, 8 plans, 18 tasks
+
+**Key accomplishments:**
+
+- Deterministic ticker-priority + theme-keyword matcher (`buildDigestCrossRefMap`) that maps each digest article to its meeting-discussion cross-reference, ported from `holding-news.ts`'s tested design.
+- Extended `generate-news-digest.ts` with an additive optional `crossRefMap` parameter that renders passive "🗣 ミーティング言及" / "🗣 関連テーマ" chips below `.news-meta`, reusing existing `.ticker-pill` tokens plus a distinct `#a78bfa` meeting-accent border, with a byte-identical regression test guaranteeing zero-match articles are unaffected.
+- Pure-function module `src/portfolio/urgency-history.ts` extracting the minimal 4-field urgency snapshot from `PortfolioAnalysis` and merging it into a date-keyed history object via immutable object-key overwrite (no I/O, no throw).
+- Thin fail-soft CLI wrapper `write-urgency-history.ts` (mkdir-first, dateKey from meeting-result.json, D-13/D-14/D-06 fail-soft branches) plus invest.md Step 3f + Step 4 `git add docs/ data/` wiring, completing HIST-01/HIST-02 end-to-end persistence to git.
+- Pure, throw-free 7-day window aggregation module (`computeWeeklyUrgencyRollup` + `formatDateKeyShort`) built via strict TDD RED/GREEN, covering window filtering, cross-history decision-diff, and prototype-pollution-safe key handling — 23/23 tests passing.
+- Rendered the weekly urgency rollup section into portfolio-report.html via a new bespoke `formatWeeklyUrgencyRollupHtml` renderer, wired through a backward-compatible 4th parameter, and made it appear in both the null- and non-null-`portfolioAnalysis` branches per the fail-soft design (D-14).
+- Added a thin fail-soft `loadUrgencyHistory` loader (type-assertion, console.warn severity per D-13) to `report-data-loaders.ts` and wired it into `generate-report.ts`'s `Promise.all` loader batch as the 4th argument to `generatePortfolioReportHtml`, closing the HIST-03 data path end-to-end.
+
+---
+
 ## v2.5 Portfolio News Intelligence (Shipped: 2026-07-04)
 
 **Phases completed:** 5 phases (19-23), 12 plans, 24 tasks
