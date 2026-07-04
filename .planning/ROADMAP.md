@@ -173,7 +173,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete    | 2026-07-03 |
 | 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
 | 24. Digest-Meeting Cross-Reference | v2.6 | 3/3 | Complete    | 2026-07-04 |
-| 25. Urgency History Persistence | v2.6 | 2/2 | Complete   | 2026-07-04 |
+| 25. Urgency History Persistence | v2.6 | 2/2 | Complete    | 2026-07-04 |
 | 26. Weekly Urgency Rollup Display | v2.6 | 0/? | Not started | - |
 
 ---
