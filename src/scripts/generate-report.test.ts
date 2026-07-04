@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import type { MeetingResult, WebSearchResult, ReevaluationOutput, AnalystRound1Output, AnalystRound2Output, AnalystRound3Output } from "../meeting/types.js";
+import type { UrgencyHistoryFile } from "../portfolio/urgency-history.js";
 
 vi.mock("node:fs/promises", () => ({
   readFile: vi.fn().mockRejectedValue(new Error("ENOENT")),
@@ -515,6 +516,102 @@ describe("Portfolio Report", () => {
     };
     const html = generatePortfolioReportHtml(validMeetingResult, analysisWithBoth);
     expect(html).toContain("border-left-color:#10b981"); // 保持 = green, unchanged despite urgent/changed
+  });
+});
+
+// Weekly urgency rollup fixtures (HIST-03) — anchored on validMeetingResult.date ("2026-06-24"),
+// window is [2026-06-18, 2026-06-24] inclusive (D-01).
+const historyWithMovement: UrgencyHistoryFile = {
+  "2026-06-22": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: true, decision: "保持" }],
+  "2026-06-23": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: false, decision: "一部売却" }],
+  "2026-06-24": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: true, decision: "一部売却" }],
+};
+
+const historyFullWeekMovement: UrgencyHistoryFile = {
+  "2026-06-18": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: false, decision: "保持" }],
+  "2026-06-19": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: false, decision: "保持" }],
+  "2026-06-20": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: false, decision: "保持" }],
+  "2026-06-21": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: false, decision: "保持" }],
+  ...historyWithMovement,
+};
+
+const historyZeroMovement: UrgencyHistoryFile = {
+  "2026-06-24": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: false, decision: "保持" }],
+};
+
+describe("Weekly urgency rollup (HIST-03)", () => {
+  it("rollup: 2引数呼び出しでも 3引数呼び出しでも後方互換で HTML を返す（4th引数省略）", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html2 = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html2).toContain("<!DOCTYPE html>");
+    const html3 = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {});
+    expect(html3).toContain("<!DOCTYPE html>");
+  });
+
+  it("rollup: Tier1 空状態 — 履歴が空の場合、見出しと定型の空メッセージが表示される", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
+    expect(html).toContain("今週の緊急・判断変更ロールアップ");
+    expect(html).toContain("まだ緊急フラグ・判断変更の履歴がありません（履歴は日次で蓄積されます）");
+  });
+
+  it("rollup: Tier2 空状態 — 履歴はあるが窓内の動きがゼロの場合、定型メッセージが表示される", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyZeroMovement);
+    expect(html).toContain("今週の緊急・判断変更ロールアップ");
+    expect(html).toContain("今週は緊急フラグ・判断変更はありませんでした");
+  });
+
+  it("rollup: Tier3 部分フッター — daysCovered<7 かつ動きありの場合、正しい日数の脚注が表示される", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyWithMovement);
+    expect(html).toContain("（過去3日分の履歴に基づく）");
+  });
+
+  it("rollup: daysCovered===7 の場合は部分フッターが表示されない", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyFullWeekMovement);
+    expect(html).not.toContain("履歴に基づく");
+  });
+
+  it("rollup: 銘柄カードに緊急フラグ日付・判断変更行・色が正しく描画される", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyWithMovement);
+    expect(html).toContain("⚠ 緊急フラグ: 06/22, 06/24");
+    expect(html).toContain("判断変更: 06/23 保持 → 一部売却");
+    expect(html).toContain("#ef4444");
+    expect(html).toContain("#f59e0b");
+  });
+
+  it("rollup: symbol/nameJa に含まれる <script> がエスケープされる", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const historyWithScript: UrgencyHistoryFile = {
+      "2026-06-24": [{ symbol: "<script>evil</script>", nameJa: "<img src=x onerror=alert(1)>", urgent: true, decision: "保持" }],
+    };
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyWithScript);
+    expect(html).toContain("&lt;script&gt;");
+    expect(html).not.toContain("<script>evil</script>");
+  });
+
+  it("rollup: portfolioAnalysis === null でもフェイルソフトでロールアップが描画される", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, null, {}, historyWithMovement);
+    expect(html).toContain("今週の緊急・判断変更ロールアップ");
+    expect(html).toContain("⚠ 緊急フラグ: 06/22, 06/24");
+    expect(html).toContain("判断変更: 06/23 保持 → 一部売却");
+  });
+
+  it("rollup: セクション順序 — 総括コメントの後、保有銘柄 個別評価の前に配置される", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyWithMovement);
+    const rollupIndex = html.indexOf("今週の緊急・判断変更ロールアップ");
+    const overallCommentIndex = html.indexOf("総括コメント");
+    const holdingsIndex = html.indexOf("保有銘柄 個別評価");
+    expect(rollupIndex).toBeGreaterThan(-1);
+    expect(overallCommentIndex).toBeGreaterThan(-1);
+    expect(holdingsIndex).toBeGreaterThan(-1);
+    expect(rollupIndex).toBeGreaterThan(overallCommentIndex);
+    expect(rollupIndex).toBeLessThan(holdingsIndex);
   });
 });
 
