@@ -142,7 +142,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
   2. ロールアップは data/urgency-history.json の直近7日間のエントリから、銘柄ごとの緊急フラグ発生日・判断変更を集計して表示する
   3. 履歴データが0件または7日に満たない場合でも、セクションはエラーにならず適切な空状態・部分表示を示す
 **Plans**: 3 plans (3 waves)
-- [ ] 26-01-PLAN.md — 純関数集計モジュール src/portfolio/urgency-rollup.ts + テスト（TDD: 7日窓・記録隣接日decision比較・欠測日・0件・部分・イミュータビリティ・__proto__拒否、formatDateKeyShort、HIST-03）
+- [x] 26-01-PLAN.md — 純関数集計モジュール src/portfolio/urgency-rollup.ts + テスト（TDD: 7日窓・記録隣接日decision比較・欠測日・0件・部分・イミュータビリティ・__proto__拒否、formatDateKeyShort、HIST-03）
 - [ ] 26-02-PLAN.md — レンダラー formatWeeklyUrgencyRollupHtml + generatePortfolioReportHtml 第4引数 + null分岐両対応（3段階空状態・バッジ色・escapeHtml、HIST-03）
 - [ ] 26-03-PLAN.md — fail-soft loader loadUrgencyHistory + generate-report.ts 配線（第4引数供給、欠損/破損→{}、HIST-03）
 **UI hint**: yes
@@ -177,7 +177,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 | 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
 | 24. Digest-Meeting Cross-Reference | v2.6 | 3/3 | Complete    | 2026-07-04 |
 | 25. Urgency History Persistence | v2.6 | 2/2 | Complete    | 2026-07-04 |
-| 26. Weekly Urgency Rollup Display | v2.6 | 0/? | Not started | - |
+| 26. Weekly Urgency Rollup Display | v2.6 | 1/3 | In Progress|  |
 
 ---
 *Roadmap created: 2026-06-24*
