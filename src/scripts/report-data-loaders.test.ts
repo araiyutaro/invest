@@ -7,6 +7,7 @@ import {
   loadRound1Results,
   loadRound2Results,
   loadRound3Results,
+  loadUrgencyHistory,
 } from "./report-data-loaders.js";
 
 vi.mock("node:fs/promises", () => ({
@@ -107,6 +108,37 @@ describe("loadPrevPortfolioAnalysis", () => {
     vi.mocked(readFile).mockResolvedValueOnce("not valid json{{{");
     const result = await loadPrevPortfolioAnalysis();
     expect(result).toBeNull();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+});
+
+describe("loadUrgencyHistory", () => {
+  it("urgency-history.json を読めたら JSON.parse 結果をオブジェクトとして返す", async () => {
+    const raw = JSON.stringify({
+      "2026-07-02": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: true, decision: "保持" }],
+    });
+    vi.mocked(readFile).mockResolvedValueOnce(raw);
+    const result = await loadUrgencyHistory();
+    expect(result).toEqual({
+      "2026-07-02": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: true, decision: "保持" }],
+    });
+  });
+
+  it("欠損時（ENOENT）は throw せず {} を返し console.warn が呼ばれる（D-13）", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockRejectedValueOnce(new Error("ENOENT"));
+    const result = await loadUrgencyHistory();
+    expect(result).toEqual({});
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("パース失敗時は throw せず {} を返し console.warn が呼ばれる", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("not valid json{{{");
+    const result = await loadUrgencyHistory();
+    expect(result).toEqual({});
     expect(warnSpy).toHaveBeenCalled();
     warnSpy.mockRestore();
   });
