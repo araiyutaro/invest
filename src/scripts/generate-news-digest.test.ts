@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { NewsCuration, CuratedArticle } from "../meeting/types.js";
+import type { DigestCrossRefMap } from "../meeting/digest-crossref.js";
 
 const baseDate = "2026-07-02";
 
@@ -93,6 +94,81 @@ const curationWithBadScheme: NewsCuration = {
   generatedAt: "2026-07-02T07:00:00.000Z",
   leadIn: "スキーム検証",
   articles: [articleBadScheme],
+};
+
+// crossref annotation (XREP-01) 用フィクスチャ
+const articleXrefTickerVerdict: CuratedArticle = {
+  id: "n01",
+  title: "NVIDIA関連ニュース(crossref検証)",
+  url: "https://example.com/news/n01",
+  source: "Reuters",
+  publishedAt: "2026-07-02T06:00:00.000Z",
+  market: "us",
+  importance: "high",
+  commentary: "crossref検証用コメント本文その1。",
+  tickers: ["NVDA"],
+  tickerNames: { NVDA: "エヌビディア" },
+};
+
+const articleXrefTickerNoVerdict: CuratedArticle = {
+  id: "n02",
+  title: "円関連ニュース(crossref検証)",
+  url: "https://example.com/news/n02",
+  source: "Bloomberg",
+  publishedAt: "2026-07-02T05:00:00.000Z",
+  market: "us",
+  importance: "medium",
+  commentary: "crossref検証用コメント本文その2。",
+  tickers: ["FXY"],
+};
+
+const articleXrefTheme: CuratedArticle = {
+  id: "n03",
+  title: "ヘルスケア関連ニュース(crossref検証)",
+  url: "https://example.com/news/n03",
+  source: "Reuters",
+  publishedAt: "2026-07-02T04:00:00.000Z",
+  market: "us",
+  importance: "low",
+  commentary: "crossref検証用コメント本文その3。",
+  tickers: [],
+};
+
+const articleXrefEscape: CuratedArticle = {
+  id: "n04",
+  title: "テーマエスケープ検証記事(crossref検証)",
+  url: "https://example.com/news/n04",
+  source: "Reuters",
+  publishedAt: "2026-07-02T03:00:00.000Z",
+  market: "us",
+  importance: "low",
+  commentary: "crossref検証用コメント本文その4。",
+  tickers: [],
+};
+
+const articleXrefEmptyMapKey: CuratedArticle = {
+  id: "n05",
+  title: "空マッチ記事(crossref検証)",
+  url: "https://example.com/news/n05",
+  source: "Reuters",
+  publishedAt: "2026-07-02T02:00:00.000Z",
+  market: "us",
+  importance: "low",
+  commentary: "crossref検証用コメント本文その5。",
+  tickers: [],
+};
+
+const crossRefCuration: NewsCuration = {
+  date: baseDate,
+  generatedAt: "2026-07-02T07:00:00.000Z",
+  leadIn: "クロスリファレンス検証用リード文。",
+  articles: [
+    articleXrefTickerVerdict,
+    articleXrefTickerNoVerdict,
+    articleXrefTheme,
+    articleXrefEscape,
+    articleXrefEmptyMapKey,
+  ],
 };
 
 function jstTime(iso: string): string {
@@ -250,5 +326,107 @@ describe("generateNewsDigestHtml", () => {
     expect(html).toContain(".news-card a:visited {");
     expect(html).toContain("#93c5fd");
     expect(html).toContain("#c4b5fd");
+  });
+});
+
+describe("crossref annotations (XREP-01, D-08/D-09/D-12)", () => {
+  it("byte-identical(2引数): 3rd引数省略時はdigest-crossref-rowを含まず既存出力と同一になる", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const html = generateNewsDigestHtml(validCuration, baseDate);
+
+    // CSSは常在するため(.digest-crossref-row{...})、実描画要素の不在はclass属性で判定する
+    expect(html).not.toContain('class="digest-crossref-row"');
+  });
+
+  it("byte-identical(空配列マップキー): tickerMatches/themeMatchesが共に空のキーはchip行を描画しない", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const crossRefMap: DigestCrossRefMap = {
+      [articleXrefEmptyMapKey.id]: { tickerMatches: [], themeMatches: [] },
+    };
+    const html = generateNewsDigestHtml(crossRefCuration, baseDate, crossRefMap);
+
+    // CSSは常在するため(.digest-crossref-row{...})、実描画要素の不在はclass属性で判定する
+    expect(html).not.toContain('class="digest-crossref-row"');
+  });
+
+  it("ティッカー一致(verdictあり): digest-crossref-row内に「🗣 ミーティング言及: NVDA」とverdict色付きstrongを含む", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const crossRefMap: DigestCrossRefMap = {
+      [articleXrefTickerVerdict.id]: {
+        tickerMatches: [{ symbol: "NVDA", verdict: "強気" }],
+        themeMatches: [],
+      },
+    };
+    const html = generateNewsDigestHtml(crossRefCuration, baseDate, crossRefMap);
+
+    expect(html).toContain('class="digest-crossref-row"');
+    expect(html).toContain("🗣 ミーティング言及:");
+    expect(html).toContain("NVDA");
+    expect(html).toContain('<strong style="color:#10b981">強気</strong>');
+  });
+
+  it("ティッカー一致(verdictなし): 「🗣 ミーティング言及: FXY」を含みそのchipにstrongタグを含まない", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const crossRefMap: DigestCrossRefMap = {
+      [articleXrefTickerNoVerdict.id]: {
+        tickerMatches: [{ symbol: "FXY" }],
+        themeMatches: [],
+      },
+    };
+    const html = generateNewsDigestHtml(crossRefCuration, baseDate, crossRefMap);
+    const cardStart = html.indexOf(articleXrefTickerNoVerdict.title);
+    const cardSection = html.slice(cardStart, cardStart + 500);
+
+    expect(html).toContain("🗣 ミーティング言及:");
+    expect(html).toContain("FXY");
+    expect(cardSection).not.toContain("<strong");
+  });
+
+  it("テーマ一致: 「🗣 関連テーマ: Healthcare」を含む", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const crossRefMap: DigestCrossRefMap = {
+      [articleXrefTheme.id]: {
+        tickerMatches: [],
+        themeMatches: [{ keyword: "Healthcare" }],
+      },
+    };
+    const html = generateNewsDigestHtml(crossRefCuration, baseDate, crossRefMap);
+
+    expect(html).toContain("🗣 関連テーマ:");
+    expect(html).toContain("Healthcare");
+  });
+
+  it("エスケープ: テーマキーワードに含まれるHTMLタグはescapeHtmlされ生の<imgが出力されない", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const crossRefMap: DigestCrossRefMap = {
+      [articleXrefEscape.id]: {
+        tickerMatches: [],
+        themeMatches: [{ keyword: "<img src=x>" }],
+      },
+    };
+    const html = generateNewsDigestHtml(crossRefCuration, baseDate, crossRefMap);
+
+    expect(html).toContain("&lt;img");
+    expect(html).not.toContain("<img src=x>");
+  });
+
+  it("配置順序: digest-crossref-rowはnews-metaの後・commentaryの前に出現する", async () => {
+    const { generateNewsDigestHtml } = await import("./generate-news-digest.js");
+    const crossRefMap: DigestCrossRefMap = {
+      [articleXrefTickerVerdict.id]: {
+        tickerMatches: [{ symbol: "NVDA", verdict: "強気" }],
+        themeMatches: [],
+      },
+    };
+    const html = generateNewsDigestHtml(crossRefCuration, baseDate, crossRefMap);
+
+    const idxMeta = html.indexOf('class="news-meta"');
+    const idxRow = html.indexOf('class="digest-crossref-row"');
+    const idxCommentary = html.indexOf(articleXrefTickerVerdict.commentary);
+    expect(idxMeta).toBeGreaterThan(-1);
+    expect(idxRow).toBeGreaterThan(-1);
+    expect(idxCommentary).toBeGreaterThan(-1);
+    expect(idxMeta).toBeLessThan(idxRow);
+    expect(idxRow).toBeLessThan(idxCommentary);
   });
 });

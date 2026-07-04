@@ -207,6 +207,20 @@ export function generateBaseStyles(accentColor: string): string {
       font-size: 0.85rem;
       margin-bottom: 0.5rem;
     }
+    .digest-crossref-chip {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #a78bfa;
+    }
+    .digest-crossref-row {
+      margin-bottom: 0.5rem;
+    }
     .news-card a {
       color: #93c5fd;
     }

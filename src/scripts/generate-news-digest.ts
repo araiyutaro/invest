@@ -1,5 +1,6 @@
-import { escapeHtml, generateBaseStyles, safeHref, formatPublishedAtJst } from "./report-utils.js";
+import { escapeHtml, generateBaseStyles, safeHref, formatPublishedAtJst, verdictColor } from "./report-utils.js";
 import type { NewsCuration, CuratedArticle } from "../meeting/types.js";
+import type { DigestCrossRef } from "../meeting/digest-crossref.js";
 
 const MARKET_ORDER: ReadonlyArray<{ value: CuratedArticle["market"]; label: string }> = [
   { value: "us", label: "米国株" },
@@ -44,7 +45,26 @@ function formatTickerPillsHtml(a: CuratedArticle): string {
     .join(" ");
 }
 
-function formatArticleCardHtml(a: CuratedArticle): string {
+function formatDigestCrossRefChipsHtml(annotation: DigestCrossRef | undefined): string {
+  // XREP-01/D-08/D-09/D-12: 注記なし(未定義 or 両配列とも空)の場合は空文字を返す(byte-identical契約)
+  if (annotation === undefined) return "";
+  if (annotation.tickerMatches.length === 0 && annotation.themeMatches.length === 0) return "";
+
+  const tickerChips = annotation.tickerMatches.map(({ symbol, verdict }) => {
+    const verdictPart = verdict === undefined
+      ? ""
+      : ` <strong style="color:${verdictColor(verdict)}">${escapeHtml(verdict)}</strong>`;
+    return `<span class="digest-crossref-chip">🗣 ミーティング言及: ${escapeHtml(symbol)}${verdictPart}</span>`;
+  });
+  const themeChips = annotation.themeMatches.map(({ keyword }) =>
+    `<span class="digest-crossref-chip">🗣 関連テーマ: ${escapeHtml(keyword)}</span>`,
+  );
+
+  const chipsHtml = [...tickerChips, ...themeChips].join(" ");
+  return `\n      <p class="digest-crossref-row">${chipsHtml}</p>`;
+}
+
+function formatArticleCardHtml(a: CuratedArticle, annotation?: DigestCrossRef): string {
   const badge = importanceBadgeHtml(a.importance);
   const timeJst = formatPublishedAtJst(a.publishedAt);
   const tickersHtml = formatTickerPillsHtml(a);
@@ -54,21 +74,25 @@ function formatArticleCardHtml(a: CuratedArticle): string {
     ? `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(a.title)}</a>`
     : escapeHtml(a.title);
   const metaTail = tickersHtml ? ` ・ ${tickersHtml}` : "";
+  const crossRefRowHtml = formatDigestCrossRefChipsHtml(annotation);
 
-  // D-03: 1行目バッジ+見出し / 2行目ソース・時刻・ティッカーのメタ行 / 3行目解説コメント
+  // D-03: 1行目バッジ+見出し / 2行目ソース・時刻・ティッカーのメタ行 / (新規)crossref注記行 / 3行目解説コメント
   return `<div class="agent-card news-card">
       <h4>${badge} ${titleHtml}</h4>
-      <p class="news-meta">${escapeHtml(a.source)} ・ ${escapeHtml(timeJst)}${metaTail}</p>
+      <p class="news-meta">${escapeHtml(a.source)} ・ ${escapeHtml(timeJst)}${metaTail}</p>${crossRefRowHtml}
       <p>${escapeHtml(a.commentary)}</p>
     </div>`;
 }
 
-function formatMarketGroupsHtml(articles: ReadonlyArray<CuratedArticle>): string {
+function formatMarketGroupsHtml(
+  articles: ReadonlyArray<CuratedArticle>,
+  crossRefMap?: Readonly<Record<string, DigestCrossRef>>,
+): string {
   return MARKET_ORDER.map(({ value, label }) => {
     const groupArticles = sortByImportance(articles.filter((a) => a.market === value));
     const bodyHtml = groupArticles.length === 0
       ? `<p class="agent-card">本日の該当記事なし</p>` // D-06: 0件市場グループも見出しは常時表示
-      : groupArticles.map(formatArticleCardHtml).join("\n");
+      : groupArticles.map((a) => formatArticleCardHtml(a, crossRefMap?.[a.id])).join("\n");
     return `<h2>${escapeHtml(label)}</h2>\n${bodyHtml}`;
   }).join("\n");
 }
@@ -101,7 +125,11 @@ function renderShell(styles: string, timestamp: string, date: string, bodyHtml: 
 </html>`;
 }
 
-export function generateNewsDigestHtml(curation: NewsCuration | null, date: string): string {
+export function generateNewsDigestHtml(
+  curation: NewsCuration | null,
+  date: string,
+  crossRefMap?: Readonly<Record<string, DigestCrossRef>>,
+): string {
   const styles = generateBaseStyles("#8b5cf6"); // D-10: パープルアクセント
   const timestamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
 
@@ -125,6 +153,6 @@ export function generateNewsDigestHtml(curation: NewsCuration | null, date: stri
     );
   }
 
-  const bodyHtml = formatLeadInHtml(curation.leadIn) + formatMarketGroupsHtml(curation.articles);
+  const bodyHtml = formatLeadInHtml(curation.leadIn) + formatMarketGroupsHtml(curation.articles, crossRefMap);
   return renderShell(styles, timestamp, curation.date, bodyHtml);
 }
