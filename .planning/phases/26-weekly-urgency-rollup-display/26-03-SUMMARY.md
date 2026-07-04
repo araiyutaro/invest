@@ -110,3 +110,14 @@ None — no external service configuration required. Zero new dependencies (D-13
 ---
 *Phase: 26-weekly-urgency-rollup-display*
 *Completed: 2026-07-04*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/report-data-loaders.ts
+- FOUND: src/scripts/report-data-loaders.test.ts
+- FOUND: src/scripts/generate-report.ts
+- FOUND: .planning/phases/26-weekly-urgency-rollup-display/26-03-SUMMARY.md
+- FOUND commit: 41cb4f6 (test - RED)
+- FOUND commit: 7ebd112 (feat - GREEN)
+- FOUND commit: 887d8b6 (feat - wiring)
+- FOUND commit: 2c334fb (docs - SUMMARY)
