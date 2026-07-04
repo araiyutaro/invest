@@ -14,7 +14,21 @@
 
 v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、AI厳選ニュースダイジェスト（news-digest.html）の4紙目追加、そして保有銘柄ごとのニュース・WebSearchリサーチを踏まえた売却・保有再考（v1.0「Web調査後の再評価」フローのv2.x再実装）を完了。ポートフォリオレポートは保有銘柄の意思決定に集中し、各保有銘柄カードにID参照方式の関連ニュース・緊急度フラグ（赤バッジ）・前日比の判断変化バッジ（TS側決定論的検出）を表示する。12銘柄のWebSearchリサーチは fail-soft な専用パイプラインステップ（Step 3-P）として実行され、失敗しても4レポートの生成・デプロイは継続する。
 
-**Next milestone:** 未定（/gsd-new-milestone で定義）。持ち越し候補: XREP-01（ダイジェスト記事とミーティングテーマの関連注記）、PORT-F1（緊急度フラグの履歴監査トレイル/週次ロールアップ）。残タスク: Phase 20/21/22 の HUMAN-UAT ライブ実行確認（明朝の launchd 実行で消化可能、STATE.md Deferred Items で追跡）。
+**Next milestone:** v2.6 Digest-Meeting Cross-Reference & Urgency History（進行中）。残タスク: Phase 20/21/22 の HUMAN-UAT ライブ実行確認（明朝の launchd 実行で消化可能、STATE.md Deferred Items で追跡）。
+
+## Current Milestone: v2.6 Digest-Meeting Cross-Reference & Urgency History
+
+**Goal:** ニュースダイジェストとミーティング分析の相互参照を実現し、緊急度フラグの履歴を永続化してポートフォリオの週次振り返りを可能にする。
+
+**Target features:**
+- XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（TS側決定論的マッチング — meeting-result.json のティッカー・テーマキーワードと照合、holding-news.ts と同じ設計思想）
+- PORT-F1: 緊急度フラグの履歴監査トレイル — リポジトリ内 `data/` ディレクトリに JSON で永続化、日次実行で追記コミット
+- PORT-F1 表示: portfolio.html 内に「今週の緊急フラグ履歴」週次ロールアップセクションを追加（新規ページなし）
+
+**Key context:**
+- 関連判定・履歴付与はいずれも LLM に頼らず TS 側決定論で実装（v2.5 の holding-news.ts / decision-diff.ts と同じ方針）
+- XREP-01 はパイプライン順序依存（ミーティング完了後にダイジェスト注記を付与）が生じるため、fail-soft 設計を踏襲
+- 緊急度履歴は公開 docs/ ではなく非公開の data/ に保存
 
 ## Requirements
 
@@ -58,11 +72,9 @@ v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 
 ### Active
 
-（なし — v2.5出荷済み、次マイルストーン未定義）
-
-持ち越し候補（v2.6+）:
-- XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（パイプライン順序依存が生じるためコア検証後に導入）
-- PORT-F1: 緊急度フラグの履歴監査トレイル / 週次ロールアップ（daily tmp/docs スナップショットを超える永続ストレージが必要）
+v2.6 対象（要件定義は REQUIREMENTS.md で確定）:
+- XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（TS側決定論的マッチング、fail-soft）
+- PORT-F1: 緊急度フラグの履歴監査トレイル（data/ 永続化）+ portfolio.html 週次ロールアップセクション
 
 ### Out of Scope
 
@@ -140,4 +152,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-04 after v2.5 milestone*
+*Last updated: 2026-07-04 — v2.6 milestone started*

@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v2.5
-milestone_name: Portfolio News Intelligence
-status: Awaiting next milestone
-stopped_at: Phase 23 UI-SPEC approved
-last_updated: "2026-07-04T00:18:57.065Z"
-last_activity: 2026-07-04 — Milestone v2.5 completed and archived
+milestone: v2.6
+milestone_name: Digest-Meeting Cross-Reference & Urgency History
+status: planning
+last_updated: "2026-07-04T00:50:04.069Z"
+last_activity: 2026-07-04
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 12
-  completed_plans: 12
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -25,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-07-04 after v2.5 milestone)
 
 ## Current Position
 
-Phase: Milestone v2.5 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-07-04 — Milestone v2.5 completed and archived
+Status: Defining requirements
+Last activity: 2026-07-04 — Milestone v2.6 started
 
 ## Performance Metrics
 
