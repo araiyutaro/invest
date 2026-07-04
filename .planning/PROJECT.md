@@ -14,7 +14,7 @@
 
 v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、AI厳選ニュースダイジェスト（news-digest.html）の4紙目追加、そして保有銘柄ごとのニュース・WebSearchリサーチを踏まえた売却・保有再考（v1.0「Web調査後の再評価」フローのv2.x再実装）を完了。ポートフォリオレポートは保有銘柄の意思決定に集中し、各保有銘柄カードにID参照方式の関連ニュース・緊急度フラグ（赤バッジ）・前日比の判断変化バッジ（TS側決定論的検出）を表示する。12銘柄のWebSearchリサーチは fail-soft な専用パイプラインステップ（Step 3-P）として実行され、失敗しても4レポートの生成・デプロイは継続する。
 
-**Next milestone:** v2.6 Digest-Meeting Cross-Reference & Urgency History（進行中）。残タスク: Phase 20/21/22 の HUMAN-UAT ライブ実行確認（明朝の launchd 実行で消化可能、STATE.md Deferred Items で追跡）。
+**Next milestone:** v2.6 Digest-Meeting Cross-Reference & Urgency History（進行中）。Phase 24（ダイジェスト-ミーティング相互参照）・Phase 25（緊急度履歴永続化 data/urgency-history.json）完了。残タスク: Phase 26（週次ロールアップ表示 HIST-03）、および Phase 20/21/22 の HUMAN-UAT ライブ実行確認（明朝の launchd 実行で消化可能、STATE.md Deferred Items で追跡）。
 
 ## Current Milestone: v2.6 Digest-Meeting Cross-Reference & Urgency History
 
@@ -69,12 +69,13 @@ v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 - ✓ 緊急度フラグ（urgent boolean、alias-transform硬化・重大材料判定基準付きプロンプト契約）とカードの赤「⚠ 緊急」バッジ — v2.5 (Phase 22, PORT-04/UI-07)
 - ✓ 前日判断スナップショット注入（同日再実行ガード付き）とTS側決定論的 decisionChanged 検出（undefined/false区別）+ アンバー「判断変更: 前日→当日」バッジ — v2.5 (Phase 22, PORT-05/UI-07)
 - ✓ ポートフォリオレポートから新規組入候補セクションを削除（通常・フォールバック両パス。portfolio-analyst への highlightedStocks 受け渡しは維持） — v2.5 (Phase 23, UI-08)
+- ✓ ニュースダイジェスト記事への当日ミーティング関連注記（TS側決定論マッチング・ticker優先+テーマ照合、fail-soft 専用STEPマーカー） — v2.6 (Phase 24, XREP-01/XREP-02)
+- ✓ 緊急度フラグ・判断の履歴監査トレイルを data/urgency-history.json に日次追記永続化（純関数 urgency-history.ts + fail-soft CLI write-urgency-history.ts、meeting-result date キー、同日上書きガード、Step 3f + Step 4 `git add docs/ data/`、全12銘柄スナップショット） — v2.6 (Phase 25, HIST-01/HIST-02)
 
 ### Active
 
-v2.6 対象（要件定義は REQUIREMENTS.md で確定）:
-- XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（TS側決定論的マッチング、fail-soft）
-- PORT-F1: 緊急度フラグの履歴監査トレイル（data/ 永続化）+ portfolio.html 週次ロールアップセクション
+v2.6 残タスク（要件定義は REQUIREMENTS.md で確定）:
+- HIST-03: portfolio.html 週次ロールアップ表示（直近7日間の緊急フラグ・判断変更履歴、data/urgency-history.json を読み取り側で決定論的に集計） — Phase 26
 
 ### Out of Scope
 
@@ -152,4 +153,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-04 — v2.6 milestone started*
+*Last updated: 2026-07-04 — Phase 25 complete (Urgency History Persistence, HIST-01/HIST-02)*
