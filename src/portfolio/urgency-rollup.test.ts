@@ -264,13 +264,13 @@ describe("computeWeeklyUrgencyRollup - garbage anchor", () => {
 });
 
 describe("computeWeeklyUrgencyRollup - corrupt snapshot entry", () => {
-  it("値が配列でない日付は throw せずスキップされる", () => {
+  it("WR-01: 値が配列でない日付は throw せずスキップされ、daysCovered にも数えられない", () => {
     const history = {
       "2026-07-01": "not-an-array",
       "2026-07-02": [makeSnapshot({ symbol: "MRNA", urgent: true })],
     } as unknown as UrgencyHistoryFile;
     const result = computeWeeklyUrgencyRollup(history, "2026-07-02");
-    expect(result.daysCovered).toBe(2);
+    expect(result.daysCovered).toBe(1);
     expect(result.symbols).toHaveLength(1);
     expect(result.symbols[0].urgentDates).toEqual(["2026-07-02"]);
   });
@@ -283,6 +283,32 @@ describe("computeWeeklyUrgencyRollup - corrupt snapshot entry", () => {
         makeSnapshot({ symbol: "MRNA", urgent: true }),
       ],
     } as unknown as UrgencyHistoryFile;
+    const result = computeWeeklyUrgencyRollup(history, "2026-07-01");
+    expect(result.symbols).toHaveLength(1);
+    expect(result.symbols[0].symbol).toBe("MRNA");
+  });
+
+  it("CR-03/WR-05: nameJa が非文字列のスナップショット要素は throw せずスキップされる", () => {
+    const history = {
+      "2026-07-01": [
+        { symbol: "CORRUPT", nameJa: 12345, urgent: true, decision: "保持" },
+        makeSnapshot({ symbol: "MRNA", urgent: true }),
+      ],
+    } as unknown as UrgencyHistoryFile;
+    expect(() => computeWeeklyUrgencyRollup(history, "2026-07-01")).not.toThrow();
+    const result = computeWeeklyUrgencyRollup(history, "2026-07-01");
+    expect(result.symbols).toHaveLength(1);
+    expect(result.symbols[0].symbol).toBe("MRNA");
+  });
+
+  it("CR-03/WR-05: decision が非文字列のスナップショット要素は throw せずスキップされる", () => {
+    const history = {
+      "2026-07-01": [
+        { symbol: "CORRUPT", nameJa: "壊れた要素", urgent: true, decision: 42 },
+        makeSnapshot({ symbol: "MRNA", urgent: true }),
+      ],
+    } as unknown as UrgencyHistoryFile;
+    expect(() => computeWeeklyUrgencyRollup(history, "2026-07-01")).not.toThrow();
     const result = computeWeeklyUrgencyRollup(history, "2026-07-01");
     expect(result.symbols).toHaveLength(1);
     expect(result.symbols[0].symbol).toBe("MRNA");

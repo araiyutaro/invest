@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import type { MeetingResult, WebSearchResult, ReevaluationOutput, AnalystRound1Output, AnalystRound2Output, AnalystRound3Output } from "../meeting/types.js";
-import type { UrgencyHistoryFile } from "../portfolio/urgency-history.js";
+import type { UrgencyHistoryFile, HoldingUrgencySnapshot } from "../portfolio/urgency-history.js";
 
 vi.mock("node:fs/promises", () => ({
   readFile: vi.fn().mockRejectedValue(new Error("ENOENT")),
@@ -591,6 +591,22 @@ describe("Weekly urgency rollup (HIST-03)", () => {
     const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyWithScript);
     expect(html).toContain("&lt;script&gt;");
     expect(html).not.toContain("<script>evil</script>");
+  });
+
+  it("CR-03/WR-05: nameJa が非文字列のスナップショットが混在しても throw せず正常な要素のみ描画される", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const historyWithCorruptNameJa: UrgencyHistoryFile = {
+      "2026-06-24": [
+        { symbol: "CORRUPT", nameJa: 12345, urgent: true, decision: "保持" } as unknown as HoldingUrgencySnapshot,
+        { symbol: "MRNA", nameJa: "モデルナ", urgent: true, decision: "保持" },
+      ],
+    };
+    expect(() =>
+      generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyWithCorruptNameJa),
+    ).not.toThrow();
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyWithCorruptNameJa);
+    expect(html).toContain("モデルナ");
+    expect(html).not.toContain("CORRUPT");
   });
 
   it("rollup: portfolioAnalysis === null でもフェイルソフトでロールアップが描画される", async () => {

@@ -101,12 +101,23 @@ export function computeWeeklyUrgencyRollup(
     .sort();
 
   const timelines = new Map<string, { nameJa: string; entries: TimelineEntry[] }>();
+  // WR-01: 実際に使用可能なスナップショットを1件以上含んだ日付のみを daysCovered に数える
+  // （配列でない/全要素が壊れている日を「カバーした」と誤って報告しないため）。
+  const usableDates = new Set<string>();
 
   for (const date of matchedDates) {
     const snapshots = history[date];
     if (!Array.isArray(snapshots)) continue;
     for (const s of snapshots) {
-      if (!s || typeof s.symbol !== "string") continue;
+      // CR-03: symbol に加えて nameJa/decision も文字列であることを検証してから採用する
+      // （非文字列値が escapeHtml へ渡って renderer 側で throw するのを防ぐ）。
+      if (
+        !s ||
+        typeof s.symbol !== "string" ||
+        typeof s.nameJa !== "string" ||
+        typeof s.decision !== "string"
+      ) continue;
+      usableDates.add(date);
       const timeline = timelines.get(s.symbol) ?? { nameJa: s.nameJa, entries: [] as TimelineEntry[] };
       timeline.entries.push({ date, urgent: s.urgent, decision: s.decision });
       timeline.nameJa = s.nameJa;
@@ -136,7 +147,7 @@ export function computeWeeklyUrgencyRollup(
   return {
     windowStart,
     windowEnd,
-    daysCovered: matchedDates.length,
+    daysCovered: usableDates.size,
     symbols: symbols.sort((a, b) => a.symbol.localeCompare(b.symbol)),
   };
 }
