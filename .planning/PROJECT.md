@@ -14,7 +14,7 @@
 
 v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、そしてAI厳選ニュースダイジェスト（news-digest.html）の4紙目追加を完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、4レポート（Daily Report / Meeting Minutes / Portfolio Report / News Digest）をGitHub Pagesへ自動デプロイする。ニュースキュレーションはID参照方式で幻覚URLを構造的に防止し、fail-soft設計により失敗時も既存3レポートの生成・デプロイに影響しない。
 
-**Next milestone:** v2.5 Portfolio News Intelligence（Phase 22 完了 — portfolio-analyst の再評価フローを実装: HoldingEvaluation に urgent フラグ（alias-transform 硬化+LLM偽装フィールドの strip）、invest.md Step 3d へリサーチ結果/前日判断の条件付きセクション（independent-then-compare・rationale 300字化）、attachDecisionChanges による TS側決定論的判断変化検出（undefined/false 区別）、カードの赤「⚠ 緊急」/アンバー「判断変更」バッジ。コードレビュー Warning 3 は全件修正済み（銘柄単位フェイルソフト・同日再実行ガード・Roundローダー警告ログ、286テスト green）。rationale 実言及・条件付きセクション動作・changed比率の複数日観測は 22-HUMAN-UAT.md で追跡中。次は Phase 23: New-Candidates Section Removal）
+**Next milestone:** v2.5 Portfolio News Intelligence（Phase 23 完了 — 全5フェーズ完了、マイルストーンクローズ待ち。Phase 23 でポートフォリオレポートから「新規組入候補（Daily Report より転載）」セクションを削除: formatNewCandidatesHtml 関数・通常/フォールバック両パスの呼び出し・未使用 import（scoreColor/verdictColor）を完全削除、Test 30 を非存在検証へ反転・Test 31 をフォールバックパス検証へ拡張（TDD RED→GREEN）。invest.md の highlightedStocks 受け渡し・types.ts・schemas.ts・report-utils.ts は無変更を diff で担保。コードレビュー Warning 2 は全件修正済み（PLTR データ流出検証アサーション追加・afterEach モックライフサイクル修正、286テスト green）。検証 4/4 must-haves passed。次は /gsd-complete-milestone または 22-HUMAN-UAT の消化）
 
 ## Current Milestone: v2.5 Portfolio News Intelligence
 
@@ -71,10 +71,11 @@ v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 - ✓ 保有銘柄別ニュース・リサーチ結果の判断根拠への反映（プロンプト契約+ガード指示。rationale実言及のライブ確認は22-HUMAN-UAT.mdで追跡） — v2.5 (Phase 22, PORT-03)
 - ✓ 緊急度フラグ（urgent boolean、alias-transform硬化・重大材料判定基準付きプロンプト契約）とカードの赤「⚠ 緊急」バッジ — v2.5 (Phase 22, PORT-04/UI-07)
 - ✓ 前日判断スナップショット注入（同日再実行ガード付き）とTS側決定論的 decisionChanged 検出（undefined/false区別）+ アンバー「判断変更: 前日→当日」バッジ — v2.5 (Phase 22, PORT-05/UI-07)
+- ✓ ポートフォリオレポートから新規組入候補セクションを削除（通常・フォールバック両パス。portfolio-analyst への highlightedStocks 受け渡しは維持） — v2.5 (Phase 23, UI-08)
 
 ### Active
 
-- [ ] ポートフォリオレポートから新規組入候補セクションを削除 — v2.5 (Phase 23, UI-08)
+（なし — v2.5 全要件実装済み）
 
 持ち越し候補（v2.6+）:
 - XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（パイプライン順序依存が生じるためコア検証後に導入）
@@ -148,4 +149,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-03 — Phase 22 (Portfolio-Analyst Re-Evaluation) complete*
+*Last updated: 2026-07-04 — Phase 23 (New-Candidates Section Removal) complete — v2.5 all phases done*
