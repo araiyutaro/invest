@@ -1,6 +1,9 @@
 import { escapeHtml, generateBaseStyles, safeHref, formatPublishedAtJst } from "./report-utils.js";
 import { normalizeHoldingSymbol } from "../portfolio/holding-news.js";
 import type { ResolvedHoldingNewsItem } from "../portfolio/holding-news.js";
+import { computeWeeklyUrgencyRollup, formatDateKeyShort } from "../portfolio/urgency-rollup.js";
+import type { WeeklyUrgencyRollup } from "../portfolio/urgency-rollup.js";
+import type { UrgencyHistoryFile } from "../portfolio/urgency-history.js";
 import type { MeetingResult, PortfolioAnalysis, HoldingEvaluation } from "../meeting/types.js";
 
 function decisionColor(decision: string): string {
@@ -99,13 +102,70 @@ function formatRebalanceActionsHtml(actions: ReadonlyArray<string>): string {
     <ul>${items}</ul>`;
 }
 
+/**
+ * D-06/D-08/D-09/D-10/D-14: 直近7暦日の緊急フラグ・判断変更ロールアップセクションを描画する。
+ * - D-08: 見出しは常に表示する（履歴が空でもセクション自体は省略しない）。
+ * - D-09: 3段階フォールバック — (1) 履歴が0件、(2) 履歴はあるが窓内の動きが0件、
+ *   (3) daysCovered<7 の部分集計（脚注付き）。いずれもエラーにしない。
+ * - D-06/D-07: 日付は formatDateKeyShort（MM/DD、純粋文字列変換）で描画し、
+ *   formatPublishedAtJst は使わない。symbol/nameJa/decision は escapeHtml を通す。
+ * - D-14: このセクションは portfolioAnalysis の有無に関わらず描画される
+ *   （呼び出し側で null 分岐にも同じ HTML を差し込む、フェイルソフト）。
+ */
+function formatWeeklyUrgencyRollupHtml(rollup: WeeklyUrgencyRollup, totalHistoryEntries: number): string {
+  const heading = `<h2>今週の緊急・判断変更ロールアップ</h2>`;
+
+  if (totalHistoryEntries === 0) {
+    return `${heading}
+    <div class="agent-card">
+      <p style="color:#888;font-size:0.85rem;">まだ緊急フラグ・判断変更の履歴がありません（履歴は日次で蓄積されます）</p>
+    </div>`;
+  }
+
+  const footnoteHtml = rollup.daysCovered < 7
+    ? `<p style="color:#888;font-size:0.85rem;margin-top:0.4rem;">（過去${rollup.daysCovered}日分の履歴に基づく）</p>`
+    : "";
+
+  if (rollup.symbols.length === 0) {
+    return `${heading}
+    <div class="agent-card">
+      <p style="color:#888;font-size:0.85rem;">今週は緊急フラグ・判断変更はありませんでした</p>
+      ${footnoteHtml}
+    </div>`;
+  }
+
+  const cards = rollup.symbols.map((s) => {
+    const urgentHtml = s.urgentDates.length > 0
+      ? `<p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: ${s.urgentDates.map(formatDateKeyShort).join(", ")}</p>`
+      : "";
+    const changesHtml = s.decisionChanges
+      .map((c) => `<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: ${formatDateKeyShort(c.date)} ${escapeHtml(c.from)} → ${escapeHtml(c.to)}</p>`)
+      .join("\n");
+    return `<div class="agent-card">
+      <h4>${escapeHtml(s.symbol)}${s.nameJa ? ` -- ${escapeHtml(s.nameJa)}` : ""}</h4>
+      ${urgentHtml}
+      ${changesHtml}
+    </div>`;
+  }).join("\n");
+
+  return `${heading}
+    ${cards}
+    ${footnoteHtml}`;
+}
+
 export function generatePortfolioReportHtml(
   result: MeetingResult,
   portfolioAnalysis: PortfolioAnalysis | null,
   resolvedHoldingNews: Record<string, ReadonlyArray<ResolvedHoldingNewsItem>> = {},
+  urgencyHistory: UrgencyHistoryFile = {},
 ): string {
   const styles = generateBaseStyles("#10b981");
   const timestamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+  // D-14: portfolioAnalysis の有無に関わらず算出する（null 分岐でもフェイルソフトで描画するため）
+  const weeklyRollupHtml = formatWeeklyUrgencyRollupHtml(
+    computeWeeklyUrgencyRollup(urgencyHistory, result.date),
+    Object.keys(urgencyHistory).length,
+  );
 
   if (portfolioAnalysis === null) {
     return `<!DOCTYPE html>
@@ -123,6 +183,7 @@ export function generatePortfolioReportHtml(
     <div class="agent-card">
       <p>本日のポートフォリオ分析は生成されませんでした。</p>
     </div>
+    ${weeklyRollupHtml}
   </div>
 </body>
 </html>`;
@@ -145,6 +206,7 @@ export function generatePortfolioReportHtml(
     <h1>Portfolio Report - ${escapeHtml(result.date)}</h1>
     <p class="timestamp">生成日時: ${timestamp}</p>
     ${overallCommentHtml}
+    ${weeklyRollupHtml}
     ${holdingEvaluationsHtml}
     ${rebalanceActionsHtml}
   </div>
