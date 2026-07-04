@@ -468,7 +468,7 @@ for (const agent of agents) {
 }
 
 // ポートフォリオ保有銘柄を除外（デイリーミーティングはポートフォリオと独立した分析）
-const portfolioSymbols = new Set(['MRNA','JOBY','HII','POWL','FLNC','EE','8522.T','5885.T','5576.T','7711.T','NXT','BWMX']);
+const portfolioSymbols = new Set(['MRNA','JOBY','HII','POWL','BRBR','EE','8522.T','5885.T','5576.T','7711.T','NXT','BWMX']);
 const tickers = Array.from(tickerSet).filter(t => !portfolioSymbols.has(t));
 fs.writeFileSync('/Users/arai/invest/tmp/moderator-tickers.json', JSON.stringify({ tickers }, null, 2));
 console.log('ティッカー抽出: ' + tickers.length + '銘柄を特定（ポートフォリオ保有銘柄は除外済み）');
@@ -1094,7 +1094,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     ## 重要な注意事項
     - highlightedStocks には Round 3 でスコアリングされた銘柄（tmp/moderator-tickers.json のリスト）のみを含めること
-    - ポートフォリオ保有銘柄（MRNA, JOBY, HII, POWL, FLNC, EE, 8522.T, 5885.T, 5576.T, 7711.T, NXT, BWMX）は highlightedStocks に絶対に含めないこと。デイリーミーティングはポートフォリオとは独立した市場分析である
+    - ポートフォリオ保有銘柄（MRNA, JOBY, HII, POWL, BRBR, EE, 8522.T, 5885.T, 5576.T, 7711.T, NXT, BWMX）は highlightedStocks に絶対に含めないこと。デイリーミーティングはポートフォリオとは独立した市場分析である
     - 注目銘柄は中小型株を優先（NVIDIA、Apple、Microsoft、Google等の大型株は避ける）
     - 各銘柄の verdict は必ずスコア計算結果に基づく
     - レポート内容は日本語で記述
