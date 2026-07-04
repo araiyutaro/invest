@@ -445,14 +445,16 @@ Not applicable in the conventional sense (no external library/framework version 
 
 **If this table is empty:** N/A — see above; all three assumptions are LOW risk and are already mitigated by the recommendations in this document.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should `data/urgency-history.json`'s top-level date keys be written in sorted order for git-diff readability?**
+   - **RESOLVED:** Leave as insertion-order (D-04's literal spec). Not required by any locked decision; the plans add no sort step. See recommendation below.
    - What we know: D-04's exact reference implementation (`{ ...history, [dateKey]: snapshots }`) appends the new key at object-insertion-order end, not sorted. `JSON.stringify` preserves that insertion order for non-numeric-like string keys (confirmed: `"YYYY-MM-DD"` keys are not valid array indices, so insertion order is preserved, not renumbered).
    - What's unclear: The phase's goal explicitly frames this as "監査可能な履歴" (an auditable history) — a human reviewing `git diff` on this file might find a sorted (e.g. descending) key order easier to audit than pure append order, especially since D-03 guarantees no pruning, so the file only grows.
    - Recommendation: Not required by any locked decision or success criterion — leave as insertion-order (D-04's literal spec) unless the planner judges the audit-readability benefit worth a small additional step (e.g. sort keys immediately before `JSON.stringify` in `write-urgency-history.ts`, outside the pure `appendUrgencySnapshot` function so the pure function's contract stays exactly as D-04 specifies).
 
-2. **Does `write-urgency-history.ts` need to guard against `tmp/meeting-result.json` itself being missing/malformed?**
+2. **(RESOLVED) Does `write-urgency-history.ts` need to guard against `tmp/meeting-result.json` itself being missing/malformed?**
+   - **RESOLVED:** No special-casing — let it throw and be caught by the outer `main().catch()`, surfacing as `[STEP:urgency-history:FAIL:...]` (consistent with the `write-news-digest.ts` precedent). Fail-soft at the pipeline level is preserved. See recommendation below.
    - What we know: `write-news-digest.ts`'s existing precedent reads `meeting-result.json` *outside* its own outer try/catch, so a missing/malformed file there simply throws, gets caught by `main().catch(...)`, and exits 1 — which is fine because news-digest's failure is already fail-soft at the invest.md pipeline level.
    - What's unclear: Whether the planner wants `write-urgency-history.ts` to treat a missing `meeting-result.json` as its own distinct D-13-style "skip, OK" case (since technically no urgency data can be attributed to a date without it) versus simply inheriting the same throw-and-exit-1 behavior as the news-digest precedent (which becomes a `[STEP:urgency-history:FAIL:...]`, still fail-soft at the pipeline level either way).
    - Recommendation: Either choice satisfies HIST-01/HIST-02 and the fail-soft requirement (D-09) since both result in the pipeline continuing regardless; for consistency with the established `write-news-digest.ts` precedent, this research recommends *not* special-casing this (let it throw and be caught by the outer `main().catch()`, surfacing as `[STEP:urgency-history:FAIL:...]`) rather than adding a new distinct skip path — but this is a low-stakes discretionary choice for the planner.

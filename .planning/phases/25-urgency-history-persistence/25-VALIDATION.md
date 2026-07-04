@@ -1,8 +1,8 @@
 ---
 phase: 25
 slug: urgency-history-persistence
-status: draft
-nyquist_compliant: false
+status: approved
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-07-04
 ---
@@ -75,6 +75,6 @@ created: 2026-07-04
 - [ ] Wave 0 covers all MISSING references
 - [ ] No watch-mode flags
 - [ ] Feedback latency < 15s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved 2026-07-04 (plan-checker Dimension 8 checks 8a–8d all pass)
