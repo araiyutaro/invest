@@ -382,7 +382,11 @@ Not applicable in the external-library sense — this is a purely internal archi
 
 **If this table is empty:** N/A — see entries above; none of these threaten the phase's core Success Criteria, but A2 and A3 should be surfaced to the planner as concrete design choices to make explicit in PLAN.md rather than left implicit.
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+> **Both resolved during planning (Phase 24 plans 24-01..24-03).**
+> - **Q1 → RESOLVED (Plan 24-03, "LOCKED DESIGN DECISION"):** Option (a) — `write-news-digest.ts`'s isolated crossref catch emits a distinctly-prefixed stderr line (`[digest-crossref] OK` / `[digest-crossref] FAIL:`); `invest.md` Step 3e observes it and echoes the dedicated `[STEP:digest-crossref:OK|FAIL:...]` marker. Chosen over (b) for zero new file I/O and to preserve the existing invest.md-only STEP-echo invariant.
+> - **Q2 → RESOLVED (24-UI-SPEC.md Copywriting Contract):** Display the stripped English sector label as-is (e.g. "🗣 関連テーマ: Healthcare"); no English→Japanese translation dictionary introduced this phase (consistent with `generate-daily-report.ts:33` displaying `sector` verbatim). Japanese labels are a deferred follow-up.
 
 1. **How exactly should the crossref STEP marker be signaled from script to `invest.md`?**
    - What we know: Every existing `[STEP:*]` marker is `echo`'d directly in `invest.md`, driven either by a shell exit code (`news-digest`, `deploy`, `report-generation`) or by the calling agent's own count/observation during the pipeline (`round-1`'s "3人以上失敗" check happens in agent-executed logic, not a script exit code). `write-news-digest.ts`'s single exit code is already claimed by `[STEP:news-digest:*]` and, per D-13, must NOT be affected by crossref failure — so a second, independent signal channel is needed.
