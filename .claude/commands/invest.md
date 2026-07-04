@@ -1911,6 +1911,32 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 ---
 
+### Step 3f: 緊急度履歴の追記（レポート生成の前に実行 — 当日分を当日レポートに含めるため）
+
+「緊急度履歴を記録中...」とユーザーに表示してください。
+
+以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/write-urgency-history.ts
+```
+
+スクリプトの終了コードに関わらず、次のステップ（Step 3c: レポート生成）へ進んでください（fail-soft, D-09）。write-urgency-history.ts は tmp/portfolio-analysis.json（Step 3d の出力）から当日の緊急度スナップショットを data/urgency-history.json に追記する。generate-report.ts はこの履歴を読んで週次ロールアップ（Phase 26 / HIST-03）を描画するため、**必ずレポート生成（Step 3c）より前に実行すること**（当日分を当日レポートに含める。Step 3f をレポート生成後に置くと当日の緊急フラグ・判断変更が翌日のレポートまで反映されない）。
+
+終了コードが 0 の場合:
+```bash
+echo '[STEP:urgency-history:OK]'
+```
+
+終了コードが非0の場合、標準エラー出力の `[urgency-history] FAIL:` 行に続く理由を短く要約して出力してください:
+```bash
+echo '[STEP:urgency-history:FAIL:<短い理由>]'
+```
+
+**`[PIPELINE:FAIL]` は絶対に出力しないこと** — この失敗は既存3レポート・ニュースダイジェスト・デプロイをブロックしない（HIST-01/HIST-02の永続化失敗は既存パイプラインの継続を妨げない。履歴書き込みが失敗した場合、ロールアップは前日までの履歴で描画される）。
+
+---
+
 ### Step 3c: HTMLレポート生成
 
 「Bloomberg風HTMLレポートを生成中...」とユーザーに表示してください。
@@ -2050,32 +2076,6 @@ m.newsDigestEnd = Date.now();
 fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(m, null, 2));
 "
 ```
-
----
-
-### Step 3f: 緊急度履歴の追記
-
-「緊急度履歴を記録中...」とユーザーに表示してください。
-
-以下のBashコマンドを実行してください:
-
-```bash
-cd /Users/arai/invest && npx tsx src/scripts/write-urgency-history.ts
-```
-
-スクリプトの終了コードに関わらず、Step 4 へ進んでください（fail-soft, D-09）。
-
-終了コードが 0 の場合:
-```bash
-echo '[STEP:urgency-history:OK]'
-```
-
-終了コードが非0の場合、標準エラー出力の `[urgency-history] FAIL:` 行に続く理由を短く要約して出力してください:
-```bash
-echo '[STEP:urgency-history:FAIL:<短い理由>]'
-```
-
-**`[PIPELINE:FAIL]` は絶対に出力しないこと** — この失敗は既存3レポート・ニュースダイジェスト・デプロイをブロックしない（HIST-01/HIST-02の永続化失敗は既存パイプラインの継続を妨げない）。
 
 ---
 
