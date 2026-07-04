@@ -213,6 +213,31 @@ describe("computeWeeklyUrgencyRollup - garbage anchor", () => {
       symbols: [],
     });
   });
+
+  it("CR-01/WR-05: 正規表現には合致するが暦日として実在しない anchorDate (2026-13-01) でも throw せず空ロールアップを返す", () => {
+    const history = makeHistory({
+      "2026-07-01": [makeSnapshot({ symbol: "MRNA", urgent: true })],
+    });
+    expect(() => computeWeeklyUrgencyRollup(history, "2026-13-01")).not.toThrow();
+    const result = computeWeeklyUrgencyRollup(history, "2026-13-01");
+    expect(result).toEqual({
+      windowStart: "2026-13-01",
+      windowEnd: "2026-13-01",
+      daysCovered: 0,
+      symbols: [],
+    });
+  });
+
+  it("CR-01/WR-05: 月末ロールオーバーする anchorDate (2026-02-30) でも throw せず空ロールアップを返す", () => {
+    expect(() => computeWeeklyUrgencyRollup({}, "2026-02-30")).not.toThrow();
+    const result = computeWeeklyUrgencyRollup({}, "2026-02-30");
+    expect(result).toEqual({
+      windowStart: "2026-02-30",
+      windowEnd: "2026-02-30",
+      daysCovered: 0,
+      symbols: [],
+    });
+  });
 });
 
 describe("computeWeeklyUrgencyRollup - corrupt snapshot entry", () => {

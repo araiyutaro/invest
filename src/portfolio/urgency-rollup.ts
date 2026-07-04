@@ -43,6 +43,17 @@ function addDaysUtc(dateKey: string, days: number): string {
   return new Date(ms).toISOString().slice(0, 10);
 }
 
+/**
+ * CR-01: isValidDateKey は正規表現の形状のみ検証するため "2026-13-01" 等の暦日として
+ * 実在しない値も通過してしまう。Date.parse に暦日を丸め込ませず（NaN も含め）実在する
+ * 暦日のみを受理するため、パース結果を再度 YYYY-MM-DD に戻して往復一致を確認する。
+ */
+function isRealCalendarDate(dateKey: string): boolean {
+  const ms = Date.parse(`${dateKey}T00:00:00Z`);
+  if (Number.isNaN(ms)) return false;
+  return new Date(ms).toISOString().slice(0, 10) === dateKey;
+}
+
 interface TimelineEntry {
   readonly date: string;
   readonly urgent: boolean;
@@ -69,12 +80,14 @@ export function computeWeeklyUrgencyRollup(
   history: UrgencyHistoryFile,
   anchorDate: string,
 ): WeeklyUrgencyRollup {
-  if (!isValidDateKey(anchorDate)) {
+  if (!isValidDateKey(anchorDate) || !isRealCalendarDate(anchorDate)) {
     return { windowStart: anchorDate, windowEnd: anchorDate, daysCovered: 0, symbols: [] };
   }
 
   const windowStart = addDaysUtc(anchorDate, -(WINDOW_DAYS - 1));
-  const windowEnd = anchorDate;
+  // WR-04: windowStart と同じ UTC 正規化パスを通す（anchorDate 自体は CR-01 で暦日実在性を
+  // 検証済みのためロールオーバーは起きないが、windowStart/windowEnd の計算方式を統一する）。
+  const windowEnd = addDaysUtc(anchorDate, 0);
 
   const matchedDates = Object.keys(history)
     .filter(isValidDateKey)
