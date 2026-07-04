@@ -10,8 +10,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### クロスリファレンス（XREP）
 
-- [ ] **XREP-01**: ユーザーはニュースダイジェスト（news-digest.html）の記事に、当日ミーティングで議論されたテーマ・銘柄への関連注記を見ることができる（meeting-result.json とのTS側決定論的マッチング — ティッカー一致優先+テーマキーワード照合、holding-news.ts と同じ設計思想）
-- [ ] **XREP-02**: クロスリファレンス付与が失敗しても news-digest.html の生成と既存3レポートの生成・デプロイは継続する（fail-soft、専用 STEP マーカーで失敗可視化）
+- [x] **XREP-01**: ユーザーはニュースダイジェスト（news-digest.html）の記事に、当日ミーティングで議論されたテーマ・銘柄への関連注記を見ることができる（meeting-result.json とのTS側決定論的マッチング — ティッカー一致優先+テーマキーワード照合、holding-news.ts と同じ設計思想）
+- [x] **XREP-02**: クロスリファレンス付与が失敗しても news-digest.html の生成と既存3レポートの生成・デプロイは継続する（fail-soft、専用 STEP マーカーで失敗可視化）
 
 ### 緊急度履歴（HIST）
 
@@ -43,8 +43,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| XREP-01 | Phase 24 | Pending |
-| XREP-02 | Phase 24 | Pending |
+| XREP-01 | Phase 24 | Complete |
+| XREP-02 | Phase 24 | Complete |
 | HIST-01 | Phase 25 | Pending |
 | HIST-02 | Phase 25 | Pending |
 | HIST-03 | Phase 26 | Pending |
