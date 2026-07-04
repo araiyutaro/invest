@@ -77,6 +77,70 @@ describe("write-news-digest main()", () => {
     expect(process.exit).not.toHaveBeenCalledWith(1);
   });
 
+  describe("crossref fail-soft isolation (XREP-02, D-13)", () => {
+    it("Test 4: crossref例外(meeting-result.jsonがvalidateMeetingResultの形状を満たさない) -- digestは正常に書き出され exit code に影響しない", async () => {
+      const fsMock = await import("node:fs/promises");
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      // date はあるが highlightedStocks/sectorRecommendations/roundSummary 等の必須フィールドを欠く
+      // -- validateMeetingResult が投げる不正な MeetingResult 形状(crossref側の失敗であり、curationは有効)
+      const invalidMeetingResultJson = JSON.stringify({ date: "2026-06-24" });
+      (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+        const p = String(path);
+        if (p.includes("meeting-result.json")) return Promise.resolve(invalidMeetingResultJson);
+        if (p.includes("news-curation.json")) return Promise.resolve(validRawCurationJson);
+        if (p.includes("news.json")) return Promise.resolve(validPoolJson);
+        return Promise.reject(new Error("ENOENT"));
+      });
+
+      const { main } = await import("./write-news-digest.js");
+      await main();
+
+      const writeCalls = (fsMock.writeFile as ReturnType<typeof vi.fn>).mock.calls;
+      const digestCall = writeCalls.find((call) => String(call[0]).includes("news-digest.html"));
+      expect(digestCall).toBeDefined();
+      expect(String(digestCall![1])).not.toContain("生成できませんでした");
+      expect(process.exit).not.toHaveBeenCalledWith(1);
+
+      const errorMessages = consoleErrorSpy.mock.calls.map((call) => call.join(" "));
+      expect(errorMessages.some((msg) => msg.includes("[digest-crossref] FAIL"))).toBe(true);
+    });
+
+    it("Test 5: crossref成功時 -- '[digest-crossref] OK' シグナルが出力される", async () => {
+      const fsMock = await import("node:fs/promises");
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const validFullMeetingResultJson = JSON.stringify({
+        date: "2026-06-24",
+        generatedAt: "2026-06-24T00:00:00.000Z",
+        marketOverview: { summary: "", trend: "混合", keyIndices: [] },
+        highlightedStocks: [],
+        sectorRecommendations: [],
+        riskWarnings: [],
+        actionItems: [],
+        weeklyEvents: [],
+        indexInvestorAdvice: "",
+        roundSummary: { round1Count: 0, round2Count: 0, round3Count: 0, scoredTickers: [] },
+      });
+      (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
+        const p = String(path);
+        if (p.includes("meeting-result.json")) return Promise.resolve(validFullMeetingResultJson);
+        if (p.includes("news-curation.json")) return Promise.resolve(validRawCurationJson);
+        if (p.includes("news.json")) return Promise.resolve(validPoolJson);
+        return Promise.reject(new Error("ENOENT"));
+      });
+
+      const { main } = await import("./write-news-digest.js");
+      await main();
+
+      const writeCalls = (fsMock.writeFile as ReturnType<typeof vi.fn>).mock.calls;
+      const digestCall = writeCalls.find((call) => String(call[0]).includes("news-digest.html"));
+      expect(digestCall).toBeDefined();
+      expect(process.exit).not.toHaveBeenCalledWith(1);
+
+      const errorMessages = consoleErrorSpy.mock.calls.map((call) => call.join(" "));
+      expect(errorMessages.some((msg) => msg.includes("[digest-crossref] OK"))).toBe(true);
+    });
+  });
+
   it("Test 2: curation欠損(ENOENT) -- フォールバックHTMLを書き出し exit code 1", async () => {
     const fsMock = await import("node:fs/promises");
     (fsMock.readFile as ReturnType<typeof vi.fn>).mockImplementation((path: string) => {
