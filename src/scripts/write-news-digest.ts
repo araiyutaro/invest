@@ -14,7 +14,10 @@ export async function main(): Promise<void> {
   // date は上流で検証済みの meeting-result.json からのみ取得する。
   // news-curation.json (LLM生成、信頼できない) から date を導出しない (T-17-03: パストラバーサル対策)。
   const meetingRaw = await readFile(join(TMP_DIR, "meeting-result.json"), "utf-8");
-  const { date } = JSON.parse(meetingRaw) as { date: string };
+  // WR-04: parse meeting-result.json once and reuse for both `date` and the crossref
+  // block below (avoids a redundant second JSON.parse of the same in-memory string).
+  const meetingParsed = JSON.parse(meetingRaw) as { date: string };
+  const { date } = meetingParsed;
 
   const dateDir = join(DOCS_DIR, date);
   await mkdir(dateDir, { recursive: true });
@@ -30,7 +33,7 @@ export async function main(): Promise<void> {
     // 例外はcrossRefMapを空のまま残すのみで、digestのexit code/フォールバック表示には一切影響しない(T-24-02)。
     let crossRefMap: DigestCrossRefMap = {};
     try {
-      const meetingResult = validateMeetingResult(JSON.parse(meetingRaw));
+      const meetingResult = validateMeetingResult(meetingParsed);
       crossRefMap = buildDigestCrossRefMap(curation, meetingResult);
       console.error("[digest-crossref] OK");
     } catch (crossRefError) {

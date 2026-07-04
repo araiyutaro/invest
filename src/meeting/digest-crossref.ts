@@ -76,15 +76,25 @@ export function buildDigestCrossRefMap(
     .map((s) => extractThemeKeyword(s.sector))
     .filter((keyword) => keyword.length > 0);
 
-  const map: Record<string, DigestCrossRef> = {};
+  // CR-01: null-prototype map so a reserved article id (e.g. "toString") can never
+  // resolve to an inherited Object.prototype member on lookup (crossRefMap[a.id]).
+  // Article ids are structurally "n01".."n99" today, but this hardens the contract
+  // for any future id source and keeps the fail-soft guarantee intact.
+  const map: Record<string, DigestCrossRef> = Object.create(null);
 
   for (const article of curation.articles) {
     const tickerMatches: DigestTickerMatch[] = [];
+    // WR-01: dedup by normalized symbol so case/whitespace variants of the same
+    // ticker (e.g. ["XLV", " xlv "]) don't consume two of the MAX_TICKER cap slots.
+    const seenSymbols = new Set<string>();
     for (const ticker of article.tickers) {
       const norm = normalizeHoldingSymbol(ticker);
+      if (seenSymbols.has(norm)) continue;
       if (verdictByTicker.has(norm)) {
+        seenSymbols.add(norm);
         tickerMatches.push({ symbol: norm, verdict: verdictByTicker.get(norm) });
       } else if (scoredTickerSet.has(norm)) {
+        seenSymbols.add(norm);
         tickerMatches.push({ symbol: norm });
       }
     }

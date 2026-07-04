@@ -289,3 +289,54 @@ describe("digest-crossref fail-soft (D-11)", () => {
     expect(Object.keys(result)).not.toContain("n10");
   });
 });
+
+describe("digest-crossref prototype-key safety (CR-01)", () => {
+  it("予約語IDの未一致記事は継承プロパティを返さず undefined になる", () => {
+    // 記事IDは構造的に n01.. だが、null-prototypeマップにより将来のID源でも
+    // Object.prototype 継承（toString等）がlookupで漏れないことを保証する。
+    const article = makeCuratedArticle({ id: "toString", title: "無関係", tickers: [] });
+    const curation = makeCuration([article]);
+    const meetingResult = makeMeetingResult({});
+
+    const result = buildDigestCrossRefMap(curation, meetingResult);
+
+    expect(result["toString"]).toBeUndefined();
+    expect((result as Record<string, unknown>)["constructor"]).toBeUndefined();
+    expect((result as Record<string, unknown>)["hasOwnProperty"]).toBeUndefined();
+  });
+
+  it("予約語IDでも一致があれば正しく注記を返す", () => {
+    const article = makeCuratedArticle({ id: "constructor", tickers: ["XLV"] });
+    const curation = makeCuration([article]);
+    const meetingResult = makeMeetingResult({
+      highlightedStocks: [
+        { ticker: "XLV", averageScore: 6, verdict: "強気", summary: "", agentScores: [], nominatedBy: [] },
+      ],
+    });
+
+    const result = buildDigestCrossRefMap(curation, meetingResult);
+
+    expect(result["constructor"].tickerMatches).toEqual([{ symbol: "XLV", verdict: "強気" }]);
+  });
+});
+
+describe("digest-crossref ticker dedup (WR-01)", () => {
+  it("同一シンボルの大小文字・空白ゆらぎは1件に重複排除しキャップ枠を浪費しない", () => {
+    const article = makeCuratedArticle({ id: "n11", tickers: ["XLV", " xlv ", "XLF"] });
+    const curation = makeCuration([article]);
+    const meetingResult = makeMeetingResult({
+      highlightedStocks: [
+        { ticker: "XLV", averageScore: 6, verdict: "強気", summary: "", agentScores: [], nominatedBy: [] },
+        { ticker: "XLF", averageScore: 5, verdict: "中立", summary: "", agentScores: [], nominatedBy: [] },
+      ],
+    });
+
+    const result = buildDigestCrossRefMap(curation, meetingResult);
+
+    // XLV(重複2件)は1件に集約され、XLFも残る（キャップ2件を "xlv" 重複で浪費しない）
+    expect(result["n11"].tickerMatches).toEqual([
+      { symbol: "XLV", verdict: "強気" },
+      { symbol: "XLF", verdict: "中立" },
+    ]);
+  });
+});

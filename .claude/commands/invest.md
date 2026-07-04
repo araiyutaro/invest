@@ -2030,6 +2030,11 @@ echo '[STEP:digest-crossref:OK]'
 echo '[STEP:digest-crossref:FAIL:<短い理由>]'
 ```
 
+出力に `[digest-crossref] OK` も `[digest-crossref] FAIL` も**どちらも含まれない**場合（WR-03: ニュースダイジェスト本体がキュレーション読込・検証の段階で失敗し、クロスリファレンスブロックに到達する前に write-news-digest.ts の外側 catch で終了したケース）は、クロスリファレンスが実行されなかったことを示す SKIP マーカーを出力してください:
+```bash
+echo '[STEP:digest-crossref:SKIP:ニュースダイジェスト本体が失敗しクロスリファレンス未実行]'
+```
+
 **この場合も `[PIPELINE:FAIL]` は絶対に出力しないこと** — クロスリファレンス失敗は既存3レポート・ニュースダイジェスト本体の生成・デプロイを一切ブロックしない（OPS-04）。`[STEP:digest-crossref:*]` は `[STEP:news-digest:*]` とは独立したマーカーであり、ニュースダイジェスト自体の成否とは無関係に評価すること。
 
 終了コードが 0 の場合は「ニュースダイジェスト生成完了: docs/{date}/news-digest.html (4紙目)」、非0の場合は「警告: ニュースダイジェスト生成に失敗しましたが、パイプラインは続行します（フォールバックページを表示）」とユーザーに表示してください。
