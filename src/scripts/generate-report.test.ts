@@ -362,6 +362,9 @@ describe("Portfolio Report", () => {
     const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis);
     expect(html).not.toContain("新規組入候補");
     expect(html).not.toContain("Daily Reportのアナリストミーティングで推奨された銘柄です");
+    // highlightedStocks 由来データの流出再発検出 (WR-01): validPortfolioAnalysis は PLTR を含まないため安全に非存在を検証できる
+    expect(html).not.toContain("PLTR");
+    expect(html).not.toContain("スコアリングマトリクス");
   });
 
   it("Test 31: portfolioAnalysis が null の場合フォールバック HTML を返す", async () => {
@@ -371,6 +374,9 @@ describe("Portfolio Report", () => {
     expect(html).toContain("Portfolio Report");
     expect(html).not.toContain("保有銘柄 個別評価");
     expect(html).not.toContain("新規組入候補");
+    // フォールバックパスも Test 30 と対称に highlightedStocks 由来データの非存在を検証 (WR-01)
+    expect(html).not.toContain("PLTR");
+    expect(html).not.toContain("Daily Reportのアナリストミーティングで推奨された銘柄です");
   });
 
   it("Test 32: decision バッジに正しい色が使われる", async () => {
