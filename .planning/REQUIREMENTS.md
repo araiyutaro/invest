@@ -43,17 +43,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| XREP-01 | — | Pending |
-| XREP-02 | — | Pending |
-| HIST-01 | — | Pending |
-| HIST-02 | — | Pending |
-| HIST-03 | — | Pending |
+| XREP-01 | Phase 24 | Pending |
+| XREP-02 | Phase 24 | Pending |
+| HIST-01 | Phase 25 | Pending |
+| HIST-02 | Phase 25 | Pending |
+| HIST-03 | Phase 26 | Pending |
 
 **Coverage:**
 - v2.6 requirements: 5 total
-- Mapped to phases: 0
-- Unmapped: 5 ⚠️ (roadmap 作成時に解消)
+- Mapped to phases: 5
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-07-04*
-*Last updated: 2026-07-04 after initial definition*
+*Last updated: 2026-07-04 after roadmap creation (Phases 24-26)*

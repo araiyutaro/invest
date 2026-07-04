@@ -8,6 +8,7 @@
 - ✅ **v2.3 Analysis Quality & Operational Stability** — Phases 11-14.1 (shipped 2026-07-01)
 - ✅ **v2.4 News Curation Report** — Phases 15-18 (shipped 2026-07-03)
 - ✅ **v2.5 Portfolio News Intelligence** — Phases 19-23 (shipped 2026-07-04)
+- 🚧 **v2.6 Digest-Meeting Cross-Reference & Urgency History** — Phases 24-26 (in progress)
 
 ## Phases
 
@@ -95,6 +96,49 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 
 </details>
 
+### 🚧 v2.6 Digest-Meeting Cross-Reference & Urgency History (Phases 24-26) — IN PROGRESS
+
+ニュースダイジェストとミーティング分析の相互参照を実現し、緊急度フラグの履歴を永続化してポートフォリオの週次振り返りを可能にする。
+
+- [ ] **Phase 24: Digest-Meeting Cross-Reference** — ニュースダイジェスト記事への当日ミーティング関連注記をTS側決定論的マッチングで付与（fail-soft）
+- [ ] **Phase 25: Urgency History Persistence** — 保有銘柄の緊急度フラグ・判断を data/urgency-history.json に日次追記（同日再実行ガード付き）
+- [ ] **Phase 26: Weekly Urgency Rollup Display** — portfolio.html に直近7日間の緊急フラグ・判断変更履歴のロールアップセクションを追加
+
+## Phase Details
+
+### Phase 24: Digest-Meeting Cross-Reference
+**Goal**: ニュースダイジェスト（news-digest.html）の閲覧者が、各記事が当日ミーティングでどう議論されたかを一目で把握でき、その関連注記はLLMの幻覚ではなく決定論的なティッカー・キーワード照合で生成される
+**Depends on**: Nothing (v2.5完了時点のnews-digest.html/meeting-result.jsonを基盤とする、v2.6内で最初のフェーズ)
+**Requirements**: XREP-01, XREP-02
+**Success Criteria** (what must be TRUE):
+  1. ユーザーは news-digest.html の記事に、当日ミーティングで議論されたテーマ・銘柄への関連注記（バッジ等の視覚的マーカー）を確認できる
+  2. 関連注記は meeting-result.json のティッカー一致優先+テーマキーワード照合によるTS側決定論的マッチングで生成され、holding-news.ts と同じ設計思想（LLMの追加呼び出しなし・幻覚URLなし）に従う
+  3. クロスリファレンス処理が例外を投げても、news-digest.html および既存3レポートの生成・デプロイパイプラインは正常に完了し、専用の STEP マーカーで失敗が可視化される
+  4. 当日ミーティングで議論されていない記事は、注記なしで通常通り表示される（0件時のフォールバック、レイアウト崩れなし）
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 25: Urgency History Persistence
+**Goal**: 保有銘柄の緊急度フラグと判断が、日次実行のたびに監査可能な履歴としてリポジトリ内に永続化され、同日の再実行によって履歴が壊れない
+**Depends on**: Nothing (Phase 24とは独立、v2.5で確立した urgent/decision フィールドを基盤とする)
+**Requirements**: HIST-01, HIST-02
+**Success Criteria** (what must be TRUE):
+  1. パイプライン実行後、data/urgency-history.json に当日の日付キーで保有12銘柄それぞれの urgent フラグと decision が記録されている
+  2. data/urgency-history.json は git commit/push フローに含まれ、リポジトリ（非公開の data/、公開 docs/ ではない）に永続化される
+  3. 同日中に複数回パイプラインを実行しても、同日エントリは重複追加されず上書きされる（v2.5 の同日再実行ガードと同方式）
+**Plans**: TBD
+
+### Phase 26: Weekly Urgency Rollup Display
+**Goal**: ユーザーは portfolio.html 上で、直近1週間にどの保有銘柄が緊急フラグや判断変更の対象になったかを振り返ることができる
+**Depends on**: Phase 25 (ロールアップの描画には data/urgency-history.json の永続化された履歴データが必要)
+**Requirements**: HIST-03
+**Success Criteria** (what must be TRUE):
+  1. ユーザーは portfolio.html で「今週の緊急フラグ履歴」等の週次ロールアップセクションを確認できる（新規ページの追加はなし）
+  2. ロールアップは data/urgency-history.json の直近7日間のエントリから、銘柄ごとの緊急フラグ発生日・判断変更を集計して表示する
+  3. 履歴データが0件または7日に満たない場合でも、セクションはエラーにならず適切な空状態・部分表示を示す
+**Plans**: TBD
+**UI hint**: yes
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -123,6 +167,9 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 | 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete    | 2026-07-03 |
 | 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
+| 24. Digest-Meeting Cross-Reference | v2.6 | 0/? | Not started | - |
+| 25. Urgency History Persistence | v2.6 | 0/? | Not started | - |
+| 26. Weekly Urgency Rollup Display | v2.6 | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-06-24*
@@ -132,4 +179,5 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 *Milestone v2.3 shipped: 2026-07-01*
 *Milestone v2.4 shipped: 2026-07-03*
 *Milestone v2.5 shipped: 2026-07-04*
+*Milestone v2.6 roadmap created: 2026-07-04*
 </content>
