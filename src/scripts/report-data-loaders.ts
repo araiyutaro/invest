@@ -4,8 +4,10 @@ import { analystRound1OutputSchema, analystRound2OutputSchema, analystRound3Outp
 import type { NewsArticlePoolEntry } from "../meeting/schemas.js";
 import type { AnalystRound1Output, AnalystRound2Output, AnalystRound3Output, PortfolioAnalysis } from "../meeting/types.js";
 import type { HoldingNewsFile } from "../portfolio/holding-news.js";
+import type { UrgencyHistoryFile } from "../portfolio/urgency-history.js";
 
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
+const DATA_DIR = join(import.meta.dirname, "../../data");
 
 export async function loadRound1Results(): Promise<ReadonlyArray<AnalystRound1Output>> {
   const roundDir = join(TMP_DIR, "round-1");
@@ -128,6 +130,22 @@ export async function loadHoldingNews(): Promise<HoldingNewsFile> {
     return JSON.parse(raw) as HoldingNewsFile;
   } catch (error) {
     console.error("Holding news load failed:", error instanceof Error ? error.message : error);
+    return {};
+  }
+}
+
+/**
+ * data/urgency-history.json（Phase 25生成）を fail-soft で読み込む。
+ * 自社TS生成物のため zod は使わず、loadHoldingNews と同じ型アサーションを用いる（D-13）。
+ * 欠損（初回実行・履歴未蓄積）は正常系のため console.warn を用いる
+ * （loadPrevPortfolioAnalysis と同じ severity 方針、D-13/D-14）。
+ */
+export async function loadUrgencyHistory(): Promise<UrgencyHistoryFile> {
+  try {
+    const raw = await readFile(join(DATA_DIR, "urgency-history.json"), "utf-8");
+    return JSON.parse(raw) as UrgencyHistoryFile;
+  } catch (error) {
+    console.warn("Urgency history load failed (expected on first run / fail-soft, HIST-03):", error instanceof Error ? error.message : error);
     return {};
   }
 }
