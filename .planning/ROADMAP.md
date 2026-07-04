@@ -7,7 +7,7 @@
 - ✅ **v2.2 News Quality & Pipeline Metrics** — Phases 8-10 (shipped 2026-06-28)
 - ✅ **v2.3 Analysis Quality & Operational Stability** — Phases 11-14.1 (shipped 2026-07-01)
 - ✅ **v2.4 News Curation Report** — Phases 15-18 (shipped 2026-07-03)
-- 🚧 **v2.5 Portfolio News Intelligence** — Phases 19-23 (in progress)
+- ✅ **v2.5 Portfolio News Intelligence** — Phases 19-23 (shipped 2026-07-04)
 
 ## Phases
 
@@ -80,79 +80,20 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 
 </details>
 
-### 🚧 v2.5 Portfolio News Intelligence (Phases 19-23) — IN PROGRESS
+<details>
+<summary>✅ v2.5 Portfolio News Intelligence (Phases 19-23) — SHIPPED 2026-07-04</summary>
 
 保有銘柄ごとのニュースとWebSearchリサーチを踏まえた売却・保有再考をポートフォリオ分析に復活させ、レポートを保有銘柄の意思決定に集中させる（v1.0「Web調査後の再評価」フローのv2.x再実装）。
 
-- [x] **Phase 19: Data Foundation & Holding-News Supply** — finnhub.tsティッカー汚染バグ修正 + 決定論的な保有銘柄別ニュース抽出をportfolio-analystへ供給 (completed 2026-07-03)
-- [x] **Phase 20: Holding-Card News Display** — 保有銘柄カードへのID参照方式ニュース表示（見出し・ソース・リンク、0件時の正常描画） (completed 2026-07-03)
-- [x] **Phase 21: Portfolio WebSearch Research** — 保有銘柄ごとのWebSearchリサーチをfail-softな新設パイプラインステップとして実行 (completed 2026-07-03)
-- [x] **Phase 22: Portfolio-Analyst Re-Evaluation** — ニュース・リサーチを踏まえた判断根拠、緊急度フラグ、前日比較の決定論的判断変化検出 (completed 2026-07-03)
-- [x] **Phase 23: New-Candidates Section Removal** — ポートフォリオレポートから新規組入候補セクションを削除（成功・フォールバック両パス） (completed 2026-07-03)
+- [x] **Phase 19: Data Foundation & Holding-News Supply** (3/3 plans) — completed 2026-07-03 — finnhub.tsティッカー汚染バグ修正 + 決定論的な保有銘柄別ニュース抽出をportfolio-analystへ供給
+- [x] **Phase 20: Holding-Card News Display** (2/2 plans) — completed 2026-07-03 — 保有銘柄カードへのID参照方式ニュース表示（見出し・ソース・リンク、0件時の正常描画）
+- [x] **Phase 21: Portfolio WebSearch Research** (2/2 plans) — completed 2026-07-03 — 保有銘柄ごとのWebSearchリサーチをfail-softな新設パイプラインステップとして実行
+- [x] **Phase 22: Portfolio-Analyst Re-Evaluation** (4/4 plans) — completed 2026-07-03 — ニュース・リサーチを踏まえた判断根拠、緊急度フラグ、前日比較の決定論的判断変化検出
+- [x] **Phase 23: New-Candidates Section Removal** (1/1 plan) — completed 2026-07-04 — ポートフォリオレポートから新規組入候補セクションを削除（成功・フォールバック両パス）
 
-## Phase Details
+Full details: `.planning/milestones/v2.5-ROADMAP.md`
 
-### Phase 19: Data Foundation & Holding-News Supply
-**Goal**: portfolio-analyst が、汚染のないティッカーデータに基づいて決定論的に抽出された保有銘柄別関連ニュースを入力として受け取る
-**Depends on**: Nothing (first phase of v2.5)
-**Requirements**: NEWS-04, PORT-01
-**Success Criteria** (what must be TRUE):
-  1. データ収集パイプライン実行後、tmp/news.json の一般記事・M&A記事の ticker フィールドが、複数の配列インデックス位置で検証しても常に undefined である（配列インデックス混入がない）
-  2. tmp/news.json と12銘柄の保有リストから、ticker一致による決定論的な保有銘柄別ニュースマッピング（優先度スコア順・銘柄あたり上限付き）が生成され、ユニットテストでカバーされている
-  3. portfolio-analyst のプロンプトに、保有銘柄ごとの関連ニュースが明示的な入力セクションとして含まれている
-**Plans**: 3 plans
-- [x] 19-01-PLAN.md — finnhub.ts index-as-ticker バグ修正 + NEWS-04 回帰テスト (Wave 1)
-- [x] 19-02-PLAN.md — 決定論的な保有銘柄別ニュース抽出モジュール(TDD) + matchAliases (Wave 1)
-- [x] 19-03-PLAN.md — collect-data 統合(holding-news.json) + portfolio-analyst プロンプト入力セクション (Wave 2)
-
-### Phase 20: Holding-Card News Display
-**Goal**: レポート閲覧者が各保有銘柄カード上で、その判断根拠となった関連ニュースを直接確認できる
-**Depends on**: Phase 19
-**Requirements**: UI-05, UI-06
-**Success Criteria** (what must be TRUE):
-  1. 各保有銘柄カードに、tmp/news.json をID参照方式で照合解決した関連ニュース（見出し・ソース名・元記事リンク）が銘柄あたり3〜5件の上限付きで表示される（幻覚URLが構造的に発生しない）
-  2. 関連ニュースが0件の保有銘柄（日本株の小型株等）も、エラーやレイアウト崩れなく通常のカードとして描画され、「本日の関連ニュースなし」等の明示的な空状態が表示される
-**Plans**: 2 plans
-  - [x] 20-01-PLAN.md — 決定論的データ層: resolvePortfolioHoldingNews リゾルバー・fail-soft ローダー・共通ヘルパー汎化
-  - [x] 20-02-PLAN.md — 保有銘柄カードのニュースサブセクション描画（空状態含む）とパイプライン配線
-**UI hint**: yes
-
-### Phase 21: Portfolio WebSearch Research
-**Goal**: 保有銘柄ごとに最新材料のWebSearchリサーチが実行され、一部または全部が失敗してもパイプライン全体が継続する
-**Depends on**: Nothing new (12銘柄の保有リストのみに依存、Phase 19/20と並行実装可能)
-**Requirements**: PORT-02, OPS-05
-**Success Criteria** (what must be TRUE):
-  1. 12銘柄それぞれについてWebSearchによる最新材料リサーチ（決算・訴訟・規制変更・大型契約・ガイダンス変更等）が実行され、結果が tmp/portfolio-research/{symbol}.json という Daily Report 用ディレクトリ（tmp/websearch/）とは分離された専用領域に保存される
-  2. 一部または全部の銘柄でWebSearchリサーチが失敗しても、ポートフォリオレポートを含む4レポート全ての生成・デプロイが継続し、専用の [STEP:portfolio-research:*] マーカーで失敗が可視化される
-**Plans**: 2 plans
-- [x] 21-01-PLAN.md — TS/スキーマ層: webSearchResultSchema alias-transform 硬化 + validate-portfolio-research.ts + Daily Report 隔離テスト (PORT-02)
-- [x] 21-02-PLAN.md — invest.md オーケストレーション: Step 3-P 保有12銘柄WebSearchリサーチ（社名併記クエリ・エンティティ確認・fail-soft マーカー・metrics）(PORT-02, OPS-05)
-
-### Phase 22: Portfolio-Analyst Re-Evaluation
-**Goal**: 保有銘柄の売却・保有判断が、ニュース・リサーチ結果を踏まえた再考であることがレポート上で確認でき、重大材料と前日からの判断変化が視覚的に強調される
-**Depends on**: Phase 19, Phase 21
-**Requirements**: PORT-03, PORT-04, PORT-05, UI-07
-**Success Criteria** (what must be TRUE):
-  1. 保有銘柄に関連ニュースやリサーチ結果が存在する場合、その銘柄の売却・保有判断（rationale）がその内容へ明示的に言及している
-  2. 決算ミス・訴訟・規制変更・大型契約・ガイダンス引下げ等の重大材料を検知した保有銘柄に緊急度フラグ（urgent）が付与され、カード上に赤/アンバー系の視覚的強調として表示される
-  3. 前日のポートフォリオ判断スナップショットとの差分がTS側で決定論的に計算され（LLM自己申告ではない）、判断が変化した銘柄のカードに変化バッジが表示される
-**Plans**: 4 plans
-- [x] 22-01-PLAN.md — 型・スキーマ契約: HoldingEvaluation 拡張 + urgent alias-transform 硬化 + decisionChanged/previousDecision strip (Wave 1)
-- [x] 22-02-PLAN.md — invest.md Step 3d: 前日退避スニペット + リサーチ/前日判断セクション + urgent 契約・rationale 300文字化 (Wave 1)
-- [x] 22-03-PLAN.md — decision-diff.ts(TDD): 決定論的 attachDecisionChanges（前日スナップショット等値比較・undefined区別） (Wave 2)
-- [x] 22-04-PLAN.md — レポート生成層: loadPrevPortfolioAnalysis + main() 配線 + Pitfall7 backfill + 緊急/判断変化バッジ (Wave 3)
-**UI hint**: yes
-
-### Phase 23: New-Candidates Section Removal
-**Goal**: ポートフォリオレポートが保有銘柄の意思決定に集中し、Daily Reportと重複する新規組入候補セクションが表示されない
-**Depends on**: Phase 22
-**Requirements**: UI-08
-**Success Criteria** (what must be TRUE):
-  1. ポートフォリオレポートHTMLに「新規組入候補」セクションが、通常パス（portfolioAnalysis 有り）・フォールバックパス（portfolioAnalysis === null）の両方で存在しない
-  2. portfolio-analyst への文脈情報としての highlightedStocks の受け渡しは維持されている（プロンプト入力からは削除されない）
-**Plans**: 1 plan
-- [x] 23-01-PLAN.md — formatNewCandidatesHtml 削除(両パス)+未使用 import 除去 / Test 30 反転・Test 31 拡張(TDD)+受け渡し維持 grep 検証 (Wave 1)
-**UI hint**: yes
+</details>
 
 ## Progress
 
@@ -190,5 +131,5 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 *Milestone v2.2 shipped: 2026-06-28*
 *Milestone v2.3 shipped: 2026-07-01*
 *Milestone v2.4 shipped: 2026-07-03*
-*Milestone v2.5 roadmap created: 2026-07-03*
+*Milestone v2.5 shipped: 2026-07-04*
 </content>

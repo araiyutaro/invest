@@ -1,5 +1,31 @@
 # Milestones
 
+## v2.5 Portfolio News Intelligence (Shipped: 2026-07-04)
+
+**Phases completed:** 5 phases (19-23), 12 plans, 24 tasks
+**Timeline:** 2026-07-03 → 2026-07-04 (2 days)
+**Changes:** src/ + .claude/ で23ファイル変更 (+2,169 / -101)、165コミット
+**Git range:** docs: start milestone v2.5 (65f133a) → docs(phase-23): add security threat verification (8ab5ed2)
+
+**Delivered:** 保有銘柄ごとのニュースとWebSearchリサーチを踏まえた売却・保有再考をポートフォリオ分析に復活させ、レポートを保有銘柄の意思決定に集中させた（v1.0「Web調査後の再評価」フローのv2.x再実装）。
+
+**Key accomplishments:**
+
+- finnhub.ts の index-as-ticker 汚染バグをTDDで修正し、ticker一致ロジックの信頼できるデータ土台を確立（Phase 19, NEWS-04）
+- 決定論的な保有銘柄別ニュース抽出（holding-news.ts、ticker一致優先+社名フォールバック・上限5件）→ tmp/holding-news.json → portfolio-analyst プロンプト注入の供給ラインを完成（Phase 19, PORT-01）
+- 保有銘柄カードにID参照方式の関連ニュースサブセクション（見出し・ソース・安全リンク、0件時の明示的空状態）を描画（Phase 20, UI-05/UI-06）
+- 保有12銘柄のWebSearchリサーチを fail-soft な新設パイプラインステップ Step 3-P として実装し、tmp/portfolio-research/{symbol}.json へ分離保存 + [STEP:portfolio-research:*] マーカーで失敗可視化（Phase 21, PORT-02/OPS-05）
+- urgent 緊急度フラグ（alias硬化スキーマ+重大材料判定プロンプト契約）と、TS側決定論的 decisionChanged 検出（attachDecisionChanges、前日スナップショット等値比較）+ 赤「⚠ 緊急」/アンバー「判断変更」バッジ（Phase 22, PORT-03/04/05, UI-07）
+- ポートフォリオレポートから「新規組入候補」セクションを通常・フォールバック両パスで削除、highlightedStocks の文脈受け渡しは維持（Phase 23, UI-08）
+
+**Requirements:** 11/11 complete（NEWS-04, PORT-01〜05, UI-05〜08, OPS-05 — traceability全Complete）
+
+**Audit:** 個別マイルストーン監査はスキップ（全フェーズ VERIFICATION passed・要件トレーサビリティ全Complete のため。v2.4と同様の判断）。pre-close artifact audit: Phase 20/21/22 の Human-UAT / 実行時検証 6件をdeferredとして記録。
+
+Known deferred items at close: 6 (see STATE.md Deferred Items)
+
+---
+
 ## v2.4 News Curation Report (Shipped: 2026-07-03)
 
 **Phases completed:** 4 phases (15-18), 9 plans, 17 tasks

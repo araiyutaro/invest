@@ -10,28 +10,11 @@
 
 ## Current State
 
-**Shipped:** v2.4 News Curation Report (2026-07-03)
+**Shipped:** v2.5 Portfolio News Intelligence (2026-07-04)
 
-v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、そしてAI厳選ニュースダイジェスト（news-digest.html）の4紙目追加を完了。毎日の自動実行パイプライン（launchd経由）が失敗ステップを特定できるログ・通知を備え、4レポート（Daily Report / Meeting Minutes / Portfolio Report / News Digest）をGitHub Pagesへ自動デプロイする。ニュースキュレーションはID参照方式で幻覚URLを構造的に防止し、fail-soft設計により失敗時も既存3レポートの生成・デプロイに影響しない。
+v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、AI厳選ニュースダイジェスト（news-digest.html）の4紙目追加、そして保有銘柄ごとのニュース・WebSearchリサーチを踏まえた売却・保有再考（v1.0「Web調査後の再評価」フローのv2.x再実装）を完了。ポートフォリオレポートは保有銘柄の意思決定に集中し、各保有銘柄カードにID参照方式の関連ニュース・緊急度フラグ（赤バッジ）・前日比の判断変化バッジ（TS側決定論的検出）を表示する。12銘柄のWebSearchリサーチは fail-soft な専用パイプラインステップ（Step 3-P）として実行され、失敗しても4レポートの生成・デプロイは継続する。
 
-**Next milestone:** v2.5 Portfolio News Intelligence（Phase 23 完了 — 全5フェーズ完了、マイルストーンクローズ待ち。Phase 23 でポートフォリオレポートから「新規組入候補（Daily Report より転載）」セクションを削除: formatNewCandidatesHtml 関数・通常/フォールバック両パスの呼び出し・未使用 import（scoreColor/verdictColor）を完全削除、Test 30 を非存在検証へ反転・Test 31 をフォールバックパス検証へ拡張（TDD RED→GREEN）。invest.md の highlightedStocks 受け渡し・types.ts・schemas.ts・report-utils.ts は無変更を diff で担保。コードレビュー Warning 2 は全件修正済み（PLTR データ流出検証アサーション追加・afterEach モックライフサイクル修正、286テスト green）。検証 4/4 must-haves passed。次は /gsd-complete-milestone または 22-HUMAN-UAT の消化）
-
-## Current Milestone: v2.5 Portfolio News Intelligence
-
-**Goal:** 保有銘柄ごとのニュースとWebSearchリサーチを踏まえた売却・保有再考をポートフォリオ分析に復活させ、レポートを保有銘柄の意思決定に集中させる（v1.0の「Web調査後の再評価」フローのv2.x再実装）
-
-**Target features:**
-- 保有銘柄別ニュース供給 — tmp/news.json からticker一致で抽出し portfolio-analyst に注入、判断根拠へ必須反映
-- WebSearch銘柄別リサーチ復活 — 保有銘柄ごとの最新材料調査と初期判断の再評価（判断変更・緊急情報の指摘）
-- 保有銘柄カードに関連ニュース表示 — 見出し・ソース・元記事リンク（ID参照方式の前例踏襲で幻覚URL防止）
-- 新規組入候補セクション削除 — formatNewCandidatesHtml をレンダラーから削除（portfolio-analyst への文脈情報は維持）
-- ticker汚染バグ修正 — finnhub.ts:43 の配列インデックス混入を修正（本機能のデータ土台）
-
-**Key context:**
-- v2.3実装済みのFinnhubポートフォリオティッカー別ニュース取得が土台（供給パイプの接続が主作業）
-- v1.0の実装前例は git 履歴 `ba01275^:src/portfolio/runner.ts`（研究→再評価フロー）と `src/data/research.ts`（銘柄別リサーチ）に残存
-- WebSearch追加で日次パイプライン実行時間が増加（12銘柄分、並列化設計はフェーズで詰める）
-- fail-soft原則踏襲: リサーチ失敗時もポートフォリオレポート自体は生成継続
+**Next milestone:** 未定（/gsd-new-milestone で定義）。持ち越し候補: XREP-01（ダイジェスト記事とミーティングテーマの関連注記）、PORT-F1（緊急度フラグの履歴監査トレイル/週次ロールアップ）。残タスク: Phase 20/21/22 の HUMAN-UAT ライブ実行確認（明朝の launchd 実行で消化可能、STATE.md Deferred Items で追跡）。
 
 ## Requirements
 
@@ -75,10 +58,11 @@ v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 
 ### Active
 
-（なし — v2.5 全要件実装済み）
+（なし — v2.5出荷済み、次マイルストーン未定義）
 
 持ち越し候補（v2.6+）:
 - XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（パイプライン順序依存が生じるためコア検証後に導入）
+- PORT-F1: 緊急度フラグの履歴監査トレイル / 週次ロールアップ（daily tmp/docs スナップショットを超える永続ストレージが必要）
 
 ### Out of Scope
 
@@ -103,6 +87,7 @@ v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 - 自動実行は launchd（毎朝実行）で scripts/run.sh 経由。STEPマーカー（stream-jsonログ）・EXIT_CODE捕捉・terminal-notifier通知・docs HTMLのSHA256チェックサム保護を備える
 - パイプライン実行時間を performance.now() で計測し、ステップ別に最終出力表示
 - v2.4 で4紙目の news-digest.html を追加: news-curator（opus 2体並列）が tmp/news.json のID付き記事プールから10〜15件を選定 → tmp/news-curation.json（ID参照方式）→ write-news-digest.ts が zod 二層バリデーション + generateNewsDigestHtml で描画。fail-soft設計（専用 [STEP:news-digest:*] マーカー、失敗時も既存3レポート継続）。index.html リンクは fs.access() 実在チェックで条件付き出し分け
+- v2.5 で保有銘柄インテリジェンスを追加: buildHoldingNewsMap（holding-news.ts）が tmp/news.json から ticker一致+社名フォールバックで保有銘柄別ニュースを決定論的に抽出 → tmp/holding-news.json → portfolio-analyst プロンプト注入。invest.md Step 3-P が保有12銘柄のWebSearchリサーチを並列実行し tmp/portfolio-research/{symbol}.json へ分離保存（fail-soft、[STEP:portfolio-research:*]）。HoldingEvaluation は urgent フラグ（alias硬化）を持ち、decisionChanged は attachDecisionChanges（decision-diff.ts）が前日スナップショットとの等値比較でTS側決定論的に付与。保有銘柄カードに関連ニュースサブセクション・緊急/判断変更バッジを描画。新規組入候補セクションは削除済み
 
 ## Constraints
 
@@ -130,6 +115,12 @@ v2.0〜v2.4で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 | news-digest fail-soft分離 | 既存3レポートのPromise.allから独立したtry/catch + 専用STEPマーカー、失敗が本流を妨げない | ✓ Good (Phase 17, ライブ検証済み) |
 | news-curator は opus 2体並列 | portfolio-analystと同格の品質を確保、記事プールはURL以外の全フィールドのみ渡す | ✓ Good (Phase 17) |
 | index.htmlリンクはfs実在チェックから毎回導出 | パース済みリンクを毎回strip→再導出し、404リンク排除 + 古いリンクの自己修復 | ✓ Good (Phase 18, 118日分ライブ検証) |
+| 保有銘柄別ニュース抽出はTS側決定論 | ticker一致優先+タイトルのみ社名フォールバック（matchAliases）、LLM選定に頼らず再現性を確保 | ✓ Good (Phase 19) |
+| ポートフォリオリサーチを tmp/portfolio-research/ に分離 | Daily Report 用 tmp/websearch/ との構造的隔離で相互汚染を防止（隔離テスト付き） | ✓ Good (Phase 21) |
+| LLM出力スキーマは passthrough().transform() で alias 硬化 | フィールド名ゆらぎ（summary/findings等）を正準形に吸収し、ハードエラーでパイプラインを止めない | ✓ Good (Phase 21, 22) |
+| decisionChanged はTS側決定論的検出 | LLM自己申告を信用せず、前日スナップショットとの decision enum 等値比較で付与（TS専用フィールドはスキーマ transform で構造的に strip） | ✓ Good (Phase 22) |
+| independent-then-compare 構成 | 前日判断を「まず独立評価→その後比較」の順でプロンプト注入しアンカリングを抑制、同日再実行ガード付き退避 | ✓ Good (Phase 22) |
+| 新規組入候補はDaily Report専任 | ポートフォリオレポートの二重目的化を解消、highlightedStocks は文脈情報として受け渡しのみ維持 | ✓ Good (Phase 23) |
 
 ## Evolution
 
@@ -149,4 +140,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-04 — Phase 23 (New-Candidates Section Removal) complete — v2.5 all phases done*
+*Last updated: 2026-07-04 after v2.5 milestone*
