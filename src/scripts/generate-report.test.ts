@@ -528,7 +528,10 @@ describe("3-report output", () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    // WR-02: restoreAllMocks はモジュールトップレベルの process.exit スパイと
+    // vi.mock ファクトリの fs モック実装まで破壊し順序依存を生むため、
+    // 呼び出し履歴のみクリアする clearAllMocks を使う（実装とスパイは維持）
+    vi.clearAllMocks();
   });
 
   it("Test 9: main() が docs/YYYY-MM-DD/daily-report.html にファイルを書き出す（fs mock 経由で確認）", async () => {
