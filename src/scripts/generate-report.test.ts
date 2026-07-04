@@ -555,6 +555,17 @@ describe("Weekly urgency rollup (HIST-03)", () => {
     expect(html).toContain("まだ緊急フラグ・判断変更の履歴がありません（履歴は日次で蓄積されます）");
   });
 
+  it("WR-02/WR-05: 不正キーのみの history では Tier1（履歴なし）が正しく選択される", async () => {
+    const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
+    const historyOnlyInvalidKeys = {
+      "__proto__": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: true, decision: "保持" }],
+      "not-a-date": [{ symbol: "MRNA", nameJa: "モデルナ", urgent: true, decision: "保持" }],
+    } as unknown as UrgencyHistoryFile;
+    const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyOnlyInvalidKeys);
+    expect(html).toContain("まだ緊急フラグ・判断変更の履歴がありません（履歴は日次で蓄積されます）");
+    expect(html).not.toContain("今週は緊急フラグ・判断変更はありませんでした");
+  });
+
   it("rollup: Tier2 空状態 — 履歴はあるが窓内の動きがゼロの場合、定型メッセージが表示される", async () => {
     const { generatePortfolioReportHtml } = await import("./generate-portfolio-report.js");
     const html = generatePortfolioReportHtml(validMeetingResult, validPortfolioAnalysis, {}, historyZeroMovement);

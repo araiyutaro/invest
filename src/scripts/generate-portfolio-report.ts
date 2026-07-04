@@ -3,6 +3,7 @@ import { normalizeHoldingSymbol } from "../portfolio/holding-news.js";
 import type { ResolvedHoldingNewsItem } from "../portfolio/holding-news.js";
 import { computeWeeklyUrgencyRollup, formatDateKeyShort } from "../portfolio/urgency-rollup.js";
 import type { WeeklyUrgencyRollup } from "../portfolio/urgency-rollup.js";
+import { isValidDateKey } from "../portfolio/urgency-history.js";
 import type { UrgencyHistoryFile } from "../portfolio/urgency-history.js";
 import type { MeetingResult, PortfolioAnalysis, HoldingEvaluation } from "../meeting/types.js";
 
@@ -162,9 +163,11 @@ export function generatePortfolioReportHtml(
   const styles = generateBaseStyles("#10b981");
   const timestamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
   // D-14: portfolioAnalysis の有無に関わらず算出する（null 分岐でもフェイルソフトで描画するため）
+  // WR-02: totalHistoryEntries は isValidDateKey を通した有効な日付キーのみを数える
+  // （"__proto__"/"not-a-date" 等の不正キーのみの history で誤って Tier2 を選んでしまうのを防ぐ）。
   const weeklyRollupHtml = formatWeeklyUrgencyRollupHtml(
     computeWeeklyUrgencyRollup(urgencyHistory, result.date),
-    Object.keys(urgencyHistory).length,
+    Object.keys(urgencyHistory).filter(isValidDateKey).length,
   );
 
   if (portfolioAnalysis === null) {
