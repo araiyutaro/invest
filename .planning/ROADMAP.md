@@ -130,7 +130,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
   2. data/urgency-history.json は git commit/push フローに含まれ、リポジトリ（非公開の data/、公開 docs/ ではない）に永続化される
   3. 同日中に複数回パイプラインを実行しても、同日エントリは重複追加されず上書きされる（v2.5 の同日再実行ガードと同方式）
 **Plans**: 2 plans (2 waves)
-- [ ] 25-01-PLAN.md — 純関数モジュール src/portfolio/urgency-history.ts + テスト（TDD: 4フィールド抽出・同日上書き・イミュータビリティ・dateKey検証、HIST-01/HIST-02）
+- [x] 25-01-PLAN.md — 純関数モジュール src/portfolio/urgency-history.ts + テスト（TDD: 4フィールド抽出・同日上書き・イミュータビリティ・dateKey検証、HIST-01/HIST-02）
 - [ ] 25-02-PLAN.md — CLIラッパー write-urgency-history.ts（mkdir先行・fail-soft）+ invest.md Step 3f/Step 4 git add docs/ data/ 統合（HIST-01/HIST-02）
 
 ### Phase 26: Weekly Urgency Rollup Display
@@ -173,7 +173,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete    | 2026-07-03 |
 | 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
 | 24. Digest-Meeting Cross-Reference | v2.6 | 3/3 | Complete    | 2026-07-04 |
-| 25. Urgency History Persistence | v2.6 | 0/? | Not started | - |
+| 25. Urgency History Persistence | v2.6 | 1/2 | In Progress|  |
 | 26. Weekly Urgency Rollup Display | v2.6 | 0/? | Not started | - |
 
 ---
