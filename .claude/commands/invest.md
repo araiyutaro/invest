@@ -2053,6 +2053,32 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 ---
 
+### Step 3f: 緊急度履歴の追記
+
+「緊急度履歴を記録中...」とユーザーに表示してください。
+
+以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/write-urgency-history.ts
+```
+
+スクリプトの終了コードに関わらず、Step 4 へ進んでください（fail-soft, D-09）。
+
+終了コードが 0 の場合:
+```bash
+echo '[STEP:urgency-history:OK]'
+```
+
+終了コードが非0の場合、標準エラー出力の `[urgency-history] FAIL:` 行に続く理由を短く要約して出力してください:
+```bash
+echo '[STEP:urgency-history:FAIL:<短い理由>]'
+```
+
+**`[PIPELINE:FAIL]` は絶対に出力しないこと** — この失敗は既存3レポート・ニュースダイジェスト・デプロイをブロックしない（HIST-01/HIST-02の永続化失敗は既存パイプラインの継続を妨げない）。
+
+---
+
 ## Step 4: 自動デプロイ（GitHub Pages）
 
 ```bash
@@ -2101,7 +2127,10 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
 }
 
 // docs/ をステージング
-execSync('git add docs/', { stdio: 'inherit' });
+// data/urgency-history.json は write-urgency-history.ts の mkdir(DATA_DIR, {recursive:true})
+// により Step 3f 完了時点で必ず存在する（Pitfall 1）。念のため二重防御で存在確認する。
+if (!fs.existsSync('data')) fs.mkdirSync('data', { recursive: true });
+execSync('git add docs/ data/', { stdio: 'inherit' });
 
 // 変更なしチェック
 let hasChanges = false;
