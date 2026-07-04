@@ -1,8 +1,8 @@
 ---
 phase: 26
 slug: weekly-urgency-rollup-display
-status: draft
-nyquist_compliant: false
+status: approved
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-07-04
 ---
@@ -18,7 +18,7 @@ created: 2026-07-04
 | Property | Value |
 |----------|-------|
 | **Framework** | vitest ^4.0.18 |
-| **Config file** | vitest.config.ts (repo root) |
+| **Config file** | none — vitest zero-config (no vitest.config.ts) |
 | **Quick run command** | `npx vitest run src/portfolio/urgency-rollup.test.ts` |
 | **Full suite command** | `npx vitest run` |
 | **Estimated runtime** | ~15 seconds |
@@ -67,11 +67,11 @@ created: 2026-07-04
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 20s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 20s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved 2026-07-04 (plan-checker manually re-verified checks 8a-8d across all 7 tasks)
