@@ -17,7 +17,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 - [x] **HIST-01**: 日次実行ごとに保有銘柄の緊急度フラグ（urgent）と判断（decision）が `data/urgency-history.json` に追記保存され、git commit/push フローで永続化される
 - [x] **HIST-02**: 同日に複数回実行しても履歴が重複しない（同日エントリは上書き、v2.5 の同日再実行ガードと同方式）
-- [ ] **HIST-03**: ユーザーは portfolio.html で直近7日間の緊急フラグ・判断変更履歴のロールアップセクションを見ることができる
+- [x] **HIST-03**: ユーザーは portfolio.html で直近7日間の緊急フラグ・判断変更履歴のロールアップセクションを見ることができる
 
 ## Future Requirements
 
@@ -47,7 +47,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | XREP-02 | Phase 24 | Complete |
 | HIST-01 | Phase 25 | Complete |
 | HIST-02 | Phase 25 | Complete |
-| HIST-03 | Phase 26 | Pending |
+| HIST-03 | Phase 26 | Complete |
 
 **Coverage:**
 - v2.6 requirements: 5 total

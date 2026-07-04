@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.6
 milestone_name: Digest-Meeting Cross-Reference & Urgency History
-status: executing
-stopped_at: Phase 26 UI-SPEC approved
-last_updated: "2026-07-04T07:34:28.310Z"
+status: milestone_complete
+stopped_at: Milestone complete (Phase 26 was final phase)
+last_updated: 2026-07-04T08:14:26.374Z
 last_activity: 2026-07-04 -- Phase 26 execution started
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 8
-  completed_plans: 5
-  percent: 63
+  completed_plans: 8
+  percent: 67
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-04 after v2.5 milestone)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** Phase 26 — weekly-urgency-rollup-display
+**Current focus:** Milestone complete
 
 ## Current Position
 
-Phase: 26 (weekly-urgency-rollup-display) — EXECUTING
-Plan: 1 of 3
-Status: Executing Phase 26
-Last activity: 2026-07-04 -- Phase 26 execution started
+Phase: 26
+Plan: Not started
+Status: Milestone complete
+Last activity: 2026-07-04
 
 ## Performance Metrics
 
