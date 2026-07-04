@@ -103,3 +103,13 @@ No blockers for closing out phase 24.
 ---
 *Phase: 24-digest-meeting-cross-reference*
 *Completed: 2026-07-04*
+
+## Self-Check: PASSED
+
+- FOUND: src/scripts/write-news-digest.ts
+- FOUND: src/scripts/write-news-digest.test.ts
+- FOUND: .claude/commands/invest.md
+- FOUND: .planning/phases/24-digest-meeting-cross-reference/24-03-SUMMARY.md
+- FOUND commit: be7ad7b (test)
+- FOUND commit: 70cad7a (feat)
+- FOUND commit: f0f13e7 (docs)
