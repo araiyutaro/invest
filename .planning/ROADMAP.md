@@ -101,7 +101,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 ニュースダイジェストとミーティング分析の相互参照を実現し、緊急度フラグの履歴を永続化してポートフォリオの週次振り返りを可能にする。
 
 - [x] **Phase 24: Digest-Meeting Cross-Reference** — ニュースダイジェスト記事への当日ミーティング関連注記をTS側決定論的マッチングで付与（fail-soft） (completed 2026-07-04)
-- [ ] **Phase 25: Urgency History Persistence** — 保有銘柄の緊急度フラグ・判断を data/urgency-history.json に日次追記（同日再実行ガード付き）
+- [x] **Phase 25: Urgency History Persistence** — 保有銘柄の緊急度フラグ・判断を data/urgency-history.json に日次追記（同日再実行ガード付き） (completed 2026-07-04)
 - [ ] **Phase 26: Weekly Urgency Rollup Display** — portfolio.html に直近7日間の緊急フラグ・判断変更履歴のロールアップセクションを追加
 
 ## Phase Details
@@ -131,7 +131,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
   3. 同日中に複数回パイプラインを実行しても、同日エントリは重複追加されず上書きされる（v2.5 の同日再実行ガードと同方式）
 **Plans**: 2 plans (2 waves)
 - [x] 25-01-PLAN.md — 純関数モジュール src/portfolio/urgency-history.ts + テスト（TDD: 4フィールド抽出・同日上書き・イミュータビリティ・dateKey検証、HIST-01/HIST-02）
-- [ ] 25-02-PLAN.md — CLIラッパー write-urgency-history.ts（mkdir先行・fail-soft）+ invest.md Step 3f/Step 4 git add docs/ data/ 統合（HIST-01/HIST-02）
+- [x] 25-02-PLAN.md — CLIラッパー write-urgency-history.ts（mkdir先行・fail-soft）+ invest.md Step 3f/Step 4 git add docs/ data/ 統合（HIST-01/HIST-02）
 
 ### Phase 26: Weekly Urgency Rollup Display
 **Goal**: ユーザーは portfolio.html 上で、直近1週間にどの保有銘柄が緊急フラグや判断変更の対象になったかを振り返ることができる
@@ -173,7 +173,7 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete    | 2026-07-03 |
 | 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
 | 24. Digest-Meeting Cross-Reference | v2.6 | 3/3 | Complete    | 2026-07-04 |
-| 25. Urgency History Persistence | v2.6 | 1/2 | In Progress|  |
+| 25. Urgency History Persistence | v2.6 | 2/2 | Complete   | 2026-07-04 |
 | 26. Weekly Urgency Rollup Display | v2.6 | 0/? | Not started | - |
 
 ---
