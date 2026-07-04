@@ -129,7 +129,9 @@ Full details: `.planning/milestones/v2.5-ROADMAP.md`
   1. パイプライン実行後、data/urgency-history.json に当日の日付キーで保有12銘柄それぞれの urgent フラグと decision が記録されている
   2. data/urgency-history.json は git commit/push フローに含まれ、リポジトリ（非公開の data/、公開 docs/ ではない）に永続化される
   3. 同日中に複数回パイプラインを実行しても、同日エントリは重複追加されず上書きされる（v2.5 の同日再実行ガードと同方式）
-**Plans**: TBD
+**Plans**: 2 plans (2 waves)
+- [ ] 25-01-PLAN.md — 純関数モジュール src/portfolio/urgency-history.ts + テスト（TDD: 4フィールド抽出・同日上書き・イミュータビリティ・dateKey検証、HIST-01/HIST-02）
+- [ ] 25-02-PLAN.md — CLIラッパー write-urgency-history.ts（mkdir先行・fail-soft）+ invest.md Step 3f/Step 4 git add docs/ data/ 統合（HIST-01/HIST-02）
 
 ### Phase 26: Weekly Urgency Rollup Display
 **Goal**: ユーザーは portfolio.html 上で、直近1週間にどの保有銘柄が緊急フラグや判断変更の対象になったかを振り返ることができる
