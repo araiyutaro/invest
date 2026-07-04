@@ -181,7 +181,7 @@ Full details: `.planning/milestones/v2.4-ROADMAP.md`
 | 20. Holding-Card News Display | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 21. Portfolio WebSearch Research | v2.5 | 2/2 | Complete    | 2026-07-03 |
 | 22. Portfolio-Analyst Re-Evaluation | v2.5 | 4/4 | Complete    | 2026-07-03 |
-| 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete   | 2026-07-03 |
+| 23. New-Candidates Section Removal | v2.5 | 1/1 | Complete    | 2026-07-04 |
 
 ---
 *Roadmap created: 2026-06-24*
