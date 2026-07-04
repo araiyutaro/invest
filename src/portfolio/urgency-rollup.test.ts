@@ -161,6 +161,29 @@ describe("computeWeeklyUrgencyRollup - immutability", () => {
   });
 });
 
+describe("computeWeeklyUrgencyRollup - non-object history root (CR-02/WR-05)", () => {
+  it("history が null でも throw せず空ロールアップを返す", () => {
+    expect(() => computeWeeklyUrgencyRollup(null as any, "2026-07-01")).not.toThrow();
+    const result = computeWeeklyUrgencyRollup(null as any, "2026-07-01");
+    expect(result.daysCovered).toBe(0);
+    expect(result.symbols).toEqual([]);
+  });
+
+  it("history が配列でも throw せず空ロールアップを返す", () => {
+    expect(() => computeWeeklyUrgencyRollup([] as any, "2026-07-01")).not.toThrow();
+    const result = computeWeeklyUrgencyRollup([] as any, "2026-07-01");
+    expect(result.daysCovered).toBe(0);
+    expect(result.symbols).toEqual([]);
+  });
+
+  it("history がプリミティブ（数値）でも throw せず空ロールアップを返す", () => {
+    expect(() => computeWeeklyUrgencyRollup(42 as any, "2026-07-01")).not.toThrow();
+    const result = computeWeeklyUrgencyRollup(42 as any, "2026-07-01");
+    expect(result.daysCovered).toBe(0);
+    expect(result.symbols).toEqual([]);
+  });
+});
+
 describe("computeWeeklyUrgencyRollup - partial history (<7 days)", () => {
   it("履歴が3日分しかなくても throw せず daysCovered=3 を返す", () => {
     const history = makeHistory({

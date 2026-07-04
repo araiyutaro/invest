@@ -89,6 +89,12 @@ export function computeWeeklyUrgencyRollup(
   // 検証済みのためロールオーバーは起きないが、windowStart/windowEnd の計算方式を統一する）。
   const windowEnd = addDaysUtc(anchorDate, 0);
 
+  // CR-02: history がプレーンオブジェクトでない場合（null / 配列 / プリミティブ）は
+  // Object.keys が例外を投げるため、集計対象がないものとしてフェイルソフトに空ロールアップを返す。
+  if (history === null || typeof history !== "object" || Array.isArray(history)) {
+    return { windowStart, windowEnd, daysCovered: 0, symbols: [] };
+  }
+
   const matchedDates = Object.keys(history)
     .filter(isValidDateKey)
     .filter((d) => d >= windowStart && d <= windowEnd)

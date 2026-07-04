@@ -142,6 +142,24 @@ describe("loadUrgencyHistory", () => {
     expect(warnSpy).toHaveBeenCalled();
     warnSpy.mockRestore();
   });
+
+  it("CR-02: root が null の構文的に正しい JSON でも throw せず {} を返し console.warn が呼ばれる", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("null");
+    const result = await loadUrgencyHistory();
+    expect(result).toEqual({});
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("CR-02: root が配列の構文的に正しい JSON でも throw せず {} を返し console.warn が呼ばれる", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("[1,2,3]");
+    const result = await loadUrgencyHistory();
+    expect(result).toEqual({});
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
 });
 
 // --- WR-03: loadRound1/2/3 の per-file catch はサイレントではなく console.warn を出す（D-15/Pitfall 7） ---

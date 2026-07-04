@@ -143,7 +143,15 @@ export async function loadHoldingNews(): Promise<HoldingNewsFile> {
 export async function loadUrgencyHistory(): Promise<UrgencyHistoryFile> {
   try {
     const raw = await readFile(join(DATA_DIR, "urgency-history.json"), "utf-8");
-    return JSON.parse(raw) as UrgencyHistoryFile;
+    const parsed = JSON.parse(raw) as unknown;
+    // CR-02: JSON.parse は root が null/配列/プリミティブでも成功してしまうため、
+    // Object.keys(history) を呼ぶ下流（computeWeeklyUrgencyRollup）で throw する前に
+    // 形状を検証してフェイルソフトにフォールバックする（defense in depth）。
+    if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+      console.warn("Urgency history load failed (unexpected root shape) — falling back to {}");
+      return {};
+    }
+    return parsed as UrgencyHistoryFile;
   } catch (error) {
     console.warn("Urgency history load failed (expected on first run / fail-soft, HIST-03):", error instanceof Error ? error.message : error);
     return {};
