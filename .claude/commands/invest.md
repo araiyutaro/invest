@@ -2109,6 +2109,14 @@ echo '[STEP:deploy:FAIL:update-index.tsが失敗]'
 echo '[PIPELINE:FAIL] ステップ: deploy, エラー: update-index.tsが失敗'
 ```
 
+「古いレポートをアーカイブ中...」とユーザーに表示してから、以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/archive-old-reports.ts
+```
+
+このステップは **fail-soft** です。`archive-old-reports.ts` は当月以外の日付ディレクトリ（`docs/YYYY-MM-DD`）を `docs_old/{YYYY-MM}/` へ移動し、`index.html` / `portfolio.html` のエントリを当月のみに剪定して、GitHub Pages のデプロイ artifact（`docs/`）を小さく保ちます（`docs/` 肥大化による `syncing_files` デプロイ失敗の対策）。スクリプトの終了コード（`[STEP:archive-reports:OK|FAIL]`）に関わらず、次のデプロイ処理へ進んでください。**`[PIPELINE:FAIL]` は絶対に出力しないこと** — アーカイブの失敗はデプロイをブロックしません（当月分は docs/ に残っているため公開は継続）。
+
 「デプロイを開始します...」とユーザーに表示してから、以下のBashコマンドを実行してください:
 
 ```bash
@@ -2129,8 +2137,11 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
 // docs/ をステージング
 // data/urgency-history.json は write-urgency-history.ts の mkdir(DATA_DIR, {recursive:true})
 // により Step 3f 完了時点で必ず存在する（Pitfall 1）。念のため二重防御で存在確認する。
+// docs_old/ は archive-old-reports.ts が当月以外のレポートを退避する先（Pages非公開・追跡対象）。
+// 月替わりで大量移動が発生しても docs+docs_old を1コミットにまとめる。
 if (!fs.existsSync('data')) fs.mkdirSync('data', { recursive: true });
-execSync('git add docs/ data/', { stdio: 'inherit' });
+if (!fs.existsSync('docs_old')) fs.mkdirSync('docs_old', { recursive: true });
+execSync('git add docs/ docs_old/ data/', { stdio: 'inherit' });
 
 // 変更なしチェック
 let hasChanges = false;
