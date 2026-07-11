@@ -442,5 +442,129 @@
       "urgent": false,
       "decision": "保持"
     }
+  ],
+  "2026-07-11": [
+    {
+      "symbol": "MRNA",
+      "nameJa": "モデルナ"
+    },
+    {
+      "symbol": "JOBY",
+      "nameJa": "ジョビー・アビエーション"
+    },
+    {
+      "symbol": "HII",
+      "nameJa": "ハンティントン・インガルス"
+    },
+    {
+      "symbol": "POWL",
+      "nameJa": "パウエル・インダストリーズ"
+    },
+    {
+      "symbol": "EE",
+      "nameJa": "エクセラレート・エナジー"
+    },
+    {
+      "symbol": "8522.T",
+      "nameJa": "名古屋銀行"
+    },
+    {
+      "symbol": "5885.T",
+      "nameJa": "ジーデップ・アドバンス"
+    },
+    {
+      "symbol": "5576.T",
+      "nameJa": "オービーシステム"
+    },
+    {
+      "symbol": "7711.T",
+      "nameJa": "助川電気工業"
+    },
+    {
+      "symbol": "NXT",
+      "nameJa": "ネクストパワー"
+    },
+    {
+      "symbol": "BWMX",
+      "nameJa": "ベターウェア・デ・メヒコ"
+    },
+    {
+      "symbol": "YOU",
+      "nameJa": "クリア・セキュア"
+    }
+  ],
+  "2026-07-12": [
+    {
+      "symbol": "MRNA",
+      "nameJa": "モデルナ",
+      "urgent": true,
+      "decision": "一部売却"
+    },
+    {
+      "symbol": "JOBY",
+      "nameJa": "ジョビー・アビエーション",
+      "urgent": true,
+      "decision": "一部売却"
+    },
+    {
+      "symbol": "HII",
+      "nameJa": "ハンティントン・インガルス",
+      "urgent": false,
+      "decision": "買増"
+    },
+    {
+      "symbol": "POWL",
+      "nameJa": "パウエル・インダストリーズ",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "EE",
+      "nameJa": "エクセラレート・エナジー",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "8522.T",
+      "nameJa": "名古屋銀行",
+      "urgent": false,
+      "decision": "買増"
+    },
+    {
+      "symbol": "5885.T",
+      "nameJa": "ジーデップ・アドバンス",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "5576.T",
+      "nameJa": "オービーシステム",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "7711.T",
+      "nameJa": "助川電気工業",
+      "urgent": true,
+      "decision": "一部売却"
+    },
+    {
+      "symbol": "NXT",
+      "nameJa": "Nextpower",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "BWMX",
+      "nameJa": "ベターウェア・デ・メヒコ",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "YOU",
+      "nameJa": "クリア・セキュア",
+      "urgent": false,
+      "decision": "保持"
+    }
   ]
 }
