@@ -46,6 +46,23 @@ describe("extractCandidateTickers", () => {
     expect(result).toEqual([]);
   });
 
+  it("通貨・商品・市況略語（WTI・USD・JPY・SPA等）は本文抽出から除外する", () => {
+    const outputs = [
+      {
+        picks: [],
+        summary: "WTI 原油が急騰、USD/JPY は162円台。SPA 型モデルの小売や TOPIX 全体は軟調",
+      },
+    ];
+    const result = extractCandidateTickers(outputs, portfolio);
+    expect(result).toEqual([]);
+  });
+
+  it("picks で明示指名されたティッカーは略語除外リストの対象外", () => {
+    const outputs = [{ picks: [{ ticker: "WTI" }] }];
+    const result = extractCandidateTickers(outputs, portfolio);
+    expect(result).toEqual(["WTI"]);
+  });
+
   it("ポートフォリオ保有銘柄は除外する", () => {
     const outputs = [
       { picks: [{ ticker: "MRNA" }, { ticker: "YOU" }, { ticker: "MP" }] },

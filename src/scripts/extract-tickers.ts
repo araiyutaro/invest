@@ -17,6 +17,8 @@ const COMMON_WORDS = new Set([
   "AS", "OF", "OR", "IF", "IS", "BE", "DO", "GO",
   "FCF", "MACD", "RSI", "EPS", "PER", "PBR", "ROE", "ROIC", "YOY", "QOQ",
   "TAM", "CAGR", "ATH", "FDA", "SEC", "FOMC", "OPEC", "GAAP", "HALEU",
+  // 通貨・商品・市況の一般略語（picksでの明示指名はこのリストを経由しないため影響なし）
+  "WTI", "USD", "JPY", "EUR", "GBP", "SPA", "TOPIX", "NISA",
 ]);
 
 interface AgentPick {

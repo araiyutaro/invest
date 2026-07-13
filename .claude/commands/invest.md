@@ -1228,10 +1228,10 @@ echo '[STEP:report-generation:START]'
 
 「Step 3: WebSearchリサーチ & レポート生成を開始します...」とユーザーに表示してください。
 
-まず中間ファイル用のディレクトリを作成してください:
+まず中間ファイル用のディレクトリを毎回クリーンにしてから作成してください（過去日の残留ファイルが Step 3b の再評価に混入するのを防ぐため）:
 
 ```bash
-mkdir -p /Users/arai/invest/tmp/websearch /Users/arai/invest/tmp/reeval
+rm -rf /Users/arai/invest/tmp/websearch /Users/arai/invest/tmp/reeval && mkdir -p /Users/arai/invest/tmp/websearch /Users/arai/invest/tmp/reeval
 ```
 
 次に、以下のファイルを Read ツールで読み込んでください:
