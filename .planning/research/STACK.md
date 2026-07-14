@@ -1,93 +1,158 @@
 # Stack Research
 
-**Domain:** Portfolio news intelligence additions to an existing Claude Code multi-agent investment pipeline (v2.5)
-**Researched:** 2026-07-03
-**Confidence:** HIGH (verified against existing codebase behavior + official Anthropic docs; MEDIUM on the Claude Code CLI concurrency ceiling, which is community-reported rather than a documented hard limit)
+**Domain:** Entry-timing watchlist & ETF exclusion (v2.7 milestone, additive to existing multi-agent investment analysis pipeline)
+**Researched:** 2026-07-15
+**Confidence:** HIGH (all findings verified against installed package source and live runtime calls against the project's own `node_modules/yahoo-finance2@3.13.2`)
 
 ## Recommended Stack
 
-### Core Technologies
+### Core Technologies — no new packages required
 
-No new runtime technologies are required. All five v2.5 features are built entirely from capabilities already present in this repository and the Claude Code CLI it runs inside.
+This milestone adds **zero new npm dependencies**. Every capability needed (ETF detection, watchlist persistence, technical/news data supply, LLM+zod verdict validation) is achievable with the stack already installed and already used identically elsewhere in the codebase (`urgency-history.ts`, `holding-news.ts`, `technicals.ts`, `meeting/schemas.ts`).
 
-| Technology | Version | Purpose | Why Recommended |
+| Technology | Version (installed) | Purpose | Why Recommended |
 |------------|---------|---------|-----------------|
-| Claude Code `Agent` tool (parallel subagent invocation) | Claude Code CLI, current (2026) | Spawn one research subagent per portfolio holding, in parallel, from `.claude/commands/invest.md` | Already the established pattern in this repo — Round 1/2/3 spawn 5 agents in parallel per round, and the existing Step 3a (`websearch-{ticker}`) already spawns one parallel `Agent` per `highlightedStocks` ticker using `model: sonnet`. Extending that exact pattern to the 12 `PORTFOLIO_HOLDINGS` tickers is a scope change, not a new mechanism. |
-| Claude Code `WebSearch` tool (used inside subagents) | Built into Claude Code CLI | Per-holding research: earnings, lawsuits, regulation, contracts | Already proven working in this codebase's Step 3a/3b (WebSearch → JSON research summary → reevaluation round). No `allowed-tools` frontmatter change needed at the command level — subagents spawned via `Agent` get their own tool access independent of the parent command's `allowed-tools: [Bash, Agent]` list, which is why WebSearch/WebFetch already work inside `websearch-{ticker}` subagents today despite not being declared at the top of `invest.md`. |
-| zod | ^4.3.6 (already installed, unchanged) | Validate/normalize LLM JSON output for the new holding-news and holding-research contracts | Already the project's sole validation library (`src/meeting/schemas.ts`). Extend the same file with new schemas rather than introducing a second validation approach. |
+| `yahoo-finance2` | `3.13.2` (already in `package.json`) | ETF/equity detection via `quote().quoteType`; OHLCV history via `chart()` for technicals | Verified live: `quote()` returns a discriminated-union `Quote` typed by `quoteType` (`"EQUITY" \| "ETF" \| "MUTUALFUND" \| "INDEX" \| ...`). Confirmed on both US (`SPY`→`ETF`, `AAPL`→`EQUITY`) and Japan tickers (`1306.T`→`ETF`, `7203.T`→`EQUITY`, `9984.T`→`EQUITY`). No separate ecosystem-specific logic needed. |
+| `zod` | `4.3.6` (already in `package.json`) | Buy-timing verdict schema validation with alias-hardening | Same `.union([...]).transform()` / `.passthrough()` pattern already proven in `src/meeting/schemas.ts` for `urgent`/`decisionChanged`. Reuse directly for the new `todayAction` (buy/wait) verdict field. |
+| Node `fs/promises` (`readFile`/`writeFile`/`mkdir`) | Node 24.x runtime (built-in) | Watchlist JSON persistence in `data/` | Identical to `src/scripts/write-urgency-history.ts` — no persistence library needed for a single flat JSON file with date-keyed append semantics. |
+| `tsx` | `4.21.0` (already in `package.json`) | Run new scripts/agents in the existing pipeline | Already the execution runtime for all `src/scripts/*.ts` CLI entrypoints. |
 
-### Supporting Libraries
+### Supporting Libraries — none needed
 
-No new libraries needed. Reuse:
-
-| Library/Module (existing) | Purpose | When to Use |
-|---------|---------|-------------|
-| `src/data/news/article-id.ts` (`assignArticleIds`) | Short `n01`-style IDs already assigned to every `tmp/news.json` entry | Reuse the existing ID for each per-holding news item when rendering the holding card link — do not invent a second ID scheme. `formatHoldingEvaluationsHtml` can look up `id → {title, url, source}` from the same pool the news-digest curator already uses. |
-| `src/data/news/types.ts` (`RawNewsArticle.ticker`) | Per-article ticker tag set only by Finnhub company-news (v2.3) | Use `article.ticker === holding.symbol` for exact per-holding matching — see "What NOT to Use" for its coverage gap. |
-| Node's native `fetch` (already used in `finnhub.ts`) | Any additional HTTP calls | If a future feature needs another HTTP call, keep using native `fetch` — no axios/node-fetch anywhere in this codebase today. |
+| Library | Version | Purpose | When to Use |
+|---------|---------|---------|-------------|
+| — | — | — | No supporting library gaps identified. `yahoo-finance2` + `zod` + built-in `fs` cover ETF detection, technical indicator computation (reuse `computeSMA`/`computeRSI`/`buildSnapshot` from `src/data/technicals.ts`), and schema validation. |
 
 ### Development Tools
 
-No new dev tools. Continue using `vitest` (already a devDependency) for the new zod schema tests and for a regression test on the `finnhub.ts` ticker bug fix.
+| Tool | Purpose | Notes |
+|------|---------|-------|
+| `vitest` (`4.0.18`, already installed) | Unit tests for new pure functions (`isEtf`, `appendWatchlistSnapshot`, `pruneWatchlist`, verdict schema parsing) | Follow existing pattern: `src/portfolio/urgency-history.test.ts` style — pure functions tested with plain fixtures, no mocking framework needed. |
 
 ## Installation
 
 ```bash
-# No installation required for this milestone.
-# All five v2.5 features are implemented with the existing dependency set:
-#   dotenv, fast-xml-parser, tsx, typescript, yahoo-finance2, zod (deps)
-#   @types/node, vitest (devDeps)
+# No installation needed — all required packages are already present.
+# Confirm with:
+npm ls yahoo-finance2 zod tsx
 ```
+
+## ETF Detection — Verified API Surface
+
+**Field to use: `quote(symbol).quoteType`** (also cross-checkable with `.typeDisp`, the human-readable label).
+
+Confirmed via live call against `yahoo-finance2@3.13.2` (`esm/src/index.js`) on 2026-07-15:
+
+| Symbol | `quoteType` | `typeDisp` | `shortName` |
+|--------|-------------|------------|-------------|
+| `SPY` | `ETF` | `ETF` | State Street SPDR S&P 500 ETF T |
+| `QQQ` | `ETF` | `ETF` | Invesco QQQ Trust, Series 1 |
+| `VOO` | `ETF` | `ETF` | Vanguard S&P 500 ETF |
+| `AAPL` | `EQUITY` | `Equity` | Apple Inc. |
+| `NVDA` | `EQUITY` | `Equity` | NVIDIA Corporation |
+| `7203.T` | `EQUITY` | `Equity` | TOYOTA MOTOR CORP |
+| `9984.T` | `EQUITY` | `Equity` | SOFTBANK GROUP CORP |
+| `1306.T` | `ETF` | `ETF` | NOMURA ASSET MANAGEMENT CO LTD (TOPIX ETF) |
+
+**Key findings:**
+- `quoteType` is a **discriminated literal** on the `Quote` union type (`QuoteEtf`, `QuoteEquity`, `QuoteIndex`, `QuoteMutualfund`, `QuoteCurrency`, `QuoteCryptoCurrency`, `QuoteFuture`, `QuoteOption`, `QuoteECNQuote`, `QuoteMoneyMarket`, `QuoteAltSymbol` — 11 variants total, source: `esm/src/modules/quote.d.ts:450-462`).
+- The signal is **identical across US and Japan tickers** — no per-market special-casing needed. This directly satisfies the PROJECT.md requirement for deterministic TS-side ETF exclusion as the second layer of defense (prompt instruction + TS verification).
+- `quote()` accepts **batch symbol arrays** (`yf.quote(["SPY","AAPL","1306.T"])` → array of `Quote`, each retaining its own `quoteType`) — verified live. This means ETF-check can be done in one batched call per pipeline run rather than N sequential calls, consistent with the existing `fetchStockQuotes`/`fetchPortfolioData` batching style (`Promise.all` over `quote()` calls) in `src/data/market.ts` and `src/portfolio/data.ts`.
+- Recommended guard function signature, mirroring existing `src/data/*.ts` fail-soft conventions:
+
+```typescript
+// src/portfolio/etf-filter.ts (new, pure function — no I/O)
+export function isEtfQuoteType(quoteType: string | undefined): boolean {
+  return quoteType === "ETF" || quoteType === "MUTUALFUND" || quoteType === "INDEX";
+}
+```
+  Excluding `MUTUALFUND` and `INDEX` alongside `ETF` is recommended because the domain requirement is "individual stock picks only" — index/mutual-fund quoteTypes are equally inappropriate as "buy-timing" picks and are trivially returned by the same field, at zero extra cost.
+- **Two-layer defense implementation shape** (matches PROJECT.md's stated architecture): analyst prompts instruct "ETFを推奨から除外" (layer 1, prompt-level), then a TS filter step calls batched `quote()` on all `picks`/`highlightedStocks` symbols and drops any where `isEtfQuoteType(quoteType)` is true before the symbols reach the watchlist writer or the Daily Report renderer (layer 2, deterministic). This is the same "don't trust LLM self-report" philosophy already applied to `decisionChanged` (`src/portfolio/urgency-history.ts` comment: "LLM自己申告を信用しない").
+- **Failure mode to handle:** if `quote()` throws or returns no `quoteType` for a symbol (delisted/typo/rate-limited), treat as **exclude** (fail-closed) rather than fail-open, since the cost of wrongly excluding one candidate is far lower than recommending an ETF or a bad ticker. This mirrors the existing `fetchQuoteSafe`/`fetchStockSafe` pattern of returning `null` on error and filtering nulls out downstream.
+
+## Watchlist Persistence — Pattern to Reuse
+
+**Do not design a new persistence pattern.** `src/portfolio/urgency-history.ts` + `src/scripts/write-urgency-history.ts` is a directly reusable template:
+
+- **Shape:** `Record<dateKey, ReadonlyArray<Snapshot>>` keyed by `YYYY-MM-DD`, same-day writes overwrite via key assignment (not array push) — structurally prevents duplicate same-day entries.
+- **Location:** `data/watchlist.json` (or similar), alongside `data/urgency-history.json` — non-public, not under `docs/`.
+- **Write flow:** pure extraction function (no I/O) → `appendXSnapshot(existing, dateKey, newSnapshots)` (pure, immutable spread) → thin CLI wrapper in `src/scripts/` that does `mkdir -p data/`, reads existing file (treats `ENOENT` as empty, treats corrupt JSON as **fail-closed skip-with-error**, never silently overwrites), writes updated file.
+- **Date key validation:** reuse `isValidDateKey` regex (`/^\d{4}-\d{2}-\d{2}$/`) to guard against prototype-pollution-style keys (e.g. `__proto__`) before writing.
+- **Auto-removal rules (verdict downgrade / already purchased):** implement as a pure `pruneWatchlist(watchlist, latestVerdicts, portfolioHoldings)` function, called before the append step, mirroring the immutable-spread style of `appendUrgencySnapshot`. Two removal conditions per PROJECT.md:
+  1. Latest re-evaluation verdict for a watchlisted symbol is 中立/弱気 → drop entry.
+  2. Symbol now appears in `PORTFOLIO_HOLDINGS` (`src/portfolio/holdings.ts`) → drop entry (already purchased).
+- **Git tracking:** Step 4's existing `git add docs/ data/` already covers any new file placed under `data/` — no pipeline change needed there, confirmed by reading `write-urgency-history.ts` comment referencing this exact mechanism.
+
+## Daily Tracking Data Supply (Technicals + News) — Reuse, Don't Rebuild
+
+- **Technicals:** `src/data/technicals.ts`'s `fetchTechnicalSnapshot(symbol)` / `fetchTechnicalSnapshots(symbols)` already returns everything needed for buy-timing judgment: `price`, `changePercent`, `ma20`/`ma50`/`ma200`, `pctFromMa50`/`pctFromMa200`, `rsi14`, `fiftyTwoWeekHigh`/`Low`, `pctFrom52wHigh`, `volumeRatio`, `trendLabel`. Call this directly for watchlist symbols — no new technical-indicator code required.
+- **Support/resistance extension (optional, if the buy-timing agent needs explicit levels beyond MA/RSI):** `yahooFinance.chart()` already returns per-bar `high`/`low`/`open`/`close`/`volume` (confirmed in `esm/src/modules/chart.d.ts:158-166`), but `technicals.ts` currently only extracts `close`/`volume`. If the buy-timing agent's prompt needs recent swing-high/swing-low support levels, extend `DailyBar`/`buildSnapshot` to also carry `high`/`low` and derive a simple rolling min/max (e.g., 20-day low as near-term support, 20-day high as resistance) — this is arithmetic on already-fetched data, not a new dependency.
+- **News:** `src/portfolio/holding-news.ts`'s `buildHoldingNewsMap` (ticker-match + name-alias fallback against `tmp/news.json`) is the exact same deterministic-extraction shape needed for watchlist-ticker news. Watchlist symbols are a superset-compatible input — either extend `PORTFOLIO_HOLDINGS`-shaped lookup to also accept ad-hoc watchlist symbols, or add a parallel `buildWatchlistNewsMap` using the same `matchAliases`/`normalizeHoldingSymbol` helpers exported from that module.
+
+## Buy-Timing Verdict Schema — Pattern to Reuse
+
+Model the new schema directly on `holdingEvaluationSchema` in `src/meeting/schemas.ts`:
+
+```typescript
+// Sketch — follow the exact rawXSchema -> .passthrough() -> transform() shape
+// already used for urgent/decisionChanged in meeting/schemas.ts
+const rawWatchlistVerdictSchema = z.object({
+  symbol: z.string(),
+  todayAction: z.enum(["buy", "wait"]).optional(),      // canonical
+  action: z.enum(["buy", "wait"]).optional(),             // alias
+  recommendation: z.enum(["buy", "wait"]).optional(),     // alias
+  reasoning: z.string().optional(),                       // canonical
+  rationale: z.string().optional(),                       // alias
+}).passthrough();
+```
+Then `.transform()` into a canonical shape exactly as `holdingEvaluationSchema` does, so prompt-level field-name drift (LLMs inventing `action`/`recommendation` instead of `todayAction`) doesn't hard-fail the pipeline. This is a **zero-new-dependency** application of the existing `zod@4.3.6` alias-hardening idiom already proven for `urgent`/`webSearchResult`/`portfolioAnalysis` in the same file.
 
 ## Alternatives Considered
 
 | Recommended | Alternative | When to Use Alternative |
-|-------------|-------------|--------------------------|
-| Reuse `tmp/news.json` + Finnhub company-news (already fetched) for per-holding news | Add a new news API (NewsAPI.org, Alpha Vantage News, Benzinga) dedicated to per-holding coverage | Only if Finnhub company-news + WebSearch prove insufficient in practice for JP holdings after a few days of live data — would require a new API key/secret and a new fetch module, which conflicts with the project's zero-new-deps convention and duplicates what Feature 2 (WebSearch) already does. |
-| Declare all 12 `websearch-{ticker}` Agent calls in a single parallel message (extending the existing Step 3a pattern) | Add `p-limit`/`bottleneck` npm package to throttle concurrency in TS code | Only relevant if pipeline runs move from Claude Code's own orchestration into a TS-driven agentic loop (e.g., using the Agent SDK directly instead of slash-command markdown). Not applicable here — concurrency is controlled by how many `Agent` calls appear in one Claude Code message, not by TS code. |
-| Extend `src/meeting/schemas.ts` with new schemas (`holdingResearchSchema`, or extend `holdingEvaluationSchema` with `relatedNews`) | Create a separate `schemas-portfolio-news.ts` file | Only if the file grows past the project's ~800-line file-size ceiling (currently ~300 lines) — not close to that yet. |
-| `article.ticker === holding.symbol` exact match for per-holding news injection | Fuzzy company-name matching (holding.name / nameJa substring match against title/summary) for tickers with no `ticker` field | Only as a deliberate fallback for JP holdings if empty news sections prove unacceptable in review — fuzzy matching risks false positives (e.g., "Bank of Nagoya" matching unrelated regional-bank articles) and breaks the project's existing "structural prevention of hallucination/misattribution" convention (ID-reference pattern, Finnhub-ticker-is-ground-truth). Prefer explicit empty state over fuzzy guesses. |
+|-------------|-------------|-------------------------|
+| `quote().quoteType` for ETF detection | Symbol-pattern heuristics (e.g., regex against known ETF ticker lists) | Never for this project — heuristic lists go stale and don't cover Japan ETF codes (e.g. `1306.T`), which have no lexical marker distinguishing them from equity codes. `quoteType` is authoritative and free (same API call already made for price data). |
+| `quote().quoteType` | `quoteSummary()` with `assetProfile`/`fundProfile` modules | Only if you need deeper fund metadata (expense ratio, holdings breakdown) for a *future* feature — unnecessary extra API surface for a simple ETF/equity boolean gate. `quote()` is lighter-weight and already the call pattern used everywhere else in this codebase (`market.ts`, `portfolio/data.ts`). |
+| Flat `data/watchlist.json` (date-keyed, `urgency-history.ts` pattern) | SQLite / a real DB | Only if watchlist size or query complexity grows beyond what a single JSON file can hold performantly — at ~12-30 watchlist symbols with daily append, this is far below that threshold, and a DB would break the project's stated `data/` JSON-file convention and add a new dependency for no benefit. |
+| Reuse `zod` alias-hardening `.passthrough().transform()` | A stricter `z.object().strict()` schema for buy-timing verdict | Never — the project's own Key Decisions log states this pattern exists specifically because strict schemas caused hard failures on LLM field-name drift (see `PROJECT.md`: "LLM出力スキーマは passthrough().transform() で alias 硬化"). Reintroducing strict validation here would reintroduce the exact problem already solved. |
 
 ## What NOT to Use
 
 | Avoid | Why | Use Instead |
 |-------|-----|--------------|
-| A new News API for per-holding coverage | Finnhub company-news (v2.3, per-ticker) already exists and is the "土台" (foundation) called out in `.planning/PROJECT.md`; adding another API means a new secret, a new fetch module, and duplicate effort with Feature 2 (WebSearch), which already covers exactly the "material events" (earnings, lawsuits, regulation, contracts) this milestone wants | Reuse `fetchAllFinnhubNews`'s `company` array (once the `.map(toRawArticle)` bug is fixed) + the new per-holding WebSearch step |
-| `article.ticker` as the *sole* signal for "does this holding have news today" | **Verified gap:** `collect-data.ts` only passes `usTickers` (US-listed symbols) into `fetchAllFinnhubNews`; the 4 JP holdings (`8522.T`, `5885.T`, `5576.T`, `7711.T`) never get Finnhub company-news, and no other news source (`google-news.ts`, RSS) tags a `ticker` field at all. A ticker-only per-holding news feed will silently show zero articles for 1/3 of the portfolio. | Treat per-holding ticker-tagged news (Feature 1) as US-holding enrichment on top of a WebSearch research pass (Feature 2) that covers all 12 holdings uniformly — do not rely on Feature 1 alone for JP holdings, and render an explicit "関連ニュースなし" state rather than fabricating a match. |
-| `axios` / `node-fetch` | Zero usages in the current codebase; `finnhub.ts` and all other fetchers use native `fetch()`, which has been available in Node without a flag since Node 18 | Native `fetch()` |
-| `p-limit`, `bottleneck`, or any TS-level concurrency limiter for the 12 WebSearch subagents | Subagent concurrency is controlled by Claude Code's own orchestration (how many `Agent` tool calls are issued in one message from the command markdown), not by TS code — there is no TS process spawning these agents to rate-limit | If concurrency needs tuning, batch the `Agent` calls across two markdown-level parallel blocks instead (see Stack Patterns below) |
-| Renaming/aliasing the old `Task` tool syntax in `invest.md` | Claude Code renamed `Task` → `Agent` in a recent CLI release; `invest.md` already uses `Agent` correctly throughout | Keep using `Agent` as already done |
-| A second ID scheme for holding-news links | The project already has a working, hallucination-proof ID-reference pattern (`n01`…`n99` via `assignArticleIds`, consumed by `news-curator`/`resolveNewsCuration`) | Reuse the same `id` field when wiring up `<a>` links on holding cards — do not have the `portfolio-analyst` subagent emit raw URLs (same rationale that drove the CURA-02 "ID参照方式" decision for news-digest) |
+| A new "financial data" or "technical analysis" npm library (e.g. `technicalindicators`, `trading-signals`) | The project already has hand-rolled, tested `computeSMA`/`computeRSI`/`buildSnapshot` in `src/data/technicals.ts` that produces exactly the fields needed; adding a second indicator library creates two sources of truth for the same numbers and risks numeric drift between existing reports and the new watchlist feature. | Reuse `src/data/technicals.ts` functions directly; extend with `high`/`low` fields only if support/resistance levels are required. |
+| A database (SQLite/Postgres/etc.) for watchlist state | Contradicts the project's established flat-JSON-in-`data/` persistence convention (`urgency-history.json`) and the `[STEP:*]` fail-soft pipeline design, which assumes plain-file read/write with `git add data/` for durability across runs, not a DB connection. | Flat JSON file, date-keyed, following `urgency-history.ts`/`write-urgency-history.ts` exactly. |
+| Symbol-name/ticker-suffix heuristics for ETF detection (e.g. "anything ending in common ETF-sounding words") | Unreliable and unverifiable; the project's stated philosophy explicitly rejects LLM/heuristic self-report in favor of deterministic TS checks — a heuristic string match is not meaningfully more deterministic than trusting the LLM. | `quote().quoteType === "ETF"` (or `MUTUALFUND`/`INDEX`), verified live against both US and Japan tickers. |
+| `quoteSummary()` with a large multi-module fetch (fundamentals + fund data + technicals) for the sole purpose of getting `quoteType` | Heavier API surface (more sub-requests, larger payload, more failure surface area) than needed for a single classification field, and inconsistent with the lightweight `quote()`-only pattern used throughout `market.ts`/`portfolio/data.ts`. | Plain `quote()` call — `quoteType` is already present on the base `Quote` response the pipeline already fetches for price data. |
 
 ## Stack Patterns by Variant
 
-**If spawning 12 parallel `websearch-holding-{ticker}` Agents in one message risks hitting Claude Code's practical concurrency ceiling:**
-- The ~10-simultaneous-subagent figure reported in the community (GitHub issue [#15487](https://github.com/anthropics/claude-code/issues/15487)) is **not a documented hard API limit** — it's a practical/coordination-overhead observation, and this pipeline already runs unattended overnight via launchd with a generous time budget.
-- Recommend firing all 12 in a single parallel message first (matches the existing 5-agent-per-round precedent exactly, just larger N) and only split into two batches of 6 (sequential parallel blocks, mirroring how Round 1 → Round 2 → Round 3 are already sequenced) if live runs show truncated/dropped results.
-- Because fail-soft is already a house convention (per `.planning/PROJECT.md` Key Decisions), a per-holding WebSearch failure should fall back to the existing `{"ticker": "...", "researchSummary": "リサーチ失敗", ...}` shape (already defined in `invest.md` Step 3a) rather than blocking the pipeline — this pattern needs no new code, just reuse.
+**If the buy-timing agent needs explicit support/resistance price levels (not just MA/RSI trend):**
+- Extend `DailyBar` in `src/data/technicals.ts` to include `high`/`low` (already returned by `chart()`, just not currently mapped).
+- Derive rolling N-day low/high (e.g. 20-day) as a simple `Math.min`/`Math.max` over the window — no new dependency, same style as existing `fiftyTwoWeekHigh`/`Low` computation in `buildSnapshot`.
 
-**If the `portfolio-analyst` subagent needs both per-holding news AND per-holding WebSearch research injected into one prompt:**
-- Keep them as two distinct, TS-computed sections in the prompt (as `invest.md` already does for `moderator-tickers.json` vs `websearch/*.json`): a `## 保有銘柄別ニュース` block built by a small pure TS function filtering `tmp/news.json` by `ticker === holding.symbol`, and a `## 保有銘柄別WebSearchリサーチ` block reading `tmp/holding-research/{symbol}.json`. Do not merge them into a single schema — they have different provenance (TS-extracted fact vs LLM-summarized research) and different failure modes.
+**If watchlist symbols is a strict superset of portfolio holdings' data shape:**
+- Do not force-fit watchlist entries into `PortfolioHolding` (which has `nameJa`/`sector`/`matchAliases` curated by hand for 12 fixed holdings). Watchlist symbols are dynamic and come from daily analyst picks, so their metadata (name, sector) should be fetched from `quote()` at read-time (`shortName`, or `longName` if available) rather than requiring manual curation like `PORTFOLIO_HOLDINGS`.
 
 ## Version Compatibility
 
 | Package A | Compatible With | Notes |
 |-----------|-----------------|-------|
-| `zod@4.3.6` (installed) | Existing `.object().passthrough().transform()` patterns in `src/meeting/schemas.ts` | No API changes needed; `npm view zod version` currently reports `4.4.3` as latest — a minor bump is optional/cosmetic for this milestone, not required by any new schema needs (no v4.4-only API is needed here). |
-| Claude Code CLI `Agent` tool + `WebSearch` tool | Already co-used successfully in `invest.md` Step 3a (existing feature, not new) | Confirms no CLI version gate blocks reusing this mechanism at a larger fan-out (12 holdings vs the current small `highlightedStocks` count, typically 1-3). |
-| Anthropic `web_search` server tool (API-level reference, informs subagent behavior) | `max_uses` unset by default in Claude Code's built-in WebSearch (not user-configurable per the slash-command markdown level); errors surface as `too_many_requests`/`unavailable` inside a `web_search_tool_result_error`, not a thrown exception | Design the holding-research subagent's JSON fallback (already the `invest.md` Step 3a convention) to also catch "WebSearch produced no results" gracefully — an empty `positiveFindings`/`negativeFindings` array is a valid, expected output on a slow-news day. |
+| `yahoo-finance2@3.13.2` | Node 24.x (project's runtime, confirmed via live test) | No changes needed; same instantiation pattern (`new YahooFinance({ suppressNotices: ["yahooSurvey"] })`) works identically for `quote()` ETF detection as for existing price/technicals fetches. |
+| `zod@4.3.6` | TypeScript 5.9.3 | `.passthrough()`/`.transform()`/`z.union([...])` APIs used in `meeting/schemas.ts` are zod v4 stable APIs — safe to extend with new schemas in the same file or a sibling file without version concerns. |
+| `tsx@4.21.0` | ESM (`"type": "module"` in `package.json`) | New scripts under `src/scripts/` must use ESM import syntax (`import ... from "../module.js"` with `.js` extension on TS source, per existing convention) — confirmed by inspecting `write-urgency-history.ts` imports. |
 
 ## Sources
 
-- `/Users/arai/invest/.claude/commands/invest.md` (lines 1243–1700) — existing Step 3a/3b WebSearch + reevaluation pattern for `highlightedStocks`, the direct precedent to extend to `PORTFOLIO_HOLDINGS`
-- `/Users/arai/invest/src/data/news/finnhub.ts` — confirmed the `.map(toRawArticle)` ticker-corruption bug (line 43: `Array.prototype.map` passes the array index as the second positional arg, which `toRawArticle`'s optional `ticker` parameter silently accepts)
-- `/Users/arai/invest/src/scripts/collect-data.ts` — confirmed only `usTickers` are passed to `fetchAllFinnhubNews`, meaning JP holdings never receive Finnhub company-news
-- `/Users/arai/invest/src/meeting/schemas.ts` — existing zod v4 patterns (`passthrough`, `transform`, ID-resolution via `resolveNewsCuration`) to extend for the new contracts; also confirmed a pre-existing workaround (line 277-282) that already treats numeric-index ticker values from the finnhub bug as non-string and drops them, evidence the corruption has been a live, silently-tolerated issue
-- `/Users/arai/invest/src/data/news/article-id.ts` — existing hallucination-proof ID-reference convention to reuse for holding-card news links
-- [Web search tool — Anthropic API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool) — HIGH confidence, official docs, verified `max_uses`, domain filtering, and error-code behavior (`too_many_requests`, `max_uses_exceeded`, `unavailable`)
-- [anthropics/claude-code issue #15487 — maxParallelAgents feature request](https://github.com/anthropics/claude-code/issues/15487) — MEDIUM confidence, community-reported ~10-subagent practical ceiling, not an official documented hard limit
-- `npm view zod version` — confirmed latest is `4.4.3` vs installed `4.3.6` (HIGH confidence, direct registry query)
+- `node_modules/yahoo-finance2/esm/src/modules/quote.d.ts` (installed v3.13.2) — confirmed `Quote` discriminated union and `quoteType` literal values (`EQUITY`, `ETF`, `MUTUALFUND`, `INDEX`, etc.), lines 450-462.
+- `node_modules/yahoo-finance2/esm/src/modules/quote.schema.js` — confirmed JSON-schema `const` values per quote type (`"ETF"`, `"EQUITY"`, `"MUTUALFUND"`, `"INDEX"`, ...).
+- `node_modules/yahoo-finance2/esm/src/modules/chart.d.ts` — confirmed `ChartResultArrayQuote` per-bar fields (`high`, `low`, `open`, `close`, `volume`), lines 158-166.
+- Live runtime verification (2026-07-15, executed against the project's own installed package): `yf.quote(["SPY","QQQ","AAPL","NVDA","7203.T","1306.T","9984.T","VOO"])` and batch-array call — confirmed `quoteType` values and batch-call support empirically, not just from types. Confidence: HIGH (first-party, verified against project's exact installed version, cross-checked type declarations against live behavior).
+- `src/portfolio/urgency-history.ts`, `src/scripts/write-urgency-history.ts` — existing in-repo pattern for `data/` JSON persistence, date-keyed append, fail-closed corruption handling. Confidence: HIGH (project's own validated, shipped code).
+- `src/meeting/schemas.ts` — existing in-repo zod alias-hardening pattern (`.passthrough().transform()`, lenient boolean union). Confidence: HIGH (project's own validated, shipped code).
+- `src/data/technicals.ts` — existing in-repo technical indicator computation (`computeSMA`, `computeRSI`, `buildSnapshot`). Confidence: HIGH (project's own validated, shipped code, has existing test coverage per `market.test.ts` sibling pattern).
+- `.planning/PROJECT.md` — milestone requirements, two-layer ETF defense design, `data/` vs `docs/` placement rule, TS-side-deterministic philosophy precedent.
 
 ---
-*Stack research for: Portfolio News Intelligence (v2.5) additions to an existing Claude Code + TypeScript investment pipeline*
-*Researched: 2026-07-03*
+*Stack research for: Entry Timing Watchlist & ETF Exclusion (v2.7)*
+*Researched: 2026-07-15*
