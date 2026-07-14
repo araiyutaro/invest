@@ -14,21 +14,25 @@
 
 v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、AI厳選ニュースダイジェスト（news-digest.html）の4紙目追加、そして保有銘柄ごとのニュース・WebSearchリサーチを踏まえた売却・保有再考（v1.0「Web調査後の再評価」フローのv2.x再実装）を完了。ポートフォリオレポートは保有銘柄の意思決定に集中し、各保有銘柄カードにID参照方式の関連ニュース・緊急度フラグ（赤バッジ）・前日比の判断変化バッジ（TS側決定論的検出）を表示する。12銘柄のWebSearchリサーチは fail-soft な専用パイプラインステップ（Step 3-P）として実行され、失敗しても4レポートの生成・デプロイは継続する。
 
-**Current state:** v2.6 Digest-Meeting Cross-Reference & Urgency History を **2026-07-04 に shipped・アーカイブ**（`.planning/milestones/v2.6-*`）。Phase 24（ダイジェスト-ミーティング相互参照 XREP-01/02）・Phase 25（緊急度履歴永続化 data/urgency-history.json HIST-01/02）・Phase 26（週次緊急ロールアップ表示 HIST-03）完了。監査で発見したロールアップ1日遅れは invest.md の Step 3f→Step 3c 再順序で解消済み。残タスク: Phase 24 および Phase 20/21/22 の HUMAN-UAT ライブ実行確認（明朝の launchd 実行で消化可能、STATE.md Deferred Items で追跡）。**次マイルストーンは未定**（`/gsd-new-milestone` で開始）。
+**Current state:** v2.6 Digest-Meeting Cross-Reference & Urgency History を **2026-07-04 に shipped・アーカイブ**（`.planning/milestones/v2.6-*`）。残タスク: Phase 24 および Phase 20/21/22 の HUMAN-UAT ライブ実行確認（launchd 日次実行で消化可能、STATE.md Deferred Items で追跡）。**2026-07-15 に v2.7 Entry Timing Watchlist & ETF Exclusion を開始。**
 
-## Current Milestone: v2.6 Digest-Meeting Cross-Reference & Urgency History
+## Current Milestone: v2.7 Entry Timing Watchlist & ETF Exclusion
 
-**Goal:** ニュースダイジェストとミーティング分析の相互参照を実現し、緊急度フラグの履歴を永続化してポートフォリオの週次振り返りを可能にする。
+**Goal:** 強気評価された個別銘柄（ETF除外）をウォッチリストとして永続追跡し、株価・ニュースに基づく日次の買いタイミング判定で「今日買うべき / 待つべき」を Daily Report に表示する。
 
 **Target features:**
-- XREP-01: ダイジェスト記事に当日ミーティングで議論されたテーマへの関連注記を表示（TS側決定論的マッチング — meeting-result.json のティッカー・テーマキーワードと照合、holding-news.ts と同じ設計思想）
-- PORT-F1: 緊急度フラグの履歴監査トレイル — リポジトリ内 `data/` ディレクトリに JSON で永続化、日次実行で追記コミット
-- PORT-F1 表示: portfolio.html 内に「今週の緊急フラグ履歴」週次ロールアップセクションを追加（新規ページなし）
+- ETFの推奨候補からの除外 — アナリストの推奨銘柄（picks / highlightedStocks）からETFを排除。プロンプト指示に加えTS側でも決定論的に検証・除外（二層防御）
+- ウォッチリスト永続化 — 当日 `verdict: 強気` の全銘柄（ETF除外後）を `data/` のウォッチリストに日次追記。今日以降の蓄積で開始（過去分の遡及なし）
+- 日次追跡データ供給 — ウォッチリスト銘柄の当日株価・テクニカル指標・関連ニュースを収集し判定エージェントに注入（collect-technicals / holding-news と同じ決定論的抽出方針）
+- 買いタイミング判定（LLM判定＋TS検証ハイブリッド） — 専用エージェントが銘柄ごとに「今日買うべき / 待つべき」を理由付きで判定し、TS側で zod スキーマ検証（alias硬化）
+- Daily Report ウォッチリストセクション — 各銘柄に「今日買うべき」バッジ（または「待ち」表示）と判定理由を表示
+- 自動除外ルール（TS側決定論） — ①再評価で verdict が中立/弱気に転落したら除外、②portfolio.json に追加されたら「購入済み」として除外
 
 **Key context:**
-- 関連判定・履歴付与はいずれも LLM に頼らず TS 側決定論で実装（v2.5 の holding-news.ts / decision-diff.ts と同じ方針）
-- XREP-01 はパイプライン順序依存（ミーティング完了後にダイジェスト注記を付与）が生じるため、fail-soft 設計を踏襲
-- 緊急度履歴は公開 docs/ ではなく非公開の data/ に保存
+- ETF除外はウォッチリストの入口より前段（推奨銘柄の選定段階）で適用し、Daily Report のハイライト銘柄自体からETFを排除
+- 判定根拠の構造検証・除外判定はTS側決定論で実装（LLM自己申告を信用しない v2.5/2.6 方針を踏襲）
+- 新パイプラインステップは fail-soft 設計（失敗しても既存4レポートの生成・デプロイを継続）
+- ウォッチリストは公開 docs/ ではなく非公開の `data/` に保存（urgency-history.json と同じ配置）
 
 ## Requirements
 
@@ -75,7 +79,12 @@ v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 
 ### Active
 
-v2.6 全要件完了。次マイルストーンは未定（/gsd-complete-milestone で v2.6 をアーカイブ可能）。
+- [ ] 推奨銘柄候補（picks / highlightedStocks）からのETF除外（プロンプト指示＋TS側決定論的検証の二層防御）
+- [ ] 強気銘柄ウォッチリストの `data/` 永続化（日次追記、当日以降の蓄積）
+- [ ] ウォッチリスト銘柄の日次追跡データ供給（株価・テクニカル・関連ニュース）
+- [ ] 買いタイミング判定エージェント（LLM判定＋TS zod 検証ハイブリッド）
+- [ ] Daily Report ウォッチリストセクション（「今日買うべき / 待ち」バッジ＋判定理由）
+- [ ] ウォッチリスト自動除外（弱気/中立転落・portfolio.json 組入で購入済み）
 
 ### Out of Scope
 
@@ -153,4 +162,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-04 after v2.6 milestone (Digest-Meeting Cross-Reference & Urgency History) — shipped & archived*
+*Last updated: 2026-07-15 after v2.7 milestone start (Entry Timing Watchlist & ETF Exclusion)*
