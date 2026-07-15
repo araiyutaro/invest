@@ -77,9 +77,12 @@ export function attachActionChanges<
 /**
  * ティッカーの市場を決定論的に導出する（D-13）。extract-tickers.ts の `.T` サフィックス
  * 規約に準拠する。
+ * WR-04: 銘柄キー照合（normalizeHoldingSymbol: trim + toUpperCase）と同じ表記揺れ耐性を
+ * 持たせるため、trim + ケースインセンシティブで判定する。schema は ticker を正規化しない
+ * ため、LLM が `7203.t` や末尾空白付きでエコーしても US に誤分類しない。
  */
 export function deriveMarket(ticker: string): "US" | "JP" {
-  return /\.T$/.test(ticker) ? "JP" : "US";
+  return /\.T$/i.test(ticker.trim()) ? "JP" : "US";
 }
 
 /**

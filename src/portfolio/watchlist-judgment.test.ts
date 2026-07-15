@@ -120,6 +120,14 @@ describe("deriveMarket (TIME-05)", () => {
   it("サフィックス無し銘柄は \"US\" になる", () => {
     expect(deriveMarket("AAPL")).toBe("US");
   });
+
+  it('小文字 ".t" サフィックスでも "JP" になる（WR-04: ケースインセンシティブ）', () => {
+    expect(deriveMarket("7203.t")).toBe("JP");
+  });
+
+  it('末尾空白付き " 7203.T " でも "JP" になる（WR-04: trim）', () => {
+    expect(deriveMarket(" 7203.T ")).toBe("JP");
+  });
 });
 
 describe("buildSkippedJudgment (TIME-05 / D-20)", () => {
