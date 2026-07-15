@@ -133,3 +133,10 @@ Task 2（checkpoint:human-verify, gate="blocking"）は実機ライブ検証が�
 ---
 *Phase: 29-daily-tracking-data-supply*
 *Completed: 2026-07-15*
+
+## Self-Check: PASSED
+
+- FOUND: .claude/commands/invest.md
+- FOUND: .planning/phases/29-daily-tracking-data-supply/29-03-SUMMARY.md
+- FOUND: 1542345 (feat commit)
+- FOUND: 758d43f (docs commit)
