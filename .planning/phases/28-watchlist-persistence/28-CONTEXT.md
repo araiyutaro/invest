@@ -33,7 +33,7 @@
 ### 時間ベース失効（WLST-04）
 - **D-07: 失効基準は `lastVerdictDate`（最終強気確認日）からの経過暦日**。営業日計算は日米の祝日カレンダーが必要になり複雑さに見合わないため暦日を採用（決定論・依存ゼロ）
 - **D-08: 失効閾値は 30 暦日（約20営業日）**。research FEATURES が「swing-trader 的な高速回転は本プロジェクトの中長期リストに不適、generous window を推奨」、PITFALLS が「30-60日で50-150銘柄に肥大」と指摘するバランス点。強気で再言及されるたびに lastVerdictDate が更新されるため、失効するのは「1ヶ月間一度も強気再確認されなかった」銘柄のみ
-- **D-09: 閾値は名前付き定数（例: `EXPIRY_CALENDAR_DAYS = 30`）として watchlist.ts に一箇所定義**。マジックナンバー分散禁止
+- **D-09: 失効閾値は名前付き定数として watchlist.ts に一箇所定義** — 定数名は `EXPIRY_CALENDAR_DAYS = 30` とする。マジックナンバー分散禁止
 - **D-10: ウォッチリストのサイズ（active 件数・除外件数）を CLI 標準出力にログする**。research PITFALLS「size instrumentation from day one」の直接適用。launchd ログから肥大傾向を事後監査可能にする
 
 ### 除外トリガーの入力ソース（WLST-02/03）
@@ -44,7 +44,7 @@
 ### パイプライン統合・fail-soft・破損時ポリシー
 - **D-14: 純関数モジュール `src/portfolio/watchlist.ts` ＋ fail-soft CLI ラッパー `src/scripts/write-watchlist.ts` の分離構成**。`urgency-history.ts`＋`write-urgency-history.ts` の実証済みテンプレートを踏襲（純関数は I/O 非依存・throw-free、ラッパーのみが readFile/writeFile/mkdir と process.exit を持つ）
 - **D-15: 実行位置は invest.md Step 2g（filter-etf-stocks → validate-meeting）完了直後の新ステップ**（research の Step 3-W 相当）。ETF除外済み・バリデーション済みの meeting-result を入力とし、Phase 29 のデータ供給・Phase 30 の判定より前にウォッチリスト状態が確定する順序を構造的に保証する
-- **D-16: 専用 STEP マーカー `[STEP:watchlist:OK]` / `[STEP:watchlist:FAIL:<理由>]` を出力し、終了コード非0でもパイプライン継続**（OPS-06 の本フェーズ分担。`[PIPELINE:FAIL]` は絶対に出さない）
+- **D-16: 専用 STEP マーカーを出力し、終了コード非0でもパイプライン継続** — マーカーは `[STEP:watchlist:OK]` / `[STEP:watchlist:FAIL:<理由>]`（OPS-06 の本フェーズ分担。`[PIPELINE:FAIL]` は絶対に出さない）
 - **D-17: 同日再実行は冪等** — ticker キーの merge 構築により同日2回実行しても addedDate は初回値を保持し重複登録が構造的に不可能（Phase 25 の spread merge パターン）。専用の同日ガードファイルは不要
 - **D-18: ファイル読み込みの二段フェイル設計** — ①ファイル欠損（ENOENT）→ 空の状態テーブルとして初期化し正常続行（初回実行がこのパス）。ENOENT 判定は `error.code === "ENOENT"` と `error.message.includes("ENOENT")` の両方をチェック（Phase 25 Plan 02 のテストモック規約）。②JSON 破損・スキーマ不整合 → **既存ファイルを上書きせず** `[STEP:watchlist:FAIL:<理由>]` で当日の更新をスキップ（蓄積済み状態の保全を可用性より優先。破損ファイルを空で上書きすると全履歴を失う）
 - **D-19: zod は使わない** — watchlist.json は LLM 出力ではなく TS 自己生成ファイルのため、alias 硬化は不要。読み込み時の防御的パースは `loadUrgencyHistory`（report-data-loaders.ts / urgency-rollup 系）の throw しない防御様式に合わせる

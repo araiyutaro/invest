@@ -1,9 +1,9 @@
 ---
 phase: 28
 slug: watchlist-persistence
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: approved
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-07-15
 ---
 
@@ -38,7 +38,13 @@ created: 2026-07-15
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| （プランナーが PLAN.md 作成時に記入） | | | WLST-01〜05 | | | unit | `npx vitest run src/portfolio/watchlist.test.ts` | ❌ W0 | ⬜ pending |
+| 28-01-01 | 01 | 1 | WLST-04, WLST-05 | T-28-06 | isValidDateKey による dateKey 検証 | unit (TDD) | `npx vitest run src/portfolio/watchlist.test.ts -t "isActive\|getActiveWatchlistEntries\|EXPIRY"` | ❌ W0 (TDDタスク内で作成) | ⬜ pending |
+| 28-01-02 | 01 | 1 | WLST-01, WLST-05 | T-28-02 | ETF第2ゲート fail-closed（lookup失敗は登録しない） | unit (TDD) | `npx vitest run src/portfolio/watchlist.test.ts -t "admitBullishStocks\|idempotent\|ETF\|lookup\|reconfirm\|re-admission"` | ❌ W0 (TDDタスク内で作成) | ⬜ pending |
+| 28-01-03 | 01 | 1 | WLST-02, WLST-03, WLST-04, WLST-05 | T-28-01 | ticker 正規化による prototype pollution 防止 | unit (TDD) | `npx vitest run src/portfolio/watchlist.test.ts` | ❌ W0 (TDDタスク内で作成) | ⬜ pending |
+| 28-02-01 | 02 | 2 | WLST-01, WLST-05 | T-28-04 | 破損ファイル非上書き（二段フェイル） | unit (TDD) | `npx vitest run src/scripts/write-watchlist.test.ts -t "ENOENT\|corrupted\|quote"` | ❌ W0 (TDDタスク内で作成) | ⬜ pending |
+| 28-02-02 | 02 | 2 | WLST-01〜05 | T-28-05 | prune→admit 合成順序・STEP マーカー fail-soft | unit | `npx vitest run src/scripts/write-watchlist.test.ts` | ❌ W0 (TDDタスク内で作成) | ⬜ pending |
+| 28-03-01 | 03 | 3 | WLST-01〜05 (配線) | — | fail-soft 挿入（PIPELINE:FAIL を出さない） | source assertion | `grep -n "write-watchlist" .claude/commands/invest.md` | ✅ | ⬜ pending |
+| 28-03-02 | 03 | 3 | WLST-01 (ライブ確認) | — | launchd 実行での実マーカー確認 | manual (checkpoint:human-verify) | — | — | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 

@@ -399,7 +399,7 @@ if (!isValidDateKey(dateKey)) {
 
 **If this table is empty:** N/A — two low-risk assumptions logged above; neither blocks planning.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Exact WatchlistEntry/WatchlistFile shape (episode array vs. active+history object)**
    - What we know: D-06 explicitly leaves this to Claude's discretion, constrained by two requirements (simple active-list derivation; history preserved in the same file)
