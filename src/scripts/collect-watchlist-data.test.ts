@@ -525,6 +525,49 @@ describe("collect-watchlist-data", () => {
       expect(written.BBB).toEqual([]);
     });
 
+    it("news.json に不正要素（null・title非文字列・publishedAt不正）が混入しても、正常な記事のみでマップが構築され NaN スコアは出力されない (WR-06)", async () => {
+      const watchlist = {
+        AAA: makeWatchlistEntry({ ticker: "AAA", name: "Company AAA" }),
+      };
+      mockReadFileByPath({
+        "watchlist.json": () => Promise.resolve(JSON.stringify(watchlist)),
+        "technicals.json": () =>
+          Promise.resolve(JSON.stringify({ generatedAt: new Date().toISOString(), snapshots: [] })),
+        "news.json": () =>
+          Promise.resolve(
+            JSON.stringify([
+              null,
+              { id: "n00", title: 123, publishedAt: "2026-07-15T00:00:00.000Z" },
+              { id: "n02", title: "Company AAA bad date", publishedAt: "not-a-date", ticker: "AAA" },
+              {
+                id: "n01",
+                title: "Company AAA reports earnings",
+                source: "test",
+                url: "https://example.com/1",
+                publishedAt: "2026-07-15T00:00:00.000Z",
+                ticker: "AAA",
+              },
+            ]),
+          ),
+      });
+      chartMock.mockResolvedValue({ quotes: [] });
+
+      const { main } = await import("./collect-watchlist-data.js");
+      await main();
+
+      const writeCalls = writeFileMock.mock.calls;
+      const newsCall = writeCalls.find((c) => String(c[0]).includes("watchlist-news.json"));
+      const written = JSON.parse(String(newsCall![1]));
+      // 全損せず、有効な記事のみが AAA に紐付く
+      expect(Object.keys(written)).toEqual(["AAA"]);
+      expect(written.AAA.map((a: { id: string }) => a.id)).toEqual(["n01"]);
+      // NaN スコアが混入しない（NaN は JSON.stringify で null になる）
+      for (const article of written.AAA) {
+        expect(typeof article.score).toBe("number");
+        expect(Number.isNaN(article.score)).toBe(false);
+      }
+    });
+
     it("news.json 欠損の場合、newsMap は全銘柄空配列だが watchlist-technicals.json は正常に snapshot を持つ（2ブランチ独立, D-20）", async () => {
       const watchlist = {
         AAA: makeWatchlistEntry({ ticker: "AAA" }),

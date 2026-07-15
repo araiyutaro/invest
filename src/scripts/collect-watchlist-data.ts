@@ -111,6 +111,26 @@ async function loadSameDayCache(
 }
 
 /**
+ * WR-06: tmp/news.json 記事要素の形状検証。要素1件の破損（null・title 非文字列・
+ * publishedAt 欠落/不正）でニュースマップ全体が {} に縮退したり、Invalid Date 由来の
+ * NaN スコアが出力へ混入するのを防ぐ（D-20 fail-soft: 不正要素のみ除外し正常記事は保持）。
+ * buildHoldingNewsMap（無改変流用, D-13）の throw-free 契約は正しい入力が前提のため、
+ * 呼び出し側であるここが入力を保証する。
+ */
+function isValidPoolArticle(
+  a: unknown,
+): a is Omit<NewsArticleWithId, "publishedAt"> & { publishedAt: string } {
+  if (typeof a !== "object" || a === null) return false;
+  const r = a as Record<string, unknown>;
+  return (
+    typeof r.id === "string" &&
+    typeof r.title === "string" &&
+    typeof r.publishedAt === "string" &&
+    !Number.isNaN(Date.parse(r.publishedAt))
+  );
+}
+
+/**
  * D-04/D-19: 両出力ファイルに有効な空JSONを書込む（空ウォッチリスト・破損・fatal 時の共通経路）。
  */
 export async function writeEmptyOutputs(): Promise<void> {
@@ -204,10 +224,11 @@ export async function main(): Promise<void> {
       // JSON往復後 string になっている（NewsArticlePoolEntry.publishedAt の契約と同一）。
       // buildHoldingNewsMap（無改変流用, D-13）は calculatePriorityScore 経由で
       // publishedAt.getTime() を呼ぶため、Date への復元が必須。
+      // WR-06: isValidPoolArticle で不正要素を除外してから復元する。
       articles = Array.isArray(parsed)
-        ? (parsed as ReadonlyArray<Omit<NewsArticleWithId, "publishedAt"> & { publishedAt: string }>).map(
-            (a) => ({ ...a, publishedAt: new Date(a.publishedAt) }),
-          )
+        ? parsed
+            .filter(isValidPoolArticle)
+            .map((a) => ({ ...a, publishedAt: new Date(a.publishedAt) }))
         : [];
     } catch {
       console.error(
