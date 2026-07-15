@@ -36,8 +36,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### レポート表示
 
-- [ ] **UI-09**: Daily Report にウォッチリストセクションが追加され、各銘柄に「今日買うべき」バッジ（または「待ち」表示）と判定理由・会社名が表示される
-- [ ] **UI-10**: 前日からの判定変化（新規買いシグナル点灯・買い→待ち転落）が既存バッジUXと同様の様式で区別表示される
+- [x] **UI-09**: Daily Report にウォッチリストセクションが追加され、各銘柄に「今日買うべき」バッジ（または「待ち」表示）と判定理由・会社名が表示される
+- [x] **UI-10**: 前日からの判定変化（新規買いシグナル点灯・買い→待ち転落）が既存バッジUXと同様の様式で区別表示される
 
 ### 運用安定性
 
@@ -85,8 +85,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TIME-03 | Phase 30 | Complete |
 | TIME-04 | Phase 30 | Complete |
 | TIME-05 | Phase 30 | Complete |
-| UI-09 | Phase 31 | Pending |
-| UI-10 | Phase 31 | Pending |
+| UI-09 | Phase 31 | Complete |
+| UI-10 | Phase 31 | Complete |
 | OPS-06 | Phase 29 | Complete |
 
 **Coverage:**

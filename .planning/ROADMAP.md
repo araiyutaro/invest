@@ -244,14 +244,14 @@ Plans:
   2. 前日からの判定変化（新規買いシグナル点灯・買い→待ち転落）が、既存のurgent/decisionChangedバッジと同様の視覚様式で区別表示される
   3. ウォッチリストが空・1件・複数件のいずれの状態でもレポートが正常に描画される（fail-softローダー、既存3+1レポートの生成・デプロイへの影響なし）
 
-**Plans**: 1/3 plans executed
+**Plans**: 2/3 plans executed
 
 Plans:
 
 **Wave 1** *(parallel — disjoint files)*
 
 - [x] 31-01-PLAN.md — fail-soft ローダー loadWatchlistJudgment（D-13 stale ガード）/ loadWatchlist を report-data-loaders.ts に新設（TDD, UI-09）
-- [ ] 31-02-PLAN.md — formatWatchlistSectionHtml + カード/バッジ純関数群を generate-daily-report.ts に追加し scoringSection 直後に挿入・シグネチャ後方互換拡張（TDD, UI-09/UI-10）
+- [x] 31-02-PLAN.md — formatWatchlistSectionHtml + カード/バッジ純関数群を generate-daily-report.ts に追加し scoringSection 直後に挿入・シグネチャ後方互換拡張（TDD, UI-09/UI-10）
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -294,7 +294,7 @@ Plans:
 | 28. Watchlist Persistence | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 29. Daily Tracking Data Supply | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 30. Buy-Timing Judgment Agent | v2.7 | 3/3 | Complete   | 2026-07-15 |
-| 31. Daily Report Watchlist Section | v2.7 | 1/3 | In Progress|  |
+| 31. Daily Report Watchlist Section | v2.7 | 2/3 | In Progress|  |
 
 ---
 *Roadmap created: 2026-06-24*
