@@ -116,6 +116,46 @@ describe("write-watchlist-judgment", () => {
       expect(result).toEqual({ prev: null, corrupted: true });
     });
 
+    it.each([
+      ["judgmentsが非配列（文字列）", JSON.stringify({ date: "2026-07-14", judgments: "oops" })],
+      ["judgments要素がnull", JSON.stringify({ date: "2026-07-14", judgments: [null] })],
+      ["judgments要素のtickerが非文字列", JSON.stringify({ date: "2026-07-14", judgments: [{ ticker: 123 }] })],
+    ])(
+      "judgmentsフィールドの形状が不正（%s）の場合、corrupted:trueでprev:nullを返しthrowしない（CR-01回帰防止）",
+      async (_label, raw) => {
+        readFileMock.mockResolvedValue(raw);
+
+        const { loadPrevJudgmentDefensive } = await import("./write-watchlist-judgment.js");
+        const result = await loadPrevJudgmentDefensive();
+
+        expect(result).toEqual({ prev: null, corrupted: true });
+      },
+    );
+
+    it("prevが破損（judgments:[null]）でも当日判定は破棄されず出力される（CR-01: 全損経路の統合回帰防止）", async () => {
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+        "watchlist-technicals.json": () =>
+          Promise.resolve(JSON.stringify(makeTechnicalsFile([{ symbol: "MRNA", asOf: "2026-07-15" }]))),
+        "prev-watchlist-judgment.json": () =>
+          Promise.resolve(JSON.stringify({ date: "2026-07-14", judgments: [null] })),
+        "MRNA.json": () =>
+          Promise.resolve(
+            JSON.stringify(makeRawJudgment({ ticker: "MRNA", todayAction: "wait", signals: [] })),
+          ),
+      });
+      readdirMock.mockResolvedValue(["MRNA.json"]);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await expect(main()).resolves.not.toThrow();
+
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      const mrna = written.judgments.find((j: { ticker: string }) => j.ticker === "MRNA");
+      expect(mrna).toBeDefined();
+      expect(mrna).not.toHaveProperty("previousAction");
+    });
+
     it("正常なJSONの場合、パースされたprevをcorrupted:falseで返す", async () => {
       const prevFile = {
         date: "2026-07-14",

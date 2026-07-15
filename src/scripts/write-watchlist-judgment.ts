@@ -26,6 +26,10 @@ const MEETING_RESULT_PATH = join(TMP_DIR, "meeting-result.json");
  * テストモック規約 — プレーンな Error("ENOENT") で欠損をシミュレートするため）。
  * 欠損（no-prior-data）と破損はどちらも前日比較をスキップする（prev: null）が、
  * corrupted フラグで区別し監査ログに残せるようにする。
+ * CR-01: judgments フィールドの形状（配列・要素オブジェクト・ticker 文字列・todayAction enum）
+ * も検証する。破損 prev が attachActionChanges で TypeError → fatal catch → 当日全判定が
+ * 空出力で上書きされる全損経路を防ぐ（前日比較は enrichment であり、prev の破損が
+ * 当日の出力を破壊してはならない）。throw せず corrupted: true で返す。
  */
 export async function loadPrevJudgmentDefensive(): Promise<{
   prev: WatchlistJudgmentFile | null;
@@ -35,6 +39,21 @@ export async function loadPrevJudgmentDefensive(): Promise<{
     const raw = await readFile(PREV_PATH, "utf-8");
     const parsed: unknown = JSON.parse(raw);
     if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      return { prev: null, corrupted: true };
+    }
+    const record = parsed as Record<string, unknown>;
+    if (!Array.isArray(record.judgments)) {
+      return { prev: null, corrupted: true };
+    }
+    const allElementsValid = record.judgments.every((j: unknown) => {
+      if (typeof j !== "object" || j === null || Array.isArray(j)) return false;
+      const el = j as Record<string, unknown>;
+      return (
+        typeof el.ticker === "string" &&
+        (el.todayAction === "buy" || el.todayAction === "wait")
+      );
+    });
+    if (!allElementsValid) {
       return { prev: null, corrupted: true };
     }
     return { prev: parsed as WatchlistJudgmentFile, corrupted: false };
