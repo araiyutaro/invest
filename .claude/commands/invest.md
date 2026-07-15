@@ -1476,7 +1476,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 ---
 
-`highlightedStocks` 配列が0件の場合は「注目銘柄が0件のためWebSearchリサーチをスキップします。」と表示し、**Step 3a/3b のみを飛ばして Step 3d へ進んでください**（Step 3d のポートフォリオ分析・ニュースキュレーションと Step 3c/3e は highlightedStocks に依存しないため、0件の日でも必ず実行します）。
+`highlightedStocks` 配列が0件の場合は「注目銘柄が0件のためWebSearchリサーチをスキップします。」と表示し、**Step 3a/3b のみを飛ばして Step 3-J へ進んでください**（Step 3-J の買いタイミング判定、Step 3d のポートフォリオ分析・ニュースキュレーション、Step 3c/3e は highlightedStocks に依存しないため、0件の日でも必ず実行します）。
 
 ---
 
