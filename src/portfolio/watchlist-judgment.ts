@@ -37,6 +37,10 @@ export function applyConfluenceGate(judgment: {
  * 銘柄キー一致は normalizeHoldingSymbol（trim + toUpperCase）で行い、表記揺れに耐える（D-13）。
  *
  * 純関数: throw なし、I/O なし。入力配列は変更しない。
+ * WR-02: 「throw なし」契約を関数自身が担保する defense-in-depth。prevJudgments が
+ * 型に反して非配列・null 要素・非文字列 ticker を含んでも throw せず、不正要素は
+ * 比較対象から除外する（呼び出し元の検証だけに依存しない — 前日比較は enrichment で
+ * あり、不正な prev が当日出力を壊してはならない）。
  */
 export function attachActionChanges<
   T extends { readonly ticker: string; readonly todayAction: "buy" | "wait" },
@@ -44,12 +48,17 @@ export function attachActionChanges<
   judgments: ReadonlyArray<T>,
   prevJudgments: ReadonlyArray<T> | null,
 ): ReadonlyArray<T & { previousAction?: "buy" | "wait"; actionChanged?: boolean }> {
-  if (prevJudgments === null) {
+  if (prevJudgments === null || !Array.isArray(prevJudgments)) {
     return judgments.map((j) => ({ ...j }));
   }
 
   const prevByTicker = new Map(
-    prevJudgments.map((j) => [normalizeHoldingSymbol(j.ticker), j] as const),
+    prevJudgments
+      .filter(
+        (j): j is T =>
+          typeof j === "object" && j !== null && typeof (j as { ticker?: unknown }).ticker === "string",
+      )
+      .map((j) => [normalizeHoldingSymbol(j.ticker), j] as const),
   );
 
   return judgments.map((j) => {

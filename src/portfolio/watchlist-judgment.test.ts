@@ -90,6 +90,26 @@ describe("attachActionChanges (TIME-03)", () => {
     expect(result.map((j) => j.ticker)).toEqual(["AAPL", "NEWSTOCK"]);
     expect(result[1]).not.toHaveProperty("actionChanged");
   });
+
+  it("prevJudgments が型に反して非配列でも throw せず全結果にプロパティ非付与（WR-02: throwなし契約）", () => {
+    const judgments = [makeJudgment({ ticker: "AAPL" })];
+    const result = attachActionChanges(judgments, "oops" as unknown as WatchlistJudgment[]);
+    expect(result).toHaveLength(1);
+    expect(result[0]).not.toHaveProperty("previousAction");
+    expect(result[0]).not.toHaveProperty("actionChanged");
+  });
+
+  it("prev 要素が null / 非文字列 ticker でも throw せず不正要素のみ比較から除外される（WR-02）", () => {
+    const judgments = [makeJudgment({ ticker: "AAPL", todayAction: "buy" })];
+    const prevJudgments = [
+      null,
+      { ticker: 123, todayAction: "wait" },
+      makeJudgment({ ticker: "AAPL", todayAction: "wait" }),
+    ] as unknown as WatchlistJudgment[];
+    const result = attachActionChanges(judgments, prevJudgments);
+    expect(result[0].previousAction).toBe("wait");
+    expect(result[0].actionChanged).toBe(true);
+  });
 });
 
 describe("deriveMarket (TIME-05)", () => {
