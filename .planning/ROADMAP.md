@@ -161,7 +161,7 @@ Plans:
   4. 強気再確認が一定期間（設計時に確定する日数）ない銘柄は`removedReason: expired`付きで時間ベースに自動失効し、リストが無限に肥大しない
   5. 除外・失効後もレコードは履歴として保持され、いつ・なぜ除外されたかを追跡できる
 
-**Plans**: 1/3 plans executed
+**Plans**: 2/3 plans executed
 Plans:
 
 **Wave 1**
@@ -170,7 +170,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 28-02-PLAN.md — fail-soft CLI write-watchlist.ts（batch quote() で quoteType+社名, ENOENT/破損二段フェイル, prune→admit 合成, [STEP:watchlist:*] マーカー + テスト）
+- [x] 28-02-PLAN.md — fail-soft CLI write-watchlist.ts（batch quote() で quoteType+社名, ENOENT/破損二段フェイル, prune→admit 合成, [STEP:watchlist:*] マーカー + テスト）
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -251,7 +251,7 @@ Plans:
 | 25. Urgency History Persistence | v2.6 | 2/2 | Complete    | 2026-07-04 |
 | 26. Weekly Urgency Rollup Display | v2.6 | 3/3 | Complete    | 2026-07-04 |
 | 27. ETF Exclusion | v2.7 | 3/3 | Complete   | 2026-07-15 |
-| 28. Watchlist Persistence | v2.7 | 1/3 | In Progress|  |
+| 28. Watchlist Persistence | v2.7 | 2/3 | In Progress|  |
 | 29. Daily Tracking Data Supply | v2.7 | 0/0 | Not started | - |
 | 30. Buy-Timing Judgment Agent | v2.7 | 0/0 | Not started | - |
 | 31. Daily Report Watchlist Section | v2.7 | 0/0 | Not started | - |
