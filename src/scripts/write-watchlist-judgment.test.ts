@@ -516,6 +516,71 @@ describe("write-watchlist-judgment", () => {
       expect(mrna.actionChanged).toBe(true);
     });
 
+    it("前日のstatus:skippedレコードは前日比較に寄与しない（WR-03/D-14: 判定不能はwait判定ではない）", async () => {
+      const prevFile = {
+        date: "2026-07-14",
+        generatedAt: "2026-07-14T00:00:00.000Z",
+        judgments: [
+          {
+            ticker: "MRNA",
+            todayAction: "wait",
+            rationale: "テクニカルデータ欠落のため判定不能",
+            signals: [],
+            status: "skipped",
+          },
+        ],
+      };
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+        "watchlist-technicals.json": () =>
+          Promise.resolve(JSON.stringify(makeTechnicalsFile([{ symbol: "MRNA", asOf: "2026-07-15" }]))),
+        "prev-watchlist-judgment.json": () => Promise.resolve(JSON.stringify(prevFile)),
+        "MRNA.json": () =>
+          Promise.resolve(
+            JSON.stringify(makeRawJudgment({ ticker: "MRNA", todayAction: "buy", signals: ["a", "b"] })),
+          ),
+      });
+      readdirMock.mockResolvedValue(["MRNA.json"]);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await main();
+
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      const mrna = written.judgments.find((j: { ticker: string }) => j.ticker === "MRNA");
+      // 前日は「判定していない」ため previousAction/actionChanged は付与されない
+      expect(mrna).not.toHaveProperty("previousAction");
+      expect(mrna).not.toHaveProperty("actionChanged");
+    });
+
+    it("当日のstatus:skippedレコードにはpreviousAction/actionChangedを付与しない（WR-03）", async () => {
+      const prevFile = {
+        date: "2026-07-14",
+        generatedAt: "2026-07-14T00:00:00.000Z",
+        judgments: [{ ticker: "NVDA", todayAction: "buy", rationale: "前日理由", signals: ["a", "b"] }],
+      };
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+        "watchlist-technicals.json": () => Promise.resolve(JSON.stringify(makeTechnicalsFile([]))),
+        "prev-watchlist-judgment.json": () => Promise.resolve(JSON.stringify(prevFile)),
+        "NVDA.json": () =>
+          Promise.resolve(
+            JSON.stringify(makeRawJudgment({ ticker: "NVDA", todayAction: "wait", signals: [] })),
+          ),
+      });
+      readdirMock.mockResolvedValue(["NVDA.json"]);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await main();
+
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      const nvda = written.judgments.find((j: { ticker: string }) => j.ticker === "NVDA");
+      expect(nvda.status).toBe("skipped");
+      expect(nvda).not.toHaveProperty("previousAction");
+      expect(nvda).not.toHaveProperty("actionChanged");
+    });
+
     it("すべての分岐で [PIPELINE:FAIL] マーカーが一度も出力されない", async () => {
       readFileMock.mockRejectedValue(new Error("破損"));
       readdirMock.mockRejectedValue(new Error("ENOENT"));

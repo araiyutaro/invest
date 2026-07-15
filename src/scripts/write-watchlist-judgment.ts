@@ -272,7 +272,18 @@ export async function main(): Promise<void> {
   if (prevCorrupted) {
     console.log("[watchlist-judgment] tmp/prev-watchlist-judgment.json が破損しています。前日比較をスキップします。");
   }
-  const finalJudgments = attachActionChanges(processedJudgments, prev?.judgments ?? null);
+  // WR-03/D-14: 前日の status:"skipped" レコードは「判定不能」であり「wait と判定した」
+  // わけではないため、比較対象から除外する（比較不能 undefined と 変化なし false の区別）。
+  const prevComparable =
+    prev === null ? null : prev.judgments.filter((j) => j.status !== "skipped");
+  const withChanges = attachActionChanges(processedJudgments, prevComparable);
+  // WR-03: 当日側の skipped レコードにも previousAction/actionChanged を付与しない
+  // （判定不能な当日レコードに前日比較の意味を持たせない）。
+  const finalJudgments = withChanges.map((j) => {
+    if (j.status !== "skipped") return j;
+    const { previousAction: _previousAction, actionChanged: _actionChanged, ...rest } = j;
+    return rest;
+  });
 
   const output: WatchlistJudgmentFile = {
     date,
