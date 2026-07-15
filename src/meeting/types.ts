@@ -131,6 +131,44 @@ export interface HoldingEvaluation {
   readonly decisionChanged?: boolean;
 }
 
+export interface WatchlistJudgment {
+  readonly ticker: string;
+  readonly todayAction: "buy" | "wait";
+  readonly rationale: string;
+  readonly signals: readonly string[];
+  /**
+   * TS側で付与（D-08）。テクニカルスナップショットの as-of 時刻を透過するのみで、
+   * LLMの生出力には決して存在しない（schemas.ts の transform で strip される）。
+   */
+  readonly asOf?: string;
+  /**
+   * TS側で決定論的に導出（D-13、deriveMarket: `.T` サフィックス判定）。
+   * LLMの生出力には決して存在しない（schemas.ts の transform で strip される）。
+   */
+  readonly market?: "US" | "JP";
+  /**
+   * TS側で付与（前日スナップショットとの決定論的比較、D-11、D-15）。
+   * LLMの生出力には決して存在しない（schemas.ts の transform で strip される）。
+   */
+  readonly previousAction?: "buy" | "wait";
+  /**
+   * TS側で付与（D-11）。undefined = 前日データ欠損等で比較不能、false = 比較した結果変化なし。
+   * 「比較できなかった」と「変化がなかった」を区別する（D-14 と同じ規律）。
+   */
+  readonly actionChanged?: boolean;
+  /**
+   * TS側で付与（D-20）。テクニカルスナップショット欠落銘柄の陽性 skip レコードにのみ設定する。
+   * 省略時（undefined）は通常判定済みを意味する。
+   */
+  readonly status?: "skipped";
+}
+
+export interface WatchlistJudgmentFile {
+  readonly date: string;
+  readonly generatedAt: string;
+  readonly judgments: readonly WatchlistJudgment[];
+}
+
 export interface PortfolioAnalysis {
   readonly date: string;
   readonly generatedAt: string;

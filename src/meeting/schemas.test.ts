@@ -6,6 +6,7 @@ import {
   validateWebSearchResult,
   holdingEvaluationSchema,
   portfolioAnalysisSchema,
+  watchlistJudgmentSchema,
 } from "./schemas.js";
 import type { NewsArticlePoolEntry, RawNewsCuration } from "./schemas.js";
 
@@ -586,5 +587,52 @@ describe("portfolioAnalysisSchema（per-holding fail-soft, WR-01）", () => {
     });
     expect(result.holdings[0]).not.toHaveProperty("decisionChanged");
     expect(result.holdings[0]).not.toHaveProperty("previousDecision");
+  });
+});
+
+describe("watchlistJudgmentSchema (TIME-02)", () => {
+  it("エイリアス受理: action→todayAction が解決される", () => {
+    const result = watchlistJudgmentSchema.parse({ ticker: "AAPL", action: "buy", signals: ["a", "b"] });
+    expect(result.todayAction).toBe("buy");
+  });
+
+  it("エイリアス受理: verdict の日本語値「待ち」→wait が解決される", () => {
+    const result = watchlistJudgmentSchema.parse({ ticker: "7203.T", verdict: "待ち" });
+    expect(result.todayAction).toBe("wait");
+  });
+
+  it("エイリアス受理: verdict の日本語値「買い」→buy が解決される", () => {
+    const result = watchlistJudgmentSchema.parse({ ticker: "7203.T", verdict: "買い" });
+    expect(result.todayAction).toBe("buy");
+  });
+
+  it("寛容boolean: buyToday が true なら todayAction が buy に解決される（lenientBoolean経路）", () => {
+    const result = watchlistJudgmentSchema.parse({ ticker: "X", buyToday: true });
+    expect(result.todayAction).toBe("buy");
+  });
+
+  it("寛容boolean: buyToday が文字列 \"false\" でも todayAction が wait に矯正される", () => {
+    const result = watchlistJudgmentSchema.parse({ ticker: "X", buyToday: "false" });
+    expect(result.todayAction).toBe("wait");
+  });
+
+  it("passthrough寛容: 未知フィールドがあってもthrowせず、todayAction不明時はfail-closedでwaitになる", () => {
+    const result = watchlistJudgmentSchema.parse({ ticker: "X", garbageField: 1 });
+    expect(result.todayAction).toBe("wait");
+  });
+
+  it("strip: LLMが誤ってmarket/asOf/previousAction/actionChangedを出力してもtransform後には存在しない（D-08）", () => {
+    const result = watchlistJudgmentSchema.parse({
+      ticker: "X",
+      todayAction: "buy",
+      market: "JP",
+      asOf: "2026-07-14",
+      previousAction: "wait",
+      actionChanged: true,
+    });
+    expect(result).not.toHaveProperty("market");
+    expect(result).not.toHaveProperty("asOf");
+    expect(result).not.toHaveProperty("previousAction");
+    expect(result).not.toHaveProperty("actionChanged");
   });
 });
