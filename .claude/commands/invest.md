@@ -1276,6 +1276,34 @@ data/watchlist.json をそのまま保全し次のステップへ進みます。
 
 ---
 
+### Step 2i: 追跡データ供給（ウォッチリスト銘柄）
+
+「ウォッチリスト銘柄の追跡データ（株価・テクニカル・ニュース）を収集中...」とユーザーに表示してください。
+
+以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/collect-watchlist-data.ts
+```
+
+終了コードに関わらず、次のステップ（Step 3）へ進んでください（fail-soft, D-03/OPS-06）。
+collect-watchlist-data.ts は data/watchlist.json（Step 2h で当日更新済みのアクティブ銘柄）＋
+tmp/technicals.json（Step 2b 生成の同日キャッシュ）＋ tmp/news.json（Step 1 生成の記事プール）
+を入力に、tmp/watchlist-technicals.json と tmp/watchlist-news.json の2ファイルを出力します。
+**必ず write-watchlist.ts（Step 2h）より後に実行すること**（D-01、当日確定済みウォッチリスト
+を入力とする前提）。
+
+collect-watchlist-data.ts はスクリプト自身が stderr に `[STEP:watchlist-data:OK]` /
+`[STEP:watchlist-data:FAIL:<reason>]` を出力する設計（Phase 29 成果物）です。スクリプトの
+stderr に出た `[STEP:watchlist-data:*]` 行をそのまま尊重し、追加で echo する必要はありません
+（Step 2h の write-watchlist.ts と同じ扱い）。
+
+**このステップの失敗は既存4レポートの生成・デプロイを一切ブロックしません**（OPS-06）。
+`[PIPELINE:FAIL]` は絶対に出力しないこと — 追跡データ供給の失敗は、両出力ファイルを有効な
+空JSONで縮退させ次のステップへ進みます。
+
+---
+
 ## Step 3: WebSearch リサーチ & レポート生成
 
 ---
