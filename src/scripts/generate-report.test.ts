@@ -233,6 +233,334 @@ describe("Daily Report", () => {
   });
 });
 
+describe("Watchlist section (UI-09/UI-10)", () => {
+  const marketDataDefault = { sectors: [], vixHistory: [] };
+
+  it("Test 37: judgments 複数件（buy 1件 + wait 1件）で見出し・バッジ文言・ラベル文言・rationale・会社名が含まれる", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        {
+          ticker: "PLTR",
+          todayAction: "buy" as const,
+          rationale: "MA上抜けと出来高急増を確認、押し目形成完了",
+          signals: ["MA上抜け"],
+        },
+        {
+          ticker: "SNOW",
+          todayAction: "wait" as const,
+          rationale: "まだ調整局面、押し目待ち",
+          signals: [],
+        },
+      ],
+    };
+    const watchlistFixture = {
+      pltr: { ticker: "PLTR", nameJa: "パランティア", history: [] },
+      snow: { ticker: "SNOW", nameJa: "スノーフレイク", history: [] },
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, watchlistFixture,
+    );
+    expect(html).toContain("ウォッチリスト 買いタイミング判定");
+    expect(html).toContain("今日買うべき");
+    expect(html).toContain("待ち");
+    expect(html).toContain("MA上抜けと出来高急増を確認、押し目形成完了");
+    expect(html).toContain("まだ調整局面、押し目待ち");
+    expect(html).toContain("パランティア");
+    expect(html).toContain("スノーフレイク");
+  });
+
+  it("Test 38: 有効な WatchlistJudgmentFile で judgments が空配列のとき見出し＋空メッセージが含まれ、カード div は含まれない", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain("ウォッチリスト 買いタイミング判定");
+    expect(html).toContain("現在ウォッチリスト銘柄はありません");
+    expect(html).not.toContain('class="agent-card"');
+  });
+
+  it("Test 39: watchlistJudgment に null を渡すとセクション見出し・空メッセージのいずれも含まれない（完全非表示）", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      null, {},
+    );
+    expect(html).not.toContain("ウォッチリスト 買いタイミング判定");
+    expect(html).not.toContain("現在ウォッチリスト銘柄はありません");
+  });
+
+  it("Test 40: buy 銘柄で背景色 #10b981 を含むピルが描画される", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        { ticker: "PLTR", todayAction: "buy" as const, rationale: "根拠", signals: [] },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain("#10b981");
+  });
+
+  it("Test 41: wait 銘柄では #10b981 のピルではなく #9ca3af の控えめラベルが描画される", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        { ticker: "SNOW", todayAction: "wait" as const, rationale: "根拠", signals: [] },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).not.toContain("#10b981");
+    expect(html).toContain("#9ca3af");
+  });
+
+  it("Test 42: market: US の銘柄で「前日終値時点」が asOf 値とともに含まれる", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        {
+          ticker: "PLTR", todayAction: "buy" as const, rationale: "根拠", signals: [],
+          asOf: "2026-06-23T20:00:00.000Z", market: "US" as const,
+        },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain("前日終値時点");
+    expect(html).toContain("2026-06-23T20:00:00.000Z");
+  });
+
+  it("Test 43: market: JP の銘柄で「寄付き前時点」が asOf 値とともに含まれる", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        {
+          ticker: "7203.T", todayAction: "wait" as const, rationale: "根拠", signals: [],
+          asOf: "2026-06-24T00:00:00.000Z", market: "JP" as const,
+        },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain("寄付き前時点");
+    expect(html).toContain("2026-06-24T00:00:00.000Z");
+  });
+
+  it("Test 44: signals 配列の各要素が .ticker-pill クラスの span として描画される", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        { ticker: "PLTR", todayAction: "buy" as const, rationale: "根拠", signals: ["MA上抜け", "出来高急増"] },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain('<span class="ticker-pill">MA上抜け</span>');
+    expect(html).toContain('<span class="ticker-pill">出来高急増</span>');
+  });
+
+  it("Test 45: watchlist エントリに addedDate があるとき「登録日:」プレフィックス付きで含まれる", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        { ticker: "PLTR", todayAction: "buy" as const, rationale: "根拠", signals: [] },
+      ],
+    };
+    const watchlistFixture = {
+      pltr: { ticker: "PLTR", nameJa: "パランティア", addedDate: "2026-06-10", history: [] },
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, watchlistFixture,
+    );
+    expect(html).toContain("登録日:");
+    expect(html).toContain("2026-06-10");
+  });
+
+  it("Test 46: status: skipped の銘柄は「判定不能（データ不足）」文言とグレー系スタイルで描画され buy/wait バッジは出さない", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        {
+          ticker: "PLTR", todayAction: "wait" as const, rationale: "根拠", signals: [],
+          status: "skipped" as const,
+        },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain("判定不能（データ不足）");
+    expect(html).toContain("border-left-color:#4b5563");
+    expect(html).toContain("opacity:0.7");
+    expect(html).not.toContain("今日買うべき");
+    expect(html).not.toContain('style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span>');
+  });
+
+  it("Test 47: 変化バッジ 待ち→買い（actionChanged: true, previousAction: wait, todayAction: buy）で「シグナル点灯: 待ち → 買い」文言かつ緑系バッジ", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        {
+          ticker: "PLTR", todayAction: "buy" as const, rationale: "根拠", signals: [],
+          actionChanged: true, previousAction: "wait" as const,
+        },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain("シグナル点灯: 待ち → 買い");
+  });
+
+  it("Test 48: 変化バッジ 買い→待ち（actionChanged: true, previousAction: buy, todayAction: wait）で「買い → 待ち」文言かつアンバーバッジ", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        {
+          ticker: "PLTR", todayAction: "wait" as const, rationale: "根拠", signals: [],
+          actionChanged: true, previousAction: "buy" as const,
+        },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain("買い → 待ち");
+    expect(html).toContain("#f59e0b");
+  });
+
+  it("Test 49: 変化バッジ非表示 undefined — actionChanged 未設定で変化バッジ文言が一切含まれない", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        { ticker: "PLTR", todayAction: "buy" as const, rationale: "根拠", signals: [] },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).not.toContain("シグナル点灯");
+    expect(html).not.toContain("買い → 待ち");
+  });
+
+  it("Test 50: 変化バッジ非表示 false — actionChanged: false で変化バッジ文言が一切含まれない", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        {
+          ticker: "PLTR", todayAction: "buy" as const, rationale: "根拠", signals: [],
+          actionChanged: false, previousAction: "wait" as const,
+        },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).not.toContain("シグナル点灯");
+    expect(html).not.toContain("買い → 待ち");
+  });
+
+  it("Test 51: watchlist に該当 ticker のエントリが無い銘柄は見出しがティッカーのみ（会社名フォールバック）", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        { ticker: "UNKNOWNTICKER", todayAction: "buy" as const, rationale: "根拠", signals: [] },
+      ],
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, {},
+    );
+    expect(html).toContain("UNKNOWNTICKER");
+    expect(html).not.toContain("UNKNOWNTICKER —");
+  });
+
+  it("Test 52: judgment.ticker が大文字小文字混在でも watchlist の正規化キーと join され会社名が解決される", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const watchlistJudgmentFixture = {
+      date: validMeetingResult.date,
+      generatedAt: "2026-06-24T08:00:00.000Z",
+      judgments: [
+        { ticker: "pLtR", todayAction: "buy" as const, rationale: "根拠", signals: [] },
+      ],
+    };
+    const watchlistFixture = {
+      pltr: { ticker: "PLTR", nameJa: "パランティア", history: [] },
+    };
+    const html = generateDailyReportHtml(
+      validMeetingResult, [], [], marketDataDefault,
+      watchlistJudgmentFixture, watchlistFixture,
+    );
+    expect(html).toContain("パランティア");
+  });
+
+  it("Test 53: generateDailyReportHtml を3引数で呼んでも throw せず HTML を返す（後方互換）", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const html = generateDailyReportHtml(validMeetingResult, [], []);
+    expect(typeof html).toBe("string");
+    expect(html).toContain("<!DOCTYPE html>");
+    expect(html).not.toContain("ウォッチリスト 買いタイミング判定");
+  });
+
+  it("Test 54: generateDailyReportHtml を4引数で呼んでも throw せず HTML を返す（後方互換）", async () => {
+    const { generateDailyReportHtml } = await import("./generate-daily-report.js");
+    const html = generateDailyReportHtml(validMeetingResult, [], [], marketDataDefault);
+    expect(typeof html).toBe("string");
+    expect(html).toContain("<!DOCTYPE html>");
+    expect(html).not.toContain("ウォッチリスト 買いタイミング判定");
+  });
+});
+
 describe("Meeting Minutes HTML", () => {
   it("Test 17: generateMeetingMinutesHtml が有効な HTML を返す", async () => {
     const { generateMeetingMinutesHtml } = await import("./generate-meeting-minutes.js");
