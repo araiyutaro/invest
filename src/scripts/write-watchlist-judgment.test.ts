@@ -253,6 +253,79 @@ describe("write-watchlist-judgment", () => {
       ).toBe(true);
     });
 
+    it("ファイル名と内容tickerの不一致: 別銘柄の判定をsilent overwriteせず警告+失敗計上する（WR-01）", async () => {
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+        "watchlist-technicals.json": () =>
+          Promise.resolve(
+            JSON.stringify(
+              makeTechnicalsFile([
+                { symbol: "AAA", asOf: "2026-07-15" },
+                { symbol: "BBB", asOf: "2026-07-15" },
+              ]),
+            ),
+          ),
+        "AAA.json": () =>
+          Promise.resolve(
+            JSON.stringify(makeRawJudgment({ ticker: "AAA", todayAction: "wait", signals: [] })),
+          ),
+        // BBB.json の内容が AAA をエコー（LLM のエコーミス）
+        "BBB.json": () =>
+          Promise.resolve(
+            JSON.stringify(makeRawJudgment({ ticker: "AAA", todayAction: "buy", signals: ["a", "b"] })),
+          ),
+      });
+      readdirMock.mockResolvedValue(["AAA.json", "BBB.json"]);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await main();
+
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      // AAA の正当な判定（wait）が BBB ファイルの内容（buy）で上書きされていないこと
+      const aaa = written.judgments.find((j: { ticker: string }) => j.ticker === "AAA");
+      expect(aaa.todayAction).toBe("wait");
+      expect(written.judgments).toHaveLength(1);
+
+      const warnCalls = (console.warn as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(warnCalls.some((c) => String(c).includes("不一致"))).toBe(true);
+
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(
+        errorCalls.some(
+          (c) => String(c).includes("[STEP:watchlist-judgment:FAIL:") && String(c).includes("1/2銘柄失敗"),
+        ),
+      ).toBe(true);
+    });
+
+    it("ticker重複（大小文字違いファイル名）: 先勝ちで警告し無警告overwriteしない（WR-01）", async () => {
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+        "watchlist-technicals.json": () =>
+          Promise.resolve(JSON.stringify(makeTechnicalsFile([{ symbol: "MRNA", asOf: "2026-07-15" }]))),
+        "MRNA.json": () =>
+          Promise.resolve(
+            JSON.stringify(makeRawJudgment({ ticker: "MRNA", todayAction: "wait", signals: [] })),
+          ),
+        "mrna.json": () =>
+          Promise.resolve(
+            JSON.stringify(makeRawJudgment({ ticker: "mrna", todayAction: "buy", signals: ["a", "b"] })),
+          ),
+      });
+      readdirMock.mockResolvedValue(["MRNA.json", "mrna.json"]);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await main();
+
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      expect(written.judgments).toHaveLength(1);
+      expect(written.judgments[0].todayAction).toBe("wait"); // 先勝ち
+
+      const warnCalls = (console.warn as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(warnCalls.some((c) => String(c).includes("重複"))).toBe(true);
+    });
+
     it("confluence降格の統合: buy+signals1件のrawが最終出力でwaitに降格する（D-07のCLI経路統合）", async () => {
       mockReadFileByPath({
         "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),

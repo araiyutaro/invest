@@ -196,7 +196,31 @@ export async function main(): Promise<void> {
       const raw = await readFile(join(RAW_DIR, file), "utf-8");
       const parsed: unknown = JSON.parse(raw);
       const judgment = watchlistJudgmentSchema.parse(parsed);
-      validatedByTicker.set(normalizeHoldingSymbol(judgment.ticker), judgment as WatchlistJudgment);
+      const contentKey = normalizeHoldingSymbol(judgment.ticker);
+      // WR-01: ファイル名（オーケストレータ管理で信頼できる）と内容 ticker の整合チェック。
+      // LLM が ticker をエコーし損ねた場合の silent overwrite（別銘柄の正当な判定が
+      // 無警告に上書きされ、当該銘柄の判定が出力から消える）を防ぐ。
+      // ファイル名は `/` を `-` に置換して保存される規約のため、逆変換キーとも比較する。
+      const filenameKeys = new Set([
+        normalizeHoldingSymbol(ticker),
+        normalizeHoldingSymbol(ticker.replace(/-/g, "/")),
+      ]);
+      if (!filenameKeys.has(contentKey)) {
+        failedTickers.push(ticker);
+        console.warn(
+          `[watchlist-judgment] ファイル名と内容tickerの不一致: ${file} の内容ticker=${judgment.ticker}。この判定は出力に含めません。`,
+        );
+        continue;
+      }
+      // WR-01: 同一 ticker への重複書込は先勝ちとし、警告して監査ログに残す。
+      if (validatedByTicker.has(contentKey)) {
+        failedTickers.push(ticker);
+        console.warn(
+          `[watchlist-judgment] ticker重複: ${contentKey}（${file}）。先勝ちで既存の判定を保持します。`,
+        );
+        continue;
+      }
+      validatedByTicker.set(contentKey, judgment as WatchlistJudgment);
     } catch (error) {
       failedTickers.push(ticker);
       console.log(`[watchlist-judgment] 検証失敗: ${ticker} — ${error instanceof Error ? error.message : String(error)}`);
