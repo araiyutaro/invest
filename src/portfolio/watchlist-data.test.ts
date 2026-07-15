@@ -51,12 +51,16 @@ describe("toPortfolioHoldingShape", () => {
     expect(result[0].name).toBe("MRNA");
   });
 
-  it("nameJa が undefined のエントリは nameJa=\"\" になる", () => {
+  it("nameJa が undefined のエントリは ticker にフォールバックする（空文字列は不可, Rule 1バグ修正）", () => {
+    // 空文字列だと holding-news.ts の titleIncludesAny が "".includes("")===true で
+    // 常に真になり、日本語社名を持たない全銘柄が任意の記事タイトルに誤マッチするため、
+    // ticker フォールバックで空文字列の universal-match バグを構造的に回避する。
     const entries = [makeWatchlistEntry({ ticker: "MRNA" })];
 
     const result = toPortfolioHoldingShape(entries);
 
-    expect(result[0].nameJa).toBe("");
+    expect(result[0].nameJa).toBe("MRNA");
+    expect(result[0].nameJa).not.toBe("");
   });
 
   it("sector は常に \"\" 固定", () => {
