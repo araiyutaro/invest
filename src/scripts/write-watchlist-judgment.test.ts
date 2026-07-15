@@ -281,10 +281,8 @@ describe("write-watchlist-judgment", () => {
         "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
         "watchlist-technicals.json": () => Promise.resolve(JSON.stringify(makeTechnicalsFile([]))),
       });
-      // raw dir 内にファイルは無いが watchlist は NVDA を持つ想定のケースは
-      // このCLIの入力契約上、technicals にスナップショットが無い銘柄は raw も生成されない
-      // （オーケストレータがactive銘柄一覧をtechnicalsから導出するため）。
-      // ここでは raw に存在するが technicals に無いケースとして直接検証する。
+      // raw に存在するが technicals に無いケース（CLI内部のskip経路）。
+      // raw 自体が無いアクティブ銘柄の skip 合成は CR-03 のテスト群で別途検証する。
       readdirMock.mockResolvedValue(["NVDA.json"]);
       readFileMock.mockImplementation((path: string) => {
         const p = String(path);
@@ -305,6 +303,86 @@ describe("write-watchlist-judgment", () => {
       const written = JSON.parse(String(writtenContent));
       const nvda = written.judgments.find((j: { ticker: string }) => j.ticker === "NVDA");
       expect(nvda.status).toBe("skipped");
+    });
+
+    it("skip合成: watchlistのアクティブ銘柄にrawファイルが無い場合status:skippedレコードが合成される（CR-03/D-20）", async () => {
+      const watchlistFile = {
+        NVDA: { ticker: "NVDA", addedDate: "2026-07-01", history: [] },
+        MRNA: { ticker: "MRNA", addedDate: "2026-07-01", history: [] },
+      };
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+        "data/watchlist.json": () => Promise.resolve(JSON.stringify(watchlistFile)),
+        "watchlist-technicals.json": () =>
+          Promise.resolve(JSON.stringify(makeTechnicalsFile([{ symbol: "MRNA", asOf: "2026-07-15" }]))),
+        "MRNA.json": () =>
+          Promise.resolve(
+            JSON.stringify(makeRawJudgment({ ticker: "MRNA", todayAction: "wait", signals: [] })),
+          ),
+      });
+      // NVDA はスナップショット欠落で Agent 未起動 → raw ファイルが存在しない
+      readdirMock.mockResolvedValue(["MRNA.json"]);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await main();
+
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      const nvda = written.judgments.find((j: { ticker: string }) => j.ticker === "NVDA");
+      expect(nvda).toBeDefined();
+      expect(nvda.status).toBe("skipped");
+      const mrna = written.judgments.find((j: { ticker: string }) => j.ticker === "MRNA");
+      expect(mrna.status).toBeUndefined();
+
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist-judgment:OK]"))).toBe(true);
+    });
+
+    it("skip合成: raw 0件でもアクティブ銘柄が存在すれば全銘柄のskippedレコードを出力する（CR-03: Agent全滅日）", async () => {
+      const watchlistFile = {
+        NVDA: { ticker: "NVDA", addedDate: "2026-07-01", history: [] },
+      };
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+        "data/watchlist.json": () => Promise.resolve(JSON.stringify(watchlistFile)),
+        "watchlist-technicals.json": () => Promise.resolve(JSON.stringify(makeTechnicalsFile([]))),
+      });
+      readdirMock.mockResolvedValue([]);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await main();
+
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      expect(written.judgments).toHaveLength(1);
+      expect(written.judgments[0].ticker).toBe("NVDA");
+      expect(written.judgments[0].status).toBe("skipped");
+    });
+
+    it("skip合成: raw検証失敗銘柄はskip合成の対象にならずFAILマーカーで報告される（CR-03: 検証失敗と判定不能の区別）", async () => {
+      const watchlistFile = {
+        NVDA: { ticker: "NVDA", addedDate: "2026-07-01", history: [] },
+      };
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+        "data/watchlist.json": () => Promise.resolve(JSON.stringify(watchlistFile)),
+        "watchlist-technicals.json": () =>
+          Promise.resolve(JSON.stringify(makeTechnicalsFile([{ symbol: "NVDA", asOf: "2026-07-15" }]))),
+        "NVDA.json": () => Promise.resolve("{not valid json"),
+      });
+      readdirMock.mockResolvedValue(["NVDA.json"]);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await main();
+
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      expect(written.judgments).toEqual([]);
+
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(
+        errorCalls.some((c) => String(c).includes("[STEP:watchlist-judgment:FAIL:") && String(c).includes("1/1銘柄失敗")),
+      ).toBe(true);
     });
 
     it("market/asOf決定論付与: rawがmarket誤申告してもderiveMarket由来・technicals由来のasOfが採用される（D-08/D-15）", async () => {

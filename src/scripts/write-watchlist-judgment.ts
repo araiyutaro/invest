@@ -10,6 +10,8 @@ import {
   buildSkippedJudgment,
 } from "../portfolio/watchlist-judgment.js";
 import { normalizeHoldingSymbol } from "../portfolio/holding-news.js";
+import { getActiveWatchlistEntries } from "../portfolio/watchlist.js";
+import type { WatchlistEntry, WatchlistFile } from "../portfolio/watchlist.js";
 import type { TechnicalSnapshot } from "../data/technicals.js";
 
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
@@ -18,6 +20,7 @@ const OUTPUT_PATH = join(TMP_DIR, "watchlist-judgment.json");
 const PREV_PATH = join(TMP_DIR, "prev-watchlist-judgment.json");
 const TECHNICALS_PATH = join(TMP_DIR, "watchlist-technicals.json");
 const MEETING_RESULT_PATH = join(TMP_DIR, "meeting-result.json");
+const WATCHLIST_PATH = join(import.meta.dirname, "../../data/watchlist.json");
 
 /**
  * D-18/Pitfall 1: tmp/prev-watchlist-judgment.json の ENOENT-vs-破損 二段フェイル読込。
@@ -66,6 +69,45 @@ export async function loadPrevJudgmentDefensive(): Promise<{
 }
 
 /**
+ * CR-03/D-20: data/watchlist.json のアクティブ銘柄 ticker 一覧を read-only で防御的に読む。
+ * collect-watchlist-data.ts の loadWatchlistDefensive と同じ二段フェイル規約
+ * （ENOENT は空正常系、エントリレベルの形状検証あり）を踏襲するが、本 CLI にとって
+ * watchlist は skip レコード合成のための secondary 入力のため、破損時も FAIL にせず
+ * 警告して空扱いで継続する（fail-soft。当日判定の出力を watchlist の破損で壊さない）。
+ * 書き込みは write-watchlist.ts の責務であり、本 CLI は一切変更しない。
+ */
+export async function loadActiveWatchlistTickersDefensive(): Promise<ReadonlyArray<string>> {
+  try {
+    const raw = await readFile(WATCHLIST_PATH, "utf-8");
+    const parsed: unknown = JSON.parse(raw);
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      console.error(
+        "[watchlist-judgment] data/watchlist.json の形状が不正です。skipレコード合成は空扱いで継続します。",
+      );
+      return [];
+    }
+    const entries = Object.entries(parsed as Record<string, unknown>).filter(
+      ([, v]) =>
+        typeof v === "object" && v !== null && typeof (v as WatchlistEntry).ticker === "string",
+    );
+    return getActiveWatchlistEntries(Object.fromEntries(entries) as WatchlistFile).map(
+      (entry) => entry.ticker,
+    );
+  } catch (error) {
+    const isMissing =
+      (error as NodeJS.ErrnoException).code === "ENOENT" ||
+      (error instanceof Error && error.message.includes("ENOENT"));
+    if (!isMissing) {
+      console.error(
+        "[watchlist-judgment] data/watchlist.json の読み込みに失敗しました。skipレコード合成は空扱いで継続します。",
+        error,
+      );
+    }
+    return [];
+  }
+}
+
+/**
  * D-18/D-19: 常に有効 JSON を tmp/watchlist-judgment.json に書き出す共通ヘルパ。
  * collect-watchlist-data.ts の writeEmptyOutputs と同趣旨。
  */
@@ -107,6 +149,9 @@ export async function main(): Promise<void> {
     return;
   }
 
+  // CR-03/D-20: skip レコード合成のソースとして data/watchlist.json のアクティブ銘柄を読む
+  const activeTickers = await loadActiveWatchlistTickersDefensive();
+
   let rawFiles: string[];
   try {
     rawFiles = (await readdir(RAW_DIR)).filter((f) => f.endsWith(".json"));
@@ -115,7 +160,9 @@ export async function main(): Promise<void> {
     rawFiles = [];
   }
 
-  if (rawFiles.length === 0) {
+  // CR-03: raw が0件でもアクティブ銘柄が存在する場合は skip レコード合成のため続行する
+  // （全アクティブ銘柄のスナップショット欠落等で Agent が1体も起動されなかった日）。
+  if (rawFiles.length === 0 && activeTickers.length === 0) {
     console.log("[watchlist-judgment] アクティブ銘柄0件");
     await writeEmptyOutput(date);
     console.error("[STEP:watchlist-judgment:OK]");
@@ -178,6 +225,22 @@ export async function main(): Promise<void> {
       market: deriveMarket(judgment.ticker),
       asOf: snapshot.asOf,
     });
+  }
+
+  // CR-03/D-20/Pitfall 5: data/watchlist.json のアクティブ銘柄のうち raw 判定が存在しない銘柄
+  // （テクニカルスナップショット欠落等で Agent が起動されず raw ファイル自体が無い銘柄）にも
+  // 陽性 skip レコードを合成する。これにより「今日データが無く判定不能」の銘柄が出力から
+  // 無言で消えない。raw 検証失敗銘柄（failedTickers）は「読み取れた判定が無い」欠落として
+  // FAIL マーカーで報告済みのため、skip 合成の対象にしない（検証失敗と判定不能を区別する）。
+  // failedTickers はファイル名由来（`/` → `-` 置換済み）のため逆変換してから照合する。
+  const coveredKeys = new Set([
+    ...validatedByTicker.keys(),
+    ...failedTickers.map((t) => normalizeHoldingSymbol(t.replace(/-/g, "/"))),
+  ]);
+  for (const activeTicker of activeTickers) {
+    if (!coveredKeys.has(normalizeHoldingSymbol(activeTicker))) {
+      processedJudgments.push(buildSkippedJudgment(activeTicker));
+    }
   }
 
   // 前日比較（D-11、TIME-03）
