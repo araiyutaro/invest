@@ -146,3 +146,13 @@ None - no external service configuration required.
 ---
 *Phase: 29-daily-tracking-data-supply*
 *Completed: 2026-07-15*
+
+## Self-Check: PASSED
+
+- FOUND: src/portfolio/watchlist-data.ts
+- FOUND: src/portfolio/watchlist-data.test.ts
+- FOUND: .planning/phases/29-daily-tracking-data-supply/29-01-SUMMARY.md
+- FOUND: 18b742d (test commit, Task 1 RED)
+- FOUND: 4655b6f (feat commit, Task 1 GREEN)
+- FOUND: 984433b (test commit, Task 2 RED)
+- FOUND: dd5f034 (feat commit, Task 2 GREEN)
