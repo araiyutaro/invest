@@ -6,7 +6,7 @@ import type { MeetingResult, WebSearchResult, ReevaluationOutput, PortfolioAnaly
 import { generateDailyReportHtml } from "./generate-daily-report.js";
 import { generateMeetingMinutesHtml } from "./generate-meeting-minutes.js";
 import { generatePortfolioReportHtml } from "./generate-portfolio-report.js";
-import { loadRound1Results, loadRound2Results, loadRound3Results, loadPortfolioAnalysis, loadNewsPool, loadHoldingNews, loadPrevPortfolioAnalysis, loadUrgencyHistory } from "./report-data-loaders.js";
+import { loadRound1Results, loadRound2Results, loadRound3Results, loadPortfolioAnalysis, loadNewsPool, loadHoldingNews, loadPrevPortfolioAnalysis, loadUrgencyHistory, loadWatchlistJudgment, loadWatchlist } from "./report-data-loaders.js";
 import { resolvePortfolioHoldingNews } from "../portfolio/holding-news.js";
 import { attachDecisionChanges } from "../portfolio/decision-diff.js";
 
@@ -119,7 +119,7 @@ export async function main(): Promise<void> {
   const raw = await readFile(join(TMP_DIR, "meeting-result.json"), "utf-8");
   const meetingResult = validateMeetingResult(JSON.parse(raw) as unknown);
 
-  const [webSearchResults, reevalResults, round1Results, round2Results, round3Results, portfolioAnalysis, marketData, newsPool, holdingNews, prevPortfolioAnalysis, urgencyHistory] = await Promise.all([
+  const [webSearchResults, reevalResults, round1Results, round2Results, round3Results, portfolioAnalysis, marketData, newsPool, holdingNews, prevPortfolioAnalysis, urgencyHistory, watchlistJudgment, watchlist] = await Promise.all([
     loadWebSearchResults(),
     loadReevalResults(),
     loadRound1Results(),
@@ -131,6 +131,8 @@ export async function main(): Promise<void> {
     loadHoldingNews(),
     loadPrevPortfolioAnalysis(),
     loadUrgencyHistory(),
+    loadWatchlistJudgment(meetingResult.date),
+    loadWatchlist(),
   ]);
 
   const resolvedHoldingNews = resolvePortfolioHoldingNews(holdingNews, newsPool);
@@ -148,7 +150,7 @@ export async function main(): Promise<void> {
   const dateDir = join(DOCS_DIR, meetingResult.date);
   await mkdir(dateDir, { recursive: true });
 
-  const dailyHtml = generateDailyReportHtml(meetingResult, webSearchResults, reevalResults, marketData);
+  const dailyHtml = generateDailyReportHtml(meetingResult, webSearchResults, reevalResults, marketData, watchlistJudgment, watchlist);
   const minutesHtml = generateMeetingMinutesHtml(meetingResult, round1Results, round2Results, round3Results);
   const portfolioHtml = generatePortfolioReportHtml(meetingResult, enrichedPortfolioAnalysis, resolvedHoldingNews, urgencyHistory);
 
