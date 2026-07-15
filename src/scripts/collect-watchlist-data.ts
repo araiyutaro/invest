@@ -48,10 +48,18 @@ export async function loadWatchlistDefensive(): Promise<{
   }
 }
 
+/** JST（UTC+9）オフセット。generatedAt の同日判定にのみ使用する。 */
+const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
+
 /**
  * D-12: tmp/technicals.json の fail-soft 読込（同日キャッシュ）。
  * 欠損（ENOENT）・パース失敗・snapshots が配列でない場合は空配列にフォールバックする
  * （警告ログのみ、キャッシュは最適化であり正しさの依存点にしない）。
+ * WR-01: generatedAt が当日（JST）でないキャッシュは全体を無視する — 前回 run の
+ * 残留ファイルや単体実行時に前日の株価・RSI が「当日テクニカル」として流れるのを防ぐ。
+ * generatedAt は UTC ISO 文字列（Step 2b が new Date().toISOString() で生成）のため、
+ * 生成時刻・現在時刻の双方を JST 日付へ変換してから比較する（JST 朝の実行では
+ * UTC 日付が前日になるため、UTC 日付同士・UTC-JST 混在の比較は誤判定する）。
  */
 async function loadSameDayCache(
   path: string,
@@ -66,6 +74,17 @@ async function loadSameDayCache(
     ) {
       console.error(
         "[watchlist-data] tmp/technicals.json の形状が不正なためキャッシュを無視します",
+      );
+      return [];
+    }
+    const todayJst = new Date(Date.now() + JST_OFFSET_MS).toISOString().slice(0, 10);
+    const generatedAtMs = Date.parse(String((parsed as TechnicalsCacheFile).generatedAt ?? ""));
+    const generatedDayJst = Number.isNaN(generatedAtMs)
+      ? ""
+      : new Date(generatedAtMs + JST_OFFSET_MS).toISOString().slice(0, 10);
+    if (generatedDayJst !== todayJst) {
+      console.error(
+        "[watchlist-data] tmp/technicals.json が当日生成ではないためキャッシュを無視します",
       );
       return [];
     }

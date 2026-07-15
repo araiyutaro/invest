@@ -206,7 +206,7 @@ describe("collect-watchlist-data", () => {
         "technicals.json": () =>
           Promise.resolve(
             JSON.stringify({
-              generatedAt: "2026-07-15T00:00:00.000Z",
+              generatedAt: new Date().toISOString(),
               snapshots: [cachedSnapshot("AAA"), cachedSnapshot("BBB")],
             }),
           ),
@@ -233,7 +233,7 @@ describe("collect-watchlist-data", () => {
         "technicals.json": () =>
           Promise.resolve(
             JSON.stringify({
-              generatedAt: "2026-07-15T00:00:00.000Z",
+              generatedAt: new Date().toISOString(),
               snapshots: [
                 {
                   symbol: "AAA",
@@ -348,6 +348,55 @@ describe("collect-watchlist-data", () => {
       expect(written.snapshots.map((s: { symbol: string }) => s.symbol)).toEqual(["AAA"]);
     });
 
+    it("キャッシュの generatedAt が当日（JST）でない場合、キャッシュを無視して全銘柄新規取得する (WR-01)", async () => {
+      const watchlist = {
+        AAA: makeWatchlistEntry({ ticker: "AAA" }),
+      };
+      // 24時間前 = JST 暦日で必ず前日以前になる
+      const staleGeneratedAt = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      mockReadFileByPath({
+        "watchlist.json": () => Promise.resolve(JSON.stringify(watchlist)),
+        "technicals.json": () =>
+          Promise.resolve(
+            JSON.stringify({
+              generatedAt: staleGeneratedAt,
+              snapshots: [makeCachedSnapshot("AAA")],
+            }),
+          ),
+        "news.json": () => Promise.resolve("[]"),
+      });
+      chartMock.mockResolvedValue({ quotes: makeChartBars() });
+
+      const { main } = await import("./collect-watchlist-data.js");
+      await main();
+
+      expect(chartMock).toHaveBeenCalledTimes(1);
+      expect(chartMock).toHaveBeenCalledWith("AAA", expect.anything());
+    });
+
+    it("キャッシュの generatedAt が欠落・不正な場合もキャッシュを無視する (WR-01)", async () => {
+      const watchlist = {
+        AAA: makeWatchlistEntry({ ticker: "AAA" }),
+      };
+      mockReadFileByPath({
+        "watchlist.json": () => Promise.resolve(JSON.stringify(watchlist)),
+        "technicals.json": () =>
+          Promise.resolve(
+            JSON.stringify({
+              snapshots: [makeCachedSnapshot("AAA")],
+            }),
+          ),
+        "news.json": () => Promise.resolve("[]"),
+      });
+      chartMock.mockResolvedValue({ quotes: makeChartBars() });
+
+      const { main } = await import("./collect-watchlist-data.js");
+      await main();
+
+      expect(chartMock).toHaveBeenCalledTimes(1);
+      expect(chartMock).toHaveBeenCalledWith("AAA", expect.anything());
+    });
+
     it("キャッシュ破損の場合、全銘柄新規取得にフォールバックする (D-12)", async () => {
       const watchlist = {
         AAA: makeWatchlistEntry({ ticker: "AAA" }),
@@ -376,7 +425,7 @@ describe("collect-watchlist-data", () => {
       mockReadFileByPath({
         "watchlist.json": () => Promise.resolve(JSON.stringify(watchlist)),
         "technicals.json": () =>
-          Promise.resolve(JSON.stringify({ generatedAt: "2026-07-15T00:00:00.000Z", snapshots: [] })),
+          Promise.resolve(JSON.stringify({ generatedAt: new Date().toISOString(), snapshots: [] })),
         "news.json": () =>
           Promise.resolve(
             JSON.stringify([
