@@ -5,8 +5,8 @@ milestone_name: Entry Timing Watchlist & ETF Exclusion
 current_phase: 27
 current_phase_name: ETF Exclusion
 status: verifying
-stopped_at: Completed 27-03-PLAN.md
-last_updated: "2026-07-15T01:35:56.974Z"
+stopped_at: Phase 28 context gathered
+last_updated: "2026-07-15T01:59:35.020Z"
 last_activity: 2026-07-15
 last_activity_desc: Phase 27 execution started
 progress:
@@ -148,10 +148,12 @@ Human-UAT / 実行時検証待ち項目。いずれも静的解析では確認�
 
 ## Session Continuity
 
+**Last session:** 2026-07-15T01:59:35.013Z
+
 **Resume file:** 
 
-None
-Stopped at: Completed 27-03-PLAN.md
+.planning/phases/28-watchlist-persistence/28-CONTEXT.md
+Stopped at: Phase 28 context gathered
 Resume with: `/gsd-plan-phase 27`
 
 ## Operator Next Steps
