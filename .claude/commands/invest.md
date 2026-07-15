@@ -1248,6 +1248,34 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
 ---
 
+### Step 2h: ウォッチリスト更新
+
+「ウォッチリストを更新中...」とユーザーに表示してください。
+
+以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/write-watchlist.ts
+```
+
+終了コードに関わらず、次のステップ（Step 3）へ進んでください（fail-soft, D-16）。
+write-watchlist.ts は tmp/meeting-result.json（Step 2g で ETF 除外・バリデーション済みの
+highlightedStocks）＋ data/watchlist.json（前日状態）＋ PORTFOLIO_HOLDINGS を入力に、当日
+strong-bullish（強気）銘柄を登録し、降格（downgraded）・購入済み（purchased）・失効
+（expired）の銘柄を除外して data/watchlist.json を更新する。**必ず filter-etf-stocks.ts /
+validate-meeting.ts より後に実行すること**（D-15、ETF除外・検証済みの meeting-result を入力
+とする前提）。
+
+write-watchlist.ts はスクリプト自身が stderr に `[STEP:watchlist:OK]` /
+`[STEP:watchlist:FAIL:<reason>]` を出力する設計（Plan 02 成果物）です。スクリプトの
+stderr に出た `[STEP:watchlist:*]` 行をそのまま尊重し、追加で echo する必要はありません。
+
+**このステップの失敗は既存4レポートの生成・デプロイを一切ブロックしません**（fail-soft,
+D-16）。`[PIPELINE:FAIL]` は絶対に出力しないこと — ウォッチリスト更新の失敗は、既存の
+data/watchlist.json をそのまま保全し次のステップへ進みます。
+
+---
+
 ## Step 3: WebSearch リサーチ & レポート生成
 
 ---
