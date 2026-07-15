@@ -8,7 +8,10 @@ import {
   loadRound2Results,
   loadRound3Results,
   loadUrgencyHistory,
+  loadWatchlistJudgment,
+  loadWatchlist,
 } from "./report-data-loaders.js";
+import type { WatchlistJudgmentFile } from "../meeting/types.js";
 
 vi.mock("node:fs/promises", () => ({
   readFile: vi.fn(),
@@ -158,6 +161,130 @@ describe("loadUrgencyHistory", () => {
     const result = await loadUrgencyHistory();
     expect(result).toEqual({});
     expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+});
+
+describe("loadWatchlistJudgment", () => {
+  const validJudgmentFile: WatchlistJudgmentFile = {
+    date: "2026-07-16",
+    generatedAt: "2026-07-16T00:00:00.000Z",
+    judgments: [
+      { ticker: "PLTR", todayAction: "buy", rationale: "テスト理由", signals: ["signal1"] },
+    ],
+  };
+
+  it("file.date が meetingResultDate と一致すれば WatchlistJudgmentFile を返す", async () => {
+    vi.mocked(readFile).mockResolvedValueOnce(JSON.stringify(validJudgmentFile));
+    const result = await loadWatchlistJudgment("2026-07-16");
+    expect(result).toEqual(validJudgmentFile);
+  });
+
+  it("D-13: file.date が meetingResultDate と異なれば null を返し console.warn が呼ばれる（前日残留ファイル防止）", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce(JSON.stringify(validJudgmentFile));
+    const result = await loadWatchlistJudgment("2026-07-15");
+    expect(result).toBeNull();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("欠損時（ENOENT）は throw せず null を返し console.warn が呼ばれる", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockRejectedValueOnce(new Error("ENOENT"));
+    const result = await loadWatchlistJudgment("2026-07-16");
+    expect(result).toBeNull();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("パース失敗時は throw せず null を返す", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("not valid json{{{");
+    const result = await loadWatchlistJudgment("2026-07-16");
+    expect(result).toBeNull();
+    warnSpy.mockRestore();
+  });
+
+  it("root が null の構文的に正しい JSON でも null を返す", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("null");
+    const result = await loadWatchlistJudgment("2026-07-16");
+    expect(result).toBeNull();
+    warnSpy.mockRestore();
+  });
+
+  it("root が配列の構文的に正しい JSON でも null を返す", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("[1,2,3]");
+    const result = await loadWatchlistJudgment("2026-07-16");
+    expect(result).toBeNull();
+    warnSpy.mockRestore();
+  });
+
+  it("judgments が配列でない場合は null を返す", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce(
+      JSON.stringify({ date: "2026-07-16", generatedAt: "2026-07-16T00:00:00.000Z", judgments: "not-array" }),
+    );
+    const result = await loadWatchlistJudgment("2026-07-16");
+    expect(result).toBeNull();
+    warnSpy.mockRestore();
+  });
+
+  it("date が string でない場合は null を返す", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce(
+      JSON.stringify({ date: 20260716, generatedAt: "2026-07-16T00:00:00.000Z", judgments: [] }),
+    );
+    const result = await loadWatchlistJudgment("2026-07-16");
+    expect(result).toBeNull();
+    warnSpy.mockRestore();
+  });
+});
+
+describe("loadWatchlist", () => {
+  it("data/watchlist.json を読めたら JSON.parse 結果を WatchlistFile として返す", async () => {
+    const raw = JSON.stringify({
+      PLTR: { ticker: "PLTR", name: "Palantir", addedDate: "2026-07-01", history: [] },
+    });
+    vi.mocked(readFile).mockResolvedValueOnce(raw);
+    const result = await loadWatchlist();
+    expect(result).toEqual({
+      PLTR: { ticker: "PLTR", name: "Palantir", addedDate: "2026-07-01", history: [] },
+    });
+  });
+
+  it("欠損時（ENOENT）は throw せず {} を返し console.warn が呼ばれる", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockRejectedValueOnce(new Error("ENOENT"));
+    const result = await loadWatchlist();
+    expect(result).toEqual({});
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it("パース失敗時は throw せず {} を返す", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("not valid json{{{");
+    const result = await loadWatchlist();
+    expect(result).toEqual({});
+    warnSpy.mockRestore();
+  });
+
+  it("root が null の構文的に正しい JSON でも {} を返す", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("null");
+    const result = await loadWatchlist();
+    expect(result).toEqual({});
+    warnSpy.mockRestore();
+  });
+
+  it("root が配列の構文的に正しい JSON でも {} を返す", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(readFile).mockResolvedValueOnce("[1,2,3]");
+    const result = await loadWatchlist();
+    expect(result).toEqual({});
     warnSpy.mockRestore();
   });
 });
