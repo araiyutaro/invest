@@ -1298,6 +1298,15 @@ collect-watchlist-data.ts はスクリプト自身が stderr に `[STEP:watchlis
 stderr に出た `[STEP:watchlist-data:*]` 行をそのまま尊重し、追加で echo する必要はありません
 （Step 2h の write-watchlist.ts と同じ扱い）。
 
+**フォールバック**: 万一スクリプトが `[STEP:watchlist-data:*]` マーカーを一切出力せずに
+終了した場合（出力先に書き込めない fatal 経路等）は、以下のコマンドで両出力ファイルへ
+有効な空JSONを書き込んでから次のステップへ進んでください（Step 2b の fail-soft
+空書き込みと同趣旨）:
+
+```bash
+echo "{\"generatedAt\": \"$(date -u +%Y-%m-%dT%H:%M:%S.000Z)\", \"snapshots\": []}" > /Users/arai/invest/tmp/watchlist-technicals.json && echo '{}' > /Users/arai/invest/tmp/watchlist-news.json
+```
+
 **このステップの失敗は既存4レポートの生成・デプロイを一切ブロックしません**（OPS-06）。
 `[PIPELINE:FAIL]` は絶対に出力しないこと — 追跡データ供給の失敗は、両出力ファイルを有効な
 空JSONで縮退させ次のステップへ進みます。

@@ -234,9 +234,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     try {
       await writeEmptyOutputs();
     } catch {
-      // 出力先にも書けない場合は invest.md 側のフォールバックに委ねる
+      // 出力先にも書けない場合は invest.md 側のフォールバック
+      //（Step 2i: マーカー無し終了時の空JSON書き込み指示）に委ねる
     }
+    // WR-04: fatal 経路でも STEP マーカー契約を守る（OK/FAIL いずれも出ない run を防ぐ）。
     // D-03: [PIPELINE:FAIL] は出さない。process.exit ではなく exitCode を使う。
+    console.error("[STEP:watchlist-data:FAIL:fatal]");
     process.exitCode = 1;
   });
 }
