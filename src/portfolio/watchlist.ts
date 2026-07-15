@@ -118,16 +118,21 @@ export function admitBullishStocks(
   // WLST-03: 保有銘柄を admit 候補から除外する（防御的深層化）
   const held = new Set(holdings.map((h) => normalizeHoldingSymbol(h.symbol)));
 
-  // 防御的に verdict==="強気" のみを対象にする（呼び出し側の絞り込みを信用しない）
-  const bullishOnly = bullishStocks.filter(
-    (s) => s.verdict === "強気" && !held.has(normalizeHoldingSymbol(s.ticker)),
-  );
+  // 防御的に verdict==="強気" のみを対象にする（呼び出し側の絞り込みを信用しない）。
+  // ticker はここで一括正規化し、以降の lookup（watchlist キー / quoteTypeByTicker /
+  // nameByTicker）をすべて正規化キーで行う — LLM 生成 JSON の表記揺れ（小文字・空白）で
+  // lookup が欠落すると fail-closed により正当な強気銘柄がサイレント除外されるため
+  // （quoteTypeByTicker / nameByTicker は正規化キーで構築される前提, write-watchlist.ts 参照）。
+  const bullishOnly = bullishStocks
+    .filter((s) => s.verdict === "強気")
+    .map((s) => ({ ...s, ticker: normalizeHoldingSymbol(s.ticker) }))
+    .filter((s) => !held.has(s.ticker));
 
   // 既に active な ticker は reconfirm のみ（第2ゲートバイパス, D-22）。
   // prune 直後（同一実行内）に除外された銘柄はこの時点で非 active のため
   // reconfirm パスには乗らない（prune → admit の優先順は保たれる）。
   const isAlreadyActive = (ticker: string): boolean =>
-    watchlist[normalizeHoldingSymbol(ticker)]?.addedDate !== undefined;
+    watchlist[ticker]?.addedDate !== undefined;
   const reconfirms = bullishOnly.filter((s) => isAlreadyActive(s.ticker));
   const newCandidates = bullishOnly.filter((s) => !isAlreadyActive(s.ticker));
 
@@ -136,9 +141,9 @@ export function admitBullishStocks(
   const { kept } = filterEtfStocks(newCandidates, quoteTypeByTicker);
 
   return [...reconfirms, ...kept].reduce<WatchlistFile>((acc, stock) => {
-    const key = normalizeHoldingSymbol(stock.ticker);
+    const key = stock.ticker; // bullishOnly 構築時に正規化済み
     const existing = acc[key];
-    const names = mergeNameFields(existing, nameByTicker.get(stock.ticker));
+    const names = mergeNameFields(existing, nameByTicker.get(key));
 
     const entry: WatchlistEntry = {
       ticker: key,

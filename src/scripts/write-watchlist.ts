@@ -9,6 +9,7 @@ import {
 } from "../portfolio/watchlist.js";
 import type { WatchlistFile } from "../portfolio/watchlist.js";
 import { isValidDateKey } from "../portfolio/urgency-history.js";
+import { normalizeHoldingSymbol } from "../portfolio/holding-news.js";
 import type { QuoteTypeLookup } from "../portfolio/etf-exclusion.js";
 import { PORTFOLIO_HOLDINGS } from "../portfolio/holdings.js";
 import type { MeetingResult } from "../meeting/types.js";
@@ -79,10 +80,13 @@ export async function fetchQuoteTypesAndNames(
     const symbol = record.symbol;
     if (!symbol) continue;
 
+    // WR-03 対応: Map キーは normalizeHoldingSymbol で正規化し、admitBullishStocks 側の
+    // 正規化済み lookup と対称にする（キー不一致 → fail-closed 誤除外を防ぐ）
+    const key = normalizeHoldingSymbol(symbol);
     if (record.quoteType) {
-      quoteTypeByTicker.set(symbol, { status: "ok", quoteType: record.quoteType });
+      quoteTypeByTicker.set(key, { status: "ok", quoteType: record.quoteType });
     }
-    nameByTicker.set(symbol, { name: record.longName ?? record.shortName, nameJa: undefined });
+    nameByTicker.set(key, { name: record.longName ?? record.shortName, nameJa: undefined });
   }
 
   return { quoteTypeByTicker, nameByTicker };
@@ -137,8 +141,10 @@ export async function main(): Promise<void> {
   const bullishStocks = highlightedStocks.filter((s) => s.verdict === "強気");
 
   // D-22: 既存登録済み（active）の ticker は再検証不要。未登録の当日強気銘柄のみ quote() 対象にする。
+  // WR-03 対応: watchlist キーは正規化済みのため、照合前に normalizeHoldingSymbol を適用する
+  // （未正規化のまま照合すると active 銘柄を新規候補と誤判定し重複 quote 取得が発生する）。
   const candidateTickers = bullishStocks
-    .map((s) => s.ticker)
+    .map((s) => normalizeHoldingSymbol(s.ticker))
     .filter((ticker) => !existingWatchlist[ticker]?.addedDate);
 
   let quoteTypeByTicker: ReadonlyMap<string, QuoteTypeLookup>;

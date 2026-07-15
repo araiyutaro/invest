@@ -327,6 +327,29 @@ describe("write-watchlist", () => {
       expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist:OK]"))).toBe(true);
     });
 
+    it("meeting-result の ticker が小文字・空白付きでも正規化されて quote 照合・登録される（WR-03）", async () => {
+      readFileMock.mockImplementation((path: string) => {
+        const p = String(path);
+        if (p.includes("meeting-result.json")) {
+          return Promise.resolve(JSON.stringify(makeMeetingResult([makeHighlightedStock({ ticker: " nvda " })])));
+        }
+        if (p.includes("watchlist.json")) return Promise.reject(new Error("ENOENT"));
+        return Promise.reject(new Error("ENOENT"));
+      });
+      quoteMock.mockResolvedValue([{ symbol: "NVDA", quoteType: "EQUITY", longName: "NVIDIA Corporation" }]);
+
+      const { main } = await import("./write-watchlist.js");
+      await main();
+
+      // 正規化済みシンボルで batch quote が呼ばれる
+      expect(quoteMock).toHaveBeenCalledWith(["NVDA"]);
+      expect(writeFileMock).toHaveBeenCalledTimes(1);
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      expect(written.NVDA).toBeDefined();
+      expect(written.NVDA.addedDate).toBe("2026-07-15");
+    });
+
     it("すべての FAIL 分岐で [PIPELINE:FAIL] マーカーが一度も出力されない", async () => {
       readFileMock.mockImplementation((path: string) => {
         const p = String(path);

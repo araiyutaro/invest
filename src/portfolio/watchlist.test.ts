@@ -205,6 +205,32 @@ describe("admitBullishStocks (WLST-01)", () => {
     expect(result.MRNA.lastVerdictDate).toBe("2026-07-10");
   });
 
+  it("小文字・空白付きの ticker でも正規化キーで lookup され admit される（WR-03: 表記揺れによる fail-closed 誤除外の防止）", () => {
+    const watchlist: WatchlistFile = {};
+    const bullish = [makeHighlightedStock({ ticker: " aapl " })];
+    const quoteTypeByTicker = new Map<string, QuoteTypeLookup>([
+      ["AAPL", makeQuoteLookup({ quoteType: "EQUITY" })],
+    ]);
+    const nameByTicker = new Map([["AAPL", { name: "Apple Inc.", nameJa: undefined }]]);
+    const result = admitBullishStocks(watchlist, bullish, quoteTypeByTicker, nameByTicker, [], "2026-07-15");
+    expect(result.AAPL).toBeDefined();
+    expect(result.AAPL.ticker).toBe("AAPL");
+    expect(result.AAPL.name).toBe("Apple Inc.");
+    expect(result[" aapl "]).toBeUndefined();
+  });
+
+  it("小文字の ticker でも active な既存エントリの reconfirm として扱われる（WR-03 × reconfirm）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-07-01", lastVerdictDate: "2026-07-10" }),
+    };
+    const bullish = [makeHighlightedStock({ ticker: "aapl" })];
+    const quoteTypeByTicker = new Map<string, QuoteTypeLookup>();
+    const nameByTicker = new Map<string, { name?: string; nameJa?: string }>();
+    const result = admitBullishStocks(watchlist, bullish, quoteTypeByTicker, nameByTicker, [], "2026-07-15");
+    expect(result.AAPL.addedDate).toBe("2026-07-01");
+    expect(result.AAPL.lastVerdictDate).toBe("2026-07-15");
+  });
+
   it("除外済み（history あり・addedDate なし）の ticker が再度強気なら history を保持したまま新 active エピソードを作る（re-admission, D-05）", () => {
     const watchlist: WatchlistFile = {
       AAPL: makeWatchlistEntry({
