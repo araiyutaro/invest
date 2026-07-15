@@ -70,30 +70,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ETF-01 | TBD | Pending |
-| ETF-02 | TBD | Pending |
-| WLST-01 | TBD | Pending |
-| WLST-02 | TBD | Pending |
-| WLST-03 | TBD | Pending |
-| WLST-04 | TBD | Pending |
-| WLST-05 | TBD | Pending |
-| TRAC-01 | TBD | Pending |
-| TRAC-02 | TBD | Pending |
-| TRAC-03 | TBD | Pending |
-| TIME-01 | TBD | Pending |
-| TIME-02 | TBD | Pending |
-| TIME-03 | TBD | Pending |
-| TIME-04 | TBD | Pending |
-| TIME-05 | TBD | Pending |
-| UI-09 | TBD | Pending |
-| UI-10 | TBD | Pending |
-| OPS-06 | TBD | Pending |
+| ETF-01 | Phase 27 | Pending |
+| ETF-02 | Phase 27 | Pending |
+| WLST-01 | Phase 28 | Pending |
+| WLST-02 | Phase 28 | Pending |
+| WLST-03 | Phase 28 | Pending |
+| WLST-04 | Phase 28 | Pending |
+| WLST-05 | Phase 28 | Pending |
+| TRAC-01 | Phase 29 | Pending |
+| TRAC-02 | Phase 29 | Pending |
+| TRAC-03 | Phase 29 | Pending |
+| TIME-01 | Phase 30 | Pending |
+| TIME-02 | Phase 30 | Pending |
+| TIME-03 | Phase 30 | Pending |
+| TIME-04 | Phase 30 | Pending |
+| TIME-05 | Phase 30 | Pending |
+| UI-09 | Phase 31 | Pending |
+| UI-10 | Phase 31 | Pending |
+| OPS-06 | Phase 29 | Pending |
 
 **Coverage:**
 - v2.7 requirements: 18 total
-- Mapped to phases: 0
-- Unmapped: 18 ⚠️ (ロードマップ作成時に更新)
+- Mapped to phases: 18
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-07-15*
-*Last updated: 2026-07-15 after initial definition*
+*Last updated: 2026-07-15 after roadmap creation (Phases 27-31)*
