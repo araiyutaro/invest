@@ -155,7 +155,23 @@ export async function main(): Promise<void> {
   let rawFiles: string[];
   try {
     rawFiles = (await readdir(RAW_DIR)).filter((f) => f.endsWith(".json"));
-  } catch {
+  } catch (error) {
+    // WR-05: 正常系0件として扱うのはディレクトリ不存在（ENOENT）のみ。
+    // EACCES/EIO 等の実障害を OK マーカーで隠蔽すると、判定が丸ごと欠けた日を
+    // 監査ログから検出できないため、FAIL マーカー + 空の有効 JSON で報告する（fail-soft）。
+    // ENOENT 判定は `.code` と `.message` の両チェック（loadPrevJudgmentDefensive と同じ規約）。
+    const isMissing =
+      (error as NodeJS.ErrnoException).code === "ENOENT" ||
+      (error instanceof Error && error.message.includes("ENOENT"));
+    if (!isMissing) {
+      console.error(
+        "[watchlist-judgment] tmp/watchlist-judgment-raw の読み込みに失敗しました。空出力で終了します。",
+        error,
+      );
+      await writeEmptyOutput(date);
+      console.error("[STEP:watchlist-judgment:FAIL:raw読込失敗]");
+      return;
+    }
     // D-19: raw ディレクトリが存在しない場合はアクティブ0件の正常系として扱う。
     rawFiles = [];
   }

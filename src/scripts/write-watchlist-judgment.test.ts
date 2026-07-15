@@ -581,6 +581,42 @@ describe("write-watchlist-judgment", () => {
       expect(nvda).not.toHaveProperty("actionChanged");
     });
 
+    it("readdirがENOENT以外（EACCES等）で失敗した場合、空の有効JSON + FAILマーカーでthrowせず終了する（WR-05）", async () => {
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+      });
+      const eacces = Object.assign(new Error("EACCES: permission denied"), { code: "EACCES" });
+      readdirMock.mockRejectedValue(eacces);
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await expect(main()).resolves.not.toThrow();
+
+      expect(writeFileMock).toHaveBeenCalledTimes(1);
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      expect(written.judgments).toEqual([]);
+
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(
+        errorCalls.some((c) => String(c).includes("[STEP:watchlist-judgment:FAIL:raw読込失敗]")),
+      ).toBe(true);
+      expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist-judgment:OK]"))).toBe(false);
+      expect(errorCalls.some((c) => String(c).includes("[PIPELINE:FAIL]"))).toBe(false);
+    });
+
+    it("readdirがENOENT（プレーンError、.codeなし）で失敗した場合は正常系0件としてOKマーカーを出す（WR-05/D-19回帰防止）", async () => {
+      mockReadFileByPath({
+        "meeting-result.json": () => Promise.resolve(JSON.stringify(makeMeetingResult())),
+      });
+      readdirMock.mockRejectedValue(new Error("ENOENT: no such file or directory"));
+
+      const { main } = await import("./write-watchlist-judgment.js");
+      await expect(main()).resolves.not.toThrow();
+
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist-judgment:OK]"))).toBe(true);
+    });
+
     it("すべての分岐で [PIPELINE:FAIL] マーカーが一度も出力されない", async () => {
       readFileMock.mockRejectedValue(new Error("破損"));
       readdirMock.mockRejectedValue(new Error("ENOENT"));
