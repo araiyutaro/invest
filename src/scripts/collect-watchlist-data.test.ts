@@ -397,6 +397,33 @@ describe("collect-watchlist-data", () => {
       expect(chartMock).toHaveBeenCalledWith("AAA", expect.anything());
     });
 
+    it("キャッシュ snapshots に不正要素（null・symbol欠落）が混入しても、正常な要素は活かされ不正要素のみ除外される (WR-02)", async () => {
+      const watchlist = {
+        AAA: makeWatchlistEntry({ ticker: "AAA" }),
+      };
+      mockReadFileByPath({
+        "watchlist.json": () => Promise.resolve(JSON.stringify(watchlist)),
+        "technicals.json": () =>
+          Promise.resolve(
+            JSON.stringify({
+              generatedAt: new Date().toISOString(),
+              snapshots: [null, { asOf: "2026-07-15" }, makeCachedSnapshot("AAA")],
+            }),
+          ),
+        "news.json": () => Promise.resolve("[]"),
+      });
+
+      const { main } = await import("./collect-watchlist-data.js");
+      await main();
+
+      // 有効なキャッシュ要素（AAA）は活かされ、新規取得は発生しない
+      expect(chartMock).not.toHaveBeenCalled();
+      const writeCalls = writeFileMock.mock.calls;
+      const technicalsCall = writeCalls.find((c) => String(c[0]).includes("watchlist-technicals.json"));
+      const written = JSON.parse(String(technicalsCall![1]));
+      expect(written.snapshots.map((s: { symbol: string }) => s.symbol)).toEqual(["AAA"]);
+    });
+
     it("キャッシュ破損の場合、全銘柄新規取得にフォールバックする (D-12)", async () => {
       const watchlist = {
         AAA: makeWatchlistEntry({ ticker: "AAA" }),

@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { fetchTechnicalSnapshot } from "../data/technicals.js";
+import type { TechnicalSnapshot } from "../data/technicals.js";
 import { getActiveWatchlistEntries } from "../portfolio/watchlist.js";
 import type { WatchlistFile } from "../portfolio/watchlist.js";
 import { buildHoldingNewsMap } from "../portfolio/holding-news.js";
@@ -88,7 +89,13 @@ async function loadSameDayCache(
       );
       return [];
     }
-    return (parsed as TechnicalsCacheFile).snapshots;
+    // WR-02: 要素レベルの形状検証（D-12: キャッシュは正しさの依存点にしない）。
+    // null や symbol を欠く不正要素が1件混入しただけでテクニカルブランチ全体が
+    // 外側 catch で空縮退するのを防ぎ、不正要素のみ除外して残りを活かす。
+    return (parsed as TechnicalsCacheFile).snapshots.filter(
+      (s): s is TechnicalSnapshot =>
+        typeof s === "object" && s !== null && typeof (s as TechnicalSnapshot).symbol === "string",
+    );
   } catch {
     // ENOENT・パース失敗を区別せず fail-soft（D-12）
     return [];
