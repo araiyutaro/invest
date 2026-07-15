@@ -257,8 +257,8 @@ describe("Watchlist section (UI-09/UI-10)", () => {
       ],
     };
     const watchlistFixture = {
-      pltr: { ticker: "PLTR", nameJa: "パランティア", history: [] },
-      snow: { ticker: "SNOW", nameJa: "スノーフレイク", history: [] },
+      PLTR: { ticker: "PLTR", nameJa: "パランティア", history: [] },
+      SNOW: { ticker: "SNOW", nameJa: "スノーフレイク", history: [] },
     };
     const html = generateDailyReportHtml(
       validMeetingResult, [], [], marketDataDefault,
@@ -286,7 +286,12 @@ describe("Watchlist section (UI-09/UI-10)", () => {
     );
     expect(html).toContain("ウォッチリスト 買いタイミング判定");
     expect(html).toContain("現在ウォッチリスト銘柄はありません");
-    expect(html).not.toContain('class="agent-card"');
+    // 他セクション（インデックス投資家へのアドバイス等）でも .agent-card が使われるため、
+    // ウォッチリストセクションのみを切り出してカード div が無いことを検証する
+    const sectionStart = html.indexOf("ウォッチリスト 買いタイミング判定");
+    const sectionEnd = html.indexOf("<hr>", sectionStart);
+    const sectionHtml = html.slice(sectionStart, sectionEnd === -1 ? undefined : sectionEnd);
+    expect(sectionHtml).not.toContain('class="agent-card"');
   });
 
   it("Test 39: watchlistJudgment に null を渡すとセクション見出し・空メッセージのいずれも含まれない（完全非表示）", async () => {
@@ -328,8 +333,12 @@ describe("Watchlist section (UI-09/UI-10)", () => {
       validMeetingResult, [], [], marketDataDefault,
       watchlistJudgmentFixture, {},
     );
-    expect(html).not.toContain("#10b981");
-    expect(html).toContain("#9ca3af");
+    // 他セクション（verdict/trend色等）で #10b981 が使われうるため、ウォッチリストセクションのみを切り出して検証する
+    const sectionStart = html.indexOf("ウォッチリスト 買いタイミング判定");
+    const sectionEnd = html.indexOf("<hr>", sectionStart);
+    const sectionHtml = html.slice(sectionStart, sectionEnd === -1 ? undefined : sectionEnd);
+    expect(sectionHtml).not.toContain("#10b981");
+    expect(sectionHtml).toContain("#9ca3af");
   });
 
   it("Test 42: market: US の銘柄で「前日終値時点」が asOf 値とともに含まれる", async () => {
@@ -399,7 +408,7 @@ describe("Watchlist section (UI-09/UI-10)", () => {
       ],
     };
     const watchlistFixture = {
-      pltr: { ticker: "PLTR", nameJa: "パランティア", addedDate: "2026-06-10", history: [] },
+      PLTR: { ticker: "PLTR", nameJa: "パランティア", addedDate: "2026-06-10", history: [] },
     };
     const html = generateDailyReportHtml(
       validMeetingResult, [], [], marketDataDefault,
@@ -535,7 +544,7 @@ describe("Watchlist section (UI-09/UI-10)", () => {
       ],
     };
     const watchlistFixture = {
-      pltr: { ticker: "PLTR", nameJa: "パランティア", history: [] },
+      PLTR: { ticker: "PLTR", nameJa: "パランティア", history: [] },
     };
     const html = generateDailyReportHtml(
       validMeetingResult, [], [], marketDataDefault,

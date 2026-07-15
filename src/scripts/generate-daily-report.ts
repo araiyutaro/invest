@@ -1,7 +1,9 @@
 import { escapeHtml, markdownToHtml, scoreColor, verdictColor, generateBaseStyles } from "./report-utils.js";
 import { renderSectorBarChart, renderVixLineChart } from "./report-charts.js";
 import type { SectorDatum, VixDatum } from "./report-charts.js";
-import type { MeetingResult, WebSearchResult, ReevaluationOutput } from "../meeting/types.js";
+import type { MeetingResult, WebSearchResult, ReevaluationOutput, WatchlistJudgment, WatchlistJudgmentFile } from "../meeting/types.js";
+import type { WatchlistEntry, WatchlistFile } from "../portfolio/watchlist.js";
+import { normalizeHoldingSymbol } from "../portfolio/holding-news.js";
 
 function formatMarketOverviewHtml(result: MeetingResult): string {
   const trendColor = result.marketOverview.trend === "上昇" ? "#10b981"
@@ -224,6 +226,90 @@ function formatWeeklyEventsHtml(result: MeetingResult): string {
     </table>`;
 }
 
+/** todayAction: "buy" のとき目立つピルバッジ、"wait" のとき控えめなインラインテキストを描画する (D-09)。 */
+function formatTodayActionBadgeHtml(todayAction: "buy" | "wait"): string {
+  if (todayAction === "buy") {
+    return ` <span style="background:#10b981;color:#0f0f1a;font-size:0.8rem;font-weight:bold;padding:0.2rem 0.6rem;margin-left:0.5rem;border-radius:999px;">今日買うべき</span>`;
+  }
+  return ` <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span>`;
+}
+
+/**
+ * actionChanged === true の銘柄にのみ方向別の変化バッジを描画する (D-10/D-11/UI-10)。
+ * 条件は必ず `!== true` の早期returnにする — undefined（比較不能）と false（変化なし）を
+ * どちらも非表示にする（truthyチェック禁止、Pitfall 2）。
+ */
+function formatActionChangedBadgeHtml(
+  actionChanged: boolean | undefined,
+  previousAction: "buy" | "wait" | undefined,
+  todayAction: "buy" | "wait",
+): string {
+  if (actionChanged !== true) return "";
+  const isNewSignal = previousAction === "wait" && todayAction === "buy";
+  const background = isNewSignal ? "#10b981" : "#f59e0b";
+  const color = isNewSignal ? "#0f0f1a" : "#1a1a28";
+  const label = isNewSignal ? "シグナル点灯: 待ち → 買い" : "買い → 待ち";
+  return ` <span style="display:inline-block;background:${background};color:${color};font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">${label}</span>`;
+}
+
+/** ウォッチリスト1銘柄分の判定カードを描画する (D-03〜D-08)。 */
+function formatWatchlistJudgmentCardHtml(judgment: WatchlistJudgment, entry: WatchlistEntry | undefined): string {
+  const companyName = entry?.nameJa ?? entry?.name;
+  const heading = companyName
+    ? `${escapeHtml(judgment.ticker)} — ${escapeHtml(companyName)}`
+    : escapeHtml(judgment.ticker);
+
+  if (judgment.status === "skipped") {
+    return `<div class="agent-card" style="border-left-color:#4b5563;opacity:0.7;">
+      <h4>${heading} <span style="color:#6b7280;font-size:0.8rem;">判定不能（データ不足）</span></h4>
+    </div>`;
+  }
+
+  const todayActionBadge = formatTodayActionBadgeHtml(judgment.todayAction);
+  const actionChangedBadge = formatActionChangedBadgeHtml(judgment.actionChanged, judgment.previousAction, judgment.todayAction);
+  const sessionLabel = judgment.market === "JP" ? "寄付き前時点" : "前日終値時点";
+  const asOfHtml = judgment.asOf
+    ? ` <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(${escapeHtml(judgment.asOf)} ${sessionLabel})</span>`
+    : "";
+  const signalsHtml = judgment.signals.length > 0
+    ? judgment.signals.map((s) => `<span class="ticker-pill">${escapeHtml(s)}</span>`).join("")
+    : "";
+  const addedDateHtml = entry?.addedDate
+    ? `<p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: ${escapeHtml(entry.addedDate)}</p>`
+    : "";
+
+  return `<div class="agent-card">
+      <h4>${heading}${todayActionBadge}${actionChangedBadge}${asOfHtml}</h4>
+      <p>${escapeHtml(judgment.rationale)}</p>
+      ${signalsHtml}
+      ${addedDateHtml}
+    </div>`;
+}
+
+/**
+ * ウォッチリストセクションの3状態ディスパッチャ (D-14)。
+ * judgmentFile === null（欠損・破損・stale）のときはセクション全体を非表示にする。
+ */
+function formatWatchlistSectionHtml(judgmentFile: WatchlistJudgmentFile | null, watchlist: WatchlistFile): string {
+  if (judgmentFile === null) return "";
+
+  const heading = `<hr>
+    <h2>ウォッチリスト 買いタイミング判定</h2>`;
+
+  if (judgmentFile.judgments.length === 0) {
+    return `${heading}
+    <p style="color: #888; font-size: 0.9rem;">現在ウォッチリスト銘柄はありません</p>`;
+  }
+
+  const cards = judgmentFile.judgments
+    .map((j) => formatWatchlistJudgmentCardHtml(j, watchlist[normalizeHoldingSymbol(j.ticker)]))
+    .join("\n");
+
+  return `${heading}
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">ウォッチリスト銘柄の本日の買いタイミング判定です。</p>
+    ${cards}`;
+}
+
 export function generateDailyReportHtml(
   result: MeetingResult,
   webSearchResults: ReadonlyArray<WebSearchResult>,
@@ -232,6 +318,8 @@ export function generateDailyReportHtml(
     sectors: ReadonlyArray<SectorDatum>;
     vixHistory: ReadonlyArray<VixDatum>;
   } = { sectors: [], vixHistory: [] },
+  watchlistJudgment: WatchlistJudgmentFile | null = null,
+  watchlist: WatchlistFile = {},
 ): string {
   const timestamp = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
   const styles = generateBaseStyles("#3b82f6");
@@ -249,6 +337,7 @@ export function generateDailyReportHtml(
     </div>`;
   const sectorSection = formatSectorRecommendationsHtml(result);
   const scoringSection = formatHighlightedStocksHtml(result);
+  const watchlistSection = formatWatchlistSectionHtml(watchlistJudgment, watchlist);
   const webSearchSection = formatWebSearchHtml(webSearchResults);
   const reevalSection = formatReevalHtml(reevalResults);
   const riskSection = formatRiskWarningsHtml(result);
@@ -272,6 +361,7 @@ export function generateDailyReportHtml(
     ${vixChartSection}
     ${sectorSection}
     ${scoringSection}
+    ${watchlistSection}
     ${webSearchSection}
     ${reevalSection}
     ${riskSection}
