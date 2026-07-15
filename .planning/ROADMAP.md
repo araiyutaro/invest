@@ -115,7 +115,7 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
 強気評価された個別銘柄（ETF除外）をウォッチリストとして永続追跡し、株価・ニュースに基づく日次の買いタイミング判定で「今日買うべき / 待つべき」を Daily Report に表示する。
 
 - [x] **Phase 27: ETF Exclusion** - アナリスト推奨銘柄からETFをプロンプト指示＋TS側`quoteType`決定論検証の二層防御で除外 (completed 2026-07-15)
-- [ ] **Phase 28: Watchlist Persistence** - 強気銘柄を`data/watchlist.json`にティッカーキー方式で日次登録し、降格・購入済み・失効を理由付きで自動除外
+- [x] **Phase 28: Watchlist Persistence** - 強気銘柄を`data/watchlist.json`にティッカーキー方式で日次登録し、降格・購入済み・失効を理由付きで自動除外 (completed 2026-07-15)
 - [ ] **Phase 29: Daily Tracking Data Supply** - ウォッチリスト銘柄の株価・テクニカル・関連ニュースを銘柄単位fail-softで収集し判定エージェントへ供給
 - [ ] **Phase 30: Buy-Timing Judgment Agent** - 複数シグナル合致に基づく「今日買うべき/待つべき」判定をLLM+TS zod検証ハイブリッドで日次生成
 - [ ] **Phase 31: Daily Report Watchlist Section** - Daily Reportにウォッチリストセクションを追加し判定バッジ・理由・前日比変化を表示
@@ -161,7 +161,7 @@ Plans:
   4. 強気再確認が一定期間（設計時に確定する日数）ない銘柄は`removedReason: expired`付きで時間ベースに自動失効し、リストが無限に肥大しない
   5. 除外・失効後もレコードは履歴として保持され、いつ・なぜ除外されたかを追跡できる
 
-**Plans**: 2/3 plans executed
+**Plans**: 3/3 plans complete
 Plans:
 
 **Wave 1**
@@ -174,7 +174,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 28-03-PLAN.md — invest.md 配線（Step 2g 直後に write-watchlist 新ステップを fail-soft 挿入 + launchd 実行の human-verify）
+- [x] 28-03-PLAN.md — invest.md 配線（Step 2g 直後に write-watchlist 新ステップを fail-soft 挿入 + launchd 実行の human-verify）
 
 ### Phase 29: Daily Tracking Data Supply
 
@@ -251,7 +251,7 @@ Plans:
 | 25. Urgency History Persistence | v2.6 | 2/2 | Complete    | 2026-07-04 |
 | 26. Weekly Urgency Rollup Display | v2.6 | 3/3 | Complete    | 2026-07-04 |
 | 27. ETF Exclusion | v2.7 | 3/3 | Complete   | 2026-07-15 |
-| 28. Watchlist Persistence | v2.7 | 2/3 | In Progress|  |
+| 28. Watchlist Persistence | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 29. Daily Tracking Data Supply | v2.7 | 0/0 | Not started | - |
 | 30. Buy-Timing Judgment Agent | v2.7 | 0/0 | Not started | - |
 | 31. Daily Report Watchlist Section | v2.7 | 0/0 | Not started | - |
