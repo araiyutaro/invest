@@ -14,11 +14,11 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### ウォッチリスト
 
-- [ ] **WLST-01**: 当日ミーティングで `verdict: 強気` となった銘柄（ETF除外後）が `data/watchlist.json` に自動登録される（ticker キー方式の状態テーブル、addedDate/lastVerdictDate 付き、当日以降の蓄積で過去分の遡及なし）
-- [ ] **WLST-02**: 再評価で verdict が中立/弱気に転落した銘柄はウォッチリストから自動除外される（TS側決定論）
-- [ ] **WLST-03**: portfolio.json の保有銘柄に現れたティッカーは「購入済み」としてウォッチリストから自動除外される（TS側決定論）
-- [ ] **WLST-04**: 強気再確認が一定期間ない銘柄は時間ベースで自動失効する（TS側決定論、リスト無限肥大の構造的防止）
-- [ ] **WLST-05**: 除外・失効はレコード削除ではなく理由付き（removedReason: downgraded/purchased/expired）で記録され、履歴として追跡できる
+- [x] **WLST-01**: 当日ミーティングで `verdict: 強気` となった銘柄（ETF除外後）が `data/watchlist.json` に自動登録される（ticker キー方式の状態テーブル、addedDate/lastVerdictDate 付き、当日以降の蓄積で過去分の遡及なし）
+- [x] **WLST-02**: 再評価で verdict が中立/弱気に転落した銘柄はウォッチリストから自動除外される（TS側決定論）
+- [x] **WLST-03**: portfolio.json の保有銘柄に現れたティッカーは「購入済み」としてウォッチリストから自動除外される（TS側決定論）
+- [x] **WLST-04**: 強気再確認が一定期間ない銘柄は時間ベースで自動失効する（TS側決定論、リスト無限肥大の構造的防止）
+- [x] **WLST-05**: 除外・失効はレコード削除ではなく理由付き（removedReason: downgraded/purchased/expired）で記録され、履歴として追跡できる
 
 ### 追跡データ供給
 
@@ -72,11 +72,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | ETF-01 | Phase 27 | Complete |
 | ETF-02 | Phase 27 | Complete |
-| WLST-01 | Phase 28 | Pending |
-| WLST-02 | Phase 28 | Pending |
-| WLST-03 | Phase 28 | Pending |
-| WLST-04 | Phase 28 | Pending |
-| WLST-05 | Phase 28 | Pending |
+| WLST-01 | Phase 28 | Complete |
+| WLST-02 | Phase 28 | Complete |
+| WLST-03 | Phase 28 | Complete |
+| WLST-04 | Phase 28 | Complete |
+| WLST-05 | Phase 28 | Complete |
 | TRAC-01 | Phase 29 | Pending |
 | TRAC-02 | Phase 29 | Pending |
 | TRAC-03 | Phase 29 | Pending |
