@@ -1,0 +1,16 @@
+{
+  "ASML": {
+    "ticker": "ASML",
+    "name": "ASML Holding N.V.",
+    "addedDate": "2026-07-16",
+    "lastVerdictDate": "2026-07-16",
+    "history": []
+  },
+  "GPC": {
+    "ticker": "GPC",
+    "name": "Genuine Parts Company",
+    "addedDate": "2026-07-16",
+    "lastVerdictDate": "2026-07-16",
+    "history": []
+  }
+}

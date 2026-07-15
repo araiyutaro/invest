@@ -788,5 +788,67 @@
       "urgent": false,
       "decision": "保持"
     }
+  ],
+  "2026-07-16": [
+    {
+      "symbol": "MRNA",
+      "nameJa": "モデルナ",
+      "decision": "保持"
+    },
+    {
+      "symbol": "JOBY",
+      "nameJa": "ジョビー・アビエーション",
+      "decision": "保持"
+    },
+    {
+      "symbol": "HII",
+      "nameJa": "ハンティントン・インガルス・インダストリーズ",
+      "decision": "保持"
+    },
+    {
+      "symbol": "POWL",
+      "nameJa": "パウエル・インダストリーズ",
+      "decision": "買増"
+    },
+    {
+      "symbol": "EE",
+      "nameJa": "エクセルレート・エナジー",
+      "decision": "保持"
+    },
+    {
+      "symbol": "NXT",
+      "nameJa": "ネクストラッカー",
+      "decision": "買増"
+    },
+    {
+      "symbol": "BWMX",
+      "nameJa": "ベタウェア・デ・メキシコ",
+      "decision": "保持"
+    },
+    {
+      "symbol": "YOU",
+      "nameJa": "クリア・セキュア",
+      "decision": "保持"
+    },
+    {
+      "symbol": "8522.T",
+      "nameJa": "名古屋銀行",
+      "decision": "買増"
+    },
+    {
+      "symbol": "5885.T",
+      "nameJa": "ジーデップ・アドバンス",
+      "decision": "要確認"
+    },
+    {
+      "symbol": "5576.T",
+      "nameJa": "オービーシステム",
+      "decision": "保持"
+    },
+    {
+      "symbol": "7711.T",
+      "nameJa": "助川電気工業",
+      "decision": "買増"
+    }
   ]
 }
