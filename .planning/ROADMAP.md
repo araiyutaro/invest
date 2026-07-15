@@ -131,7 +131,11 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
   2. meeting-result確定後、TS側で`yahoo-finance2`の`quote().quoteType`照合により、米国ETF・日本ETF（`.T`サフィックスでは判別不能なため`quoteType`必須）の両方がhighlightedStocksから決定論的に除外される
   3. 個別銘柄のquoteType lookupに失敗した場合でもパイプラインがthrowせず、安全側（除外 or 通過の明示方針）で処理が継続する
   4. 除外ロジックの単体テストが米国ETF・日本ETF・個別株それぞれの分類を正しく検証している
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 27-01-PLAN.md — 純関数 etf-exclusion.ts（quoteType allowlist フィルタ + 単体テスト, TDD）
+- [ ] 27-02-PLAN.md — fail-soft CLI filter-etf-stocks.ts（単一 batch quote 照合 + 書き戻し + テスト）
+- [ ] 27-03-PLAN.md — invest.md 配線（5アナリスト+モデレーターのプロンプト指示 + Step 2g wiring）
 
 ### Phase 28: Watchlist Persistence
 **Goal**: 当日「強気」評価された銘柄（ETF除外後）が`data/watchlist.json`に日次で蓄積され、降格・購入・長期未確認の各理由に応じて理由付きで自動除外される、監査可能な状態テーブルとして機能する

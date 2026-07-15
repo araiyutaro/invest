@@ -1,8 +1,8 @@
 ---
 phase: 27
 slug: etf-exclusion
-status: draft
-nyquist_compliant: false
+status: planned
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-07-15
 ---
@@ -38,7 +38,12 @@ created: 2026-07-15
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| （プランナーがPLAN.md確定後に記入） | | | ETF-01, ETF-02 | — | | unit | `npx vitest run` | ❌ W0 | ⬜ pending |
+| 27-01 T1 (RED test) | 27-01 | 1 | ETF-02 | T-27-01 | Map キーで prototype pollution 回避 | unit | `npx vitest run src/portfolio/etf-exclusion.test.ts` | ❌ W0→本タスクで作成 | ⬜ pending |
+| 27-01 T2 (pure fn) | 27-01 | 1 | ETF-02 | T-27-01/02 | allowlist=EQUITY, lookup失敗→fail-closed | unit | `npx vitest run src/portfolio/etf-exclusion.test.ts` | ✅ (T1) | ⬜ pending |
+| 27-02 T1 (CLI test) | 27-02 | 2 | ETF-02 | T-27-03/04/05 | fail-soft/fail-closed 分離, 書き戻し検証 | unit (mocked) | `npx vitest run src/scripts/filter-etf-stocks.test.ts` | ❌ W0→本タスクで作成 | ⬜ pending |
+| 27-02 T2 (CLI impl) | 27-02 | 2 | ETF-02 | T-27-03/04/SC | 単一 batch quote (D-05), fail-soft (D-02) | unit (mocked) | `npx vitest run src/scripts/filter-etf-stocks.test.ts` | ✅ (T1) | ⬜ pending |
+| 27-03 T1 (prompts) | 27-03 | 2 | ETF-01 | T-27-07 | 5アナリスト+モデレーター除外指示 | static (grep) | `grep -c "…は picks に含めないこと" .claude/commands/invest.md` (==5) | n/a | ⬜ pending |
+| 27-03 T2 (Step 2g wiring) | 27-03 | 2 | ETF-02 | T-27-06 | fail-soft wiring, [PIPELINE:FAIL]禁止 | static (grep+awk) | filter-etf-stocks.ts が validate-meeting.ts より前 (awk順序) | n/a | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
