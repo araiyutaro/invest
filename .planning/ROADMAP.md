@@ -188,7 +188,7 @@ Plans:
   3. 追跡データ収集は銘柄単位でfail-softに実装されており、1銘柄のAPI取得失敗（レート制限含む）が他銘柄の処理やパイプライン全体の失敗につながらないことがテストで確認できる
   4. 新パイプラインステップに専用`[STEP:*]`マーカーがあり、失敗時も既存4レポートの生成・デプロイが継続する
 
-**Plans**: 1/3 plans executed
+**Plans**: 2/3 plans executed
 
 Plans:
 
@@ -198,7 +198,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 29-02-PLAN.md — fail-soft CLI collect-watchlist-data.ts（同日キャッシュ+チャンク取得、buildHoldingNewsMap無改変流用、テクニカル/ニュース独立fail-soft、[STEP:watchlist-data:*]マーカー + テスト, TRAC-01/02/03/OPS-06）
+- [x] 29-02-PLAN.md — fail-soft CLI collect-watchlist-data.ts（同日キャッシュ+チャンク取得、buildHoldingNewsMap無改変流用、テクニカル/ニュース独立fail-soft、[STEP:watchlist-data:*]マーカー + テスト, TRAC-01/02/03/OPS-06）
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -266,7 +266,7 @@ Plans:
 | 26. Weekly Urgency Rollup Display | v2.6 | 3/3 | Complete    | 2026-07-04 |
 | 27. ETF Exclusion | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 28. Watchlist Persistence | v2.7 | 3/3 | Complete   | 2026-07-15 |
-| 29. Daily Tracking Data Supply | v2.7 | 1/3 | In Progress|  |
+| 29. Daily Tracking Data Supply | v2.7 | 2/3 | In Progress|  |
 | 30. Buy-Timing Judgment Agent | v2.7 | 0/0 | Not started | - |
 | 31. Daily Report Watchlist Section | v2.7 | 0/0 | Not started | - |
 

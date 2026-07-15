@@ -22,9 +22,9 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### 追跡データ供給
 
-- [ ] **TRAC-01**: ウォッチリスト銘柄の当日株価・テクニカル指標（MA/RSI/出来高等）が日次収集され判定エージェントに供給される（collect-technicals パターン流用）
-- [ ] **TRAC-02**: ウォッチリスト銘柄の関連ニュースが tmp/news.json からTS側決定論で抽出され判定エージェントに供給される（holding-news パターン流用）
-- [ ] **TRAC-03**: 追跡データ収集は銘柄単位で fail-soft（1銘柄の取得失敗が他銘柄の処理やパイプライン全体を止めない、バッチ化でレート制限を考慮）
+- [x] **TRAC-01**: ウォッチリスト銘柄の当日株価・テクニカル指標（MA/RSI/出来高等）が日次収集され判定エージェントに供給される（collect-technicals パターン流用）
+- [x] **TRAC-02**: ウォッチリスト銘柄の関連ニュースが tmp/news.json からTS側決定論で抽出され判定エージェントに供給される（holding-news パターン流用）
+- [x] **TRAC-03**: 追跡データ収集は銘柄単位で fail-soft（1銘柄の取得失敗が他銘柄の処理やパイプライン全体を止めない、バッチ化でレート制限を考慮）
 
 ### 買いタイミング判定
 
@@ -41,7 +41,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### 運用安定性
 
-- [ ] **OPS-06**: ウォッチリスト関連の新パイプラインステップ（登録・データ供給・判定・描画）は fail-soft 設計（専用 [STEP:*] マーカー、失敗時も既存4レポートの生成・デプロイが継続）
+- [x] **OPS-06**: ウォッチリスト関連の新パイプラインステップ（登録・データ供給・判定・描画）は fail-soft 設計（専用 [STEP:*] マーカー、失敗時も既存4レポートの生成・デプロイが継続）
 
 ## Future Requirements
 
@@ -77,9 +77,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WLST-03 | Phase 28 | Complete |
 | WLST-04 | Phase 28 | Complete |
 | WLST-05 | Phase 28 | Complete |
-| TRAC-01 | Phase 29 | Pending |
-| TRAC-02 | Phase 29 | Pending |
-| TRAC-03 | Phase 29 | Pending |
+| TRAC-01 | Phase 29 | Complete |
+| TRAC-02 | Phase 29 | Complete |
+| TRAC-03 | Phase 29 | Complete |
 | TIME-01 | Phase 30 | Pending |
 | TIME-02 | Phase 30 | Pending |
 | TIME-03 | Phase 30 | Pending |
@@ -87,7 +87,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TIME-05 | Phase 30 | Pending |
 | UI-09 | Phase 31 | Pending |
 | UI-10 | Phase 31 | Pending |
-| OPS-06 | Phase 29 | Pending |
+| OPS-06 | Phase 29 | Complete |
 
 **Coverage:**
 
