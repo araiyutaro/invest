@@ -188,6 +188,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     }
 
     注意: picksのtickerは必ず英数字ティッカー形式（例: AAPL, 7203.T）で記入してください。
+    ETF・投資信託・インデックスファンド（例: SPY, QQQ, 1306.T等）は picks に含めないこと。個別企業株のみを推奨してください。
     ニュース・市況から新規の注目銘柄を 1〜3 銘柄に絞って推奨してください。ポートフォリオ保有銘柄の評価は対象外です。
     analysis フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
@@ -233,6 +234,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     }
 
     注意: picksのtickerは必ず英数字ティッカー形式（例: AAPL, 7203.T）で記入してください。
+    ETF・投資信託・インデックスファンド（例: SPY, QQQ, 1306.T等）は picks に含めないこと。個別企業株のみを推奨してください。
     ニュース・市況から新規の注目銘柄を 1〜3 銘柄に絞って推奨してください。ポートフォリオ保有銘柄の評価は対象外です。
     analysis フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
@@ -278,6 +280,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     }
 
     注意: picksのtickerは必ず英数字ティッカー形式（例: AAPL, 7203.T）で記入してください。
+    ETF・投資信託・インデックスファンド（例: SPY, QQQ, 1306.T等）は picks に含めないこと。個別企業株のみを推奨してください。
     macroはセクターレベルでの推奨が主体なので、個別銘柄picksは 0〜2 銘柄（0件も可）で構いません。ポートフォリオ保有銘柄の評価は対象外です。
     analysis フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
@@ -323,6 +326,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     }
 
     注意: picksのtickerは必ず英数字ティッカー形式（例: AAPL, 7203.T）で記入してください。
+    ETF・投資信託・インデックスファンド（例: SPY, QQQ, 1306.T等）は picks に含めないこと。個別企業株のみを推奨してください。
     ニュース・市況から新規の注目銘柄を 1〜3 銘柄に絞って推奨してください。ポートフォリオ保有銘柄の評価は対象外です。
     analysis フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
@@ -368,6 +372,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     }
 
     注意: picksのtickerは必ず英数字ティッカー形式（例: AAPL, 7203.T）で記入してください。
+    ETF・投資信託・インデックスファンド（例: SPY, QQQ, 1306.T等）は picks に含めないこと。個別企業株のみを推奨してください。
     ニュース・市況から新規の注目銘柄を 1〜3 銘柄に絞って推奨してください。ポートフォリオ保有銘柄の評価は対象外です。
     analysis フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
@@ -1074,6 +1079,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     - 注目銘柄は中小型株を優先（NVIDIA、Apple、Microsoft、Google等の大型株は避ける）
     - 各銘柄の verdict は必ずスコア計算結果に基づく
     - レポート内容は日本語で記述
+    - ETF・投資信託・インデックスファンドは highlightedStocks に含めないこと（個別企業株のみ）。TS側でも quoteType による除外チェックを行うため、疑わしい銘柄は含めないこと
 
     以下のJSONフォーマットのみを出力してください。他のテキストは一切出力しないでください。
     マークダウンコードブロック（```json）も不要です。JSONオブジェクトのみを出力してください。
