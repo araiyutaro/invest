@@ -3,12 +3,22 @@ import {
   isActive,
   getActiveWatchlistEntries,
   admitBullishStocks,
+  pruneWatchlist,
   EXPIRY_CALENDAR_DAYS,
   type WatchlistEntry,
   type WatchlistFile,
 } from "./watchlist.js";
 import type { QuoteTypeLookup } from "./etf-exclusion.js";
 import type { MeetingResult } from "../meeting/types.js";
+import type { PortfolioHolding } from "./holdings.js";
+
+const makeHolding = (overrides: Partial<PortfolioHolding>): PortfolioHolding => ({
+  symbol: "TEST",
+  name: "Test Co.",
+  nameJa: "テスト社",
+  sector: "Technology",
+  ...overrides,
+});
 
 const makeWatchlistEntry = (
   overrides: Partial<WatchlistEntry>,
@@ -188,5 +198,117 @@ describe("admitBullishStocks (WLST-01)", () => {
         removedDate: "2026-05-21",
       },
     ]);
+  });
+});
+
+describe("pruneWatchlist (WLST-02/03/04/05)", () => {
+  it("active 銘柄が当日 verdict=中立 で登場したら removedReason=downgraded で除外される（WLST-02）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-07-01", lastVerdictDate: "2026-07-10" }),
+    };
+    const todaysHighlighted = [makeHighlightedStock({ ticker: "AAPL", verdict: "中立" })];
+    const result = pruneWatchlist(watchlist, todaysHighlighted, [], "2026-07-15");
+    expect(result.AAPL.addedDate).toBeUndefined();
+    expect(result.AAPL.lastVerdictDate).toBeUndefined();
+    expect(result.AAPL.history).toEqual([
+      {
+        addedDate: "2026-07-01",
+        lastVerdictDate: "2026-07-10",
+        removedReason: "downgraded",
+        removedDate: "2026-07-15",
+      },
+    ]);
+  });
+
+  it("active 銘柄が当日 verdict=弱気 で登場したら removedReason=downgraded で除外される（WLST-02）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-07-01", lastVerdictDate: "2026-07-10" }),
+    };
+    const todaysHighlighted = [makeHighlightedStock({ ticker: "AAPL", verdict: "弱気" })];
+    const result = pruneWatchlist(watchlist, todaysHighlighted, [], "2026-07-15");
+    expect(result.AAPL.history[0]?.removedReason).toBe("downgraded");
+  });
+
+  it("当日 highlightedStocks に一切登場しない active 銘柄は現状維持（lastVerdictDate 不変, D-11）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-07-01", lastVerdictDate: "2026-07-10" }),
+    };
+    const result = pruneWatchlist(watchlist, [], [], "2026-07-15");
+    expect(result.AAPL.addedDate).toBe("2026-07-01");
+    expect(result.AAPL.lastVerdictDate).toBe("2026-07-10");
+    expect(result.AAPL.history).toEqual([]);
+  });
+
+  it("active 銘柄が PORTFOLIO_HOLDINGS の symbol に一致すれば removedReason=purchased で除外される（WLST-03/D-12）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-07-01", lastVerdictDate: "2026-07-10" }),
+    };
+    const holdings = [makeHolding({ symbol: "AAPL" })];
+    const result = pruneWatchlist(watchlist, [], holdings, "2026-07-15");
+    expect(result.AAPL.addedDate).toBeUndefined();
+    expect(result.AAPL.history[0]?.removedReason).toBe("purchased");
+  });
+
+  it("lastVerdictDate から経過日数がちょうど EXPIRY_CALENDAR_DAYS のときは失効しない（境界, D-08）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-06-01", lastVerdictDate: "2026-06-15" }),
+    };
+    // 2026-06-15 + 30日 = 2026-07-15
+    const result = pruneWatchlist(watchlist, [], [], "2026-07-15");
+    expect(result.AAPL.addedDate).toBe("2026-06-01");
+    expect(isActive(result.AAPL)).toBe(true);
+  });
+
+  it("lastVerdictDate から経過日数が EXPIRY_CALENDAR_DAYS+1 のときは removedReason=expired で失効する（境界, D-08）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-06-01", lastVerdictDate: "2026-06-14" }),
+    };
+    // 2026-06-14 + 31日 = 2026-07-15
+    const result = pruneWatchlist(watchlist, [], [], "2026-07-15");
+    expect(result.AAPL.addedDate).toBeUndefined();
+    expect(result.AAPL.history[0]?.removedReason).toBe("expired");
+  });
+
+  it("除外後も removedReason/removedDate が history に保持され、レコード自体は削除されない（WLST-05/D-05）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-07-01", lastVerdictDate: "2026-07-10" }),
+    };
+    const holdings = [makeHolding({ symbol: "AAPL" })];
+    const result = pruneWatchlist(watchlist, [], holdings, "2026-07-15");
+    expect(result.AAPL).toBeDefined();
+    expect(result.AAPL.ticker).toBe("AAPL");
+    expect(result.AAPL.history).toHaveLength(1);
+    expect(result.AAPL.history[0]?.removedDate).toBe("2026-07-15");
+  });
+
+  it("同一銘柄が purchased かつ downgraded に該当するとき purchased が優先される（precedence, Pitfall 3）", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({ ticker: "AAPL", addedDate: "2026-07-01", lastVerdictDate: "2026-07-10" }),
+    };
+    const todaysHighlighted = [makeHighlightedStock({ ticker: "AAPL", verdict: "弱気" })];
+    const holdings = [makeHolding({ symbol: "AAPL" })];
+    const result = pruneWatchlist(watchlist, todaysHighlighted, holdings, "2026-07-15");
+    expect(result.AAPL.history[0]?.removedReason).toBe("purchased");
+  });
+
+  it("既に除外済み（非 active）のエントリはそのまま保持され、二重に history 追記されない", () => {
+    const watchlist: WatchlistFile = {
+      AAPL: makeWatchlistEntry({
+        ticker: "AAPL",
+        addedDate: undefined,
+        lastVerdictDate: undefined,
+        history: [
+          {
+            addedDate: "2026-05-01",
+            lastVerdictDate: "2026-05-20",
+            removedReason: "downgraded",
+            removedDate: "2026-05-21",
+          },
+        ],
+      }),
+    };
+    const holdings = [makeHolding({ symbol: "AAPL" })];
+    const result = pruneWatchlist(watchlist, [], holdings, "2026-07-15");
+    expect(result.AAPL.history).toHaveLength(1);
   });
 });
