@@ -86,7 +86,8 @@ function sleep(ms: number): Promise<void> {
  * 技術指標の複数一括取得関数への依存は import も呼び出しも一切しない（Pitfall 1）。
  * D-17: fetchOne が null を返した ticker は結果配列から omit する（null 埋め・プレースホルダ禁止、
  * 既存 technicals.json 契約と同一）。fetchOne 自身が per-ticker try/catch を持つ前提だが、
- * 万一 reject しても Promise.all のチャンク単位分離は破壊されない（TRAC-03/D-10）。
+ * WR-07: 万一 reject しても per-ticker try/catch で null 扱いにして omit するため、
+ * Promise.all のチャンク単位分離・蓄積済み結果は破壊されない（TRAC-03/D-10）。
  */
 export async function fetchChunked(
   tickers: ReadonlyArray<string>,
@@ -96,7 +97,17 @@ export async function fetchChunked(
   const results: TechnicalSnapshot[] = [];
   const batches = chunk(tickers, CHUNK_SIZE);
   for (let i = 0; i < batches.length; i++) {
-    const batchResults = await Promise.all(batches[i].map(fetchOne));
+    const batchResults = await Promise.all(
+      // 明示ラムダで map の (element, index, array) 引数流入も防ぐ（IN-02）
+      batches[i].map(async (symbol) => {
+        try {
+          return await fetchOne(symbol);
+        } catch {
+          // WR-07: reject は null（omit）として扱い、他 ticker・他チャンクの結果を保全する
+          return null;
+        }
+      }),
+    );
     results.push(...batchResults.filter((r): r is TechnicalSnapshot => r !== null));
     if (i < batches.length - 1) {
       await sleep(delayMs);

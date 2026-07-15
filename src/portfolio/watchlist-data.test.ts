@@ -228,15 +228,13 @@ describe("fetchChunked", () => {
     expect(result[0].symbol).toBe("MRNA");
   });
 
-  it("一部 ticker で fetchOne が reject する場合でも他 ticker の snapshot が失われない", async () => {
+  it("一部 ticker で fetchOne が実際に reject しても、他 ticker・後続チャンクの snapshot が失われない (WR-07)", async () => {
+    // JOBY は第1チャンク内。NXT は第2チャンク — reject が fetchChunked 全体を reject させると
+    // 蓄積済み results ごと失われるため、チャンク跨ぎで保全されることを検証する。
     const tickers = ["MRNA", "JOBY", "HII", "POWL", "EE", "NXT"];
     const fetchOne = vi.fn(async (symbol: string) => {
       if (symbol === "JOBY") {
-        try {
-          throw new Error("network error");
-        } catch {
-          return null;
-        }
+        throw new Error("network error");
       }
       return makeTechnicalSnapshot(symbol);
     });
