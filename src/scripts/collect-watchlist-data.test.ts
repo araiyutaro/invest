@@ -48,6 +48,26 @@ function makeChartBars(count = 30) {
   return bars;
 }
 
+function makeCachedSnapshot(symbol: string) {
+  return {
+    symbol,
+    asOf: "2026-07-14",
+    price: 100,
+    changePercent: null,
+    ma20: null,
+    ma50: null,
+    ma200: null,
+    pctFromMa50: null,
+    pctFromMa200: null,
+    rsi14: null,
+    fiftyTwoWeekHigh: null,
+    fiftyTwoWeekLow: null,
+    pctFrom52wHigh: null,
+    volumeRatio: null,
+    trendLabel: "テスト",
+  };
+}
+
 function mockReadFileByPath(handlers: Record<string, () => Promise<string>>) {
   readFileMock.mockImplementation((path: string) => {
     const p = String(path);
@@ -274,6 +294,58 @@ describe("collect-watchlist-data", () => {
 
       const logCalls = (console.log as ReturnType<typeof vi.fn>).mock.calls.flat();
       expect(logCalls.some((c) => String(c).includes("⚠ 取得失敗") && String(c).includes("AAA"))).toBe(true);
+    });
+
+    it("キャッシュにウォッチリスト外銘柄が含まれる場合、その snapshot は出力に含まれない (CR-01)", async () => {
+      const watchlist = {
+        AAA: makeWatchlistEntry({ ticker: "AAA" }),
+      };
+      mockReadFileByPath({
+        "watchlist.json": () => Promise.resolve(JSON.stringify(watchlist)),
+        "technicals.json": () =>
+          Promise.resolve(
+            JSON.stringify({
+              generatedAt: new Date().toISOString(),
+              // ZZZ は Step 2b のモデレーター候補（ウォッチリスト外）を模擬
+              snapshots: [makeCachedSnapshot("AAA"), makeCachedSnapshot("ZZZ")],
+            }),
+          ),
+        "news.json": () => Promise.resolve("[]"),
+      });
+
+      const { main } = await import("./collect-watchlist-data.js");
+      await main();
+
+      expect(chartMock).not.toHaveBeenCalled();
+      const writeCalls = writeFileMock.mock.calls;
+      const technicalsCall = writeCalls.find((c) => String(c[0]).includes("watchlist-technicals.json"));
+      const written = JSON.parse(String(technicalsCall![1]));
+      expect(written.snapshots.map((s: { symbol: string }) => s.symbol)).toEqual(["AAA"]);
+    });
+
+    it("キャッシュに同一 symbol の重複要素がある場合、出力へ重複させない (CR-01)", async () => {
+      const watchlist = {
+        AAA: makeWatchlistEntry({ ticker: "AAA" }),
+      };
+      mockReadFileByPath({
+        "watchlist.json": () => Promise.resolve(JSON.stringify(watchlist)),
+        "technicals.json": () =>
+          Promise.resolve(
+            JSON.stringify({
+              generatedAt: new Date().toISOString(),
+              snapshots: [makeCachedSnapshot("AAA"), makeCachedSnapshot("AAA")],
+            }),
+          ),
+        "news.json": () => Promise.resolve("[]"),
+      });
+
+      const { main } = await import("./collect-watchlist-data.js");
+      await main();
+
+      const writeCalls = writeFileMock.mock.calls;
+      const technicalsCall = writeCalls.find((c) => String(c[0]).includes("watchlist-technicals.json"));
+      const written = JSON.parse(String(technicalsCall![1]));
+      expect(written.snapshots.map((s: { symbol: string }) => s.symbol)).toEqual(["AAA"]);
     });
 
     it("キャッシュ破損の場合、全銘柄新規取得にフォールバックする (D-12)", async () => {

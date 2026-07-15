@@ -119,9 +119,19 @@ export async function main(): Promise<void> {
   let mergedSnapshots: ReadonlyArray<TechnicalsCacheFile["snapshots"][number]> = [];
   try {
     const activeTickers = activeEntries.map((entry) => entry.ticker);
+    const activeSet = new Set(activeTickers);
     const cachedSnapshots = await loadSameDayCache(TECHNICALS_CACHE_PATH);
-    const { cachedTickers, missingTickers } = mergeWithCache(activeTickers, cachedSnapshots);
-    const hitSnapshots = cachedSnapshots.filter((s) => cachedTickers.has(s.symbol));
+    const { missingTickers } = mergeWithCache(activeTickers, cachedSnapshots);
+    // CR-01: アクティブ銘柄に一致するスナップショットのみコピーする（D-11）。
+    // cachedTickers（キャッシュ全 symbol の集合）で filter するとトートロジーになり、
+    // ウォッチリスト外銘柄（Step 2b のモデレーター候補）が出力へ漏出する。
+    // 同一 symbol の重複キャッシュ要素も seen 集合で去重する。
+    const seen = new Set<string>();
+    const hitSnapshots = cachedSnapshots.filter((s) => {
+      if (!activeSet.has(s.symbol) || seen.has(s.symbol)) return false;
+      seen.add(s.symbol);
+      return true;
+    });
     const fetchedSnapshots = await fetchChunked(missingTickers, fetchTechnicalSnapshot);
     mergedSnapshots = [...hitSnapshots, ...fetchedSnapshots];
 
