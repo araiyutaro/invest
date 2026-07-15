@@ -559,17 +559,19 @@ Not applicable in the "external ecosystem evolved" sense — this is a pure inte
 
 **If this table is empty:** N/A — see entries above. All three assumptions are low-risk, illustrative-shape-only gaps explicitly reserved for planner/implementer discretion by CONTEXT.md itself (D-05, D-06, D-21) rather than unresolved unknowns.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Exact insertion point heading name/number for Step 3-J**
    - What we know: D-16 requires insertion after Step 3-P's section end and before Step 3a's heading — structurally, this is the `---` separator at invest.md line 1481 (between the "highlightedStocks 配列が0件の場合は..." paragraph and the `### Step 3a` heading at line 1483).
    - What's unclear: Whether to literally use the label "Step 3-J" (as research/ARCHITECTURE.md suggests) or a different label — CONTEXT.md D-16 explicitly says "正確なステップ名（Step 3-J 等）はプランナー裁量".
    - Recommendation: Use "Step 3-J" for continuity with the v2.7 research's own naming convention (SUMMARY.md, ARCHITECTURE.md, PITFALLS.md all reference "Step 3-J"), unless the planner has a structural reason to diverge (e.g., wanting to insert as "Step 3-P2" to signal direct adjacency to 3-P).
+   - **RESOLVED:** Step 3-J 命名を採用（30-03 Plan Task 1、insertion at invest.md line 1481 `---` 直後・`### Step 3a` 直前）。推奨どおり v2.7 リサーチの命名規約に一致させた。
 
 2. **Whether `tmp/watchlist-judgment-raw/{ticker}.json` needs `.T`-suffix-to-hyphen sanitization like Step 3-P's `{symbol}` files**
    - What we know: Step 3-P's precedent (invest.md line 1439) preserves the `.T` suffix but replaces `/` with `-` in filenames (e.g., a hypothetical `BRK/B` ticker would become `BRK-B.json`, but `7203.T` stays `7203.T.json`).
    - What's unclear: Whether any watchlist ticker could ever contain a `/` character (portfolio holdings do, per Step 3-P's comment, but watchlist tickers are LLM-nominated `highlightedStocks` tickers, which historically have been plain alphanumeric + `.T`).
    - Recommendation: Apply the same `/` → `-` replacement defensively regardless (cheap safety net, zero downside), following the exact Step 3-P convention rather than assuming watchlist tickers are guaranteed slash-free.
+   - **RESOLVED:** 防御的 `/`→`-` sanitization を採用（`.T` サフィックス保持、`/`→`-` 置換）。30-03 Plan Task 1 の Agent 命名・raw ファイル名規約、および 30-02 Plan Task 1 の validate-portfolio-research.ts 由来ファイル名突合ループに反映（T-30-10 パストラバーサル対策）。推奨どおり Step 3-P 規約を踏襲した。
 
 ## Environment Availability
 
