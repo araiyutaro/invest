@@ -188,13 +188,13 @@ Plans:
   3. 追跡データ収集は銘柄単位でfail-softに実装されており、1銘柄のAPI取得失敗（レート制限含む）が他銘柄の処理やパイプライン全体の失敗につながらないことがテストで確認できる
   4. 新パイプラインステップに専用`[STEP:*]`マーカーがあり、失敗時も既存4レポートの生成・デプロイが継続する
 
-**Plans**: 3 plans
+**Plans**: 1/3 plans executed
 
 Plans:
 
 **Wave 1**
 
-- [ ] 29-01-PLAN.md — 純関数 watchlist-data.ts（toPortfolioHoldingShape/mergeWithCache/chunk/fetchChunked + 名前付き定数, TDD, TRAC-01/02/03）
+- [x] 29-01-PLAN.md — 純関数 watchlist-data.ts（toPortfolioHoldingShape/mergeWithCache/chunk/fetchChunked + 名前付き定数, TDD, TRAC-01/02/03）
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -266,7 +266,7 @@ Plans:
 | 26. Weekly Urgency Rollup Display | v2.6 | 3/3 | Complete    | 2026-07-04 |
 | 27. ETF Exclusion | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 28. Watchlist Persistence | v2.7 | 3/3 | Complete   | 2026-07-15 |
-| 29. Daily Tracking Data Supply | v2.7 | 0/3 | Planned | - |
+| 29. Daily Tracking Data Supply | v2.7 | 1/3 | In Progress|  |
 | 30. Buy-Timing Judgment Agent | v2.7 | 0/0 | Not started | - |
 | 31. Daily Report Watchlist Section | v2.7 | 0/0 | Not started | - |
 
