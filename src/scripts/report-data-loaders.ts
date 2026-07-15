@@ -2,9 +2,10 @@ import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { analystRound1OutputSchema, analystRound2OutputSchema, analystRound3OutputSchema, portfolioAnalysisSchema } from "../meeting/schemas.js";
 import type { NewsArticlePoolEntry } from "../meeting/schemas.js";
-import type { AnalystRound1Output, AnalystRound2Output, AnalystRound3Output, PortfolioAnalysis } from "../meeting/types.js";
+import type { AnalystRound1Output, AnalystRound2Output, AnalystRound3Output, PortfolioAnalysis, WatchlistJudgmentFile } from "../meeting/types.js";
 import type { HoldingNewsFile } from "../portfolio/holding-news.js";
 import type { UrgencyHistoryFile } from "../portfolio/urgency-history.js";
+import type { WatchlistFile } from "../portfolio/watchlist.js";
 
 const TMP_DIR = join(import.meta.dirname, "../../tmp");
 const DATA_DIR = join(import.meta.dirname, "../../data");
@@ -154,6 +155,59 @@ export async function loadUrgencyHistory(): Promise<UrgencyHistoryFile> {
     return parsed as UrgencyHistoryFile;
   } catch (error) {
     console.warn("Urgency history load failed (expected on first run / fail-soft, HIST-03):", error instanceof Error ? error.message : error);
+    return {};
+  }
+}
+
+/**
+ * tmp/watchlist-judgment.json（Phase 30生成）を fail-soft で読み込む。
+ * 自社TS生成物のため zod は使わず、loadUrgencyHistory と同じ型アサーションを用いる。
+ * D-13: file.date が渡された meetingResultDate と一致しない場合（前日残留ファイル）は
+ * 当日レポートへの誤表示を防ぐため null を返す（ルックアヘッド防止思想の表示側適用）。
+ * 欠損・破損・形状不整合はいずれも正常系として console.warn を用いる。
+ */
+export async function loadWatchlistJudgment(meetingResultDate: string): Promise<WatchlistJudgmentFile | null> {
+  try {
+    const raw = await readFile(join(TMP_DIR, "watchlist-judgment.json"), "utf-8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+      console.warn("Watchlist judgment load failed (unexpected root shape) — falling back to null");
+      return null;
+    }
+    const file = parsed as WatchlistJudgmentFile;
+    if (!Array.isArray(file.judgments) || typeof file.date !== "string") {
+      console.warn("Watchlist judgment load failed (unexpected file shape) — falling back to null");
+      return null;
+    }
+    if (file.date !== meetingResultDate) {
+      console.warn(
+        `Watchlist judgment load skipped (stale file, D-13): file.date=${file.date} !== meetingResultDate=${meetingResultDate}`,
+      );
+      return null;
+    }
+    return file;
+  } catch (error) {
+    console.warn("Watchlist judgment load failed (expected on first run / fail-soft):", error instanceof Error ? error.message : error);
+    return null;
+  }
+}
+
+/**
+ * data/watchlist.json（Phase 28生成）を fail-soft で読み込む。
+ * 自社TS生成物のため zod は使わず、loadUrgencyHistory と同じ型アサーションを用いる（D-12）。
+ * 欠損・破損・形状不整合はいずれも正常系として console.warn を用い、{} にフォールバックする。
+ */
+export async function loadWatchlist(): Promise<WatchlistFile> {
+  try {
+    const raw = await readFile(join(DATA_DIR, "watchlist.json"), "utf-8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+      console.warn("Watchlist load failed (unexpected root shape) — falling back to {}");
+      return {};
+    }
+    return parsed as WatchlistFile;
+  } catch (error) {
+    console.warn("Watchlist load failed (expected on first run / fail-soft):", error instanceof Error ? error.message : error);
     return {};
   }
 }
