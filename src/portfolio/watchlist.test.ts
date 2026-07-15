@@ -330,6 +330,20 @@ describe("pruneWatchlist (WLST-02/03/04/05)", () => {
     expect(result.AAPL.history[0]?.removedReason).toBe("purchased");
   });
 
+  it("history フィールドを欠くエントリ（手編集・旧フォーマット）でも throw せず history を新規作成して除外する", () => {
+    const legacyEntry = {
+      ticker: "AAPL",
+      addedDate: "2026-07-01",
+      lastVerdictDate: "2026-07-10",
+    } as WatchlistEntry; // history 欠落をシミュレート
+    const watchlist: WatchlistFile = { AAPL: legacyEntry };
+    const holdings = [makeHolding({ symbol: "AAPL" })];
+    const result = pruneWatchlist(watchlist, [], holdings, "2026-07-15");
+    expect(result.AAPL.addedDate).toBeUndefined();
+    expect(result.AAPL.history).toHaveLength(1);
+    expect(result.AAPL.history[0]?.removedReason).toBe("purchased");
+  });
+
   it("既に除外済み（非 active）のエントリはそのまま保持され、二重に history 追記されない", () => {
     const watchlist: WatchlistFile = {
       AAPL: makeWatchlistEntry({

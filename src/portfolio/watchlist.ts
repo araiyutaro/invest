@@ -185,7 +185,8 @@ function removeEntry(
     nameJa: entry.nameJa,
     addedDate: undefined,
     lastVerdictDate: undefined,
-    history: [...entry.history, episode],
+    // 手編集・旧フォーマットのファイルで history が欠落していても throw しない（防御的ガード）
+    history: [...(entry.history ?? []), episode],
   };
 }
 

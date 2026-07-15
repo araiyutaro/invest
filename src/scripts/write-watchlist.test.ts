@@ -99,6 +99,20 @@ describe("write-watchlist", () => {
 
       expect(result).toEqual({ watchlist: existing, corrupted: false });
     });
+
+    it.each([
+      ["null", "null"],
+      ["配列", "[1,2]"],
+      ["文字列", JSON.stringify("plain string")],
+      ["数値", "42"],
+    ])("JSONとしてvalidだが形状が不正（%s）の場合、corrupted:true で空のwatchlistを返す", async (_label, raw) => {
+      readFileMock.mockResolvedValue(raw);
+
+      const { loadExistingWatchlist } = await import("./write-watchlist.js");
+      const result = await loadExistingWatchlist();
+
+      expect(result).toEqual({ watchlist: {}, corrupted: true });
+    });
   });
 
   describe("fetchQuoteTypesAndNames", () => {
@@ -263,6 +277,54 @@ describe("write-watchlist", () => {
       const written = JSON.parse(String(writtenContent));
       expect(written.NVDA.addedDate).toBe("2026-07-01");
       expect(written.NVDA.lastVerdictDate).toBe("2026-07-15");
+    });
+
+    it("watchlist.json の内容が null の場合、クラッシュせず [STEP:watchlist:FAIL:corrupted] で終了する", async () => {
+      readFileMock.mockImplementation((path: string) => {
+        const p = String(path);
+        if (p.includes("watchlist.json")) return Promise.resolve("null");
+        if (p.includes("meeting-result.json")) {
+          return Promise.resolve(JSON.stringify(makeMeetingResult([makeHighlightedStock({ ticker: "NVDA" })])));
+        }
+        return Promise.reject(new Error("ENOENT"));
+      });
+
+      const { main } = await import("./write-watchlist.js");
+      await main();
+
+      expect(writeFileMock).not.toHaveBeenCalled();
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist:FAIL:corrupted]"))).toBe(true);
+    });
+
+    it("highlightedStocks に ticker を欠く不正要素が混在してもクラッシュせず有効要素のみ処理する", async () => {
+      readFileMock.mockImplementation((path: string) => {
+        const p = String(path);
+        if (p.includes("meeting-result.json")) {
+          const meeting = makeMeetingResult([makeHighlightedStock({ ticker: "NVDA" })]);
+          const withMalformed = {
+            ...meeting,
+            highlightedStocks: [
+              ...meeting.highlightedStocks,
+              { verdict: "強気", summary: "ticker欠落の不正要素" },
+            ],
+          };
+          return Promise.resolve(JSON.stringify(withMalformed));
+        }
+        if (p.includes("watchlist.json")) return Promise.reject(new Error("ENOENT"));
+        return Promise.reject(new Error("ENOENT"));
+      });
+      quoteMock.mockResolvedValue([{ symbol: "NVDA", quoteType: "EQUITY", longName: "NVIDIA Corporation" }]);
+
+      const { main } = await import("./write-watchlist.js");
+      await main();
+
+      expect(writeFileMock).toHaveBeenCalledTimes(1);
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      expect(written.NVDA).toBeDefined();
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist:OK]"))).toBe(true);
     });
 
     it("すべての FAIL 分岐で [PIPELINE:FAIL] マーカーが一度も出力されない", async () => {

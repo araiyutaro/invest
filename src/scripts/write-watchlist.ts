@@ -31,7 +31,15 @@ export async function loadExistingWatchlist(): Promise<{
 }> {
   try {
     const raw = await readFile(WATCHLIST_PATH, "utf-8");
-    return { watchlist: JSON.parse(raw) as WatchlistFile, corrupted: false };
+    const parsed: unknown = JSON.parse(raw);
+    // JSON として valid でも形状が不正（null / 配列 / プリミティブ）な場合は corrupted 扱いにし、
+    // D-18 の保全経路（上書きスキップ + FAIL マーカー）へ落とす。型キャストのみだと
+    // main 側の `existingWatchlist[ticker]` 等で TypeError → fatal 経路に落ち、
+    // [STEP:watchlist:FAIL:<reason>] マーカー契約が破られる。
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      return { watchlist: {}, corrupted: true };
+    }
+    return { watchlist: parsed as WatchlistFile, corrupted: false };
   } catch (error) {
     const isMissing =
       (error as NodeJS.ErrnoException).code === "ENOENT" ||
@@ -120,7 +128,12 @@ export async function main(): Promise<void> {
     return;
   }
 
-  const highlightedStocks = meetingResult.highlightedStocks ?? [];
+  // ticker を欠く不正要素は除外する（LLM 生成 JSON の防御, Phase 27 の fail-soft ガードと同規約）。
+  // 欠落要素があると normalizeHoldingSymbol(undefined).trim() で fatal クラッシュし
+  // FAIL マーカー契約が破られるため、ここでフィルタする。
+  const highlightedStocks = (meetingResult.highlightedStocks ?? []).filter(
+    (s) => typeof s?.ticker === "string",
+  );
   const bullishStocks = highlightedStocks.filter((s) => s.verdict === "強気");
 
   // D-22: 既存登録済み（active）の ticker は再検証不要。未登録の当日強気銘柄のみ quote() 対象にする。
