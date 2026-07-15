@@ -1167,6 +1167,32 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 "
 ```
 
+以下のBashコマンドを実行してください:
+
+```bash
+cd /Users/arai/invest && npx tsx src/scripts/filter-etf-stocks.ts
+```
+
+終了コードに関わらず、次のバリデーションステップへ進んでください（fail-soft, D-02）。
+filter-etf-stocks.ts は tmp/meeting-result.json の highlightedStocks から
+yahoo-finance2 の quoteType 照合によりETFを決定論的に除外し、同ファイルを
+書き戻す。**必ず validate-meeting.ts より前に実行すること**。
+
+終了コードが 0 の場合:
+```bash
+echo '[STEP:etf-exclusion:OK]'
+```
+
+終了コードが非0の場合、標準エラー出力の `[filter-etf-stocks] FAIL:` 行に
+続く理由を短く要約して出力してください:
+```bash
+echo '[STEP:etf-exclusion:FAIL:<短い理由>]'
+```
+
+**`[PIPELINE:FAIL]` は絶対に出力しないこと**（D-02）— このステップの失敗は
+既存4レポートの生成・デプロイを一切ブロックしない。フィルタが失敗した場合、
+元の tmp/meeting-result.json（未フィルタ）のまま次のステップへ進む。
+
 ```bash
 cd /Users/arai/invest && npx tsx src/scripts/validate-meeting.ts
 ```
