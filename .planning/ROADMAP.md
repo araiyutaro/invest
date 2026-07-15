@@ -114,7 +114,7 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
 
 強気評価された個別銘柄（ETF除外）をウォッチリストとして永続追跡し、株価・ニュースに基づく日次の買いタイミング判定で「今日買うべき / 待つべき」を Daily Report に表示する。
 
-- [ ] **Phase 27: ETF Exclusion** - アナリスト推奨銘柄からETFをプロンプト指示＋TS側`quoteType`決定論検証の二層防御で除外
+- [x] **Phase 27: ETF Exclusion** - アナリスト推奨銘柄からETFをプロンプト指示＋TS側`quoteType`決定論検証の二層防御で除外 (completed 2026-07-15)
 - [ ] **Phase 28: Watchlist Persistence** - 強気銘柄を`data/watchlist.json`にティッカーキー方式で日次登録し、降格・購入済み・失効を理由付きで自動除外
 - [ ] **Phase 29: Daily Tracking Data Supply** - ウォッチリスト銘柄の株価・テクニカル・関連ニュースを銘柄単位fail-softで収集し判定エージェントへ供給
 - [ ] **Phase 30: Buy-Timing Judgment Agent** - 複数シグナル合致に基づく「今日買うべき/待つべき」判定をLLM+TS zod検証ハイブリッドで日次生成
@@ -134,7 +134,7 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
   3. 個別銘柄のquoteType lookupに失敗した場合でもパイプラインがthrowせず、安全側（除外 or 通過の明示方針）で処理が継続する
   4. 除外ロジックの単体テストが米国ETF・日本ETF・個別株それぞれの分類を正しく検証している
 
-**Plans**: 2/3 plans executed
+**Plans**: 3/3 plans complete
 Plans:
 **Wave 1**
 
@@ -146,7 +146,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 27-03-PLAN.md — invest.md 配線（5アナリスト+モデレーターのプロンプト指示 + Step 2g wiring）
+- [x] 27-03-PLAN.md — invest.md 配線（5アナリスト+モデレーターのプロンプト指示 + Step 2g wiring）
 
 ### Phase 28: Watchlist Persistence
 
@@ -237,7 +237,7 @@ Plans:
 | 24. Digest-Meeting Cross-Reference | v2.6 | 3/3 | Complete    | 2026-07-04 |
 | 25. Urgency History Persistence | v2.6 | 2/2 | Complete    | 2026-07-04 |
 | 26. Weekly Urgency Rollup Display | v2.6 | 3/3 | Complete    | 2026-07-04 |
-| 27. ETF Exclusion | v2.7 | 2/3 | In Progress|  |
+| 27. ETF Exclusion | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 28. Watchlist Persistence | v2.7 | 0/0 | Not started | - |
 | 29. Daily Tracking Data Supply | v2.7 | 0/0 | Not started | - |
 | 30. Buy-Timing Judgment Agent | v2.7 | 0/0 | Not started | - |
