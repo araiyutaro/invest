@@ -2,9 +2,13 @@
 gsd_state_version: 1.0
 milestone: v2.7
 milestone_name: Entry Timing Watchlist & ETF Exclusion
+current_phase: 27
+current_phase_name: ETF Exclusion
 status: planning
-last_updated: "2026-07-15T00:00:00.000Z"
+stopped_at: Phase 27 context gathered
+last_updated: "2026-07-15T00:59:48.992Z"
 last_activity: 2026-07-15
+last_activity_desc: Milestone v2.7 roadmap created (Phases 27-31)
 progress:
   total_phases: 5
   completed_phases: 0
@@ -141,8 +145,10 @@ Human-UAT / 実行時検証待ち項目。いずれも静的解析では確認�
 
 ## Session Continuity
 
-Last session: 2026-07-15T00:00:00.000Z
-Stopped at: v2.7 ROADMAP.md created (Phases 27-31), REQUIREMENTS.md traceability updated
+**Resume file:** .planning/phases/27-etf-exclusion/27-CONTEXT.md
+
+Last session: 2026-07-15T00:59:48.985Z
+Stopped at: Phase 27 context gathered
 Resume with: `/gsd-plan-phase 27`
 
 ## Operator Next Steps
