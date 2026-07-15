@@ -4,16 +4,16 @@ milestone: v2.7
 milestone_name: Entry Timing Watchlist & ETF Exclusion
 current_phase: 27
 current_phase_name: ETF Exclusion
-status: planning
+status: executing
 stopped_at: Phase 27 context gathered
-last_updated: "2026-07-15T00:59:48.992Z"
+last_updated: "2026-07-15T01:26:25.281Z"
 last_activity: 2026-07-15
-last_activity_desc: Milestone v2.7 roadmap created (Phases 27-31)
+last_activity_desc: Phase 27 execution started
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
   percent: 0
 ---
 
@@ -24,14 +24,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-15 after v2.7 milestone start)
 
 **Core value:** 毎日の投資判断に必要な多角的分析を、複数AIアナリストの議論形式で提供すること
-**Current focus:** v2.7 Entry Timing Watchlist & ETF Exclusion — roadmap created, ready for phase planning
+**Current focus:** Phase 27 — ETF Exclusion
 
 ## Current Position
 
-Phase: 27 (ETF Exclusion) — not started
-Plan: —
-Status: Roadmap created, awaiting `/gsd-plan-phase 27`
-Last activity: 2026-07-15 — Milestone v2.7 roadmap created (Phases 27-31)
+Phase: 27 (ETF Exclusion) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
+Last activity: 2026-07-15 — Phase 27 execution started
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Last activity: 2026-07-15 — Milestone v2.7 roadmap created (Phases 27-31)
 
 *Updated after each plan completion*
 | Phase 25 P02 | 10min | 3 tasks | 3 files |
+| Phase 27-etf-exclusion P01 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -147,7 +148,7 @@ Human-UAT / 実行時検証待ち項目。いずれも静的解析では確認�
 
 **Resume file:** .planning/phases/27-etf-exclusion/27-CONTEXT.md
 
-Last session: 2026-07-15T00:59:48.985Z
+Last session: 2026-07-15T01:25:46.961Z
 Stopped at: Phase 27 context gathered
 Resume with: `/gsd-plan-phase 27`
 
@@ -155,3 +156,7 @@ Resume with: `/gsd-plan-phase 27`
 
 - Review ROADMAP.md draft for v2.7 (Phases 27-31) and confirm phase structure
 - Start phase planning with `/gsd-plan-phase 27`
+
+## Decisions
+
+- [Phase ?]: allowlistはquoteType!==EQUITY判定で実装（denylist不採用）。quoteTypeByTickerはReadonlyMap型でprototype pollution対策（T-27-01）

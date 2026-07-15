@@ -10,7 +10,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### ETF除外
 
 - [ ] **ETF-01**: アナリストの推奨銘柄（picks / highlightedStocks）からETFを除外するプロンプト指示が全アナリストエージェントに適用される
-- [ ] **ETF-02**: meeting-result 確定後、TS側で yahoo-finance2 `quote().quoteType` 照合により highlightedStocks からETFを決定論的に除外する（米国・日本ETF両対応、lookup失敗時も throw せず安全側に処理）
+- [x] **ETF-02**: meeting-result 確定後、TS側で yahoo-finance2 `quote().quoteType` 照合により highlightedStocks からETFを決定論的に除外する（米国・日本ETF両対応、lookup失敗時も throw せず安全側に処理）
 
 ### ウォッチリスト
 
@@ -71,7 +71,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | ETF-01 | Phase 27 | Pending |
-| ETF-02 | Phase 27 | Pending |
+| ETF-02 | Phase 27 | Complete |
 | WLST-01 | Phase 28 | Pending |
 | WLST-02 | Phase 28 | Pending |
 | WLST-03 | Phase 28 | Pending |
@@ -90,6 +90,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OPS-06 | Phase 29 | Pending |
 
 **Coverage:**
+
 - v2.7 requirements: 18 total
 - Mapped to phases: 18
 - Unmapped: 0 ✓

@@ -134,11 +134,11 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
   3. 個別銘柄のquoteType lookupに失敗した場合でもパイプラインがthrowせず、安全側（除外 or 通過の明示方針）で処理が継続する
   4. 除外ロジックの単体テストが米国ETF・日本ETF・個別株それぞれの分類を正しく検証している
 
-**Plans**: 3 plans
+**Plans**: 1/3 plans executed
 Plans:
 **Wave 1**
 
-- [ ] 27-01-PLAN.md — 純関数 etf-exclusion.ts（quoteType allowlist フィルタ + 単体テスト, TDD）
+- [x] 27-01-PLAN.md — 純関数 etf-exclusion.ts（quoteType allowlist フィルタ + 単体テスト, TDD）
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -237,7 +237,7 @@ Plans:
 | 24. Digest-Meeting Cross-Reference | v2.6 | 3/3 | Complete    | 2026-07-04 |
 | 25. Urgency History Persistence | v2.6 | 2/2 | Complete    | 2026-07-04 |
 | 26. Weekly Urgency Rollup Display | v2.6 | 3/3 | Complete    | 2026-07-04 |
-| 27. ETF Exclusion | v2.7 | 0/0 | Not started | - |
+| 27. ETF Exclusion | v2.7 | 1/3 | In Progress|  |
 | 28. Watchlist Persistence | v2.7 | 0/0 | Not started | - |
 | 29. Daily Tracking Data Supply | v2.7 | 0/0 | Not started | - |
 | 30. Buy-Timing Judgment Agent | v2.7 | 0/0 | Not started | - |
