@@ -60,6 +60,17 @@ export async function main(): Promise<void> {
     return;
   }
 
+  if (!Array.isArray(meetingResult.highlightedStocks)) {
+    // D-02/WR-01: この時点の meeting-result.json は validate-meeting.ts 未検証の
+    // LLM生出力（D-07）。highlightedStocks の形状不正はメカニズム故障として扱い、
+    // try/catch 外で TypeError を投げず、元ファイルを維持して終了する。
+    console.error(
+      "[filter-etf-stocks] FAIL: meeting-result.json の highlightedStocks が配列ではありません。フィルタをスキップします。",
+    );
+    process.exitCode = 1;
+    return;
+  }
+
   const tickers = meetingResult.highlightedStocks.map((s) => s.ticker);
   if (tickers.length === 0) {
     console.error("[filter-etf-stocks] OK (skip: highlightedStocks 0件)");
@@ -74,6 +85,19 @@ export async function main(): Promise<void> {
     console.error(
       "[filter-etf-stocks] FAIL: quoteType一括取得に失敗しました。フィルタをスキップします。",
       error,
+    );
+    process.exitCode = 1;
+    return;
+  }
+
+  if (quoteTypeByTicker.size === 0) {
+    // D-03/WR-02: 要求N件（tickers.length > 0）に対し quote 応答0件は、
+    // 個別銘柄のlookup失敗（D-01 fail-closed）ではなく、フィルタ機構そのものの
+    // 故障とみなす。全銘柄を fail-closed 除外して highlightedStocks を空で
+    // 書き戻すと当日の推奨銘柄と翌日のprev-highlighted-stocks注入が失われるため、
+    // D-02 に倣い元ファイルを維持して終了する。
+    console.error(
+      `[filter-etf-stocks] FAIL: ${tickers.length}銘柄の要求に対しquote応答が0件でした。メカニズム故障とみなしフィルタをスキップします。`,
     );
     process.exitCode = 1;
     return;

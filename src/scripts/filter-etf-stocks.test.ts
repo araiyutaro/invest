@@ -192,4 +192,61 @@ describe("filter-etf-stocks main()", () => {
     expect(quoteMock).toHaveBeenCalledTimes(1);
     expect(Array.isArray(quoteMock.mock.calls[0][0])).toBe(true);
   });
+
+  it("Test H (WR-01): highlightedStocksが非配列の不正な形状で fail-soft -- throwせずwriteFileが呼ばれずFAIL行を出力する", async () => {
+    const malformedMeetingResult = {
+      ...makeMeetingResult([]),
+      highlightedStocks: undefined,
+    };
+    readFileMock.mockResolvedValue(JSON.stringify(malformedMeetingResult));
+
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const originalExitCode = process.exitCode;
+    process.exitCode = undefined;
+
+    const { main } = await import("./filter-etf-stocks.js");
+    await expect(main()).resolves.toBeUndefined();
+
+    try {
+      expect(quoteMock).not.toHaveBeenCalled();
+      expect(writeFileMock).not.toHaveBeenCalled();
+      expect(process.exitCode).not.toBe(0);
+      expect(process.exitCode).toBeDefined();
+      const errorLines = consoleErrorSpy.mock.calls.map((call) => call.join(" "));
+      expect(errorLines).toEqual(
+        expect.arrayContaining([expect.stringContaining("[filter-etf-stocks] FAIL:")]),
+      );
+    } finally {
+      process.exitCode = originalExitCode;
+    }
+  });
+
+  it("Test I (WR-02): 要求N件に対しquote応答0件でメカニズム故障として fail-soft -- writeFileが呼ばれず元ファイルを維持する", async () => {
+    const meetingResult = makeMeetingResult([
+      makeHighlightedStock({ ticker: "AAPL" }),
+      makeHighlightedStock({ ticker: "SPY" }),
+    ]);
+    readFileMock.mockResolvedValue(JSON.stringify(meetingResult));
+    // 例外は投げないが、応答0件（全件 symbol/quoteType 欠損など）を返すケース
+    quoteMock.mockResolvedValue([]);
+
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const originalExitCode = process.exitCode;
+    process.exitCode = undefined;
+
+    const { main } = await import("./filter-etf-stocks.js");
+    await expect(main()).resolves.toBeUndefined();
+
+    try {
+      expect(writeFileMock).not.toHaveBeenCalled();
+      expect(process.exitCode).not.toBe(0);
+      expect(process.exitCode).toBeDefined();
+      const errorLines = consoleErrorSpy.mock.calls.map((call) => call.join(" "));
+      expect(errorLines).toEqual(
+        expect.arrayContaining([expect.stringContaining("[filter-etf-stocks] FAIL:")]),
+      );
+    } finally {
+      process.exitCode = originalExitCode;
+    }
+  });
 });
