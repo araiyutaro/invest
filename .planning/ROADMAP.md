@@ -217,7 +217,7 @@ Plans:
   4. 判定理由が実際に供給されたデータの複数シグナル合致（confluence ≥2、例: MA位置＋RSI＋出来高＋ニュース材料）に基づいており、存在しない指標値を創作していないことがプロンプト契約とレビューで確認できる
   5. 米国株は前日終値ベース、日本株は寄付き前という基準時点の違いが、判定入力（as-ofタイムスタンプ）と表示の両方で区別され、ルックアヘッドバイアスが構造的に防止される
 
-**Plans**: 1/3 plans executed
+**Plans**: 2/3 plans executed
 
 Plans:
 
@@ -227,7 +227,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 30-02-PLAN.md — fail-soft CLI write-watchlist-judgment.ts（銘柄別 raw 独立検証・confluence 降格・market/asOf 決定論付与・前日比較・[STEP:watchlist-judgment:*] マーカー + テスト, TIME-01/02/03/05）
+- [x] 30-02-PLAN.md — fail-soft CLI write-watchlist-judgment.ts（銘柄別 raw 独立検証・confluence 降格・market/asOf 決定論付与・前日比較・[STEP:watchlist-judgment:*] マーカー + テスト, TIME-01/02/03/05）
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -281,7 +281,7 @@ Plans:
 | 27. ETF Exclusion | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 28. Watchlist Persistence | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 29. Daily Tracking Data Supply | v2.7 | 3/3 | Complete   | 2026-07-15 |
-| 30. Buy-Timing Judgment Agent | v2.7 | 1/3 | In Progress|  |
+| 30. Buy-Timing Judgment Agent | v2.7 | 2/3 | In Progress|  |
 | 31. Daily Report Watchlist Section | v2.7 | 0/0 | Not started | - |
 
 ---
