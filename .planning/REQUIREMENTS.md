@@ -29,10 +29,10 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### 買いタイミング判定
 
 - [ ] **TIME-01**: 判定エージェントが各ウォッチリスト銘柄について「今日買うべき / 待つべき」の二値判定と判定理由を日次で出力する
-- [ ] **TIME-02**: 判定出力はTS側 zod スキーマ（passthrough().transform() alias硬化）で検証され、不正フィールドでパイプラインが停止しない
-- [ ] **TIME-03**: 前日判定スナップショットが independent-then-compare 方式で注入され、判定変化（待ち→買い等）はTS側決定論で検出される（フリップフロップ緩和、Phase 22 パターン流用）
-- [ ] **TIME-04**: 判定理由は供給された実データの複数シグナル合致（confluence ≥2、例: MA位置＋RSI＋出来高＋ニュース材料）に基づくことがプロンプト契約で要求される（指標値の創作禁止）
-- [ ] **TIME-05**: 米国株（前日終値ベース）と日本株（寄付き前）のデータ基準時点の違いが判定入力と表示の両方で区別される（ルックアヘッドバイアス防止）
+- [x] **TIME-02**: 判定出力はTS側 zod スキーマ（passthrough().transform() alias硬化）で検証され、不正フィールドでパイプラインが停止しない
+- [x] **TIME-03**: 前日判定スナップショットが independent-then-compare 方式で注入され、判定変化（待ち→買い等）はTS側決定論で検出される（フリップフロップ緩和、Phase 22 パターン流用）
+- [x] **TIME-04**: 判定理由は供給された実データの複数シグナル合致（confluence ≥2、例: MA位置＋RSI＋出来高＋ニュース材料）に基づくことがプロンプト契約で要求される（指標値の創作禁止）
+- [x] **TIME-05**: 米国株（前日終値ベース）と日本株（寄付き前）のデータ基準時点の違いが判定入力と表示の両方で区別される（ルックアヘッドバイアス防止）
 
 ### レポート表示
 
@@ -81,10 +81,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TRAC-02 | Phase 29 | Complete |
 | TRAC-03 | Phase 29 | Complete |
 | TIME-01 | Phase 30 | Pending |
-| TIME-02 | Phase 30 | Pending |
-| TIME-03 | Phase 30 | Pending |
-| TIME-04 | Phase 30 | Pending |
-| TIME-05 | Phase 30 | Pending |
+| TIME-02 | Phase 30 | Complete |
+| TIME-03 | Phase 30 | Complete |
+| TIME-04 | Phase 30 | Complete |
+| TIME-05 | Phase 30 | Complete |
 | UI-09 | Phase 31 | Pending |
 | UI-10 | Phase 31 | Pending |
 | OPS-06 | Phase 29 | Complete |
