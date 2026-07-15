@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { fetchTechnicalSnapshot } from "../data/technicals.js";
 import type { TechnicalSnapshot } from "../data/technicals.js";
 import { getActiveWatchlistEntries } from "../portfolio/watchlist.js";
-import type { WatchlistFile } from "../portfolio/watchlist.js";
+import type { WatchlistFile, WatchlistEntry } from "../portfolio/watchlist.js";
 import { buildHoldingNewsMap } from "../portfolio/holding-news.js";
 import type { HoldingNewsFile } from "../portfolio/holding-news.js";
 import type { NewsArticleWithId } from "../data/news/article-id.js";
@@ -40,7 +40,15 @@ export async function loadWatchlistDefensive(): Promise<{
     if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
       return { watchlist: {}, corrupted: true };
     }
-    return { watchlist: parsed as WatchlistFile, corrupted: false };
+    // WR-03: エントリレベルの形状検証。値が null / 非オブジェクト / ticker 欠落のエントリを
+    // 除外する。型キャストのみだと isActive(entry) の addedDate アクセスで TypeError →
+    // fatal 経路に落ち [STEP:watchlist-data:FAIL:corrupted] マーカー契約が破られる
+    // （write-watchlist.ts の loadExistingWatchlist と同じ理由付け、Phase 28 WR-02 と同水準）。
+    const entries = Object.entries(parsed as Record<string, unknown>).filter(
+      ([, v]) =>
+        typeof v === "object" && v !== null && typeof (v as WatchlistEntry).ticker === "string",
+    );
+    return { watchlist: Object.fromEntries(entries) as WatchlistFile, corrupted: false };
   } catch (error) {
     const isMissing =
       (error as NodeJS.ErrnoException).code === "ENOENT" ||

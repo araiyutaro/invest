@@ -164,6 +164,51 @@ describe("collect-watchlist-data", () => {
     });
   });
 
+  describe("main() - entry-level validation (WR-03)", () => {
+    it("値が null / ticker欠落のエントリは除外され、fatal 経路に落ちず正常エントリのみ処理される", async () => {
+      const watchlist = {
+        AAA: null,
+        CCC: { addedDate: "2026-07-01", history: [] }, // ticker 欠落
+        BBB: makeWatchlistEntry({ ticker: "BBB" }),
+      };
+      mockReadFileByPath({
+        "watchlist.json": () => Promise.resolve(JSON.stringify(watchlist)),
+        "news.json": () => Promise.resolve("[]"),
+      });
+      chartMock.mockResolvedValue({ quotes: makeChartBars() });
+
+      const { main } = await import("./collect-watchlist-data.js");
+      await expect(main()).resolves.toBeUndefined();
+
+      // 不正エントリは fetch 対象にならない
+      expect(chartMock).toHaveBeenCalledTimes(1);
+      expect(chartMock).toHaveBeenCalledWith("BBB", expect.anything());
+
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist-data:OK]"))).toBe(true);
+      expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist-data:FAIL"))).toBe(false);
+      expect(errorCalls.some((c) => String(c).includes("[PIPELINE:FAIL]"))).toBe(false);
+    });
+
+    it("全エントリが不正な場合はアクティブ0件の正常系として空JSONを書き OK マーカーを出す", async () => {
+      mockReadFileByPath({
+        "watchlist.json": () => Promise.resolve(JSON.stringify({ AAA: null, BBB: 1 })),
+      });
+
+      const { main } = await import("./collect-watchlist-data.js");
+      await main();
+
+      const writeCalls = writeFileMock.mock.calls;
+      const technicalsCall = writeCalls.find((c) => String(c[0]).includes("watchlist-technicals.json"));
+      const newsCall = writeCalls.find((c) => String(c[0]).includes("watchlist-news.json"));
+      expect(JSON.parse(String(technicalsCall![1])).snapshots).toEqual([]);
+      expect(JSON.parse(String(newsCall![1]))).toEqual({});
+
+      const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
+      expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist-data:OK]"))).toBe(true);
+    });
+  });
+
   describe("main() - STEP markers, all branches", () => {
     it("全 FAIL 分岐で [PIPELINE:FAIL] マーカーが一度も出力されない (STEP)", async () => {
       mockReadFileByPath({
