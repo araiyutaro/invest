@@ -180,15 +180,17 @@ describe("write-watchlist", () => {
     });
 
     it("正常系: 強気銘柄をwatchlistに登録し [STEP:watchlist:OK] と active/removed 件数ログを出力する", async () => {
+      // NVDA は PORTFOLIO_HOLDINGS に含まれない銘柄を使う（保有銘柄は WLST-03 の
+      // holdings ゲートで admit されないため、新規登録の正常系には使えない）
       readFileMock.mockImplementation((path: string) => {
         const p = String(path);
         if (p.includes("meeting-result.json")) {
-          return Promise.resolve(JSON.stringify(makeMeetingResult([makeHighlightedStock({ ticker: "MRNA" })])));
+          return Promise.resolve(JSON.stringify(makeMeetingResult([makeHighlightedStock({ ticker: "NVDA" })])));
         }
         if (p.includes("watchlist.json")) return Promise.reject(new Error("ENOENT"));
         return Promise.reject(new Error("ENOENT"));
       });
-      quoteMock.mockResolvedValue([{ symbol: "MRNA", quoteType: "EQUITY", longName: "Moderna, Inc." }]);
+      quoteMock.mockResolvedValue([{ symbol: "NVDA", quoteType: "EQUITY", longName: "NVIDIA Corporation" }]);
 
       const { main } = await import("./write-watchlist.js");
       await main();
@@ -197,8 +199,8 @@ describe("write-watchlist", () => {
       const [writtenPath, writtenContent] = writeFileMock.mock.calls[0];
       expect(String(writtenPath)).toContain("watchlist.json");
       const written = JSON.parse(String(writtenContent));
-      expect(written.MRNA).toBeDefined();
-      expect(written.MRNA.addedDate).toBe("2026-07-15");
+      expect(written.NVDA).toBeDefined();
+      expect(written.NVDA.addedDate).toBe("2026-07-15");
 
       const errorCalls = (console.error as ReturnType<typeof vi.fn>).mock.calls.flat();
       expect(errorCalls.some((c) => String(c).includes("[STEP:watchlist:OK]"))).toBe(true);
@@ -227,9 +229,40 @@ describe("write-watchlist", () => {
       expect(writeFileMock).toHaveBeenCalledTimes(1);
       const [, writtenContent] = writeFileMock.mock.calls[0];
       const written = JSON.parse(String(writtenContent));
-      // MRNA is in PORTFOLIO_HOLDINGS -> purchased プルーンが適用され非アクティブ化される
+      // MRNA is in PORTFOLIO_HOLDINGS -> purchased プルーンが適用され非アクティブ化される。
+      // admit 側の holdings ゲート（WLST-03）により当日強気でも re-admit/reconfirm されず、
+      // prune の結果が同一 run 内で打ち消されないことを検証する
       expect(written.MRNA.addedDate).toBeUndefined();
+      expect(written.MRNA.lastVerdictDate).toBeUndefined();
       expect(written.MRNA.history.at(-1).removedReason).toBe("purchased");
+    });
+
+    it("既に active な非保有銘柄が当日も強気なら quote() を呼ばずに lastVerdictDate が更新される（reconfirm, WLST-01/D-22）", async () => {
+      // NVDA は PORTFOLIO_HOLDINGS に含まれない。D-22 で active 銘柄は quote() 対象外のため、
+      // lookup 欠落でも fail-closed に落ちず reconfirm されることを検証する（CR-01 回帰テスト）
+      const existingWatchlist = {
+        NVDA: { ticker: "NVDA", addedDate: "2026-07-01", lastVerdictDate: "2026-07-01", history: [] },
+      };
+      readFileMock.mockImplementation((path: string) => {
+        const p = String(path);
+        if (p.includes("meeting-result.json")) {
+          return Promise.resolve(JSON.stringify(makeMeetingResult([makeHighlightedStock({ ticker: "NVDA" })])));
+        }
+        if (p.includes("watchlist.json")) return Promise.resolve(JSON.stringify(existingWatchlist));
+        return Promise.reject(new Error("ENOENT"));
+      });
+      quoteMock.mockResolvedValue([]);
+
+      const { main } = await import("./write-watchlist.js");
+      await main();
+
+      // active 銘柄のみ強気 -> 新規候補ゼロ -> quote() は呼ばれない（D-22 のレート制限回避を維持）
+      expect(quoteMock).not.toHaveBeenCalled();
+      expect(writeFileMock).toHaveBeenCalledTimes(1);
+      const [, writtenContent] = writeFileMock.mock.calls[0];
+      const written = JSON.parse(String(writtenContent));
+      expect(written.NVDA.addedDate).toBe("2026-07-01");
+      expect(written.NVDA.lastVerdictDate).toBe("2026-07-15");
     });
 
     it("すべての FAIL 分岐で [PIPELINE:FAIL] マーカーが一度も出力されない", async () => {

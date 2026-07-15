@@ -143,10 +143,19 @@ export async function main(): Promise<void> {
     return;
   }
 
-  // Pitfall 3: prune を admit より先に実行し、purchased/downgraded が
-  // 「今日も強気」に優先されるようにする。
+  // Pitfall 3: prune を admit より先に実行する。purchased は admit 側の holdings ゲート
+  // （WLST-03 の二重防御）でも除外されるため prune の結果が同一 run 内で打ち消されることはなく、
+  // downgraded（当日 中立/弱気）はそもそも bullishStocks に含まれない。expired された銘柄が
+  // 当日強気なら新規候補として第2ゲートを経て再登録される（D-05 の re-admission）。
   const pruned = pruneWatchlist(existingWatchlist, highlightedStocks, PORTFOLIO_HOLDINGS, dateKey);
-  const result = admitBullishStocks(pruned, bullishStocks, quoteTypeByTicker, nameByTicker, dateKey);
+  const result = admitBullishStocks(
+    pruned,
+    bullishStocks,
+    quoteTypeByTicker,
+    nameByTicker,
+    PORTFOLIO_HOLDINGS,
+    dateKey,
+  );
 
   await writeFile(WATCHLIST_PATH, JSON.stringify(result, null, 2), "utf-8");
 

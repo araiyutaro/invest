@@ -93,7 +93,14 @@ function mergeNameFields(
 
 /**
  * 当日 verdict 強気（ETF除外後）の銘柄をウォッチリストに admit（登録/再確認）する。
- * D-21: filterEtfStocks（第2ゲート）を必ず経由し、fail-closed（lookup 失敗は除外）を担保する。
+ * D-21: 新規候補は filterEtfStocks（第2ゲート）を必ず経由し、fail-closed（lookup 失敗は除外）を
+ * 担保する。既に active な ticker は登録時に第2ゲート検証済み（D-22）のためバイパスし、
+ * reconfirm（lastVerdictDate 更新）のみ行う — CLI は active 銘柄を quote() 対象から除外する
+ * （D-22）ため、第2ゲートに通すと lookup 欠落 → fail-closed 除外となり lastVerdictDate が
+ * 凍結して 31 日目に誤って expired される（WLST-01 の reconfirm 要件違反）。
+ * WLST-03: PORTFOLIO_HOLDINGS（holdings 引数）に含まれる銘柄は admit 候補から除外する
+ * （prune 側の purchased ゲートだけに依存しない二重防御。これがないと「保有中 + 当日強気」の
+ * 未登録 ticker が active 登録され、翌 run の prune と隔日振動する）。
  * D-17: spread-merge（urgency-history.ts の冪等パターン踏襲）により同日複数回呼んでも結果が同一。
  * D-05: 除外済み（history あり・addedDate なし）の ticker が再度強気なら history を保持したまま
  * 新しい active エピソードとして再アクティブ化する。
@@ -105,16 +112,30 @@ export function admitBullishStocks(
   bullishStocks: MeetingResult["highlightedStocks"],
   quoteTypeByTicker: ReadonlyMap<string, QuoteTypeLookup>,
   nameByTicker: ReadonlyMap<string, { readonly name?: string; readonly nameJa?: string }>,
+  holdings: ReadonlyArray<PortfolioHolding>,
   today: string,
 ): WatchlistFile {
+  // WLST-03: 保有銘柄を admit 候補から除外する（防御的深層化）
+  const held = new Set(holdings.map((h) => normalizeHoldingSymbol(h.symbol)));
+
   // 防御的に verdict==="強気" のみを対象にする（呼び出し側の絞り込みを信用しない）
-  const bullishOnly = bullishStocks.filter((s) => s.verdict === "強気");
+  const bullishOnly = bullishStocks.filter(
+    (s) => s.verdict === "強気" && !held.has(normalizeHoldingSymbol(s.ticker)),
+  );
 
-  // D-21: filterEtfStocks（第2ゲート）を通し、kept のみを登録候補とする。fail-closed は
-  // filterEtfStocks 自身が担保するため、ここでは変更せずそのまま呼ぶ。
-  const { kept } = filterEtfStocks(bullishOnly, quoteTypeByTicker);
+  // 既に active な ticker は reconfirm のみ（第2ゲートバイパス, D-22）。
+  // prune 直後（同一実行内）に除外された銘柄はこの時点で非 active のため
+  // reconfirm パスには乗らない（prune → admit の優先順は保たれる）。
+  const isAlreadyActive = (ticker: string): boolean =>
+    watchlist[normalizeHoldingSymbol(ticker)]?.addedDate !== undefined;
+  const reconfirms = bullishOnly.filter((s) => isAlreadyActive(s.ticker));
+  const newCandidates = bullishOnly.filter((s) => !isAlreadyActive(s.ticker));
 
-  return kept.reduce<WatchlistFile>((acc, stock) => {
+  // D-21: 新規候補のみ filterEtfStocks（第2ゲート）を通し、kept のみを登録候補とする。
+  // fail-closed は filterEtfStocks 自身が担保するため、ここでは変更せずそのまま呼ぶ。
+  const { kept } = filterEtfStocks(newCandidates, quoteTypeByTicker);
+
+  return [...reconfirms, ...kept].reduce<WatchlistFile>((acc, stock) => {
     const key = normalizeHoldingSymbol(stock.ticker);
     const existing = acc[key];
     const names = mergeNameFields(existing, nameByTicker.get(stock.ticker));
