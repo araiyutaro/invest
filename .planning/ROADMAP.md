@@ -117,7 +117,7 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
 - [x] **Phase 27: ETF Exclusion** - アナリスト推奨銘柄からETFをプロンプト指示＋TS側`quoteType`決定論検証の二層防御で除外 (completed 2026-07-15)
 - [x] **Phase 28: Watchlist Persistence** - 強気銘柄を`data/watchlist.json`にティッカーキー方式で日次登録し、降格・購入済み・失効を理由付きで自動除外 (completed 2026-07-15)
 - [x] **Phase 29: Daily Tracking Data Supply** - ウォッチリスト銘柄の株価・テクニカル・関連ニュースを銘柄単位fail-softで収集し判定エージェントへ供給 (completed 2026-07-15)
-- [ ] **Phase 30: Buy-Timing Judgment Agent** - 複数シグナル合致に基づく「今日買うべき/待つべき」判定をLLM+TS zod検証ハイブリッドで日次生成
+- [x] **Phase 30: Buy-Timing Judgment Agent** - 複数シグナル合致に基づく「今日買うべき/待つべき」判定をLLM+TS zod検証ハイブリッドで日次生成 (completed 2026-07-15)
 - [ ] **Phase 31: Daily Report Watchlist Section** - Daily Reportにウォッチリストセクションを追加し判定バッジ・理由・前日比変化を表示
 
 ## Phase Details
@@ -217,7 +217,7 @@ Plans:
   4. 判定理由が実際に供給されたデータの複数シグナル合致（confluence ≥2、例: MA位置＋RSI＋出来高＋ニュース材料）に基づいており、存在しない指標値を創作していないことがプロンプト契約とレビューで確認できる
   5. 米国株は前日終値ベース、日本株は寄付き前という基準時点の違いが、判定入力（as-ofタイムスタンプ）と表示の両方で区別され、ルックアヘッドバイアスが構造的に防止される
 
-**Plans**: 2/3 plans executed
+**Plans**: 3/3 plans complete
 
 Plans:
 
@@ -231,7 +231,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 30-03-PLAN.md — invest.md 配線（Step 3-P 直後に Step 3-J を挿入: 前日退避・model:sonnet 並列 Agent・二層防御プロンプト契約・CLI 呼び出し + launchd 実行の human-verify, TIME-01/03/04/05）
+- [x] 30-03-PLAN.md — invest.md 配線（Step 3-P 直後に Step 3-J を挿入: 前日退避・model:sonnet 並列 Agent・二層防御プロンプト契約・CLI 呼び出し + launchd 実行の human-verify, TIME-01/03/04/05）
 
 ### Phase 31: Daily Report Watchlist Section
 
@@ -281,7 +281,7 @@ Plans:
 | 27. ETF Exclusion | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 28. Watchlist Persistence | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 29. Daily Tracking Data Supply | v2.7 | 3/3 | Complete   | 2026-07-15 |
-| 30. Buy-Timing Judgment Agent | v2.7 | 2/3 | In Progress|  |
+| 30. Buy-Timing Judgment Agent | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 31. Daily Report Watchlist Section | v2.7 | 0/0 | Not started | - |
 
 ---
