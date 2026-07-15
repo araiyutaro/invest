@@ -23,7 +23,7 @@
 ### パイプライン配置とステップ設計
 - **D-01: 実行位置は invest.md Step 2h（ウォッチリスト更新）直後の新ステップ（Step 2i）**。Step 2h でウォッチリスト状態が確定した後・Step 3 のレポート系より前に配置し、Phase 30 の判定ステップが常に当日確定済みのウォッチリストに対する追跡データを参照できる順序を構造的に保証する（research ARCHITECTURE の Step 3-W → 3-W2 相当。決定論的TSインフラを Step 2g〜2i に連続配置）
 - **D-02: 単一の fail-soft CLI `src/scripts/collect-watchlist-data.ts` がテクニカルとニュースの両方を収集し、2ファイルを出力する**。1 CLI = 1 STEP マーカーで invest.md の配線を最小化（テクニカル/ニュースでステップを分割しない。ニュースマッチングは純関数でネットワーク非依存のため、分割してもfail-soft上の利得がない）
-- **D-03: 専用 STEP マーカーは `[STEP:watchlist-data:OK]` / `[STEP:watchlist-data:FAIL:<短い理由>]`**。write-watchlist.ts（Phase 28 Plan 02）と同様にスクリプト自身が stderr へマーカーを出力し、invest.md 側は終了コードに関わらず次ステップへ進む。`[PIPELINE:FAIL]` は絶対に出さない（OPS-06 の本フェーズ分担）
+- **D-03: 専用 STEP マーカーは watchlist-data 名前空間** — マーカーは `[STEP:watchlist-data:OK]` および `[STEP:watchlist-data:FAIL:<短い理由>]`。write-watchlist.ts（Phase 28 Plan 02）と同様にスクリプト自身が stderr へマーカーを出力し、invest.md 側は終了コードに関わらず次ステップへ進む。`[PIPELINE:FAIL]` は絶対に出さない（OPS-06 の本フェーズ分担）
 - **D-04: 空ウォッチリスト（アクティブ0件）は正常系** — `[STEP:watchlist-data:OK]` を出し、空のスナップショット/空のニュースマップを持つ有効JSONを両ファイルに書き込む（0件ログ付き）。Phase 30/31 のローダーが常に有効JSONを読める契約を維持する（collect-technicals.ts の「fail-soft: 空スナップショット書き込み」前例踏襲）
 
 ### 出力ファイル構成（Phase 30 への供給契約）
