@@ -63,6 +63,34 @@ describe("toPortfolioHoldingShape", () => {
     expect(result[0].nameJa).not.toBe("");
   });
 
+  it("name が空文字列のエントリは ticker にフォールバックする（universal-matchバグ防止, WR-05）", () => {
+    // "".includes("") === true のため、空文字列がそのまま通ると titleIncludesAny が
+    // 全記事タイトルに真を返し、記事プール上位5件が無差別に紐付く。
+    const entries = [makeWatchlistEntry({ ticker: "MRNA", name: "" })];
+
+    const result = toPortfolioHoldingShape(entries);
+
+    expect(result[0].name).toBe("MRNA");
+  });
+
+  it("nameJa が空文字列のエントリは ticker にフォールバックする（universal-matchバグ防止, WR-05）", () => {
+    const entries = [makeWatchlistEntry({ ticker: "MRNA", nameJa: "" })];
+
+    const result = toPortfolioHoldingShape(entries);
+
+    expect(result[0].nameJa).toBe("MRNA");
+    expect(result[0].nameJa).not.toBe("");
+  });
+
+  it("name/nameJa が空白のみの文字列でも ticker にフォールバックする (WR-05)", () => {
+    const entries = [makeWatchlistEntry({ ticker: "MRNA", name: "  ", nameJa: " " })];
+
+    const result = toPortfolioHoldingShape(entries);
+
+    expect(result[0].name).toBe("MRNA");
+    expect(result[0].nameJa).toBe("MRNA");
+  });
+
   it("sector は常に \"\" 固定", () => {
     const entries = [makeWatchlistEntry({ ticker: "MRNA", name: "Moderna" })];
 

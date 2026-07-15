@@ -8,11 +8,14 @@ import type { TechnicalSnapshot } from "../data/technicals.js";
  * entry.ticker は Phase 28 が normalizeHoldingSymbol 済みで保存している前提のため
  * 再正規化しない。sector は常に "" 固定（マッチングロジック未使用）。
  * matchAliases は省略する（D-15: 人手キュレーション不採用）。
- * [Rule 1 - Bug fix] nameJa は entry.ticker にフォールバックする（空文字列は不可）。
+ * [Rule 1 - Bug fix] name/nameJa は entry.ticker にフォールバックする（空文字列は不可）。
  * PortfolioHolding.nameJa は string 型必須のため undefined を渡せないが、空文字列を渡すと
  * holding-news.ts の titleIncludesAny が `"".includes("")===true` で常に真になり、
  * 日本語社名を持たない全銘柄が任意の記事タイトルに誤マッチする（全銘柄が name一致扱いになる
  * 構造的バグ）。ticker フォールバックなら記事タイトルへの偶発一致リスクが実質ゼロ。
+ * WR-05: `??` は undefined のみ防ぎ `""` を素通しする。name/nameJa は yahoo-finance2 の
+ * longName/shortName 由来（write-watchlist.ts）で空文字列混入が排除されていないため、
+ * trim 判定で空文字列・空白のみの文字列も ticker にフォールバックする。
  * 純関数: throw なし、I/O なし。入力 entries は変更しない。
  */
 export function toPortfolioHoldingShape(
@@ -20,8 +23,8 @@ export function toPortfolioHoldingShape(
 ): ReadonlyArray<PortfolioHolding> {
   return entries.map((entry) => ({
     symbol: entry.ticker,
-    name: entry.name ?? entry.ticker,
-    nameJa: entry.nameJa ?? entry.ticker,
+    name: entry.name?.trim() ? entry.name : entry.ticker,
+    nameJa: entry.nameJa?.trim() ? entry.nameJa : entry.ticker,
     sector: "",
   }));
 }
