@@ -7,6 +7,7 @@ import type {
   NewsCuration,
   CuratedArticle,
 } from "./types.js";
+import type { WatchlistJudgment } from "./types.js";
 
 export const stockPickSchema = z.object({
   ticker: z.string(),
@@ -376,4 +377,61 @@ export function resolveNewsCuration(
   }
 
   return { date, generatedAt, leadIn: raw.leadIn, articles };
+}
+
+// --- Watchlist Judgment Contract (Phase 30: TIME-02) ---
+// rawWatchlistJudgmentSchema → watchlistJudgmentSchema の二段階 passthrough/transform
+// パターン（rawHoldingSchema→holdingEvaluationSchema の複製、D-04）。正準判定フィールドは
+// todayAction: "buy" | "wait" の二値 enum に alias 硬化する（D-05）。
+// TS専用の派生フィールド群は raw スキーマに構造的に存在しない（D-08）——
+// TS側のみが付与し、LLM がエコーしても正準形に混入しない（Pitfall 4）。
+
+const watchlistTodayActionEnum = z.enum(["buy", "wait"]);
+
+const rawWatchlistJudgmentSchema = z
+  .object({
+    ticker: z.string(),
+    todayAction: watchlistTodayActionEnum.optional(),
+    action: watchlistTodayActionEnum.optional(), // alias
+    verdict: z.string().optional(), // alias、日本語値「買い」「待ち」を運ぶ可能性
+    buyToday: lenientBoolean, // alias（boolean形。既存lenientBooleanを再利用）
+    rationale: z.string().optional(),
+    signals: z.array(z.string()).optional(),
+  })
+  .passthrough();
+
+// alias 解決優先順位: todayAction → action → verdict（日本語マッピング含む）→ buyToday
+// （true→buy / false→wait）→ デフォルト "wait"（fail-closed: 不明時は買いを出さない、D-07 思想）
+function normalizeTodayAction(raw: z.infer<typeof rawWatchlistJudgmentSchema>): "buy" | "wait" {
+  if (raw.todayAction !== undefined) {
+    return raw.todayAction;
+  }
+  if (raw.action !== undefined) {
+    return raw.action;
+  }
+  if (raw.verdict !== undefined) {
+    if (raw.verdict === "買い") {
+      return "buy";
+    }
+    if (raw.verdict === "待ち") {
+      return "wait";
+    }
+  }
+  if (raw.buyToday !== undefined) {
+    return raw.buyToday ? "buy" : "wait";
+  }
+  return "wait";
+}
+
+export const watchlistJudgmentSchema = rawWatchlistJudgmentSchema.transform((raw) => ({
+  ticker: raw.ticker,
+  todayAction: normalizeTodayAction(raw),
+  rationale: raw.rationale ?? "",
+  signals: raw.signals ?? [],
+  // TS専用の派生フィールドはここでは決して参照しない（D-08）。
+  // TS側決定論（watchlist-judgment.ts）が transform 後に付与する。
+}));
+
+export function validateWatchlistJudgment(data: unknown): WatchlistJudgment {
+  return watchlistJudgmentSchema.parse(data) as WatchlistJudgment;
 }
