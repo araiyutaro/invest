@@ -36,3 +36,63 @@ export function mergeWithCache(
   const missingTickers = activeTickers.filter((t) => !cachedTickers.has(t));
   return { cachedTickers, missingTickers };
 }
+
+/**
+ * D-09: マジックナンバー分散を禁止し、チャンクサイズ・チャンク間待機をこの1箇所のみで定義する。
+ * 目安: 並列4〜5 / チャンク間200〜500ms（29-RESEARCH.md Pattern 2）。
+ */
+export const CHUNK_SIZE = 5;
+export const CHUNK_DELAY_MS = 300;
+
+/**
+ * D-09: tmp/technicals.json の形状（Pattern 3: 同日キャッシュ read-through）。
+ */
+export interface TechnicalsCacheFile {
+  readonly generatedAt: string;
+  readonly snapshots: ReadonlyArray<TechnicalSnapshot>;
+}
+
+/**
+ * 配列を固定サイズのチャンク配列に分割する純関数。
+ * 純関数: throw なし、I/O なし。入力 items を mutate しない。
+ */
+export function chunk<T>(
+  items: ReadonlyArray<T>,
+  size: number,
+): ReadonlyArray<ReadonlyArray<T>> {
+  const chunks: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size));
+  }
+  return chunks;
+}
+
+/** チャンク間の待機ヘルパー。 */
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * D-09: tickers をチャンク分割し、チャンク単位で Promise.all 並列取得、チャンク間に待機を挟む。
+ * atomic unit は必ず引数 fetchOne（Plan 02 で技術指標の単数取得関数を渡す）——
+ * 技術指標の複数一括取得関数への依存は import も呼び出しも一切しない（Pitfall 1）。
+ * D-17: fetchOne が null を返した ticker は結果配列から omit する（null 埋め・プレースホルダ禁止、
+ * 既存 technicals.json 契約と同一）。fetchOne 自身が per-ticker try/catch を持つ前提だが、
+ * 万一 reject しても Promise.all のチャンク単位分離は破壊されない（TRAC-03/D-10）。
+ */
+export async function fetchChunked(
+  tickers: ReadonlyArray<string>,
+  fetchOne: (symbol: string) => Promise<TechnicalSnapshot | null>,
+  delayMs: number = CHUNK_DELAY_MS,
+): Promise<ReadonlyArray<TechnicalSnapshot>> {
+  const results: TechnicalSnapshot[] = [];
+  const batches = chunk(tickers, CHUNK_SIZE);
+  for (let i = 0; i < batches.length; i++) {
+    const batchResults = await Promise.all(batches[i].map(fetchOne));
+    results.push(...batchResults.filter((r): r is TechnicalSnapshot => r !== null));
+    if (i < batches.length - 1) {
+      await sleep(delayMs);
+    }
+  }
+  return results;
+}
