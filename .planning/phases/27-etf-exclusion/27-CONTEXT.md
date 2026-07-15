@@ -31,13 +31,13 @@
 ### TS側フィルタの統合ポイント
 - **D-06: 純関数モジュール `src/portfolio/etf-exclusion.ts` ＋ 薄い fail-soft CLI ラッパー `src/scripts/filter-etf-stocks.ts` の分離構成**。`urgency-history.ts` + `write-urgency-history.ts` の実証済みパターンを踏襲（純関数は quote 結果を引数で受け取りネットワーク非依存 → 単体テスト容易）
 - **D-07: 実行位置は invest.md Step 2g（バリデーション）内、`validate-meeting.ts` 実行の**前**に挿入**。tmp/meeting-result.json を読み、ETF除外済みの highlightedStocks で同ファイルを書き戻す（イミュータブルに新オブジェクト構築）。既存の Step 2g バリデーション・サマリー表示は除外後のデータを自然に検証・表示する
-- **D-08: 専用 STEP マーカー `[STEP:etf-exclusion:OK]` / `[STEP:etf-exclusion:FAIL:<理由>]` を出力**（既存 STEP マーカー規約に準拠）
+- **D-08: 専用 STEP マーカーを出力する** — `[STEP:etf-exclusion:OK]` および `[STEP:etf-exclusion:FAIL:<理由>]`（既存 STEP マーカー規約に準拠）
 - **D-09: meeting-result.json のスキーマ（src/meeting/schemas.ts）は変更しない**。highlightedStocks の要素を除去するのみで、フィールド追加は行わない（Phase 28 のウォッチリスト側で必要になればそこで設計）
 
 ### プロンプト指示の挿入箇所（第1層）
 - **D-10: `.claude/commands/invest.md` の Round 1 5アナリストブロック（Step 2a）の各出力契約部分に、ETF除外指示を追記**。既存の「注意: picksのtickerは必ず英数字ティッカー形式…」の並びに「ETF・投資信託・インデックスファンドは picks に含めないこと（個別企業株のみ）」の趣旨を追加。5ブロックすべてに同一文言を適用
 - **D-11: Step 2f モデレーター最終統合プロンプトの「重要な注意事項」にも同趣旨の除外指示を追加**（highlightedStocks 生成点での防御）
-- **D-12: `src/agents/*.ts` の systemPrompt は変更しない**。picks の出力契約が定義されているのは invest.md であり、そこが指示の正準位置。二重管理を避ける
+- **D-12: src/agents 配下の systemPrompt ファイルは変更しない** — picks の出力契約が定義されているのは invest.md であり、そこが指示の正準位置。二重管理を避ける
 
 ### 除外の可視性・監査性
 - **D-13: 除外が発生した場合、除外ティッカー・quoteType・理由（ETF判定 / lookup失敗）を CLI の標準出力に記録**（例: `ETF除外: SPY (quoteType=ETF)` / `ETF除外: XYZ (quoteType取得失敗, fail-closed)`)。launchd ログから事後監査可能

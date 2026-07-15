@@ -123,63 +123,86 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
 ## Phase Details
 
 ### Phase 27: ETF Exclusion
+
 **Goal**: アナリストが推奨する銘柄候補（picks / highlightedStocks）からETFが構造的に排除され、ウォッチリストや各レポートのハイライト銘柄に一切ETFが混入しない
 **Depends on**: Nothing (first phase of v2.7)
 **Requirements**: ETF-01, ETF-02
 **Success Criteria** (what must be TRUE):
+
   1. 全5アナリストエージェントのプロンプトに、ETFを推奨銘柄（picks）から除外する明示的指示が含まれている
   2. meeting-result確定後、TS側で`yahoo-finance2`の`quote().quoteType`照合により、米国ETF・日本ETF（`.T`サフィックスでは判別不能なため`quoteType`必須）の両方がhighlightedStocksから決定論的に除外される
   3. 個別銘柄のquoteType lookupに失敗した場合でもパイプラインがthrowせず、安全側（除外 or 通過の明示方針）で処理が継続する
   4. 除外ロジックの単体テストが米国ETF・日本ETF・個別株それぞれの分類を正しく検証している
+
 **Plans**: 3 plans
 Plans:
+**Wave 1**
+
 - [ ] 27-01-PLAN.md — 純関数 etf-exclusion.ts（quoteType allowlist フィルタ + 単体テスト, TDD）
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 27-02-PLAN.md — fail-soft CLI filter-etf-stocks.ts（単一 batch quote 照合 + 書き戻し + テスト）
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 27-03-PLAN.md — invest.md 配線（5アナリスト+モデレーターのプロンプト指示 + Step 2g wiring）
 
 ### Phase 28: Watchlist Persistence
+
 **Goal**: 当日「強気」評価された銘柄（ETF除外後）が`data/watchlist.json`に日次で蓄積され、降格・購入・長期未確認の各理由に応じて理由付きで自動除外される、監査可能な状態テーブルとして機能する
 **Depends on**: Phase 27 (ETF除外済みのhighlightedStocksが入力となるため)
 **Requirements**: WLST-01, WLST-02, WLST-03, WLST-04, WLST-05
 **Success Criteria** (what must be TRUE):
+
   1. 当日ミーティングで`verdict: 強気`となった銘柄（ETF除外後）が、ティッカーキー方式の`data/watchlist.json`に`addedDate`/`lastVerdictDate`付きで自動登録される（過去分の遡及なし、当日以降のみ）
   2. 翌日以降の再評価でverdictが中立/弱気に転落した銘柄は、レコード削除ではなく`removedReason: downgraded`付きでウォッチリストから除外される
   3. portfolio.jsonの保有銘柄に現れたティッカーは`removedReason: purchased`付きで自動除外される
   4. 強気再確認が一定期間（設計時に確定する日数）ない銘柄は`removedReason: expired`付きで時間ベースに自動失効し、リストが無限に肥大しない
   5. 除外・失効後もレコードは履歴として保持され、いつ・なぜ除外されたかを追跡できる
+
 **Plans**: TBD
 
 ### Phase 29: Daily Tracking Data Supply
+
 **Goal**: ウォッチリストに登録された各銘柄について、当日の株価・テクニカル指標・関連ニュースが判定エージェントへ確実に供給され、1銘柄の取得失敗が他銘柄処理やパイプライン全体を止めない
 **Depends on**: Phase 28 (追跡対象となるアクティブなウォッチリストが存在すること)
 **Requirements**: TRAC-01, TRAC-02, TRAC-03, OPS-06
 **Success Criteria** (what must be TRUE):
+
   1. ウォッチリスト銘柄それぞれの当日株価・テクニカル指標（MA/RSI/出来高等）が`collect-technicals`パターンを流用して日次収集される
   2. ウォッチリスト銘柄それぞれの関連ニュースが`tmp/news.json`から`holding-news`パターン流用のTS側決定論マッチングで抽出される
   3. 追跡データ収集は銘柄単位でfail-softに実装されており、1銘柄のAPI取得失敗（レート制限含む）が他銘柄の処理やパイプライン全体の失敗につながらないことがテストで確認できる
   4. 新パイプラインステップに専用`[STEP:*]`マーカーがあり、失敗時も既存4レポートの生成・デプロイが継続する
+
 **Plans**: TBD
 
 ### Phase 30: Buy-Timing Judgment Agent
+
 **Goal**: ウォッチリスト銘柄それぞれについて、供給された実データに基づく複数シグナル合致の根拠を伴う「今日買うべき / 待つべき」の日次判定が、前日との比較を踏まえてブレなく生成される
 **Depends on**: Phase 29 (判定に必要な株価・テクニカル・ニュースデータが供給されていること)
 **Requirements**: TIME-01, TIME-02, TIME-03, TIME-04, TIME-05
 **Success Criteria** (what must be TRUE):
+
   1. 判定エージェントがウォッチリスト銘柄ごとに「今日買うべき / 待つべき」の二値判定と判定理由を日次で出力する
   2. 判定出力はTS側zodスキーマ（`passthrough().transform()`によるalias硬化）で検証され、LLMが不正・ゆらぎのあるフィールド名を出力してもパイプラインが停止しない
   3. 前日の判定スナップショットがindependent-then-compare方式でプロンプトに注入され、判定が「待ち→買い」等に変化した場合はTS側決定論で検出される（Phase 22 decisionChangedパターン流用、フリップフロップ緩和）
   4. 判定理由が実際に供給されたデータの複数シグナル合致（confluence ≥2、例: MA位置＋RSI＋出来高＋ニュース材料）に基づいており、存在しない指標値を創作していないことがプロンプト契約とレビューで確認できる
   5. 米国株は前日終値ベース、日本株は寄付き前という基準時点の違いが、判定入力（as-ofタイムスタンプ）と表示の両方で区別され、ルックアヘッドバイアスが構造的に防止される
+
 **Plans**: TBD
 
 ### Phase 31: Daily Report Watchlist Section
+
 **Goal**: Daily Reportの閲覧者が、ウォッチリスト銘柄ごとの「今日買うべき」判定と前日からの変化を一目で把握できる
 **Depends on**: Phase 30 (表示する判定データが存在すること)
 **Requirements**: UI-09, UI-10
 **Success Criteria** (what must be TRUE):
+
   1. Daily Reportにウォッチリストセクションが追加され、各銘柄に「今日買うべき」バッジ（または「待ち」表示）・判定理由・会社名が表示される
   2. 前日からの判定変化（新規買いシグナル点灯・買い→待ち転落）が、既存のurgent/decisionChangedバッジと同様の視覚様式で区別表示される
   3. ウォッチリストが空・1件・複数件のいずれの状態でもレポートが正常に描画される（fail-softローダー、既存3+1レポートの生成・デプロイへの影響なし）
+
 **Plans**: TBD
 **UI hint**: yes
 

@@ -512,7 +512,7 @@ describe("filter-etf-stocks main()", () => {
 
 **If this table is empty:** N/A — see A1/A2 above; both are low-risk, narrowly-scoped assumptions with concrete mitigation already noted.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should the exclusion log distinguish MUTUALFUND/INDEX from ETF in the D-13 stdout message, or bucket them all as "ETF除外"?**
    - What we know: D-04 allowlists only `EQUITY`; ETF/MUTUALFUND/INDEX/CRYPTOCURRENCY etc. are all excluded identically.
