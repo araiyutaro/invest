@@ -5,8 +5,8 @@ milestone_name: Entry Timing Watchlist & ETF Exclusion
 current_phase: 30
 current_phase_name: Buy-Timing Judgment Agent
 status: verifying
-stopped_at: Completed 30-02-PLAN.md
-last_updated: "2026-07-15T12:06:11.734Z"
+stopped_at: Phase 31 context gathered
+last_updated: "2026-07-15T22:59:59.033Z"
 last_activity: 2026-07-15
 last_activity_desc: Phase 30 execution started
 progress:
@@ -157,12 +157,12 @@ Human-UAT / 実行時検証待ち項目。いずれも静的解析では確認�
 
 ## Session Continuity
 
-**Last session:** 2026-07-15T12:05:51.806Z
+**Last session:** 2026-07-15T22:59:59.026Z
 
 **Resume file:** 
 
-None
-Stopped at: Completed 30-02-PLAN.md
+.planning/phases/31-daily-report-watchlist-section/31-CONTEXT.md
+Stopped at: Phase 31 context gathered
 Resume with: `/gsd-plan-phase 27`
 
 ## Operator Next Steps
