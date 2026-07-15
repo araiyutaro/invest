@@ -14,7 +14,9 @@ findings:
   warning: 2
   info: 4
   total: 6
-status: issues_found
+  fixed: 2
+  skipped: 0
+status: fixed
 ---
 
 # Phase 27: Code Review Report
@@ -22,7 +24,7 @@ status: issues_found
 **Reviewed:** 2026-07-15T01:45:00Z
 **Depth:** standard
 **Files Reviewed:** 5
-**Status:** issues_found
+**Status:** fixed (WR-01, WR-02 fixed; IN-01..IN-04 remain open, out of scope)
 
 ## Summary
 
@@ -35,14 +37,15 @@ Phase 27（ETF Exclusion）の実装5ファイルを standard 深度でレビュ
 - **D-08（STEPマーカー）**: 準拠。`[STEP:etf-exclusion:OK]`（invest.md:1183）/ `[STEP:etf-exclusion:FAIL:<短い理由>]`（invest.md:1189）
 - **D-09（スキーマ不変）**: 準拠。spread による要素除去のみ（filter-etf-stocks.ts:94）
 - **D-10/D-11（第1層プロンプト）**: 準拠。Round 1 全5ブロック（invest.md:191, 237, 283, 329, 375）とモデレーター注意事項（invest.md:1082）に除外指示あり
-- **D-02（whole-script fail-soft）**: **部分的に不完全** — WR-01 参照
+- **D-02（whole-script fail-soft）**: WR-01/WR-02 のフィックスにより準拠（fail-soft ガードを追加）
 
-テストは 16/16 パス。ただし D-02 のフェイルソフト保証に1箇所の抜け道（WR-01）、D-03（銘柄単位失敗とメカニズム故障の区別）に境界の曖昧さ（WR-02）を検出した。Critical 該当なし。
+テストは 16/16 パス（フィックス後は 9件追加され 439/439 パス、filter-etf-stocks.test.ts は 9/9）。D-02 のフェイルソフト保証にあった1箇所の抜け道（WR-01）と、D-03（銘柄単位失敗とメカニズム故障の区別）の境界の曖昧さ（WR-02）は commit `8f4d2ac` で修正済み。Critical 該当なし。
 
 ## Warnings
 
-### WR-01: `highlightedStocks.map` が try/catch 外にあり、形状不正な JSON で D-02（throwしない）契約を破る
+### WR-01: `highlightedStocks.map` が try/catch 外にあり、形状不正な JSON で D-02（throwしない）契約を破る [fixed]
 
+**Status:** fixed (commit `8f4d2ac`, `fix(27-02): fail-soft guard for malformed highlightedStocks and empty quote response`)
 **File:** `src/scripts/filter-etf-stocks.ts:63`
 **Issue:** filter-etf-stocks.ts は validate-meeting.ts の**前**に実行される（D-07）ため、この時点の tmp/meeting-result.json はモデレーター LLM の生出力であり、形状検証されていない。invest.md Step 2f のリトライは「有効な JSON か」のみを保証し、`highlightedStocks` フィールドの存在は保証しない。`JSON.parse` は成功するが `highlightedStocks` が欠損／非配列のケースで、line 63 の `.map()` が try/catch の外で TypeError を投げる。結果:
 1. `main()` が reject し、D-02 の「throw せず」契約に違反（CLI 実行時は line 100 の `.catch` で拾われ exit 1 になるため元ファイルは保全されるが、契約上のフェイルソフトハンドラを素通りする）
@@ -64,8 +67,9 @@ Phase 27（ETF Exclusion）の実装5ファイルを standard 深度でレビュ
   const tickers = meetingResult.highlightedStocks.map((s) => s.ticker);
 ```
 
-### WR-02: batch quote() が「成功したが結果0件」の場合、全銘柄が fail-closed 除外され highlightedStocks が空で書き戻される（D-03 の混同）
+### WR-02: batch quote() が「成功したが結果0件」の場合、全銘柄が fail-closed 除外され highlightedStocks が空で書き戻される（D-03 の混同）[fixed]
 
+**Status:** fixed (commit `8f4d2ac`, `fix(27-02): fail-soft guard for malformed highlightedStocks and empty quote response`)
 **File:** `src/scripts/filter-etf-stocks.ts:24-39, 82-95`
 **Issue:** `fetchQuoteTypes` が例外なく空の Map（あるいは全 ticker 不一致の Map）を返した場合 — 例: Yahoo API の劣化応答、全件で `symbol`/`quoteType` フィールド欠損（line 34 のガードで全件スキップ）— コードはこれを「N 銘柄すべての個別 lookup 失敗（D-01 fail-closed）」として扱い、`highlightedStocks: []` を tmp/meeting-result.json に**書き込んで上書きする**。しかし要求 N 件に対し応答 0 件という状況は、個別銘柄の判定不能ではなく「フィルタ機構そのものの故障」の徴候であり、D-03 が明示的に禁止している2つの故障モードの混同にあたる。この場合の正しい挙動は D-02（元ファイル維持・未フィルタで継続）である。当日の全推奨銘柄がレポートおよび翌日の prev-highlighted-stocks 注入から消失するため、影響はフィルタ失敗（未フィルタ継続）より重い。
 **Fix:**
