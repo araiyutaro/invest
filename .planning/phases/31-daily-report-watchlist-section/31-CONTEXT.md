@@ -29,7 +29,7 @@ Daily Report（daily-report.html）にウォッチリストセクションを追
 - **D-04: カード見出しは「ティッカー — 会社名」形式**。会社名は `data/watchlist.json` のエントリ（Phase 28 D-04 で登録時保存済みの `nameJa ?? name`）から取得し、取得不能時はティッカーのみにフォールバック（判定ファイルは ticker のみ保持のため、ローダーで watchlist.json と join する）
 - **D-05: signals（合致シグナル配列）はカード内に列挙表示する**（インラインピル or 箇条書き、詳細はプランナー裁量）。Phase 30 D-06 が「Phase 31 の表示が消費できる構造」として設計したフィールドの消費点。confluence ≥2 の判定根拠を閲覧者が検証できる形にする
 - **D-06: as-of タイムスタンプと市場セッション注記をバッジ横に必ず表示する**。judgment の `asOf` / `market` フィールド（Phase 30 D-15 が「Phase 31 のデータ契約として欠落させない」と明記した値）を使い、US=「前日終値時点」/ JP=「寄付き前時点」の基準時点の違いを表示上も区別する（research §Phase 5 の UX pitfall「always display as-of timestamp next to badge」への直接対応、TIME-05 の表示側の履行）
-- **D-07: `status: "skipped"` の銘柄は「判定不能（データ不足）」としてグレー系の控えめ表示で描画する**。「待ち」と「判定不能」を視覚的に区別する（Phase 30 D-20 が構造化した「読めなかった vs 判定不能」の区別を表示まで貫通させる）
+- **D-07: `status` が `"skipped"` の銘柄は「判定不能（データ不足）」としてグレー系の控えめ表示で描画する**。「待ち」と「判定不能」を視覚的に区別する（Phase 30 D-20 が構造化した「読めなかった vs 判定不能」の区別を表示まで貫通させる）
 - **D-08: カードのメタ情報としてウォッチリスト登録日（`addedDate`）を小さく表示する**。長期滞留エントリの文脈を閲覧者に与える（research の「de-emphasize stale still-waiting entries」への最小対応。視覚的減衰処理そのものは deferred）
 
 ### バッジ体系と判定変化の視覚表現（UI-10）

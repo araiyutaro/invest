@@ -17,10 +17,10 @@ created: 2026-07-16
 
 | Property | Value |
 |----------|-------|
-| **Framework** | node:test (tsx) — existing project convention |
-| **Config file** | none — `npx tsx --test` direct invocation |
-| **Quick run command** | `npx tsx --test src/scripts/report-data-loaders.test.ts src/scripts/generate-report.test.ts` |
-| **Full suite command** | `npx tsx --test src/**/*.test.ts` |
+| **Framework** | vitest — existing project convention (`package.json` の `"test": "vitest run"`) |
+| **Config file** | none — vitest デフォルト設定 |
+| **Quick run command** | `npx vitest run src/scripts/report-data-loaders.test.ts src/scripts/generate-report.test.ts` |
+| **Full suite command** | `npm run test` |
 | **Estimated runtime** | ~30 seconds |
 
 ---
@@ -38,7 +38,7 @@ created: 2026-07-16
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| (filled by planner) | — | — | UI-09 / UI-10 | — | HTML escaping of LLM-derived text | unit | `npx tsx --test ...` | ✅ | ⬜ pending |
+| (filled by planner) | — | — | UI-09 / UI-10 | — | HTML escaping of LLM-derived text | unit | `npx vitest run ...` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
