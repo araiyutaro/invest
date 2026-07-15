@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { toPortfolioHoldingShape, mergeWithCache } from "./watchlist-data.js";
+import { describe, it, expect, vi } from "vitest";
+import { toPortfolioHoldingShape, mergeWithCache, chunk, fetchChunked } from "./watchlist-data.js";
 import type { WatchlistEntry } from "./watchlist.js";
 import type { TechnicalSnapshot } from "../data/technicals.js";
 
@@ -134,5 +134,118 @@ describe("mergeWithCache", () => {
     const result = mergeWithCache(activeTickers, cached);
 
     expect(result.cachedTickers).toEqual(new Set(["MRNA"]));
+  });
+});
+
+describe("chunk", () => {
+  it("12要素 size=5 → 3チャンク（5, 5, 2）", () => {
+    const items = Array.from({ length: 12 }, (_, i) => i);
+
+    const result = chunk(items, 5);
+
+    expect(result).toHaveLength(3);
+    expect(result[0]).toHaveLength(5);
+    expect(result[1]).toHaveLength(5);
+    expect(result[2]).toHaveLength(2);
+  });
+
+  it("空配列 → 空チャンク配列", () => {
+    const result = chunk([], 5);
+
+    expect(result).toEqual([]);
+  });
+
+  it("size 以下の要素数 → 単一チャンク", () => {
+    const items = [1, 2, 3];
+
+    const result = chunk(items, 5);
+
+    expect(result).toEqual([[1, 2, 3]]);
+  });
+
+  it("入力配列を mutate しない", () => {
+    const items = [1, 2, 3, 4, 5, 6];
+    const snapshot = [...items];
+
+    chunk(items, 2);
+
+    expect(items).toEqual(snapshot);
+  });
+});
+
+describe("fetchChunked", () => {
+  it("fetchOne が全 ticker で snapshot を返す → 全 snapshot が結果に含まれる", async () => {
+    const tickers = ["MRNA", "JOBY"];
+    const fetchOne = vi.fn(async (symbol: string) => makeTechnicalSnapshot(symbol));
+
+    const result = await fetchChunked(tickers, fetchOne, 0);
+
+    expect(result).toHaveLength(2);
+    expect(result.map((s) => s.symbol).sort()).toEqual(["JOBY", "MRNA"]);
+  });
+
+  it("一部 ticker で fetchOne が null を返す → その ticker は omit され、他の snapshot は保持される（D-10）", async () => {
+    const tickers = ["MRNA", "JOBY"];
+    const fetchOne = vi.fn(async (symbol: string) =>
+      symbol === "JOBY" ? null : makeTechnicalSnapshot(symbol),
+    );
+
+    const result = await fetchChunked(tickers, fetchOne, 0);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].symbol).toBe("MRNA");
+  });
+
+  it("一部 ticker で fetchOne が reject する場合でも他 ticker の snapshot が失われない", async () => {
+    const tickers = ["MRNA", "JOBY", "HII", "POWL", "EE", "NXT"];
+    const fetchOne = vi.fn(async (symbol: string) => {
+      if (symbol === "JOBY") {
+        try {
+          throw new Error("network error");
+        } catch {
+          return null;
+        }
+      }
+      return makeTechnicalSnapshot(symbol);
+    });
+
+    const result = await fetchChunked(tickers, fetchOne, 0);
+
+    const symbols = result.map((s) => s.symbol);
+    expect(symbols).not.toContain("JOBY");
+    expect(symbols).toContain("MRNA");
+    expect(symbols).toContain("HII");
+    expect(symbols).toContain("POWL");
+    expect(symbols).toContain("EE");
+    expect(symbols).toContain("NXT");
+  });
+
+  it("空 tickers → 空配列（fetchOne を呼ばない）", async () => {
+    const fetchOne = vi.fn(async (symbol: string) => makeTechnicalSnapshot(symbol));
+
+    const result = await fetchChunked([], fetchOne, 0);
+
+    expect(result).toEqual([]);
+    expect(fetchOne).not.toHaveBeenCalled();
+  });
+
+  it("チャンク間の待機ロジックが存在する（fake timers で検証）", async () => {
+    vi.useFakeTimers();
+    try {
+      const tickers = Array.from({ length: 6 }, (_, i) => `T${i}`);
+      const fetchOne = vi.fn(async (symbol: string) => makeTechnicalSnapshot(symbol));
+
+      const promise = fetchChunked(tickers, fetchOne, 300);
+
+      // 最初のチャンク（5件）が解決するまで進める
+      await vi.advanceTimersByTimeAsync(0);
+      // 2チャンク目までのタイマーを進める
+      await vi.advanceTimersByTimeAsync(300);
+      const result = await promise;
+
+      expect(result).toHaveLength(6);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
