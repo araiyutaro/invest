@@ -2,15 +2,32 @@
   "ASML": {
     "ticker": "ASML",
     "name": "ASML Holding N.V.",
-    "addedDate": "2026-07-16",
-    "lastVerdictDate": "2026-07-16",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-07-16",
+        "lastVerdictDate": "2026-07-16",
+        "removedReason": "downgraded",
+        "removedDate": "2026-07-17"
+      }
+    ]
   },
   "GPC": {
     "ticker": "GPC",
     "name": "Genuine Parts Company",
-    "addedDate": "2026-07-16",
-    "lastVerdictDate": "2026-07-16",
+    "history": [
+      {
+        "addedDate": "2026-07-16",
+        "lastVerdictDate": "2026-07-16",
+        "removedReason": "downgraded",
+        "removedDate": "2026-07-17"
+      }
+    ]
+  },
+  "JNJ": {
+    "ticker": "JNJ",
+    "name": "Johnson & Johnson",
+    "addedDate": "2026-07-17",
+    "lastVerdictDate": "2026-07-17",
     "history": []
   }
 }
