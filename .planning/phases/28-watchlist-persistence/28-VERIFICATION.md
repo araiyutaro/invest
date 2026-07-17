@@ -1,17 +1,20 @@
 ---
 phase: 28-watchlist-persistence
 verified: 2026-07-15T03:16:08Z
-status: human_needed
+status: passed
 score: 5/5 must-haves verified
 behavior_unverified: 0
 overrides_applied: 0
 human_verification:
+
   - test: "翌朝の launchd 日次実行ログで Step 2h（write-watchlist.ts）の `[STEP:watchlist:OK]` が filter-etf-stocks / validate-meeting の後に出力されていることを確認する"
     expected: "実パイプライン順序どおりに `[STEP:watchlist:OK]`（または理由付き `[STEP:watchlist:FAIL:<reason>]`）が出力され、`[PIPELINE:FAIL]` は出ない"
     why_human: "launchd の実運用実行環境（本物の meeting-result.json・yahoo-finance2 quote() 応答・実行スケジュール）は静的解析・単体テストでは再現できない"
+
   - test: "実パイプライン実行後、data/watchlist.json が更新され、Step 4 の `git add docs/ docs_old/ data/` で自動コミットされていることを確認する"
     expected: "data/watchlist.json が当日の強気銘柄・除外理由付きの状態を反映して更新され、既存コミットフローでコミットされる"
     why_human: "実際の git commit 発生と実ファイル内容の実地確認は、テスト環境のフィクスチャ削除運用（本フェーズの smoke test は都度クリーンアップ）では代替できない"
+
   - test: "既存4レポート（daily/portfolio/meeting-minutes/news-digest）の生成・デプロイが Step 2h 追加後も一切影響を受けていないことを確認する（fail-soft, OPS-06 分担）"
     expected: "Step 2h の成功・失敗に関わらず、既存4レポートが従来どおり生成・デプロイされる"
     why_human: "実パイプライン全体の end-to-end 観測が必要で、静的解析やユニットテストでは既存レポート生成への波及影響を確認できない"
