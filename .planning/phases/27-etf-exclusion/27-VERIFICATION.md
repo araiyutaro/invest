@@ -1,14 +1,16 @@
 ---
 phase: 27-etf-exclusion
 verified: 2026-07-15T11:00:00Z
-status: human_needed
+status: passed
 score: 4/4 must-haves verified
 behavior_unverified: 0
 overrides_applied: 0
 human_verification:
+
   - test: "翌営業日の launchd 実行後、tmp/round-1/*.json の picks と tmp/meeting-result.json の highlightedStocks に ETF が含まれないことを確認する"
     expected: "全アナリストの picks、モデレーターの highlightedStocks いずれにも ETF/投信/インデックスファンドのtickerが含まれない"
     why_human: "LLM出力（Layer 1プロンプト効果）は静的検証不能。実際のライブパイプライン実行が必要"
+
   - test: "翌営業日の launchd ログで [STEP:etf-exclusion:OK]（または FAIL の場合の fail-soft継続）を確認する"
     expected: "filter-etf-stocks.ts が validate-meeting.ts の直前に実行され、STEPマーカーが出力される。失敗時も [PIPELINE:FAIL] は出力されず後続ステップが継続する"
     why_human: "パイプライン統合の実行順序・fail-soft継続はライブ実行でのみ確認可能（ユニットテストはCLIロジックをモック環境で検証済みだが、invest.md からの実呼び出しは未検証）"
