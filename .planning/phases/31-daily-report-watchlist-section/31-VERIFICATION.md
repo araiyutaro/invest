@@ -1,20 +1,24 @@
 ---
 phase: 31-daily-report-watchlist-section
 verified: 2026-07-16T08:52:00Z
-status: human_needed
+status: passed
 score: 7/7 must-haves verified
 behavior_unverified: 0
 overrides_applied: 0
 human_verification:
+
   - test: "生成された docs/{date}/daily-report.html で「注目銘柄スコアリングマトリクス」直後・「WebSearch リサーチ結果」前にウォッチリストセクションが表示される（D-01 挿入順序）"
     expected: "配線コミット後にパイプラインを実行して生成した daily-report.html をブラウザで開き、セクション順序どおりに表示されること"
     why_human: "静的解析・単体テストではブラウザ実描画の視覚的な挿入位置・色味・レイアウトを直接確認できない。2026-07-16分のdaily-report.html（07:50生成）は配線コミット7f755c4（08:38）より前に生成されており、対象外。既に31-HUMAN-UAT.mdに7項目がpendingとして記録済み"
+
   - test: "buy/wait バッジの強度非対称（緑ピル vs グレーの控えめラベル）、as-of注記、判定理由、signalsピル、登録日メタ、skipped表示、会社名表示形式のブラウザ目視確認"
     expected: "31-HUMAN-UAT.mdのTest 2, 3, 5, 6の期待値どおりに表示される"
     why_human: "視覚的な強度・色の見え方はレンダリングされたブラウザ画面でのみ確認可能"
+
   - test: "前日比の変化バッジ（待ち→買い/買い→待ち）表示確認"
     expected: "31-HUMAN-UAT.mdのTest 4の期待値どおり、2日連続実行後に前日スナップショットとの比較で変化バッジが表示される"
     why_human: "2日以上の連続パイプライン実行が必要なため単発の静的検証では確認不可"
+
   - test: "他の3+1レポート（meeting-minutes/portfolio-report/news-digest）が配線後も継続生成される"
     expected: "31-HUMAN-UAT.mdのTest 7の期待値どおり、fail-soft特性により他レポートの生成・デプロイが影響を受けない"
     why_human: "実パイプライン実行（launchd朝実行または手動/invest実行）でのみ確認可能な運用挙動"

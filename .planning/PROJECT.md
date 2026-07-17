@@ -76,15 +76,11 @@ v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 - ✓ ニュースダイジェスト記事への当日ミーティング関連注記（TS側決定論マッチング・ticker優先+テーマ照合、fail-soft 専用STEPマーカー） — v2.6 (Phase 24, XREP-01/XREP-02)
 - ✓ 緊急度フラグ・判断の履歴監査トレイルを data/urgency-history.json に日次追記永続化（純関数 urgency-history.ts + fail-soft CLI write-urgency-history.ts、meeting-result date キー、同日上書きガード、Step 3f + Step 4 `git add docs/ data/`、全12銘柄スナップショット） — v2.6 (Phase 25, HIST-01/HIST-02)
 - ✓ portfolio-report.html に週次緊急ロールアップセクションを追加（純関数 urgency-rollup.ts が data/urgency-history.json を読み取り側で決定論的に集計: 直近7カレンダー日窓・記録隣接日 decision 差分・銘柄別緊急発生日、動きのあった銘柄のみ表示、3段階空/部分状態、null分岐含む両分岐描画、fail-soft ローダー loadUrgencyHistory、暦日不正/非オブジェクト/非文字列フィールドでも throw しない防御を実装） — v2.6 (Phase 26, HIST-03)
-
-### Active
-
-- [ ] 推奨銘柄候補（picks / highlightedStocks）からのETF除外（プロンプト指示＋TS側決定論的検証の二層防御）
-- [ ] 強気銘柄ウォッチリストの `data/` 永続化（日次追記、当日以降の蓄積）
-- [ ] ウォッチリスト銘柄の日次追跡データ供給（株価・テクニカル・関連ニュース）
-- [ ] 買いタイミング判定エージェント（LLM判定＋TS zod 検証ハイブリッド）
-- [ ] Daily Report ウォッチリストセクション（「今日買うべき / 待ち」バッジ＋判定理由）
-- [ ] ウォッチリスト自動除外（弱気/中立転落・portfolio.json 組入で購入済み）
+- ✓ 推奨銘柄候補（picks / highlightedStocks）からのETF除外（プロンプト指示＋TS側 quoteType!==EQUITY 決定論検証の二層防御） — v2.7 (Phase 27)
+- ✓ 強気銘柄ウォッチリストの `data/watchlist.json` 永続化（日次追記・ticker キー状態テーブル・addedDate/lastVerdictDate）と自動除外状態機械（purchased > downgraded > expired の3トリガー、理由付き history 保持、no-mention は現状維持） — v2.7 (Phase 28, WLST-01〜05)
+- ✓ ウォッチリスト銘柄の日次追跡データ供給（collect-watchlist-data.ts: テクニカルスナップショット + ID参照ニュースマップ、fail-soft） — v2.7 (Phase 29, TRAC-01〜03/OPS-06)
+- ✓ 買いタイミング判定エージェント（銘柄別並列 Agent + write-watchlist-judgment.ts の zod alias硬化検証・confluence ゲート・market/asOf 決定論付与・前日比較 actionChanged TS算出、fail-soft） — v2.7 (Phase 30)
+- ✓ Daily Report ウォッチリストセクション（buy=緑ピルバッジ/wait=控えめラベルの強度非対称、as-of注記・判定理由・signalsピル・登録日・方向別変化バッジ・skipped簡略表示、D-13 staleガード、fail-soft） — v2.7 (Phase 31、UAT 7/7 pass・実機デプロイ確認済み)
 
 ### Out of Scope
 
@@ -143,6 +139,10 @@ v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 | decisionChanged はTS側決定論的検出 | LLM自己申告を信用せず、前日スナップショットとの decision enum 等値比較で付与（TS専用フィールドはスキーマ transform で構造的に strip） | ✓ Good (Phase 22) |
 | independent-then-compare 構成 | 前日判断を「まず独立評価→その後比較」の順でプロンプト注入しアンカリングを抑制、同日再実行ガード付き退避 | ✓ Good (Phase 22) |
 | 新規組入候補はDaily Report専任 | ポートフォリオレポートの二重目的化を解消、highlightedStocks は文脈情報として受け渡しのみ維持 | ✓ Good (Phase 23) |
+| ウォッチリスト除外は理由付き history 追記（削除しない） | removedReason (purchased/downgraded/expired) で将来の的中率検証（WLST-F2）に備え履歴を保全 | ✓ Good (Phase 28) |
+| confluence ゲートはTS側決定論降格 | buy 判定に signals 2件以上を要求、未達は wait へ機械的降格（LLM自己申告を信用しない方針の踏襲） | ✓ Good (Phase 30) |
+| スナップショット欠落は陽性 skip レコード合成 | 省略ではなく status:skipped を明示記録し、「判定不能」と「リスト外」を下流レンダラーが区別可能に | ✓ Good (Phase 30/31, fail-soft実動確認済み) |
+| buy/wait バッジの視覚強度非対称 | buy のみピル型バッジで強調し wait は控えめなインラインラベル、行動が必要な日だけ目に飛び込む | ✓ Good (Phase 31) |
 
 ## Evolution
 
@@ -162,4 +162,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-15 after v2.7 milestone start (Entry Timing Watchlist & ETF Exclusion)*
+*Last updated: 2026-07-17 after Phase 31 (v2.7 全5フェーズ完了・UAT/verification passed)*

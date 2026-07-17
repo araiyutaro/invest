@@ -118,7 +118,7 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
 - [x] **Phase 28: Watchlist Persistence** - 強気銘柄を`data/watchlist.json`にティッカーキー方式で日次登録し、降格・購入済み・失効を理由付きで自動除外 (completed 2026-07-15)
 - [x] **Phase 29: Daily Tracking Data Supply** - ウォッチリスト銘柄の株価・テクニカル・関連ニュースを銘柄単位fail-softで収集し判定エージェントへ供給 (completed 2026-07-15)
 - [x] **Phase 30: Buy-Timing Judgment Agent** - 複数シグナル合致に基づく「今日買うべき/待つべき」判定をLLM+TS zod検証ハイブリッドで日次生成 (completed 2026-07-15)
-- [ ] **Phase 31: Daily Report Watchlist Section** - Daily Reportにウォッチリストセクションを追加し判定バッジ・理由・前日比変化を表示
+- [x] **Phase 31: Daily Report Watchlist Section** - Daily Reportにウォッチリストセクションを追加し判定バッジ・理由・前日比変化を表示 (completed 2026-07-17)
 
 ## Phase Details
 
@@ -294,7 +294,7 @@ Plans:
 | 28. Watchlist Persistence | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 29. Daily Tracking Data Supply | v2.7 | 3/3 | Complete   | 2026-07-15 |
 | 30. Buy-Timing Judgment Agent | v2.7 | 3/3 | Complete   | 2026-07-15 |
-| 31. Daily Report Watchlist Section | v2.7 | 3/3 | In Progress|  |
+| 31. Daily Report Watchlist Section | v2.7 | 3/3 | Complete    | 2026-07-17 |
 
 ---
 *Roadmap created: 2026-06-24*
