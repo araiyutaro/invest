@@ -1,14 +1,14 @@
 ---
-status: partial
+status: complete
 phase: 31-daily-report-watchlist-section
 source: [31-03-PLAN.md Task 2]
 started: 2026-07-16T08:40:00Z
-updated: 2026-07-16T14:55:00Z
+updated: 2026-07-17T10:25:00Z
 ---
 
 ## Current Test
 
-[testing paused — 1 item outstanding: Test 4（前日比変化バッジ、2026-07-17 朝の launchd 実行後に検証可能）]
+[testing complete]
 
 ## Tests
 
@@ -26,9 +26,8 @@ result: pass
 
 ### 4. 前日比変化バッジ確認
 expected: 前日から変化した銘柄があれば、待ち→買いは緑「シグナル点灯: 待ち → 買い」、買い→待ちはアンバー（#f59e0b）「買い → 待ち」バッジが表示される（UI-10）。
-result: blocked
-blocked_by: other
-reason: "前日スナップショット（tmp/prev-watchlist-judgment.json）との比較が必要で、2026-07-16 が判定初日のため実データでは検証不可。合成前日データでの UI 検証はユーザーが選択せず（blocked を選択）。2026-07-17 朝の launchd 実行後（2日目データが揃った時点）に検証する。"
+result: pass
+note: "2026-07-17 に合成テストで検証。実データでは検証不可だったため（07-17 朝の会議で ASML/GPC が中立降格→ウォッチリスト除外、新規 JNJ には前日判定なし）、合成前日データ（JNJ=buy）を一時配置し write-watchlist-judgment.ts → generate-report.ts の実コードパスで actionChanged=true を算出させ、アンバー（#f59e0b）「買い → 待ち」バッジの描画をブラウザで目視確認（pass）。確認後、実データを復元しレポートをデプロイ済み状態に戻した。緑「シグナル点灯: 待ち → 買い」方向は単体テストでカバー済み。"
 
 ### 5. skipped銘柄の表示確認
 expected: skipped 銘柄があればグレー系（opacity 0.7）の「判定不能（データ不足）」表示になっている（D-07）。
@@ -45,11 +44,11 @@ result: pass
 ## Summary
 
 total: 7
-passed: 6
+passed: 7
 issues: 0
 pending: 0
 skipped: 0
-blocked: 1
+blocked: 0
 
 ## Gaps
 
