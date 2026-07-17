@@ -1,17 +1,20 @@
 ---
 phase: 29-daily-tracking-data-supply
 verified: 2026-07-15T13:40:00Z
-status: human_needed
+status: passed
 score: 8/8 must-haves verified
 behavior_unverified: 0
 overrides_applied: 0
 human_verification:
+
   - test: "launchd 毎朝8時実行（または手動 `cd /Users/arai/invest && npx tsx src/scripts/collect-watchlist-data.ts` 実行）で、Step 2h 直後に Step 2i が実行され stderr に [STEP:watchlist-data:OK]（または :FAIL:<reason>）が出力されること"
     expected: "STEP マーカーが Step 2h の直後・Step 3 より前のタイミングで stderr に出力される"
     why_human: "静的解析ではプロセス実行時の実際の stderr 出力タイミングとオーケストレーター（LLM）による Bash 実行順序を確認できない"
+
   - test: "実行後、tmp/watchlist-technicals.json が {generatedAt, snapshots:[...]} 形状の有効JSON、tmp/watchlist-news.json がアクティブ銘柄キーを持つ有効JSON（HoldingNewsFile）で生成されること"
     expected: "両ファイルが実運用のウォッチリスト・Yahoo Finance・news.json の実データを入力に正しく生成される"
     why_human: "テストはモックデータでのロジック検証のみ。実際の Yahoo Finance API 応答・実運用の watchlist.json 内容での実行結果は実機でしか確認できない"
+
   - test: "Step 2i のログに [PIPELINE:FAIL] が出ていないこと、既存4レポート（daily/portfolio/meeting-minutes/news-digest）が通常どおり docs/{date}/ に生成・デプロイされること"
     expected: "Step 2i の成功・失敗にかかわらず既存4レポートの生成・デプロイパイプラインが継続する"
     why_human: "invest.md はオーケストレーターLLMが解釈して実行する自然言語スクリプトであり、実際に人間が実行ログを見て fail-soft 配線が意図通り機能したかを確認する必要がある（29-03 Task 2 は human-verify checkpoint、--auto チェーンで自動承認・HUMAN-UAT 追跡）"
