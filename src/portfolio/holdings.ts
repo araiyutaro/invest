@@ -24,4 +24,5 @@ export const PORTFOLIO_HOLDINGS: ReadonlyArray<PortfolioHolding> = [
   { symbol: "NXT", name: "Nextpower", nameJa: "ネクストパワー", sector: "Energy" },
   { symbol: "BWMX", name: "Betterware de Mexico", nameJa: "ベターウェア・デ・メヒコ", sector: "Consumer" },
   { symbol: "YOU", name: "Clear Secure", nameJa: "クリア・セキュア", sector: "Technology" },
+  { symbol: "ASML", name: "ASML Holding", nameJa: "ASMLホールディング", sector: "Technology" },
 ] as const;
