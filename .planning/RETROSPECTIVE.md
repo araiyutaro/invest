@@ -2,6 +2,47 @@
 
 *A living document updated after each milestone. Lessons feed forward into future planning.*
 
+## Milestone: v2.7 — Entry Timing Watchlist & ETF Exclusion
+
+**Shipped:** 2026-07-17
+**Phases:** 5 (27-31) | **Plans:** 15 | **Tasks:** 30
+
+### What Was Built
+- ETF二層防御除外: 5アナリスト+モデレーターへのプロンプト指示（Layer 1）+ TS側 quoteType!==EQUITY 決定論フィルタ（Layer 2, fail-closed）で picks/highlightedStocks からETFを構造的に排除 (Phase 27, ETF-01/02)
+- ウォッチリスト状態機械: data/watchlist.json への強気銘柄日次 admit（冪等 reconfirm・ETF第2ゲート）+ 3トリガー prune（purchased > downgraded > expired、理由付き history 保持で削除しない） (Phase 28, WLST-01〜05)
+- 追跡データ供給: collect-watchlist-data.ts がテクニカル（チャンク化・同日キャッシュ・銘柄単位fail-soft）とニュース（buildHoldingNewsMap 無改変流用）を独立ブランチで収集 (Phase 29, TRAC-01〜03/OPS-06)
+- 買いタイミング判定: 銘柄別並列 Agent（sonnet）→ write-watchlist-judgment.ts の zod alias硬化検証・confluence≥2 TS決定論降格・market/asOf 決定論再付与・前日比較 actionChanged 算出・skip陽性記録 (Phase 30, TIME-01〜05)
+- レポート描画: daily-report.html ウォッチリストセクション（buy緑ピル/wait控えめラベルの強度非対称・as-of注記・signalsピル・方向別変化バッジ・D-13 staleガード付き fail-soft ローダー） (Phase 31, UI-09/10)
+
+### What Worked
+- 「純関数モジュール → fail-soft CLI → invest.md 配線」の3プラン・フェーズテンプレートが5フェーズ全てで機能し、計画・実行が高速化（全フェーズ 3/3 プラン、プラン当たり2〜12分）
+- 監査駆動クローズの継続: /gsd-audit-milestone が初回で passed（要件18/18・統合10/10）。統合チェッカーが実デプロイ済み daily-report.html のライブ描画まで確認し、v2.6 の「タイミング継ぎ目」教訓（Step順序のgrep検証）が計画段階から反映されていたことを裏付けた
+- コードレビュー→fixer→回帰テストのループが Critical 4件（28 CR-01 reconfirmバイパス、29 CR-01 キャッシュ・トートロジー漏出、30 CR-01 prev全損経路・CR-02 0件分岐スキップ）を全てクローズ前に修正、各修正に回帰テストを追加（439→610テストへ増加）
+- HUMAN-UAT を実機ライブ実行（07-16/17 の launchd/手動パイプライン）でまとめて消化し、ログ・成果物からの自動検証（auto-verify）でユーザー負担を最小化 — v2.5 の教訓「溜めずにフルパイプライン1回で消化」を実行
+- Phase 22 パターン（independent-then-compare・同日再実行ガード・TS側変化検出）の watchlist 判定への流用が設計議論をほぼ不要にした
+
+### What Was Inefficient
+- レビューで Critical が3フェーズ連続検出（28/29/30） — 特に 29 CR-01（cachedTickers 自己参照フィルタで watchlist 外銘柄が漏出）は「フィルタが機能しない」実質 HOLLOW 状態で、TDD のテストが正常系キャッシュ命中に偏りクロス集合ケースを欠いていた
+- VALIDATION.md が5フェーズとも validate-phase 未照合のまま（status: planned/approved/draft/ready）でマイルストーンを通過 — Nyquist カバレッジは全フェーズ NOT-VALIDATED として監査に記録（コンプライアンス失敗ではないが、seed後の照合を実行する運用が確立していない）
+- Phase 27 の invest.md 配線コミットと当日レポート生成の時刻前後関係（配線 08:38 > 生成 07:50）で、当日中のライブ検証ができず翌日実行待ちが発生 — 配線系プランは朝のパイプライン実行前に完了させると1日早く検証できる
+
+### Patterns Established
+- 状態テーブルの除外は「削除」ではなく「理由付き history 追記」（removedReason enum）を標準形とし、事後検証（的中率レポート等）への拡張性を保全する
+- LLM判定の品質ゲートは「プロンプト契約（best-effort）+ TS側決定論降格（構造保証）」の二層で設計する（confluence≥2: プロンプトで要求しつつ applyConfluenceGate で機械的降格）
+- データ欠落は省略ではなく陽性 skip レコード（status:skipped）で明示記録し、下流が「判定不能」と「対象外」を区別できるようにする
+- 行動を促すバッジは視覚強度を非対称にする（buy のみピル強調、wait は控えめ）— 行動が必要な日だけ目に飛び込む
+
+### Key Lessons
+1. キャッシュ・マージ系の純関数は「キャッシュ側にしか無い要素」「対象集合外の要素」を含むクロス集合テストを最初に書く。自己参照フィルタ（cachedTickers で cache をフィルタ）はテストが通るのに何も除外しない。
+2. プロンプト契約の静的存在（grep で確認可能）と LLM の実遵守（実行でのみ確認可能）は別の検証層。後者は HUMAN-UAT に明示的に切り出し、実機ライブ実行1回でまとめて消化する。
+3. invest.md 配線プランは朝の定期パイプライン実行より前に完了させる（当日中にライブ検証が閉じ、翌日待ちを回避できる）。
+
+### Cost Observations
+- Model mix: メインセッション（設計・レビュー・監査・検証）は opus、executor/checker/judgment Agent 本番は sonnet 委譲
+- Notable: 3日間で146コミット・+5,242行（テスト含む）。判定エージェントを銘柄別並列 sonnet にしたことで本番実行コストを抑制。監査の統合チェッカー（sonnet, 約97秒）が9ホップの配線とライブ成果物確認を1パスで完了
+
+---
+
 ## Milestone: v2.6 — Digest-Meeting Cross-Reference & Urgency History
 
 **Shipped:** 2026-07-04
@@ -170,6 +211,7 @@
 | v2.4 | 4 | ID参照方式によるLLM幻覚の構造的防止 + fail-soft統合のライブ実証 |
 | v2.5 | 5 | LLM信頼境界の標準化（TS側決定論的検出 + alias硬化 + スキーマstrip）とv2.4パターン再利用 |
 | v2.6 | 3 | 監査駆動クローズへ回帰 — 統合チェッカーがクロスフェーズのタイミング継ぎ目（Step 3f書込 vs Step 3c読取の順序）を検出、クローズ前に修正 |
+| v2.7 | 5 | 「純関数→fail-soft CLI→invest.md配線」3プラン・テンプレートの標準化 + LLM判定の二層品質ゲート（プロンプト契約+TS決定論降格）+ 実機ライブ実行によるHUMAN-UAT一括消化 |
 
 ### Top Lessons (Verified Across Milestones)
 
