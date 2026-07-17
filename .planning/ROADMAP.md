@@ -9,7 +9,7 @@
 - ✅ **v2.4 News Curation Report** — Phases 15-18 (shipped 2026-07-03)
 - ✅ **v2.5 Portfolio News Intelligence** — Phases 19-23 (shipped 2026-07-04)
 - ✅ **v2.6 Digest-Meeting Cross-Reference & Urgency History** — Phases 24-26 (shipped 2026-07-04)
-- 🚧 **v2.7 Entry Timing Watchlist & ETF Exclusion** — Phases 27-31 (in progress)
+- ✅ **v2.7 Entry Timing Watchlist & ETF Exclusion** — Phases 27-31 (shipped 2026-07-17)
 
 ## Phases
 
@@ -110,154 +110,20 @@ Full details: `.planning/milestones/v2.6-ROADMAP.md`
 
 </details>
 
-### 🚧 v2.7 Entry Timing Watchlist & ETF Exclusion (Phases 27-31) — IN PROGRESS
+<details>
+<summary>✅ v2.7 Entry Timing Watchlist & ETF Exclusion (Phases 27-31) — SHIPPED 2026-07-17</summary>
 
 強気評価された個別銘柄（ETF除外）をウォッチリストとして永続追跡し、株価・ニュースに基づく日次の買いタイミング判定で「今日買うべき / 待つべき」を Daily Report に表示する。
 
-- [x] **Phase 27: ETF Exclusion** - アナリスト推奨銘柄からETFをプロンプト指示＋TS側`quoteType`決定論検証の二層防御で除外 (completed 2026-07-15)
-- [x] **Phase 28: Watchlist Persistence** - 強気銘柄を`data/watchlist.json`にティッカーキー方式で日次登録し、降格・購入済み・失効を理由付きで自動除外 (completed 2026-07-15)
-- [x] **Phase 29: Daily Tracking Data Supply** - ウォッチリスト銘柄の株価・テクニカル・関連ニュースを銘柄単位fail-softで収集し判定エージェントへ供給 (completed 2026-07-15)
-- [x] **Phase 30: Buy-Timing Judgment Agent** - 複数シグナル合致に基づく「今日買うべき/待つべき」判定をLLM+TS zod検証ハイブリッドで日次生成 (completed 2026-07-15)
-- [x] **Phase 31: Daily Report Watchlist Section** - Daily Reportにウォッチリストセクションを追加し判定バッジ・理由・前日比変化を表示 (completed 2026-07-17)
+- [x] **Phase 27: ETF Exclusion** (3/3 plans) — completed 2026-07-15 — アナリスト推奨銘柄からETFをプロンプト指示＋TS側`quoteType`決定論検証の二層防御で除外
+- [x] **Phase 28: Watchlist Persistence** (3/3 plans) — completed 2026-07-15 — 強気銘柄を`data/watchlist.json`にティッカーキー方式で日次登録し、降格・購入済み・失効を理由付きで自動除外
+- [x] **Phase 29: Daily Tracking Data Supply** (3/3 plans) — completed 2026-07-15 — ウォッチリスト銘柄の株価・テクニカル・関連ニュースを銘柄単位fail-softで収集し判定エージェントへ供給
+- [x] **Phase 30: Buy-Timing Judgment Agent** (3/3 plans) — completed 2026-07-15 — 複数シグナル合致に基づく「今日買うべき/待つべき」判定をLLM+TS zod検証ハイブリッドで日次生成
+- [x] **Phase 31: Daily Report Watchlist Section** (3/3 plans) — completed 2026-07-17 — Daily Reportにウォッチリストセクションを追加し判定バッジ・理由・前日比変化を表示
 
-## Phase Details
+Full details: `.planning/milestones/v2.7-ROADMAP.md`
 
-### Phase 27: ETF Exclusion
-
-**Goal**: アナリストが推奨する銘柄候補（picks / highlightedStocks）からETFが構造的に排除され、ウォッチリストや各レポートのハイライト銘柄に一切ETFが混入しない
-**Depends on**: Nothing (first phase of v2.7)
-**Requirements**: ETF-01, ETF-02
-**Success Criteria** (what must be TRUE):
-
-  1. 全5アナリストエージェントのプロンプトに、ETFを推奨銘柄（picks）から除外する明示的指示が含まれている
-  2. meeting-result確定後、TS側で`yahoo-finance2`の`quote().quoteType`照合により、米国ETF・日本ETF（`.T`サフィックスでは判別不能なため`quoteType`必須）の両方がhighlightedStocksから決定論的に除外される
-  3. 個別銘柄のquoteType lookupに失敗した場合でもパイプラインがthrowせず、安全側（除外 or 通過の明示方針）で処理が継続する
-  4. 除外ロジックの単体テストが米国ETF・日本ETF・個別株それぞれの分類を正しく検証している
-
-**Plans**: 3/3 plans complete
-Plans:
-**Wave 1**
-
-- [x] 27-01-PLAN.md — 純関数 etf-exclusion.ts（quoteType allowlist フィルタ + 単体テスト, TDD）
-
-**Wave 2** *(blocked on Wave 1 completion)*
-
-- [x] 27-02-PLAN.md — fail-soft CLI filter-etf-stocks.ts（単一 batch quote 照合 + 書き戻し + テスト）
-
-**Wave 3** *(blocked on Wave 2 completion)*
-
-- [x] 27-03-PLAN.md — invest.md 配線（5アナリスト+モデレーターのプロンプト指示 + Step 2g wiring）
-
-### Phase 28: Watchlist Persistence
-
-**Goal**: 当日「強気」評価された銘柄（ETF除外後）が`data/watchlist.json`に日次で蓄積され、降格・購入・長期未確認の各理由に応じて理由付きで自動除外される、監査可能な状態テーブルとして機能する
-**Depends on**: Phase 27 (ETF除外済みのhighlightedStocksが入力となるため)
-**Requirements**: WLST-01, WLST-02, WLST-03, WLST-04, WLST-05
-**Success Criteria** (what must be TRUE):
-
-  1. 当日ミーティングで`verdict: 強気`となった銘柄（ETF除外後）が、ティッカーキー方式の`data/watchlist.json`に`addedDate`/`lastVerdictDate`付きで自動登録される（過去分の遡及なし、当日以降のみ）
-  2. 翌日以降の再評価でverdictが中立/弱気に転落した銘柄は、レコード削除ではなく`removedReason: downgraded`付きでウォッチリストから除外される
-  3. portfolio.jsonの保有銘柄に現れたティッカーは`removedReason: purchased`付きで自動除外される
-  4. 強気再確認が一定期間（設計時に確定する日数）ない銘柄は`removedReason: expired`付きで時間ベースに自動失効し、リストが無限に肥大しない
-  5. 除外・失効後もレコードは履歴として保持され、いつ・なぜ除外されたかを追跡できる
-
-**Plans**: 3/3 plans complete
-Plans:
-
-**Wave 1**
-
-- [x] 28-01-PLAN.md — 純関数 watchlist.ts（型定義・admitBullishStocks・pruneWatchlist・EXPIRY_CALENDAR_DAYS・getActiveWatchlistEntries + 単体テスト, TDD, WLST-01〜05）
-
-**Wave 2** *(blocked on Wave 1 completion)*
-
-- [x] 28-02-PLAN.md — fail-soft CLI write-watchlist.ts（batch quote() で quoteType+社名, ENOENT/破損二段フェイル, prune→admit 合成, [STEP:watchlist:*] マーカー + テスト）
-
-**Wave 3** *(blocked on Wave 2 completion)*
-
-- [x] 28-03-PLAN.md — invest.md 配線（Step 2g 直後に write-watchlist 新ステップを fail-soft 挿入 + launchd 実行の human-verify）
-
-### Phase 29: Daily Tracking Data Supply
-
-**Goal**: ウォッチリストに登録された各銘柄について、当日の株価・テクニカル指標・関連ニュースが判定エージェントへ確実に供給され、1銘柄の取得失敗が他銘柄処理やパイプライン全体を止めない
-**Depends on**: Phase 28 (追跡対象となるアクティブなウォッチリストが存在すること)
-**Requirements**: TRAC-01, TRAC-02, TRAC-03, OPS-06
-**Success Criteria** (what must be TRUE):
-
-  1. ウォッチリスト銘柄それぞれの当日株価・テクニカル指標（MA/RSI/出来高等）が`collect-technicals`パターンを流用して日次収集される
-  2. ウォッチリスト銘柄それぞれの関連ニュースが`tmp/news.json`から`holding-news`パターン流用のTS側決定論マッチングで抽出される
-  3. 追跡データ収集は銘柄単位でfail-softに実装されており、1銘柄のAPI取得失敗（レート制限含む）が他銘柄の処理やパイプライン全体の失敗につながらないことがテストで確認できる
-  4. 新パイプラインステップに専用`[STEP:*]`マーカーがあり、失敗時も既存4レポートの生成・デプロイが継続する
-
-**Plans**: 3/3 plans complete
-
-Plans:
-
-**Wave 1**
-
-- [x] 29-01-PLAN.md — 純関数 watchlist-data.ts（toPortfolioHoldingShape/mergeWithCache/chunk/fetchChunked + 名前付き定数, TDD, TRAC-01/02/03）
-
-**Wave 2** *(blocked on Wave 1 completion)*
-
-- [x] 29-02-PLAN.md — fail-soft CLI collect-watchlist-data.ts（同日キャッシュ+チャンク取得、buildHoldingNewsMap無改変流用、テクニカル/ニュース独立fail-soft、[STEP:watchlist-data:*]マーカー + テスト, TRAC-01/02/03/OPS-06）
-
-**Wave 3** *(blocked on Wave 2 completion)*
-
-- [x] 29-03-PLAN.md — invest.md 配線（Step 2h 直後に Step 2i を fail-soft 挿入 + launchd 実行の human-verify, OPS-06）
-
-### Phase 30: Buy-Timing Judgment Agent
-
-**Goal**: ウォッチリスト銘柄それぞれについて、供給された実データに基づく複数シグナル合致の根拠を伴う「今日買うべき / 待つべき」の日次判定が、前日との比較を踏まえてブレなく生成される
-**Depends on**: Phase 29 (判定に必要な株価・テクニカル・ニュースデータが供給されていること)
-**Requirements**: TIME-01, TIME-02, TIME-03, TIME-04, TIME-05
-**Success Criteria** (what must be TRUE):
-
-  1. 判定エージェントがウォッチリスト銘柄ごとに「今日買うべき / 待つべき」の二値判定と判定理由を日次で出力する
-  2. 判定出力はTS側zodスキーマ（`passthrough().transform()`によるalias硬化）で検証され、LLMが不正・ゆらぎのあるフィールド名を出力してもパイプラインが停止しない
-  3. 前日の判定スナップショットがindependent-then-compare方式でプロンプトに注入され、判定が「待ち→買い」等に変化した場合はTS側決定論で検出される（Phase 22 decisionChangedパターン流用、フリップフロップ緩和）
-  4. 判定理由が実際に供給されたデータの複数シグナル合致（confluence ≥2、例: MA位置＋RSI＋出来高＋ニュース材料）に基づいており、存在しない指標値を創作していないことがプロンプト契約とレビューで確認できる
-  5. 米国株は前日終値ベース、日本株は寄付き前という基準時点の違いが、判定入力（as-ofタイムスタンプ）と表示の両方で区別され、ルックアヘッドバイアスが構造的に防止される
-
-**Plans**: 3/3 plans complete
-
-Plans:
-
-**Wave 1**
-
-- [x] 30-01-PLAN.md — 決定論コア（WatchlistJudgment 型・二段階 alias 硬化スキーマ・confluence ゲート・変化検出・market/asOf 導出・skip 記録の純関数 + 単体テスト, TDD, TIME-02/03/04/05）
-
-**Wave 2** *(blocked on Wave 1 completion)*
-
-- [x] 30-02-PLAN.md — fail-soft CLI write-watchlist-judgment.ts（銘柄別 raw 独立検証・confluence 降格・market/asOf 決定論付与・前日比較・[STEP:watchlist-judgment:*] マーカー + テスト, TIME-01/02/03/05）
-
-**Wave 3** *(blocked on Wave 2 completion)*
-
-- [x] 30-03-PLAN.md — invest.md 配線（Step 3-P 直後に Step 3-J を挿入: 前日退避・model:sonnet 並列 Agent・二層防御プロンプト契約・CLI 呼び出し + launchd 実行の human-verify, TIME-01/03/04/05）
-
-### Phase 31: Daily Report Watchlist Section
-
-**Goal**: Daily Reportの閲覧者が、ウォッチリスト銘柄ごとの「今日買うべき」判定と前日からの変化を一目で把握できる
-**Depends on**: Phase 30 (表示する判定データが存在すること)
-**Requirements**: UI-09, UI-10
-**Success Criteria** (what must be TRUE):
-
-  1. Daily Reportにウォッチリストセクションが追加され、各銘柄に「今日買うべき」バッジ（または「待ち」表示）・判定理由・会社名が表示される
-  2. 前日からの判定変化（新規買いシグナル点灯・買い→待ち転落）が、既存のurgent/decisionChangedバッジと同様の視覚様式で区別表示される
-  3. ウォッチリストが空・1件・複数件のいずれの状態でもレポートが正常に描画される（fail-softローダー、既存3+1レポートの生成・デプロイへの影響なし）
-
-**Plans**: 3/3 plans executed
-
-Plans:
-
-**Wave 1** *(parallel — disjoint files)*
-
-- [x] 31-01-PLAN.md — fail-soft ローダー loadWatchlistJudgment（D-13 stale ガード）/ loadWatchlist を report-data-loaders.ts に新設（TDD, UI-09）
-- [x] 31-02-PLAN.md — formatWatchlistSectionHtml + カード/バッジ純関数群を generate-daily-report.ts に追加し scoringSection 直後に挿入・シグネチャ後方互換拡張（TDD, UI-09/UI-10）
-
-**Wave 2** *(blocked on Wave 1 completion)*
-
-- [x] 31-03-PLAN.md — generate-report.ts 配線（Promise.all にローダー2件追加・generateDailyReportHtml 6引数呼び出し + 実描画 human-verify, UI-09/UI-10/OPS-06）
-
-**UI hint**: yes
+</details>
 
 ## Progress
 
@@ -305,4 +171,4 @@ Plans:
 *Milestone v2.4 shipped: 2026-07-03*
 *Milestone v2.5 shipped: 2026-07-04*
 *Milestone v2.6 shipped: 2026-07-04*
-*Milestone v2.7 roadmap created: 2026-07-15*
+*Milestone v2.7 shipped: 2026-07-17*

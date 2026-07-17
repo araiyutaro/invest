@@ -10,29 +10,11 @@
 
 ## Current State
 
-**Shipped:** v2.5 Portfolio News Intelligence (2026-07-04)
+**Shipped:** v2.7 Entry Timing Watchlist & ETF Exclusion (2026-07-17)
 
-v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、ニュース/分析/運用安定性/レポートUIの総合底上げ、AI厳選ニュースダイジェスト（news-digest.html）の4紙目追加、そして保有銘柄ごとのニュース・WebSearchリサーチを踏まえた売却・保有再考（v1.0「Web調査後の再評価」フローのv2.x再実装）を完了。ポートフォリオレポートは保有銘柄の意思決定に集中し、各保有銘柄カードにID参照方式の関連ニュース・緊急度フラグ（赤バッジ）・前日比の判断変化バッジ（TS側決定論的検出）を表示する。12銘柄のWebSearchリサーチは fail-soft な専用パイプラインステップ（Step 3-P）として実行され、失敗しても4レポートの生成・デプロイは継続する。
+v2.0〜v2.7で、Gemini→Claude Code移行、3レポート構成復元、ニュース品質フィルタ、パイプライン計測、運用安定性・レポートUIの総合底上げ、AI厳選ニュースダイジェスト（4紙目）、保有銘柄インテリジェンス（緊急度フラグ・判断変化検出・履歴永続化）、そしてエントリータイミング支援を完了。v2.7では、強気評価された個別銘柄（ETF二層防御除外後）を `data/watchlist.json` に状態テーブルとして永続追跡し、株価テクニカル・ニュースの日次供給に基づく買いタイミング判定エージェント（LLM判定＋TS決定論検証ハイブリッド、confluence≥2ゲート・前日比較 actionChanged 検出）が「今日買うべき / 待つべき」を Daily Report のウォッチリストセクションに描画する。全新規ステップ（2g/2h/2i/3-J）は fail-soft で、失敗しても既存4レポートの生成・デプロイは継続する。
 
-**Current state:** v2.6 Digest-Meeting Cross-Reference & Urgency History を **2026-07-04 に shipped・アーカイブ**（`.planning/milestones/v2.6-*`）。残タスク: Phase 24 および Phase 20/21/22 の HUMAN-UAT ライブ実行確認（launchd 日次実行で消化可能、STATE.md Deferred Items で追跡）。**2026-07-15 に v2.7 Entry Timing Watchlist & ETF Exclusion を開始。**
-
-## Current Milestone: v2.7 Entry Timing Watchlist & ETF Exclusion
-
-**Goal:** 強気評価された個別銘柄（ETF除外）をウォッチリストとして永続追跡し、株価・ニュースに基づく日次の買いタイミング判定で「今日買うべき / 待つべき」を Daily Report に表示する。
-
-**Target features:**
-- ETFの推奨候補からの除外 — アナリストの推奨銘柄（picks / highlightedStocks）からETFを排除。プロンプト指示に加えTS側でも決定論的に検証・除外（二層防御）
-- ウォッチリスト永続化 — 当日 `verdict: 強気` の全銘柄（ETF除外後）を `data/` のウォッチリストに日次追記。今日以降の蓄積で開始（過去分の遡及なし）
-- 日次追跡データ供給 — ウォッチリスト銘柄の当日株価・テクニカル指標・関連ニュースを収集し判定エージェントに注入（collect-technicals / holding-news と同じ決定論的抽出方針）
-- 買いタイミング判定（LLM判定＋TS検証ハイブリッド） — 専用エージェントが銘柄ごとに「今日買うべき / 待つべき」を理由付きで判定し、TS側で zod スキーマ検証（alias硬化）
-- Daily Report ウォッチリストセクション — 各銘柄に「今日買うべき」バッジ（または「待ち」表示）と判定理由を表示
-- 自動除外ルール（TS側決定論） — ①再評価で verdict が中立/弱気に転落したら除外、②portfolio.json に追加されたら「購入済み」として除外
-
-**Key context:**
-- ETF除外はウォッチリストの入口より前段（推奨銘柄の選定段階）で適用し、Daily Report のハイライト銘柄自体からETFを排除
-- 判定根拠の構造検証・除外判定はTS側決定論で実装（LLM自己申告を信用しない v2.5/2.6 方針を踏襲）
-- 新パイプラインステップは fail-soft 設計（失敗しても既存4レポートの生成・デプロイを継続）
-- ウォッチリストは公開 docs/ ではなく非公開の `data/` に保存（urgency-history.json と同じ配置）
+**Current state:** v2.7 を **2026-07-17 に shipped・アーカイブ**（`.planning/milestones/v2.7-*`）。監査 passed（要件18/18・統合10/10）、全フェーズ UAT complete（実機ライブ実行確認済み）。次マイルストーンは未定（Future Requirements: WLST-F1 保有銘柄買い増しタイミング判定、WLST-F2 買いシグナル的中率の事後検証）。
 
 ## Requirements
 
@@ -106,6 +88,7 @@ v2.0〜v2.5で、Gemini→Claude Code移行、3レポート構成復元、ニュ
 - パイプライン実行時間を performance.now() で計測し、ステップ別に最終出力表示
 - v2.4 で4紙目の news-digest.html を追加: news-curator（opus 2体並列）が tmp/news.json のID付き記事プールから10〜15件を選定 → tmp/news-curation.json（ID参照方式）→ write-news-digest.ts が zod 二層バリデーション + generateNewsDigestHtml で描画。fail-soft設計（専用 [STEP:news-digest:*] マーカー、失敗時も既存3レポート継続）。index.html リンクは fs.access() 実在チェックで条件付き出し分け
 - v2.5 で保有銘柄インテリジェンスを追加: buildHoldingNewsMap（holding-news.ts）が tmp/news.json から ticker一致+社名フォールバックで保有銘柄別ニュースを決定論的に抽出 → tmp/holding-news.json → portfolio-analyst プロンプト注入。invest.md Step 3-P が保有12銘柄のWebSearchリサーチを並列実行し tmp/portfolio-research/{symbol}.json へ分離保存（fail-soft、[STEP:portfolio-research:*]）。HoldingEvaluation は urgent フラグ（alias硬化）を持ち、decisionChanged は attachDecisionChanges（decision-diff.ts）が前日スナップショットとの等値比較でTS側決定論的に付与。保有銘柄カードに関連ニュースサブセクション・緊急/判断変更バッジを描画。新規組入候補セクションは削除済み
+- v2.7 でエントリータイミング支援を追加: filter-etf-stocks.ts（Step 2g）が highlightedStocks から quoteType!==EQUITY を決定論除外（fail-closed）→ write-watchlist.ts（Step 2h）が強気銘柄を data/watchlist.json 状態機械に admit/prune（purchased>downgraded>expired、理由付き history 保持）→ collect-watchlist-data.ts（Step 2i）がテクニカル+ニュースをチャンク化 fail-soft 収集 → Step 3-J で銘柄別並列 Agent（sonnet）の判定を write-watchlist-judgment.ts が zod alias硬化検証・confluence≥2ゲート・market/asOf 決定論付与・前日比較 actionChanged 算出 → daily-report.html のウォッチリストセクションに buy/wait バッジ・判定理由・変化バッジを描画（D-13 stale ガード付きローダー）
 
 ## Constraints
 
@@ -162,4 +145,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-17 after Phase 31 (v2.7 全5フェーズ完了・UAT/verification passed)*
+*Last updated: 2026-07-17 after v2.7 milestone*

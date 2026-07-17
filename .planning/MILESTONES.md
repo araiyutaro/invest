@@ -1,5 +1,29 @@
 # Milestones
 
+## v2.7 Entry Timing Watchlist & ETF Exclusion (Shipped: 2026-07-17)
+
+**Phases completed:** 5 phases, 15 plans, 30 tasks
+
+**Key accomplishments:**
+
+- filterEtfStocks pure classification function (D-01 fail-closed + D-04 EQUITY allowlist) built via TDD, mirroring the urgency-history.ts pure-module pattern
+- filter-etf-stocks.ts fail-soft CLI wrapper built via TDD: single batched yahoo-finance2 quote() call classifies highlightedStocks tickers, then rewrites tmp/meeting-result.json with ETFs deterministically excluded
+- 5アナリスト+モデレーターのプロンプト（Layer 1）と Step 2g パイプライン統合（Layer 2, filter-etf-stocks.ts の fail-soft wiring）を invest.md に配線し、ETF除外の二層防御を完成させた
+- 純関数モジュール src/portfolio/watchlist.ts — admitBullishStocks（強気登録・冪等・ETF第2ゲート）とpruneWatchlist（3トリガー除外・履歴保持）でウォッチリスト状態機械を実装、20件のvitestテストで全WLST要件を検証
+- fail-soft CLI ラッパー write-watchlist.ts — batch quote()1回でquoteType+社名を取得しPlan 01の純関数(prune→admit)を合成、二段フェイル(ENOENT/破損)とSTEPマーカーでdata/watchlist.jsonを日次更新、11件のvitestテスト+実quote()スモークテストで検証
+- invest.md Step 2g（filter-etf-stocks→validate-meeting）直後・Step 3前にwrite-watchlist.ts実行のStep 2hをfail-softで挿入し、オーケストレーター実施のスモークテスト（POWL個別株+SPY ETF fixture）で[STEP:watchlist:OK]・data/watchlist.json生成・ETF第2ゲート除外を確認、実launchd実行のライブ検証3項目はHUMAN-UATとして保留
+- ウォッチリスト銘柄のテクニカル収集に必要な4純関数（形状マップ/キャッシュ突き合わせ/チャンク分割/チャンク単位フェイルソフト並列取得）をTDDで実装、fetchTechnicalSnapshots複数形への依存ゼロで並列度を構造的に制限
+- 単一の fail-soft CLI `collect-watchlist-data.ts` がウォッチリスト銘柄の株価テクニカルと関連ニュースを独立ブランチで収集し、同日キャッシュ再利用・チャンク取得・銘柄単位fail-softで2つの下流供給ファイルを生成
+- collect-watchlist-data.ts（29-02成果物）をinvest.mdの新Step 2iとしてStep 2h直後・Step 3より前にfail-soft配線し、日次パイプラインへの組み込みを完了
+- LLM出力契約を二段階alias硬化スキーマで防御し、confluenceゲート・変化検出・market導出・skip陽性記録の4純関数をTDDで実装（TIME-02〜05）
+- Plan 01の決定論コア（watchlistJudgmentSchema/applyConfluenceGate/attachActionChanges/deriveMarket/buildSkippedJudgment）を組み込むfail-soft CLIをTDDで実装し、銘柄別raw JSON検証→confluenceゲート→market/asOf決定論再付与→前日比較の全パイプラインをthrowなしで完遂
+- invest.md に Step 3-J（買いタイミング判定）を Step 3-P 直後・Step 3c より前に挿入し、前日退避・raw リセット・銘柄別 model:sonnet 並列 Agent・二層防御プロンプト契約・write-watchlist-judgment.ts CLI 呼び出しを配線。実機ライブ検証は 30-HUMAN-UAT.md へ永続追跡として委譲
+- Two new throw-free loaders (loadWatchlistJudgment / loadWatchlist) added to report-data-loaders.ts via strict TDD, including a D-13 stale-date guard that prevents a leftover prior-day judgment file from being displayed as today's data.
+- Pure HTML-string rendering functions (formatWatchlistSectionHtml + 3 helpers) added to generate-daily-report.ts to display buy-timing judgments as badged cards, inserted between the scoring matrix and WebSearch sections with fully backward-compatible optional params.
+- generate-report.ts の main() が loadWatchlistJudgment/loadWatchlist を Promise.all に追加し、generateDailyReportHtml へ判定データとウォッチリストを渡すことで、Plan 01 の fail-soft ローダーと Plan 02 のセクション描画を実パイプラインに統合した。
+
+---
+
 ## v2.6 Digest-Meeting Cross-Reference & Urgency History (Shipped: 2026-07-04)
 
 **Phases completed:** 3 phases, 8 plans, 18 tasks
