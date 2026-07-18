@@ -26,8 +26,13 @@
   "JNJ": {
     "ticker": "JNJ",
     "name": "Johnson & Johnson",
-    "addedDate": "2026-07-17",
-    "lastVerdictDate": "2026-07-18",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-07-17",
+        "lastVerdictDate": "2026-07-18",
+        "removedReason": "downgraded",
+        "removedDate": "2026-07-19"
+      }
+    ]
   }
 }
