@@ -1084,5 +1084,72 @@
       "urgent": false,
       "decision": "保持"
     }
+  ],
+  "2026-07-20": [
+    {
+      "symbol": "MRNA",
+      "nameJa": "モデルナ",
+      "urgent": false
+    },
+    {
+      "symbol": "JOBY",
+      "nameJa": "ジョビー・アビエーション",
+      "urgent": false
+    },
+    {
+      "symbol": "HII",
+      "nameJa": "ハンティントン・インガルス",
+      "urgent": false
+    },
+    {
+      "symbol": "POWL",
+      "nameJa": "パウエル・インダストリーズ",
+      "urgent": false
+    },
+    {
+      "symbol": "EE",
+      "nameJa": "エクセラレート・エナジー",
+      "urgent": false
+    },
+    {
+      "symbol": "NXT",
+      "nameJa": "ネクストラッカー",
+      "urgent": false
+    },
+    {
+      "symbol": "BWMX",
+      "nameJa": "ベターウェア・デ・メキシコ",
+      "urgent": false
+    },
+    {
+      "symbol": "YOU",
+      "nameJa": "クリア・セキュア",
+      "urgent": false
+    },
+    {
+      "symbol": "ASML",
+      "nameJa": "ASMLホールディング",
+      "urgent": false
+    },
+    {
+      "symbol": "8522.T",
+      "nameJa": "名古屋銀行",
+      "urgent": false
+    },
+    {
+      "symbol": "5885.T",
+      "nameJa": "ジーデップ・アドバンス",
+      "urgent": false
+    },
+    {
+      "symbol": "5576.T",
+      "nameJa": "オービーシステム",
+      "urgent": false
+    },
+    {
+      "symbol": "7711.T",
+      "nameJa": "助川電気工業",
+      "urgent": false
+    }
   ]
 }
