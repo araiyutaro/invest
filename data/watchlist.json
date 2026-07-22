@@ -34,5 +34,12 @@
         "removedDate": "2026-07-19"
       }
     ]
+  },
+  "NEE": {
+    "ticker": "NEE",
+    "name": "NextEra Energy, Inc.",
+    "addedDate": "2026-07-23",
+    "lastVerdictDate": "2026-07-23",
+    "history": []
   }
 }
