@@ -41,5 +41,26 @@
     "addedDate": "2026-07-23",
     "lastVerdictDate": "2026-07-23",
     "history": []
+  },
+  "ATRC": {
+    "ticker": "ATRC",
+    "name": "AtriCure, Inc.",
+    "addedDate": "2026-07-24",
+    "lastVerdictDate": "2026-07-24",
+    "history": []
+  },
+  "VST": {
+    "ticker": "VST",
+    "name": "Vistra Corp.",
+    "addedDate": "2026-07-24",
+    "lastVerdictDate": "2026-07-24",
+    "history": []
+  },
+  "FCX": {
+    "ticker": "FCX",
+    "name": "Freeport-McMoRan Inc.",
+    "addedDate": "2026-07-24",
+    "lastVerdictDate": "2026-07-24",
+    "history": []
   }
 }
