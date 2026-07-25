@@ -46,21 +46,31 @@
     "ticker": "ATRC",
     "name": "AtriCure, Inc.",
     "addedDate": "2026-07-24",
-    "lastVerdictDate": "2026-07-24",
+    "lastVerdictDate": "2026-07-26",
     "history": []
   },
   "VST": {
     "ticker": "VST",
     "name": "Vistra Corp.",
-    "addedDate": "2026-07-24",
-    "lastVerdictDate": "2026-07-24",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-07-24",
+        "lastVerdictDate": "2026-07-24",
+        "removedReason": "downgraded",
+        "removedDate": "2026-07-26"
+      }
+    ]
   },
   "FCX": {
     "ticker": "FCX",
     "name": "Freeport-McMoRan Inc.",
-    "addedDate": "2026-07-24",
-    "lastVerdictDate": "2026-07-24",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-07-24",
+        "lastVerdictDate": "2026-07-24",
+        "removedReason": "downgraded",
+        "removedDate": "2026-07-26"
+      }
+    ]
   }
 }
