@@ -45,9 +45,14 @@
   "ATRC": {
     "ticker": "ATRC",
     "name": "AtriCure, Inc.",
-    "addedDate": "2026-07-24",
-    "lastVerdictDate": "2026-07-26",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-07-24",
+        "lastVerdictDate": "2026-07-26",
+        "removedReason": "downgraded",
+        "removedDate": "2026-07-28"
+      }
+    ]
   },
   "VST": {
     "ticker": "VST",
