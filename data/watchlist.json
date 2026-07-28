@@ -77,5 +77,12 @@
         "removedDate": "2026-07-26"
       }
     ]
+  },
+  "FDX": {
+    "ticker": "FDX",
+    "name": "FedEx Corporation",
+    "addedDate": "2026-07-29",
+    "lastVerdictDate": "2026-07-29",
+    "history": []
   }
 }
