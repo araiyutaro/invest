@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Investment Report - 2026-07-31</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      color: #fff;
+      border-bottom: 2px solid #3b82f6;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: #60a5fa;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #3b82f6;
+      padding-left: 0.8rem;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #93c5fd;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: #a5b4fc;
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+    p { margin-bottom: 0.8rem; }
+    ul { list-style: none; padding-left: 0; margin-bottom: 1rem; }
+    li {
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.3rem;
+      background: #1e1e2e;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+    }
+    strong { color: #fbbf24; }
+    hr {
+      border: none;
+      border-top: 1px solid #333;
+      margin: 2rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #1e1e2e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    tr:first-child td {
+      background: #2a2a3e;
+      font-weight: bold;
+      color: #93c5fd;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+    .timestamp {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .agent-card {
+      background: #1e1e2e;
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #6366f1;
+    }
+    .agent-card h4 { color: #a5b4fc; margin-top: 0; }
+    .discussion-card {
+      background: #1a1a28;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #f59e0b;
+    }
+    .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    .ticker-pill {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #3f3f5a;
+    }
+    .news-meta {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .digest-crossref-chip {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #a78bfa;
+    }
+    .digest-crossref-row {
+      margin-bottom: 0.5rem;
+    }
+    .news-card a {
+      color: #93c5fd;
+    }
+    .news-card a:visited {
+      color: #c4b5fd;
+    }
+    .news-card a:hover {
+      color: #bfdbfe;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Investment Report - 2026-07-31</h1>
+    <p class="timestamp">Generated: 2026/8/1 7:48:48</p>
+    <hr>
+    <h2>市場概況</h2>
+    <div class="agent-card">
+      <p><strong>トレンド:</strong> <span style="color:#f59e0b">混合</span></p>
+      <p>本日はMSFT+16%・AAPL+27%・Amazonの好決算を起点に大型テック主導の強烈なリスクオンが発生し、S&amp;P500+1.66%・NASDAQ+2.78%と主要指数が上昇、VIXは20.66から17.09へ-17.28%急落しました。ただし上昇の中身はTechセクター単独+5.50%への一極集中で、Communication Services -2.68%・Consumer Staples -2.16%・Healthcare -1.64%と半数のセクターが下落しており市場ブレッドスは極めて狭い状態です。円は157円台へ急騰し日銀会合を控える中、円キャリー巻き戻しと原油急騰の複合ショック、FRB内3名の利上げ主張という金融政策リスクが燻っています。VIX単日急落を本格的なリスクオンの号砲と見るのは早計で、恐怖の消滅ではなく先送りと解釈すべき局面です。</p>
+      <ul><li>S&amp;P 500: <span style="color:#10b981">+1.66%</span></li>
+<li>NASDAQ: <span style="color:#10b981">+2.78%</span></li>
+<li>ダウ: <span style="color:#10b981">+1.19%</span></li>
+<li>日経225: <span style="color:#10b981">+0.71%</span></li>
+<li>VIX: <span style="color:#ef4444">-17.28%</span></li></ul>
+    </div>
+    <hr>
+    <h2>セクターパフォーマンス</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 400 352" width="100%" role="img" aria-label="セクターパフォーマンス">
+    <line x1="270" y1="0" x2="270" y2="352" stroke="#333" stroke-width="1"/>
+    
+      <text x="132" y="16" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Discretionary</text>
+      <rect x="270" y="0" width="126" height="24" fill="#10b981" rx="2"/>
+      <text x="400" y="16" font-size="13" fill="#e0e0e0" text-anchor="start">+3.29%</text>
+    
+      <text x="132" y="48" font-size="13" fill="#e0e0e0" text-anchor="end">Communication Services</text>
+      <rect x="270" y="32" width="59.61126940250904" height="24" fill="#10b981" rx="2"/>
+      <text x="333.61126940250904" y="48" font-size="13" fill="#e0e0e0" text-anchor="start">+1.56%</text>
+    
+      <text x="132" y="80" font-size="13" fill="#e0e0e0" text-anchor="end">Energy</text>
+      <rect x="270" y="64" width="38.29946842440995" height="24" fill="#10b981" rx="2"/>
+      <text x="312.29946842440995" y="80" font-size="13" fill="#e0e0e0" text-anchor="start">+1.00%</text>
+    
+      <text x="132" y="112" font-size="13" fill="#e0e0e0" text-anchor="end">Industrials</text>
+      <rect x="270" y="96" width="31.109572613225602" height="24" fill="#10b981" rx="2"/>
+      <text x="305.1095726132256" y="112" font-size="13" fill="#e0e0e0" text-anchor="start">+0.81%</text>
+    
+      <text x="132" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">Financials</text>
+      <rect x="265.97110780352966" y="128" width="4.028892196470338" height="24" fill="#ef4444" rx="2"/>
+      <text x="261.97110780352966" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">-0.11%</text>
+    
+      <text x="132" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">Technology</text>
+      <rect x="261.7239421645758" y="160" width="8.276057835424197" height="24" fill="#ef4444" rx="2"/>
+      <text x="257.7239421645758" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">-0.22%</text>
+    
+      <text x="132" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Staples</text>
+      <rect x="251.19250691048268" y="192" width="18.80749308951733" height="24" fill="#ef4444" rx="2"/>
+      <text x="247.19250691048268" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">-0.49%</text>
+    
+      <text x="132" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">Real Estate</text>
+      <rect x="250.56761641505423" y="224" width="19.43238358494578" height="24" fill="#ef4444" rx="2"/>
+      <text x="246.56761641505423" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">-0.51%</text>
+    
+      <text x="132" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">Healthcare</text>
+      <rect x="247.29619391877526" y="256" width="22.703806081224748" height="24" fill="#ef4444" rx="2"/>
+      <text x="243.29619391877526" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">-0.59%</text>
+    
+      <text x="132" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">Utilities</text>
+      <rect x="243.43298745481607" y="288" width="26.567012545183925" height="24" fill="#ef4444" rx="2"/>
+      <text x="239.43298745481607" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">-0.69%</text>
+    
+      <text x="132" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">Materials</text>
+      <rect x="180.31996597916225" y="320" width="89.68003402083775" height="24" fill="#ef4444" rx="2"/>
+      <text x="176.31996597916225" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">-2.34%</text>
+    
+  </svg>
+    </div>
+    <hr>
+    <h2>VIX推移</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 600 200" width="100%" role="img" aria-label="VIX推移">
+    
+    <line x1="10" y1="137.5" x2="560" y2="137.5"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="141.5" font-size="13" fill="#6b7280">20</text>
+  
+    
+    <line x1="10" y1="52.5" x2="560" y2="52.5"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="56.5" font-size="13" fill="#6b7280">30</text>
+  
+    <polyline points="10,166.48499870300293 36.19047619047619,170.22500324249268 62.38095238095238,175.15500259399414 88.57142857142857,170.3950071334839 114.76190476190476,163.85000324249268 140.95238095238093,172.85999870300293 167.14285714285714,179.74500226974487 193.33333333333331,161.64000129699707 219.52380952380952,167.25 245.7142857142857,174.30499935150146 271.90476190476187,165.2950038909912 298.09523809523813,147.9549961090088 324.2857142857143,148.97500324249268 350.4761904761905,162.57500648498535 376.66666666666663,166.06000518798828 402.8571428571429,148.54999351501465 429.04761904761904,149.57000064849854 455.23809523809524,148.80499935150146 481.4285714285714,152.71500778198242 507.61904761904765,131.89000129699707 533.8095238095237,162.23499870300293 560,171.5850019454956" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="10" cy="166.48499870300293" r="3" fill="#3b82f6"/><circle cx="36.19047619047619" cy="170.22500324249268" r="3" fill="#3b82f6"/><circle cx="62.38095238095238" cy="175.15500259399414" r="3" fill="#3b82f6"/><circle cx="88.57142857142857" cy="170.3950071334839" r="3" fill="#3b82f6"/><circle cx="114.76190476190476" cy="163.85000324249268" r="3" fill="#3b82f6"/><circle cx="140.95238095238093" cy="172.85999870300293" r="3" fill="#3b82f6"/><circle cx="167.14285714285714" cy="179.74500226974487" r="3" fill="#3b82f6"/><circle cx="193.33333333333331" cy="161.64000129699707" r="3" fill="#3b82f6"/><circle cx="219.52380952380952" cy="167.25" r="3" fill="#3b82f6"/><circle cx="245.7142857142857" cy="174.30499935150146" r="3" fill="#3b82f6"/><circle cx="271.90476190476187" cy="165.2950038909912" r="3" fill="#3b82f6"/><circle cx="298.09523809523813" cy="147.9549961090088" r="3" fill="#3b82f6"/><circle cx="324.2857142857143" cy="148.97500324249268" r="3" fill="#3b82f6"/><circle cx="350.4761904761905" cy="162.57500648498535" r="3" fill="#3b82f6"/><circle cx="376.66666666666663" cy="166.06000518798828" r="3" fill="#3b82f6"/><circle cx="402.8571428571429" cy="148.54999351501465" r="3" fill="#3b82f6"/><circle cx="429.04761904761904" cy="149.57000064849854" r="3" fill="#3b82f6"/><circle cx="455.23809523809524" cy="148.80499935150146" r="3" fill="#3b82f6"/><circle cx="481.4285714285714" cy="152.71500778198242" r="3" fill="#3b82f6"/><circle cx="507.61904761904765" cy="131.89000129699707" r="3" fill="#3b82f6"/><circle cx="533.8095238095237" cy="162.23499870300293" r="3" fill="#3b82f6"/><circle cx="560" cy="171.5850019454956" r="3" fill="#3b82f6"/>
+    <text x="10" y="196" font-size="13" fill="#888">2026-07-01</text>
+    <text x="560" y="196" font-size="13" fill="#888" text-anchor="end">2026-07-31</text>
+  </svg>
+    </div>
+    <hr>
+    <h2>セクター推奨ランキング</h2>
+    <table>
+      <tr>
+        <td>ランク</td>
+        <td>セクター</td>
+        <td>理由</td>
+        <td>見通し</td>
+      </tr>
+      <tr>
+      <td>1</td>
+      <td><strong>Technology（テクノロジー）</strong></td>
+      <td>MS・AWSの好決算がAI設備投資の加速を裏付け、本日+5.50%と全セクターを牽引しました。ただし上昇は大型テック一極集中で「見せかけの強さ」の側面があり、AI電力インフラなど周辺受益テーマへの波及を狙う姿勢が有効です。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>2</td>
+      <td><strong>Industrials（資本財）</strong></td>
+      <td>本日+0.98%と底堅く、AI電力インフラ・データセンター建設需要の構造的受益テーマの中核に位置します。ETNやJCIなど電力・空調インフラ関連の押し目買い妙味があり、Tech一極集中相場のヘッジにもなります。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>3</td>
+      <td><strong>Financials（金融）</strong></td>
+      <td>本日+0.56%。日銀の政策正常化観測を背景に、円キャリー巻き戻し局面ではNIM拡大を通じて邦銀（8306.T=MUFG）が受益します。ただし日銀会合通過前は新規強気のタイミングとしては尚早です。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中立</td>
+    </tr>
+<tr>
+      <td>4</td>
+      <td><strong>Energy（エネルギー）</strong></td>
+      <td>本日+0.53%。米イラン緊張の地政学リスクを背景に原油急騰シナリオでの上振れ余地がありますが、これは円高との複合ショックとして市場全体の下押し要因にもなり得る両刃の剣です。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中立</td>
+    </tr>
+<tr>
+      <td>5</td>
+      <td><strong>Consumer Discretionary（一般消費財）</strong></td>
+      <td>本日+0.70%とプラス圏を維持。Amazonの好決算が追い風ですが、個別ではSBUXの再建加速のようなターンアラウンド銘柄の選別が重要で、セクター全体への強気は時期尚早です。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中立</td>
+    </tr>
+<tr>
+      <td>6</td>
+      <td><strong>Healthcare（ヘルスケア）</strong></td>
+      <td>本日-1.64%と軟調。リスクオン局面でディフェンシブ資金が流出しており、TDOCのように財務が脆弱で下降トレンドの銘柄は避けるべきです。</td>
+      <td style="color:#ef4444;font-weight:bold;">弱気</td>
+    </tr>
+<tr>
+      <td>7</td>
+      <td><strong>Communication Services（通信サービス）</strong></td>
+      <td>本日-2.68%と全セクター最大の下落。大型テックへの資金集中の裏で明確に売られており、ブレッドスの狭さを象徴するセクターです。当面は様子見が妥当です。</td>
+      <td style="color:#ef4444;font-weight:bold;">弱気</td>
+    </tr>
+    </table>
+    <hr>
+    <h2>注目銘柄スコアリングマトリクス</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">各エージェントが10段階評価した結果です。平均7以上=強気、4〜6.9=中立、4未満=弱気。</p>
+    <table>
+      <tr>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;">銘柄</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">ファンダメンタルズアナリスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テンバガーハンター</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">マクロエコノミスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テクニカルストラテジスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">リスクマネージャー</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">平均</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">判定</td>
+      </tr>
+      <tr>
+      <td><strong>JCI</strong><br><span style="font-size:0.8rem;color:#888;">WebSearch再評価でQ3オーガニック売上+10%・受注+37%・バックログ+40%（米州）が確認され、5エージェントの再評価平均スコアが6.2から7.0へ上昇し強気に昇格しました。データセンター売上が3〜5年以内に全体の1/3へ拡大見込みというロードマップが具体化し、ファンダメンタルズ・テクニカル両面から評価が引き上げられました。RSI53.41で過熱感なく上昇トレンド継続中、Tech一極集中相場のヘッジとして質の高い受益株です。</span></td>
+      <td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">Q3オーガニック売上10%増・受注37%増・バックログ40%増と業績が予想超過。データセンター向けが全体の1/3へ拡大見込みで長期成長目標も引き上げ。ファンダメンタルズ改善明確。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">AIインフラ冷却という高成長TAMへのエクスポージャーが明確化。データセンター売上3〜5年で1/3拡大見込み。バックログ40%増はコンパウンダーとしての複数年成長を示唆。3〜5倍の成長ストーリーとして再評価。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">AIインフラ投資サイクルの恩恵を確実に取り込む証拠。EMEA地域の中東リスク露出は懸念だが、米州バックログ40%増で相殺可能。セクターローテーションの観点でも追い風継続。</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">RSI53.41で過熱感なく上昇余地あり。50日線・200日線の上の上昇トレンド維持に加え、Q3業績超過・受注37%増・バックログ40%増というファンダメンタルズの裏付けがブレイクアウトの持続性を高める。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">業績好調だがEMEA低迷・中東地政学リスク・競合激化は依然残存。バックログ拡大はポジティブだが過度な楽観は禁物。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">7</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+<tr>
+      <td><strong>ETN</strong><br><span style="font-size:0.8rem;color:#888;">WebSearch再評価でデータセンター向け受注+240%・Electrical Americas全体バックログ+48%過去最高が確認され、マクロスコアが6→7に上昇。Q2決算が本日（7月31日）発表予定という短期カタリストも注目材料です。Boyd Thermal買収によるグリッドからチップレベル冷却までの垂直統合でAI電力インフラの構造的受益ポジションを確立。ファンダメンタルズは最高水準の8点ですが、テクニカルはRSI45.27でレンジ/転換点、Q2決算発表後の方向確認が先決です。</span></td>
+      <td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">データセンター向け受注240%増・バックログ48%増で構造的成長は盤石。Q1マージン圧縮とBoyd統合リスクは注視だがインフラ投資超サイクルの恩恵は継続。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">電力インフラ構造受益は本物だが時価総額が巨大すぎてテンバガー数学的に不可能。小型株専門の観点では対象外。インサイダー売却増加も懸念材料。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">データセンター向け受注240%増という数字はサイクル的需要ではなく構造的AIインフラ電力需要の確認。Boyd Thermal買収による垂直統合はセクターローテーション的に見ても電力インフラへの資金流入トレンドと完全に合致。Q2決算（7月31日）が短期カタリスト。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">RSI45.27でレンジ/転換点。本日Q2決算発表で240%増が確認されれば200日線を上抜けるブレイクアウトの可能性がある。決算ポジティブサプライズを前提とした期待値。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">データセンター需要は構造的だがQ1マージン圧縮・Boyd統合リスク・インサイダー売却増加が内部警戒シグナル。変圧器100週リードタイムも供給制約リスク。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.6</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>SBUX</strong><br><span style="font-size:0.8rem;color:#888;">WebSearch再評価で「Back to Starbucks」戦略による4四半期連続既存店売上成長・通期ガイダンス上方修正が確認されました。テクニカルストラテジストはRSI56.64・上昇トレンドを評価し8点に引き上げた一方、マクロエコノミストは米イラン紛争によるエネルギーコスト上昇・aspirational spending削減リスクを懸念し4点に下方修正。現株価は52週高値圏で回復を織り込み済みのため平均5.2の中立。CEO自身が「回復は直線的にならない」と警告しており執行リスクへの余白は限定的です。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">4四半期連続既存店成長とガイダンス上方修正は評価できるが、現株価は52週高値圏で回復を織り込み済み。CEO自身が非線形回復を警告しており上値余地は限定的。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">現株価が52週高値圏で回復を織り込み済みという点がテンバガーハンターとして致命的。大型株でTAM拡大も限定的。テンバガー観点ではほぼ投資機会なし。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">米イラン紛争によるエネルギーコスト上昇が現実化しつつある中、aspirational spendingへの依存度が高いSBUXは消費者マクロ悪化局面で最初に影響を受けるセクター。VIX+13.5%・全面安・FRB利上げ派台頭のマクロ環境では下方リスクが大きい。</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">RSI56.64は過熱でも過売られでもない健全な上昇ゾーン。50日線・200日線の上の上昇トレンドが継続し、4四半期連続の既存店売上成長・通期ガイダンス上方修正がテクニカルのモメンタムを支持。RSIに上昇余地が残っており追随買いの入りやすい局面。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">52週高値圏で回復織り込み済み。CEO自ら「回復は直線的でない」と警告し執行リスクが高い。コスト削減による組織的緊張が再失速リスクを高める。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.2</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>8306.T</strong><br><span style="font-size:0.8rem;color:#888;">WebSearch再評価で日銀利上げ（政策金利0.75%）によるNIM改善・純利益2.4兆円（過去最高）・2026年7月に上場来高値更新が確認されました。ROE目標12%・最終年度純利益2.7兆円と明確な成長ロードマップを提示。ただし本日が日銀会合当日であり、利上げ決定後の「材料出尽くし」リスクとバイナリ性の高いイベントリスクが残存。テクニカルはRSI51.41・上昇トレンドで良好ですが、会合通過後の方向確認が推奨されます。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">日銀利上げによるNIM改善・過去最高益は追い風。ただし日銀次回会合での追加利上げ観測による円高・株安リスクがタイミング面での懸念。バリュエーションは割安だが触媒待ち。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">三菱UFJは大型メガバンクでテンバガー余地皆無。金利上昇恩恵は既に株価に織り込まれてきている。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">円高進行・日銀利上げ観測で金融株ローテーションは合理的。利上げ継続シナリオなら追い風継続、地政学リスクによる円急騰局面では輸出関連のヘッジとして機能するポジション。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">RSI51.41は中立ゾーンで健全、50日線・200日線の上の上昇トレンドを維持。日銀政策テーマとチャート一致、押し目買い有効。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">本日の日銀会合がまさにイベントリスク本番。利上げ見送りなら円安継続でネガティブ、利上げなら信用コスト上昇懸念。バイナリリスクで中立維持。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.2</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>TENB</strong><br><span style="font-size:0.8rem;color:#888;">WebSearch再評価で顧客獲得コスト回収期間114.9か月という深刻なユニットエコノミクス問題と成長率鈍化（今後12か月予想6.4%）が確認され、平均スコアが5.8から5.0に低下しました。FedRAMP High認可・OpenAI提携・Tenable One（新規ビジネスの41%）などプラットフォーム転換の証拠はあるものの、Q2決算が予想超過にもかかわらず株価が4%下落した市場の懐疑心が引き続き重石です。Okta/Permiso等のサイバーM&amp;A連鎖からの被買収候補としての位置づけは維持しますが、スタンドアロンの投資妙味は低下しています。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">顧客獲得コスト回収期間114.9か月は構造的な収益性懸念。成長率6.4%予想への鈍化とQ2好決算でも株価下落は市場の懐疑心を反映。OpenAI提携は中期的材料だが現状では評価しにくい。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">FedRAMP High認可・OpenAI提携・Tenable OneのAIセキュリティ統合はプラットフォーム転換の証拠として評価可能。被買収候補としての妙味も残る。ただしCAC回収期間114.9か月が見逃せないリスク。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">FedRAMP High認可は地政学リスクが高まる環境で連邦政府向けサイバーセキュリティ需要の取り込みとして評価できる。ただし売上成長率鈍化と高金利下でのSaaS評価倍率圧縮が重石。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">50日線・200日線の上の上昇トレンドを維持しているが、RSI45.66は上昇トレンド中として弱い水準。好決算にもかかわらず株価が4%下落した「良いニュースで売られる」パターンはモメンタムの失速を示唆。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">CAC回収期間114.9か月は致命的懸念。成長率6.4%予想への鈍化と黒字化不透明で決算超過でも株価下落という市場の懐疑心が確認された。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+    </table>
+    <hr>
+    <h2>ウォッチリスト 買いタイミング判定</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">ウォッチリスト銘柄の本日の買いタイミング判定です。</p>
+    <div class="agent-card">
+      <h4>FDX — FedEx Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-07-30 前日終値時点)</span></h4>
+      <p>本日のテクニカルデータを独立に評価すると、FDXはMA20（312.84）およびMA50（320.35）をともに下回っており、現在値308.55はMA50から▲3.68%の位置にある。RSI14は43.80と中立〜弱気域にあり、買い圧力の回復を示す兆候は見られない。出来高比率は0.74と平均を下回っており、機関投資家の積極的な参加を示す証拠もない。関連ニュースも本日は存在しない。MA200（275.61）を+11.95%上回っている点は中長期的な下値支持を示唆するが、それ単独では短期エントリーの合致根拠としては不十分であり、confluence要件（2件以上のシグナル合致）を満たさない。前日判定（wait）と結論は同一であるが、RSIが47→43.80とさらに低下し、出来高比率も0.60→0.74とわずかに改善したものの依然として低水準であることから、弱気方向への圧力がやや継続している点が今日の追加観察事項となる。</p>
+      <span class="ticker-pill">RSI14=43.80（中立〜弱気域、買い転換の確認なし）</span><span class="ticker-pill">現在値がMA20・MA50をともに下回るデュアル移動平均割れ</span><span class="ticker-pill">出来高比率0.74（平均以下、需要の不在）</span><span class="ticker-pill">関連ニュースなし（触媒材料の欠如）</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-07-29</p>
+    </div>
+<div class="agent-card">
+      <h4>NEE — NextEra Energy, Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">買い → 待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-07-30 前日終値時点)</span></h4>
+      <p>本日のテクニカル指標は前日から明確に弱化している。価格は89.28→87.93へ下落し、MA20（88.57）を下回った。前日はMA20・MA50・MA200の三線すべての上に位置していたが、本日はMA20を割り込み、MA50（87.43）とMA200（87.68）にわずかに乗せているに過ぎない状態に後退した。RSIも54.49→47.31へ低下し、中立域の下寄りに移行。出来高比率も0.82と低水準で買い方の積極性が見られない。52週高値から-10.17%の位置にあり、上値余地はあるものの関連ニュースが皆無でカタリスト不在。複数シグナルの合致（confluence）を満たせないため、本日夜の米国市場セッションでのエントリーは待機が妥当。前日判定が「buy」から「wait」へ変更した主因は、MA20割れによるモメンタム悪化とRSI低下の組み合わせである。</p>
+      <span class="ticker-pill">MA20（88.57）を下回り、前日の三線上抜けから後退</span><span class="ticker-pill">RSI14が54.49→47.31へ低下し中立域下寄り</span><span class="ticker-pill">出来高比率0.82と薄く、買い圧力の裏付けなし</span><span class="ticker-pill">関連ニュースなしでカタリスト不在</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-07-23</p>
+    </div>
+    <hr>
+    <h2>WebSearch リサーチ結果</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">注目銘柄に関する最新の定性情報をWebリサーチした結果です。</p>
+    <div class="agent-card" style="border-left-color: #10b981;">
+      <h4>8306.T</h4>
+      <p>日銀の利上げサイクルが追い風となり、MUFGは過去最高益（純利益約2.4兆円）を達成。AIネイティブ機関への転換やアジア・プラットフォーム強化など中長期成長戦略を推進中。7月に上場来高値を更新したが、中東情勢・AI情報セキュリティリスク・日銀会合イベントリスクが短期の懸念材料。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>日銀利上げ（政策金利0.75%）によりNIMが改善し、純利益2.4兆円と過去最高を記録。JPY金利引き上げが約1,700億円の増益効果をもたらした</li><li>2026年7月に上場来高値を更新。早期追加利上げ観測が引き続き株価の支援材料となっている</li><li>モルガン・スタンレーとの戦略的提携・インドのシュリラム・ファイナンスへの投資など、グローバル展開が着実に進展</li><li>生成AIのエンタープライズ全社展開・GoogleとのUI/UX統合計画（FY27目標）など、デジタル変革を積極推進</li><li>ROE目標12.0%（FY26）・最終年度純利益2.7兆円目標と、明確な株主還元・収益成長ロードマップを提示</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>中東紛争の緊迫化が信用安定性に脅威を与えるリスクとして経営陣自身が明示。原油価格上昇・地政学的不確実性が継続</li><li>AI導入拡大に伴う情報セキュリティリスクが増大しており、防御的支出の増加が収益圧迫要因となりうる</li><li>持続的インフレと上昇する基礎経費が約8,000億円の利益圧力となっており、コスト管理が課題</li><li>日銀会合前後のイベントリスクが高く、利上げ決定後に「材料出尽くし」で株価が下落する局面が過去に発生済み</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>MUFG Hits Record Profit Trifecta as Rising Interest Rates and Strategic Pivots Drive ¥2.4 Trillion Result</strong>: 日銀利上げ・モルガンスタンレー提携・AIネイティブ化の3本柱で過去最高益を達成。次期目標は純利益2.7兆円。</li><li><strong>三菱UFJFGが上場来高値更新 日銀の早期利上げ観測が追い風（日本経済新聞）</strong>: 2026年7月、中東情勢や円安進行に伴う国内インフレ圧力拡大が日銀早期利上げ観測を強め、株価が上場来高値を更新した。</li><li><strong>Japan&#39;s megabanks expected to post record profits in coming years（S&amp;P Global）</strong>: S&amp;PがメガバンクAの今後数年にわたる記録的利益継続を予測。NIM拡大と国内法人ローン需要増が主因と分析。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>8306.T</h4>
+      <p>FY2026は純利益2.4兆円・ROE約14%と業績絶好調。日銀利上げサイクルが国内NIM改善を後押しし強気材料は十分。ただし円157円台の急騰は海外収益の円換算を圧迫する逆風。8月3日Q1決算で通期ガイダンス維持が確認できれば株価上昇余地あり。信用コストと円高が短期リスク。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>FY2026（2026年3月期）連結純利益は前年比30%増の2兆4,272億円。メガバンク初の2兆円台達成。ROE13.98%、EPS213円17銭と過去最高水準を更新。時価総額でトヨタ自動車を抜き国内首位に浮上。</li><li>日銀利上げによる国内貸出利鞘拡大が収益を牽引。海外高金利環境の恩恵も継続。連結粗利益は前年比23%増の5兆9,444億円。2026年8月3日にFY2027第1四半期決算発表予定。</li><li>アナリスト19名のコンセンサスは「買い」（強い買い3名・買い13名・保持3名）。平均目標株価3,333〜3,596円。中東情勢悪化で250億円の引当金計上（地政学リスクが信用コストに直撃）。本日の日銀会合「現状維持」決定で円157円台急騰。</li></ul>
+      
+      
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>AMBA</h4>
+      <p>Hanwha8億ドル契約でエッジAI基盤を固めた直後にNXP買収報道が重なり株価は急騰。FY2026は37%増収・Edge AI80%比率と独立成長も強固。M&amp;A成立なら買収プレミアム期待、破談でも堅調ファンダメンタルズが下支え。短期的には買収不確実性がボラティリティ要因。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年7月31日、NXPセミコンダクターズがAmbarellaの買収交渉中とFTが報道。AMBA株は約19%急騰、NXP株は約3.8%下落。市場時価総額は約33億ドル。交渉は初期段階で買収価格未開示。</li><li>2026年5月28日、HanwhaグループとエッジAI SoC・ソフトウェアの共同開発・展開に関する10年超の長期契約を締結。最大8億ドル超の収益創出を見込む。映像セキュリティ・ロボティクス・産業自動化・ライフサイエンス分野が対象。</li><li>FY2026通期売上高3億9,070万ドル（前年比+37%）を記録。エッジAI売上は+50%成長で全体の80%を占める。4nmプロセスのCV7 SoCを新投入し、8Kビジョン処理と車載ADAS向けに展開拡大中。アナリスト22名の平均目標株価は100ドル、うち9名が買い推奨。</li></ul>
+      
+      
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>ETN</h4>
+      <p>Q2 2026は売上・EPS・バックログすべて記録更新で通期ガイダンスも引き上げ。データセンター電力インフラ需要が主要牽引役で、バックログ230億ドルは視界良好。アナリスト評価はBuy多数。ただし高PER・マージン圧縮・設備投資負担がリスク。中長期的な成長ストーリーは健在。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q2 2026決算は記録的な売上85.3億ドル（前年比+21.4%）、調整後EPS3.15ドルでコンセンサス超え。有機成長率14%、通期調整後EPS見通しを13.40〜13.60ドルへ引き上げ（前年比+12%）。</li><li>Electrical Americas受注の12ヶ月移動平均が41%増、電気部門バックログが43%増で計230億ドル規模。データセンター向けは受注240%増・売上50%増（Q1比較）。Q2決算説明会では「データセンタースーパーサイクル」と表現。Boyd Thermal買収によるグリッドからチップレベル冷却への垂直統合完成。</li><li>BofAが目標株価490ドル（買い維持）、KeyCorpが480ドルへ引き上げ。平均コンセンサス目標株価は約426〜452ドル。現在値$415.20から+2.6%〜+18.2%の上昇余地。</li></ul>
+      
+      
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>JCI</h4>
+      <p>FY2026 Q3でEPS・売上ともに市場予測超え、ガイダンス再引き上げ。AIデータセンター冷却需要がバックログ$210億（+32%）を押し上げ構造的成長フェーズ入り。アナリスト大半が強気評価。主要リスクは関税コスト・訴訟・割高バリュエーションだが、成長モメンタムは強く強気評価を維持。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>FY2026 Q3決算（7月末発表）：売上高$66.1億（前年比+9%、有機成長+10%）、調整後EPS $1.42（前年比+35%）でコンセンサスを上回り、FY26通期ガイダンスを調整後EPS約$5.05（前年比+35%成長）に引き上げ。受注残は$210億で前年比+32%の過去最高。</li><li>AIデータセンター冷却需要が主要成長ドライバー。Q3受注は前年比+27%、データセンター向け吸収式チラー参照設計ガイドを7月28日に発表（97MWのAI容量解放）。NVIDIAとのAI特化コラボや複数冷却技術展開で業界リーダー地位を確立。市場シェアはTrane・Carrierと並ぶ商業HVAC上位（約30%）。</li><li>アナリスト強気継続：モルガン・スタンレーが目標株価を$140→$175に引き上げ（Overweight維持）、バーンスタインは$176（Outperform）。30名中14名がBuy、コンセンサス目標株価$155（現在値$146.66から約+5.7%上昇余地）。株価は年初来+70%超で推移。</li></ul>
+      
+      
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>SBUX</h4>
+      <p>ブライアン・ニコルCEOの「Back to Starbucks」戦略が実を結び、4四半期連続の既存店売上成長を達成。店舗改装・グリーンエプロンサービスモデル・ロイヤルティプログラム刷新が顧客行動の実質的変化をもたらしている。ただし現株価には回復の相当部分が織り込み済みであり、執行リスクに対する余白は限定的。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>「Back to Starbucks」戦略が奏功し、4四半期連続の既存店売上成長を達成。CEOニコルは「今四半期こそモメンタムが真に計測可能になった」と明言</li><li>グリーンエプロンサービスモデル導入によりベンチマーク達成店舗が30ポイント超急増。サービス速度・顧客体験の実質的改善が確認されている</li><li>リワードプログラムのアクティブ会員が3,580万人超に拡大。Free Mod Mondaysなど個別特典でリピート率が向上</li><li>年度計画を前倒しで1,000店舗超のカフェ改装（アップリフト）を完了。居心地の良い座席・温かみある内装で来店動機を強化</li><li>販売増加がトランザクション数の増加によって牽引されており、値上げではなく実質的な顧客回帰による回復</li><li>朝の時間帯のトラフィック回復が顕著で、コア顧客の日常購買習慣の再構築に成功しつつある</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>ニコルCEO自身が「回復は直線的にはならない」と警告。マクロ経済悪化時に aspirational spending が最初に削られるリスク</li><li>現在の株価は52週高値圏で推移しており、市場は回復完了をほぼ織り込み済み。少しでも執行ミスがあれば大幅下落の可能性</li><li>前年比較が強化されるにつれ、既存店売上成長率の自然減速が見込まれ、継続的加速を期待する投資家を失望させるリスク</li><li>米国・イラン紛争によるエネルギーコスト上昇などのマクロ逆風が消費者行動に影響を与える可能性</li><li>コーポレート300人削減・サポートセンター閉鎖といったコスト削減策が店舗投資拡大と並行しており、組織的緊張が潜在</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Starbucks Earnings (SBUX) Show Turnaround Bid Gaining Momentum</strong>: Q3決算でニコルCEOがターンアラウンドの加速を宣言。4四半期連続の既存店売上成長と2四半期連続のマージン拡大を達成し、通期ガイダンスを上方修正。</li><li><strong>Starbucks CEO sees the turn in the turnaround as human touch sings</strong>: 「アクセシブルな小さな贅沢」というブランド再定義と労働投資によるサービス改善戦略を詳述。マクロ悪化時の脆弱性リスクも言及。</li><li><strong>Brian Niccol&#39;s Starbucks Turnaround Is Quietly Working</strong>: トランザクション数主導の回復が本物である一方、株価が回復完了を織り込み済みで執行ミスへの耐性が極めて低い点を警告。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>TENB</h4>
+      <p>Q2決算は売上・EPSともコンセンサス超過かつ通期ガイダンス引き上げと堅調。FedRAMP High取得とOpenAI提携により政府市場開拓が加速。CTEM市場でのポジションも強固。ただし成長率は一桁台後半に留まりアナリスト評価は強弱分かれる。CAC回収長期化懸念は依然継続中。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q2 2026決算(7/29発表): 売上$268.5M(前年比+8.6%、予想比+1.26%超過)、Non-GAAP EPS $0.51(予想$0.47を+8.5%超過)、NRR 105%。通期ガイダンスを$1.075〜1.081Bに引き上げ。</li><li>FedRAMP High・IL5認可を2026年6月29日に取得。OpenAI Daybreak Cyber Partner ProgramへもGPT-5.5連携で参画。政府・防衛・情報機関向け市場が大幅拡大。株価は認可発表後40.7%上昇。</li><li>Tenable Oneに継続的セキュリティ制御バリデーション機能を追加(6月発表)。EDR・MFA・ファイアウォールを攻撃パス上にマッピングし誤検知を削減。アナリスト30名の平均目標株価$29.13(Buy 57%・Hold 43%)。Cantor Fitzgeraldが$30→$45に引き上げ。Non-GAAP営業利益率24.7%（前年比+540bp）と改善継続。</li></ul>
+      
+      
+    </div>
+    <hr>
+    <h2>再評価ラウンド結果（WebSearch後）</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">WebSearchリサーチ結果を踏まえて各アナリストがスコアを再評価した結果です。</p>
+    <div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>ファンダメンタルズアナリスト</h4>
+        <ul><li>
+      <strong>JCI</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#10b981">8</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q3オーガニック売上10%増・受注37%増・バックログ40%増と業績が予想超過。データセンター向けが全体の1/3へ拡大見込みで長期成長目標も引き上げ。ファンダメンタルズ改善明確。</span>
+    </li><li>
+      <strong>TENB</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">顧客獲得コスト回収期間114.9か月は構造的な収益性懸念。成長率6.4%予想への鈍化とQ2好決算でも株価下落は市場の評価を反映。OpenAI提携は中期的材料だが現状では評価しにくい。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>マクロエコノミスト</h4>
+        <ul><li>
+      <strong>SBUX</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">スコアを1ポイント下方修正。米イラン紛争によるエネルギーコスト上昇が現実化しつつある中、aspirational spendingへの依存度が高いSBUXは消費者マクロ悪化局面で最初に影響を受けるセクター。4四半期連続の既存店成長は評価するが、VIX+13.5%・全面安・FRB利上げ派台頭という現在のマクロ環境では、回復期待の織り込み済み株価は下方リスクが大きい。</span>
+    </li><li>
+      <strong>ETN</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">スコアを1ポイント上方修正。データセンター向け受注240%増という数字はサイクル的な需要ではなく構造的なAIインフラ電力需要の確認を意味する。Boyd Thermal買収によるグリッドからチップレベルまでの垂直統合はセクターローテーション的に見ても電力インフラへの資金流入トレンドと完全に合致。Q2決算（7月31日）が本日発表予定であることも短期カタリストとして機能しうる。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>リスクマネージャー</h4>
+        <ul><li>
+      <strong>TENB</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">CAC回収期間114.9ヶ月は致命的懸念。成長率6.4%予想への鈍化と黒字化不透明で決算超過でも株価下落という市場の懐疑心が確認された。下方修正。</span>
+    </li><li>
+      <strong>SBUX</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">52週高値圏で回復織り込み済み。CEO自ら「回復は直線的でない」と警告し執行リスクが高い。コスト削減による組織的緊張が再失速リスクを高める。下方修正。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>テクニカルストラテジスト</h4>
+        <ul><li>
+      <strong>JCI</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#10b981">8</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI53.41で過熱感なく上昇余地あり。50日線・200日線の上の上昇トレンド維持に加え、Q3業績超過・受注37%増・バックログ40%増というファンダメンタルズの裏付けがテクニカル的なブレイクアウトの持続性を高める。データセンター向け成長がモメンタム継続の触媒となりやすく、スコアを1点引き上げ。</span>
+    </li><li>
+      <strong>TENB</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">テクニカル的には50日線・200日線の上の上昇トレンドを維持しているが、RSI45.66は上昇トレンド中としては弱い水準。好決算にもかかわらず株価が4%下落したことは需給の悪化を示すネガティブシグナルであり、「良いニュースで売られる」パターンはモメンタムの失速を示唆する。テクニカル的リスクを加味して1点引き下げ。</span>
+    </li><li>
+      <strong>SBUX</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#10b981">8</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI56.64は過熱でも過売られでもない健全な上昇ゾーン。50日線・200日線の上の上昇トレンドが継続し、4四半期連続の既存店売上成長・通期ガイダンス上方修正がテクニカルのモメンタムを支持。RSIに上昇余地が残っており、追随買いの入りやすい局面。スコアを1点引き上げ。</span>
+    </li><li>
+      <strong>ETN</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI45.27でレンジ/転換点に位置し、50日線と200日線の間に挟まれた状況は方向感に欠ける。ただし本日（7月31日）のQ2決算発表でデータセンター向け240%増という強力なカタリストが確認されれば、200日線を上抜けるブレイクアウトの可能性がある。決算ポジティブサプライズを前提とした期待値として1点引き上げ。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>テンバガーハンター</h4>
+        <ul><li>
+      <strong>JCI</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q3 2026でオーガニック売上10%増、受注37%増、バックログ40%増（米州）という数字は予想を大幅に上回る。AIインフラ冷却という高成長TAMへのエクスポージャーが明確化され、データセンター売上が3〜5年以内に全体の約1/3まで拡大見込みという具体的な成長ロードマップが示された点が評価を引き上げる。JCIは大型株だが時価総額は中型株レンジに近く、バックログ40%増という数字はコンパウンダーとしての複数年成長を示唆。テンバガーとしては非現実的だが、3〜5倍の成長ストーリーとして再評価。RSI=53でモメンタムも健全。</span>
+    </li><li>
+      <strong>TENB</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">顧客獲得コスト回収期間114.9か月（約9.5年）という数字は深刻なユニットエコノミクスの問題を示す。成長率鈍化（今後12か月予想6.4%）と組み合わさると、テンバガーポテンシャルは著しく制限される。ただしFedRAMP High認可・OpenAI提携・Tenable OneのAIセキュリティ統合はプラットフォーム転換の証拠として評価可能。Q2超過決算後の株価4%下落はセンチメントの弱さを示す。ポジティブな材料はあるが、コスト回収の長期性が見逃せないリスクのためスコアを1ポイント引き下げ。</span>
+    </li><li>
+      <strong>SBUX</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">4四半期連続の既存店売上成長は印象的だが、現株価が52週高値圏で回復を織り込み済みという点がテンバガーハンターとして致命的。大型株でTAM拡大も限定的。テンバガー観点ではほぼ投資機会なし。RSI=56で過熱感はないが上値余地も乏しい。スコアを1ポイント引き下げ。</span>
+    </li></ul>
+      </div>
+    <hr>
+    <h2>リスク警告</h2>
+    <ul><li><span style="color:#ef4444;font-weight:bold;">[高]</span> 市場ブレッドスの狭さとTech一極集中による調整脆弱性。本日の上昇はTechセクター単独+5.50%への集中で、Communication Services -2.68%・Consumer Staples -2.16%・Healthcare -1.64%と半数のセクターが下落しています。MSFT単日+約4500億ドルの時価総額増はバブル的過熱であり、少数の大型株に依存した相場は反落時に急激な調整を招きやすい状態です。</li>
+<li><span style="color:#ef4444;font-weight:bold;">[高]</span> 円キャリー巻き戻し＋原油急騰の複合ショックリスク。円は157円台へ急騰し日銀会合を控える中、政策正常化観測が円キャリートレードの巻き戻しを誘発する可能性があります。同時に米イラン緊張による原油急騰が重なると、円高とインフレ再燃の複合ショックがTech一極集中相場を直撃する懸念があります。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> 日銀会合通過前のイベントリスクと金融政策の不確実性。日銀会合の結果次第で円相場・邦銀株・日経の変動が拡大します。加えてFRB内3名が利上げを主張しており、米国の金融政策の方向性にも不透明感が残ります。会合通過前の新規の強気ポジション構築は避けるべきです。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> 投機的ポジションへの依存リスク。BE・RDWRはキャッシュバーン継続や被買収思惑に依存する投機的な位置づけです。特にRDWRはRSI33・下降トレンドの「落ちるナイフ」であり、被買収プレミアム期待だけで拾うのは危険です。思惑が外れた場合の下振れが大きい点に留意が必要です。</li>
+<li><span style="color:#10b981;font-weight:bold;">[低]</span> VIX単日急落の解釈の誤り。VIXは17.28%下落しましたが、これは「恐怖の消滅」ではなく「先送り」と解釈すべきです。単日のボラティリティ低下を本格的なリスクオンの号砲と早計に判断し、リスク資産を積み増すのは危険です。</li></ul>
+    <hr>
+    <h2>アクションアイテム</h2>
+    <ul><li>現金比率を10〜15%へ引き上げる。VIX急落による見せかけの安心感に乗じてリスク資産を積み増すのではなく、Tech一極集中相場の脆弱性と日銀会合・複合ショックのリスクに備え、ドライパウダーを確保しておくことを推奨します。</li>
+<li>JCI（強気・7.0）を最優先の押し目買い候補としてウォッチする。WebSearch再評価でQ3受注+37%・バックログ+40%が確認され、AI電力インフラ受益テーマの純粋プレイとして最高評価を獲得しました。RSI53.41・上昇トレンドで現在のエントリーも有効です。</li>
+<li>ETN（中立・5.6）はQ2決算（本日発表予定）でデータセンター向け受注240%増が確認された場合、200日線奪回を確認してから段階的にエントリーする。Boyd統合リスクとインサイダー売却増加は引き続き監視が必要です。</li>
+<li>MSFTはRSI72の過熱圏のため新規の強気エントリーを見送る。TDOC（RSI31・下降トレンド・財務脆弱）とRDWR（RSI33・落ちるナイフ）は弱気で、新規買いは避けます。</li>
+<li>日銀会合・米雇用統計など今週の重要イベントのカレンダーを確認し、イベント通過後に改めてポジションを見直す。</li></ul>
+    <hr>
+    <h2>週間注目イベント</h2>
+    <table>
+      <tr>
+        <td>日付</td>
+        <td>イベント</td>
+        <td>インパクト</td>
+      </tr>
+      <tr>
+      <td>2026-07-31</td>
+      <td>日銀金融政策決定会合（政策正常化・利上げ観測）。円157円台の環境で結果次第では円相場・邦銀株（8306.T）・日経225の変動が拡大。円キャリー巻き戻しの引き金となる可能性。</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-08-01</td>
+      <td>米雇用統計（非農業部門雇用者数・失業率・平均時給）。FRB内3名が利上げを主張する中、労働市場の強弱が金融政策の方向性を左右し、実質金利・株式市場に大きく影響。</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-07-31</td>
+      <td>イートン（ETN）Q2決算発表予定。AIデータセンター向け電力機器の受注動向と通期ガイダンスに注目。ポジティブサプライズなら200日線奪回のカタリストとなりうる。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-08-04</td>
+      <td>大型テック・主要企業の追加決算発表の続き。本日のMSFT・AAPL・Amazon好決算後の相場のフォロースルーとブレッドス拡大の有無を見極める重要局面。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-08-07</td>
+      <td>米新規失業保険申請件数など週次経済指標。雇用統計後の労働市場トレンドの確認材料として金融政策観測に影響。</td>
+      <td style="color:#10b981;font-weight:bold;">低</td>
+    </tr>
+    </table>
+    <hr>
+    <h2>インデックス投資家へのアドバイス</h2>
+    <div class="agent-card">
+      <p>本日のS&amp;P500+1.66%・NASDAQ+2.78%の上昇は好調に見えますが、中身は大型テック一極集中でブレッドスが極めて狭く、指数の堅牢性という観点では注意が必要です。VIX急落による楽観に乗じて一括投資を増やすのではなく、ドルコスト平均法による定額積立を淡々と継続するのが最善です。日銀会合・米雇用統計・地政学リスクという複数のイベントが今週集中しており、短期的なボラティリティ上昇に備えて現金クッションを一定程度維持してください。長期のインデックス投資家にとって重要なのは、こうした一極集中相場の過熱局面で狼狽して積立を止めないこと、そして調整が来た際に淡々と買い増せる余力を残しておくことです。特定セクターへの集中投資は避け、幅広く分散されたインデックスの保有を継続することを推奨します。</p>
+    </div>
+  </div>
+</body>
+</html>

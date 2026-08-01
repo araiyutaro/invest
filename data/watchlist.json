@@ -88,8 +88,13 @@
   "JCI": {
     "ticker": "JCI",
     "name": "Johnson Controls International plc",
-    "addedDate": "2026-07-31",
-    "lastVerdictDate": "2026-07-31",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-07-31",
+        "lastVerdictDate": "2026-07-31",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-02"
+      }
+    ]
   }
 }

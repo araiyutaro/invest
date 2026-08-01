@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Report - 2026-07-10</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      color: #fff;
+      border-bottom: 2px solid #10b981;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: #34d399;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #10b981;
+      padding-left: 0.8rem;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #6ee7b7;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: #a5b4fc;
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+    p { margin-bottom: 0.8rem; }
+    ul { list-style: none; padding-left: 0; margin-bottom: 1rem; }
+    li {
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.3rem;
+      background: #1e1e2e;
+      border-radius: 6px;
+      border-left: 3px solid #10b981;
+    }
+    strong { color: #fbbf24; }
+    hr {
+      border: none;
+      border-top: 1px solid #333;
+      margin: 2rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #1e1e2e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    tr:first-child td {
+      background: #2a2a3e;
+      font-weight: bold;
+      color: #6ee7b7;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+    .timestamp {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .agent-card {
+      background: #1e1e2e;
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #6366f1;
+    }
+    .agent-card h4 { color: #a5b4fc; margin-top: 0; }
+    .discussion-card {
+      background: #1a1a28;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #f59e0b;
+    }
+    .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    .ticker-pill {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #3f3f5a;
+    }
+    .news-meta {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .digest-crossref-chip {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #a78bfa;
+    }
+    .digest-crossref-row {
+      margin-bottom: 0.5rem;
+    }
+    .news-card a {
+      color: #93c5fd;
+    }
+    .news-card a:visited {
+      color: #c4b5fd;
+    }
+    .news-card a:hover {
+      color: #bfdbfe;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Portfolio Report - 2026-07-10</h1>
+    <p class="timestamp">生成日時: 2026/7/10 7:59:30</p>
+    <h2>総括コメント</h2>
+    <div class="agent-card">
+      <p>本日はテクノロジー主導のリスクオン相場で、S&amp;P500・NASDAQ・日経平均が揃って上昇、VIXも15.84へ低下し市場心理は良好。XLK+2.18%が最強、XLE・XLPが最弱という循環はグロース選好を示し、当ポートフォリオの成長株偏重と整合的。POWL・NXT・MRNAといった高モメンタム銘柄が牽引する一方、EE（エネルギー-1.40%セクター）や助川電気の急落が重石となり、セクター分散の効果が働いた。構成はディフェンス（HII）、次世代エネルギー（EE・NXT）、ヘルスケア（MRNA）、フィンテック・SI（日本小型株）、消費（BWMX・YOU）と多様だが、全体的に急騰後の割高株（POWL・NXT・MRNA）比率が高く、調整局面での下振れ耐性は限定的。方針は全12銘柄保持を継続しつつ、利益乗せ幅の大きい銘柄で一部利確を検討し、下落した助川電気・JOBYは業績を確認しながら平均取得単価の改善余地を見極める。日本小型株の流動性リスクにも留意し、過度な集中を避けた漸進的リバランスが妥当。</p>
+    </div>
+    <h2>今週の緊急・判断変更ロールアップ</h2>
+    <div class="agent-card">
+      <h4>5885.T -- ジーデップ・アドバンス</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 07/08</p>
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/08 保持 → 買増</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/09 買増 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>7711.T -- 助川電気工業</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/08 保持 → 買増</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/09 買増 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>8522.T -- 名古屋銀行</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/09 保持 → 買増</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/10 買増 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>BRBR -- ベルリング・ブランズ</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 07/05, 07/06, 07/07</p>
+      
+    </div>
+<div class="agent-card">
+      <h4>BWMX -- ベターウェア・デ・メヒコ</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/08 保持 → 買増</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/09 買増 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>EE -- エクセラレート・エナジー</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 07/08</p>
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/08 保持 → 一部売却</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/09 一部売却 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>HII -- ハンティントン・インガルス</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 07/08</p>
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/08 保持 → 買増</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/10 買増 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>POWL -- パウエル・インダストリーズ</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 07/07 一部売却 → 保持</p>
+    </div>
+    <p style="color:#888;font-size:0.85rem;margin-top:0.4rem;">（過去6日分の履歴に基づく）</p>
+    <h2>保有銘柄 個別評価</h2>
+    <div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>MRNA -- モデルナ <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>mFLUSIVAがFDA諮問委9-0で承認推奨、8月PDUFA期限を控え触媒明確。がん・希少疾患へのパイプライン拡充で中期成長ドライバー健在。YTD+125%で割高だが上昇トレンド継続中のため保持。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: R&amp;D費30億ドル超で赤字継続、フル収益化2027年以降、訴訟リスク残存。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>JOBY -- ジョビー・アビエーション <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>FAA認証ステージ4クリアで残るはステージ5のみ、2026年末商業運航開始が視野。トヨタとの製造合弁で量産体制整備中。52週高値から約62%下落し下値余地は限定的とみて保持継続。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: FAA型式証明取得遅延リスク、累積赤字と資金調達圧力。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>HII -- ハンティントン・インガルス <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">判断変更: 買増 → 保持</span> <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>Q1売上+13.4%でEPS超過、Lionfish量産契約やROMULUS新設で長期成長健全。アナリスト平均目標$383に対し現$286と上昇余地大。ディフェンシブ性も評価し保持。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 営業利益率6.3%→5.6%へ悪化、造船コスト上昇継続。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><ul style="list-style:none;padding-left:0;margin:0;"><li style="padding:0.4rem 0;border-top:1px solid #2a2a3e;background:transparent;border-radius:0;margin-bottom:0;">
+      <a href="https://finnhub.io/api/news?id=3f47d9885db1f4eb3941e8af420b8ada61f864201791d21214a07ab397491371" target="_blank" rel="noopener noreferrer">How HII’s Push Into Autonomous Vessels and Spectrum Warfare Will Impact Huntington Ingalls Industries (HII) Investors</a>
+      <p style="color:#888;font-size:0.85rem;margin:0.15rem 0 0;">Yahoo ・ 7/9 21:14</p>
+    </li></ul></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>POWL -- パウエル・インダストリーズ <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>Q2受注+97%、データセンター大型受注$400M超、受注残+33%と需要旺盛。無借金・現金5.45億ドルで財務盤石。YTD+158%と割高だがモメンタム継続で保持、利確余地は意識。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 株価急騰で割高感、大型単発受注への依存度高。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>EE -- エクセラレート・エナジー <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">判断変更: 一部売却 → 保持</span> <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>2026年EBITDAガイダンス$515-545Mと過去最高、バングラデシュ15年供給やヨルダン新規チャーターで契約残高$17B。長期収益基盤は堅固で本日の下落は保持判断を変えない。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: イラク端末2027年以降に延期、地政学リスク。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>8522.T -- 名古屋銀行 <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>経常利益+34.4%、純利益+37.6%と好調で3期連続最高益見込み。年間配当200円で+17.6%増配とインカム魅力。52週高値近辺だが業績・還元裏付けで保持。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 金利上昇一巡による資金利益頭打ち、愛知地域経済悪化リスク。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>5885.T -- ジーデップ・アドバンス <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">判断変更: 買増 → 保持</span> <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>AI・XR・ビッグデータ向けシステムインキュベーションでAI需要拡大が追い風。本日+4.28%と堅調でテーマ性強く保持。ただし小型株のため比率管理を意識する。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 小型株ゆえ流動性リスク、テーマ株として市場センチメント感応度高。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>5576.T -- オービーシステム <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>2026/3期売上+12.6%、営業利益+19.5%で最高益更新、2027/3期「100億円の壁」超えを目標。日立・三菱電機等の安定顧客基盤と配当性向40%超で保持継続。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 独立系SIer競争リスク、東証スタンダードで流動性低い。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>7711.T -- 助川電気工業 <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">判断変更: 買増 → 保持</span> <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>売上+5.0%、営業利益+12.1%と業績堅調。直近1週間で約8%急落し本日も-4.43%だが、ファンダメンタルズに変化はなく調整局面とみて保持継続が妥当。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 直近急落で上値抵抗重い、エネルギー需要変動リスク。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>NXT -- ネクストパワー <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>連続でEPS・売上がコンセンサス超過、売上前年比20〜42%増、バックログ$50億超。欧州展開加速、アナリスト27名買い・目標$150に対し現$112.71と上昇余地大で保持。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 関税・貿易政策リスク、特許訴訟、補助金縮小懸念。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>BWMX -- ベターウェア・デ・メヒコ <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">判断変更: 買増 → 保持</span> <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>Q1売上+14.8%・EPS+110%と好調、タッパーウェア中南米事業買収完了で規模拡大。EBITDAマージン19%超目標で収益性改善が見込め保持。ポートフォリオの消費分散にも寄与。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 買収に伴う2.15億ドル負債増加、メキシコペソ変動、直販員確保リスク。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>YOU -- クリア・セキュア <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>Q1売上+19.7%でコンセンサス超過、EPS$0.38、ブッキング+40.8%と加速、会員4,100万人。アナリスト平均Buy・目標$62に対し現$56.12で上昇余地あり保持。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: マージン圧縮懸念、空港依存でTSA政策・生体認証規制リスク。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+    <h2>リバランス提案</h2>
+    <ul><li>POWL（YTD+158%）・NXT・MRNAなど急騰後の高割高銘柄は利益乗せ幅が大きいため、各ポジションの一部利確でグロース集中リスクを軽減し、現金比率を高めて調整局面に備える</li>
+<li>本日下落した助川電気工業（7711.T）とJOBYは業績・認証進捗を確認のうえ、ファンダメンタルズ健全なら押し目での平均取得単価改善を検討する</li>
+<li>日本小型株（5885.T・5576.T・7711.T）は流動性が低いため合計ウェイトを点検し、1銘柄への過度な集中を避けて分散を維持する</li></ul>
+  </div>
+</body>
+</html>
