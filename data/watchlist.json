@@ -96,5 +96,19 @@
         "removedDate": "2026-08-02"
       }
     ]
+  },
+  "ETN": {
+    "ticker": "ETN",
+    "name": "Eaton Corporation plc",
+    "addedDate": "2026-08-04",
+    "lastVerdictDate": "2026-08-04",
+    "history": []
+  },
+  "BRC": {
+    "ticker": "BRC",
+    "name": "Brady Corporation",
+    "addedDate": "2026-08-04",
+    "lastVerdictDate": "2026-08-04",
+    "history": []
   }
 }
