@@ -101,7 +101,7 @@
     "ticker": "ETN",
     "name": "Eaton Corporation plc",
     "addedDate": "2026-08-04",
-    "lastVerdictDate": "2026-08-06",
+    "lastVerdictDate": "2026-08-07",
     "history": []
   },
   "BRC": {
@@ -115,5 +115,12 @@
         "removedDate": "2026-08-06"
       }
     ]
+  },
+  "TEAM": {
+    "ticker": "TEAM",
+    "name": "Atlassian Corporation",
+    "addedDate": "2026-08-07",
+    "lastVerdictDate": "2026-08-07",
+    "history": []
   }
 }
