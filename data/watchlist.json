@@ -126,8 +126,13 @@
   "IRTC": {
     "ticker": "IRTC",
     "name": "iRhythm Holdings, Inc.",
-    "addedDate": "2026-08-09",
-    "lastVerdictDate": "2026-08-09",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-09",
+        "lastVerdictDate": "2026-08-09",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-10"
+      }
+    ]
   }
 }
