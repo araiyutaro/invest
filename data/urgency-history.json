@@ -2338,5 +2338,85 @@
       "urgent": false,
       "decision": "買増"
     }
+  ],
+  "2026-08-11": [
+    {
+      "symbol": "MRNA",
+      "nameJa": "モデルナ",
+      "urgent": false,
+      "decision": "一部売却"
+    },
+    {
+      "symbol": "JOBY",
+      "nameJa": "ジョビー・アビエーション",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "HII",
+      "nameJa": "ハンティントン・インガルス",
+      "urgent": false,
+      "decision": "買増"
+    },
+    {
+      "symbol": "POWL",
+      "nameJa": "パウエル・インダストリーズ",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "EE",
+      "nameJa": "エクセラレート・エナジー",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "8522.T",
+      "nameJa": "名古屋銀行",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "5885.T",
+      "nameJa": "CACホールディングス",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "5576.T",
+      "nameJa": "ベリタス・イン・シリコ",
+      "urgent": false,
+      "decision": "一部売却"
+    },
+    {
+      "symbol": "7711.T",
+      "nameJa": "助川電気工業",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "NXT",
+      "nameJa": "ネクストラッカー",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "BWMX",
+      "nameJa": "ベターウェア・デ・メヒコ",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "YOU",
+      "nameJa": "クリア・セキュア",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "ASML",
+      "nameJa": "ASMLホールディング",
+      "urgent": false,
+      "decision": "買増"
+    }
   ]
 }

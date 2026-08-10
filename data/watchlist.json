@@ -134,5 +134,19 @@
         "removedDate": "2026-08-10"
       }
     ]
+  },
+  "JAZZ": {
+    "ticker": "JAZZ",
+    "name": "Jazz Pharmaceuticals plc",
+    "addedDate": "2026-08-11",
+    "lastVerdictDate": "2026-08-11",
+    "history": []
+  },
+  "MP": {
+    "ticker": "MP",
+    "name": "MP Materials Corp.",
+    "addedDate": "2026-08-11",
+    "lastVerdictDate": "2026-08-11",
+    "history": []
   }
 }
