@@ -183,5 +183,26 @@
     "addedDate": "2026-08-13",
     "lastVerdictDate": "2026-08-13",
     "history": []
+  },
+  "ETON": {
+    "ticker": "ETON",
+    "name": "Eton Pharmaceuticals, Inc.",
+    "addedDate": "2026-08-14",
+    "lastVerdictDate": "2026-08-14",
+    "history": []
+  },
+  "6146.T": {
+    "ticker": "6146.T",
+    "name": "Disco Corporation",
+    "addedDate": "2026-08-14",
+    "lastVerdictDate": "2026-08-14",
+    "history": []
+  },
+  "3923.T": {
+    "ticker": "3923.T",
+    "name": "Rakus Co., Ltd.",
+    "addedDate": "2026-08-14",
+    "lastVerdictDate": "2026-08-14",
+    "history": []
   }
 }
