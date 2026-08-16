@@ -25,4 +25,5 @@ export const PORTFOLIO_HOLDINGS: ReadonlyArray<PortfolioHolding> = [
   { symbol: "BWMX", name: "Betterware de Mexico", nameJa: "ベターウェア・デ・メヒコ", sector: "Consumer" },
   { symbol: "YOU", name: "Clear Secure", nameJa: "クリア・セキュア", sector: "Technology" },
   { symbol: "ASML", name: "ASML Holding", nameJa: "ASMLホールディング", sector: "Technology" },
+  { symbol: "IRTC", name: "iRhythm Holdings", nameJa: "アイリズム・ホールディングス", sector: "Healthcare", matchAliases: ["iRhythm", "アイリズム"] },
 ] as const;
