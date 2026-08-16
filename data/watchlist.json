@@ -213,8 +213,13 @@
   "8306.T": {
     "ticker": "8306.T",
     "name": "Mitsubishi UFJ Financial Group, Inc.",
-    "addedDate": "2026-08-16",
-    "lastVerdictDate": "2026-08-16",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-16",
+        "lastVerdictDate": "2026-08-16",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-17"
+      }
+    ]
   }
 }
