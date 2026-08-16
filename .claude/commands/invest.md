@@ -1337,9 +1337,9 @@ rm -rf /Users/arai/invest/tmp/websearch /Users/arai/invest/tmp/reeval && mkdir -
 
 ---
 
-### Step 3-P: 保有銘柄WebSearchリサーチ（12銘柄並列）
+### Step 3-P: 保有銘柄WebSearchリサーチ（全保有銘柄並列）
 
-このステップは `highlightedStocks` の件数に関わらず**必ず実行**してください（注目銘柄が0件の日でも保有銘柄リサーチはスキップしません）。反復対象は `highlightedStocks` ではなく `src/portfolio/holdings.ts` の `PORTFOLIO_HOLDINGS`（固定12銘柄）です。
+このステップは `highlightedStocks` の件数に関わらず**必ず実行**してください（注目銘柄が0件の日でも保有銘柄リサーチはスキップしません）。反復対象は `highlightedStocks` ではなく `src/portfolio/holdings.ts` の `PORTFOLIO_HOLDINGS`（全保有銘柄。件数はファイルの配列が正）です。
 
 以下のBashコマンドで ポートフォリオリサーチ の計測タイムスタンプを記録してください:
 
@@ -1363,9 +1363,9 @@ echo '[STEP:portfolio-research:START]'
 rm -rf /Users/arai/invest/tmp/portfolio-research && mkdir -p /Users/arai/invest/tmp/portfolio-research
 ```
 
-「ポートフォリオリサーチ: 保有12銘柄を調査中...」とユーザーに表示してください。
+「ポートフォリオリサーチ: 保有M銘柄を調査中...」（M = PORTFOLIO_HOLDINGS の件数）とユーザーに表示してください。
 
-`PORTFOLIO_HOLDINGS`（`src/portfolio/holdings.ts`）の12銘柄（symbol / name / nameJa）それぞれに対して、**以下の Agent ツールを同時に（1つのメッセージで12並列）呼び出してください:**
+`PORTFOLIO_HOLDINGS`（`src/portfolio/holdings.ts`）の全銘柄（symbol / name / nameJa）それぞれに対して、**以下の Agent ツールを同時に（1つのメッセージで全銘柄分並列）呼び出してください:**
 
 各銘柄について以下の設定で Agent を呼び出してください:
 - name: `portfolio-research-{symbol}`（例: portfolio-research-MRNA、symbol の `/` は `-` に置換）
@@ -1441,26 +1441,26 @@ rm -rf /Users/arai/invest/tmp/portfolio-research && mkdir -p /Users/arai/invest/
 
 **`/Users/arai/invest/tmp/websearch/` および `/Users/arai/invest/tmp/reeval/` への書き込みは絶対禁止です。** これらは Step 3a/3b 専用の Daily Report 用領域であり、本ステップの結果（`/Users/arai/invest/tmp/portfolio-research/`）と混在させてはいけません。
 
-出力が有効なJSONでない場合は、以下のフォールバックJSONを保存してください（失敗した銘柄も含め、12銘柄全てのファイルを必ず書いてください）:
+出力が有効なJSONでない場合は、以下のフォールバックJSONを保存してください（失敗した銘柄も含め、全保有銘柄分のファイルを必ず書いてください）:
 ```json
 {"ticker": "...", "researchSummary": "リサーチ失敗", "positiveFindings": [], "negativeFindings": [], "keyArticles": [], "researchedAt": "..."}
 ```
 
 **フォールバックJSONの `"..."` は必ず実際の値に置き換えて保存してください**: `ticker` には該当銘柄の symbol（例: `"EE"`、`.T` サフィックスもそのまま）、`researchedAt` には現在時刻の ISO8601 タイムスタンプ（例: `"2026-06-24T08:00:00Z"`）を設定すること。`"..."` のまま保存してはいけません（Phase 22 の銘柄照合が壊れます）。
 
-12/12銘柄が成功した場合:
+全銘柄が成功した場合:
 ```bash
 echo '[STEP:portfolio-research:OK]'
 ```
 
-1銘柄でも失敗した場合、以下のプレースホルダ `{N}` と `{失敗ティッカー}` を**実際の値に置き換えてから**実行してください（`{N}` = 失敗銘柄数、`{失敗ティッカー}` = 実際に失敗したティッカーをカンマ区切りで列挙。このブロックをそのままコピペ実行してはいけません）:
+1銘柄でも失敗した場合、以下のプレースホルダ `{N}` と `{失敗ティッカー}` を**実際の値に置き換えてから**実行してください（`{N}` = 失敗銘柄数、`{M}` = PORTFOLIO_HOLDINGS の総銘柄数、`{失敗ティッカー}` = 実際に失敗したティッカーをカンマ区切りで列挙。このブロックをそのままコピペ実行してはいけません）:
 ```bash
-echo '[STEP:portfolio-research:FAIL:{N}/12銘柄失敗（{失敗ティッカー}）]'
+echo '[STEP:portfolio-research:FAIL:{N}/{M}銘柄失敗（{失敗ティッカー}）]'
 ```
 
 **`[PIPELINE:FAIL]` は絶対に出力しないこと** — この失敗は4レポート・デプロイをブロックしない。
 
-「ポートフォリオリサーチ完了: N/12銘柄成功」とユーザーに表示してください。
+「ポートフォリオリサーチ完了: N/M銘柄成功」とユーザーに表示してください。
 
 以下のBashコマンドで ポートフォリオリサーチ完了 タイムスタンプを記録してください:
 
@@ -1944,12 +1944,12 @@ try {
 
 まず以下のファイルを Read ツールで読み込んでください:
 
-- `/Users/arai/invest/tmp/portfolio.json` -- 全内容（12銘柄の株価データ）
+- `/Users/arai/invest/tmp/portfolio.json` -- 全内容（全保有銘柄の株価データ）
 - `/Users/arai/invest/tmp/meeting-result.json` -- 全内容（ミーティング統合結果）
 - `/Users/arai/invest/src/portfolio/holdings.ts` -- PORTFOLIO_HOLDINGS 定数を取得
 - `/Users/arai/invest/tmp/news.json` -- 全内容（フィルタ済みニュース記事プール。news-curator のプロンプトに埋め込む）
 - `/Users/arai/invest/tmp/holding-news.json` -- 全内容（保有銘柄別ニュースID参照。tmp/news.json と突き合わせて全文解決する）
-- `/Users/arai/invest/tmp/portfolio-research/{symbol}.json` -- 12銘柄分（存在する場合のみ。researchSummary/positiveFindings/negativeFindingsのみ使用、keyArticlesは埋め込まない）
+- `/Users/arai/invest/tmp/portfolio-research/{symbol}.json` -- 全保有銘柄分（存在する場合のみ。researchSummary/positiveFindings/negativeFindingsのみ使用、keyArticlesは埋め込まない）
 - `/Users/arai/invest/tmp/prev-portfolio-analysis.json` -- 全内容（前日のポートフォリオ判断。存在する場合のみ）
 
 **以下2つの Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
@@ -1971,12 +1971,12 @@ try {
     - リスク警告: [riskWarnings 配列の全内容]
     - アクションアイテム: [actionItems 配列の全内容]
 
-    ## 保有銘柄一覧（全12銘柄、必ず全銘柄を評価すること）
-    [PORTFOLIO_HOLDINGS の全12銘柄: symbol, name, nameJa, sector]
+    ## 保有銘柄一覧（PORTFOLIO_HOLDINGS の全銘柄、必ず全銘柄を評価すること）
+    [PORTFOLIO_HOLDINGS の全銘柄: symbol, name, nameJa, sector]
 
     （tmp/holding-news.json が存在する場合のみ以下を含めること）
     ## 保有銘柄別関連ニュース
-    [tmp/holding-news.json の各銘柄（全12銘柄、必ず全銘柄を列挙すること）について以下の手順で解決して展開する:
+    [tmp/holding-news.json の各銘柄（全保有銘柄、必ず全銘柄を列挙すること）について以下の手順で解決して展開する:
     1. 銘柄の記事ID配列（id, matchType, score）の各 id を tmp/news.json と照合し、該当記事の title・summary・source・publishedAt を解決する
     2. 銘柄ごとに見出し「### {symbol}（{nameJa}）」を付け、解決した記事を「- {publishedAt} [{source}] {title}: {summary}」の形式で列挙する
     3. 記事ID配列が空の銘柄には記事を列挙せず、「本日の関連ニュースなし（ニュース不在は問題なしを意味しない）」と明記する。0件銘柄であってもこの見出し自体を省略してはならない]
@@ -1990,7 +1990,7 @@ try {
 
     （tmp/portfolio-research/ ディレクトリが存在する場合のみ以下を含めること）
     ## 保有銘柄別リサーチ結果
-    [tmp/portfolio-research/{symbol}.json の各銘柄（全12銘柄、必ず全銘柄を列挙すること）について以下を展開する:
+    [tmp/portfolio-research/{symbol}.json の各銘柄（全保有銘柄、必ず全銘柄を列挙すること）について以下を展開する:
     1. 銘柄ごとに見出し「### {symbol}（{nameJa}）」を付け、researchSummary・positiveFindings・negativeFindings のみを列挙する（keyArticles は含めないこと）
     2. 該当ファイルが存在しない、またはリサーチ失敗を示すフォールバック形状の銘柄には「本日のリサーチ結果なし（リサーチ不在は問題なしを意味しない）」と明記する。この場合も見出し自体は省略してはならない]
 
@@ -2053,7 +2053,7 @@ try {
 
     注意:
     - decision は「保持」「買増」「一部売却」「全売却」の4択のみ使用すること。他の表現（ホールド、買い増し、売却等）は使用しないこと
-    - holdings は全12銘柄を含めること（抜け漏れ禁止）
+    - holdings は PORTFOLIO_HOLDINGS の全銘柄を含めること（抜け漏れ禁止）
     - rebalanceActions は具体的なアクション（銘柄名と方向を明示）を2-5項目
     - overallComment はポートフォリオ全体の状況を俯瞰したコメント
 
