@@ -2823,14 +2823,14 @@
     {
       "symbol": "MRNA",
       "nameJa": "モデルナ",
-      "urgent": false,
+      "urgent": true,
       "decision": "一部売却"
     },
     {
       "symbol": "JOBY",
       "nameJa": "ジョビー・アビエーション",
       "urgent": false,
-      "decision": "保持"
+      "decision": "一部売却"
     },
     {
       "symbol": "HII",
@@ -2841,7 +2841,7 @@
     {
       "symbol": "POWL",
       "nameJa": "パウエル・インダストリーズ",
-      "urgent": false,
+      "urgent": true,
       "decision": "保持"
     },
     {
@@ -2878,7 +2878,7 @@
       "symbol": "NXT",
       "nameJa": "ネクストパワー",
       "urgent": false,
-      "decision": "保持"
+      "decision": "一部売却"
     },
     {
       "symbol": "BWMX",
@@ -2896,6 +2896,12 @@
       "symbol": "ASML",
       "nameJa": "ASMLホールディング",
       "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "IRTC",
+      "nameJa": "アイリズム・ホールディングス",
+      "urgent": true,
       "decision": "保持"
     }
   ]
