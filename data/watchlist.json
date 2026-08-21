@@ -228,5 +228,19 @@
     "addedDate": "2026-08-17",
     "lastVerdictDate": "2026-08-19",
     "history": []
+  },
+  "8331.T": {
+    "ticker": "8331.T",
+    "name": "The Chiba Bank, Ltd.",
+    "addedDate": "2026-08-21",
+    "lastVerdictDate": "2026-08-21",
+    "history": []
+  },
+  "RTX": {
+    "ticker": "RTX",
+    "name": "RTX Corporation",
+    "addedDate": "2026-08-21",
+    "lastVerdictDate": "2026-08-21",
+    "history": []
   }
 }
