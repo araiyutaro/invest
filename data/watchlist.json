@@ -38,9 +38,14 @@
   "NEE": {
     "ticker": "NEE",
     "name": "NextEra Energy, Inc.",
-    "addedDate": "2026-07-23",
-    "lastVerdictDate": "2026-07-23",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-07-23",
+        "lastVerdictDate": "2026-07-23",
+        "removedReason": "expired",
+        "removedDate": "2026-08-24"
+      }
+    ]
   },
   "ATRC": {
     "ticker": "ATRC",
@@ -246,8 +251,53 @@
   "8750.T": {
     "ticker": "8750.T",
     "name": "Daiichi Life Group, Inc.",
-    "addedDate": "2026-08-22",
-    "lastVerdictDate": "2026-08-22",
+    "history": [
+      {
+        "addedDate": "2026-08-22",
+        "lastVerdictDate": "2026-08-24",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-25"
+      }
+    ]
+  },
+  "4109.T": {
+    "ticker": "4109.T",
+    "name": "Stella Chemifa Corporation",
+    "history": [
+      {
+        "addedDate": "2026-08-24",
+        "lastVerdictDate": "2026-08-24",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-25"
+      }
+    ]
+  },
+  "4493.T": {
+    "ticker": "4493.T",
+    "name": "Cyber Security Cloud, Inc.",
+    "addedDate": "2026-08-24",
+    "lastVerdictDate": "2026-08-25",
+    "history": []
+  },
+  "ICL": {
+    "ticker": "ICL",
+    "name": "ICL Group Ltd",
+    "addedDate": "2026-08-24",
+    "lastVerdictDate": "2026-08-25",
+    "history": []
+  },
+  "4097.T": {
+    "ticker": "4097.T",
+    "name": "Koatsu Gas Kogyo Co., Ltd.",
+    "addedDate": "2026-08-25",
+    "lastVerdictDate": "2026-08-25",
+    "history": []
+  },
+  "MET": {
+    "ticker": "MET",
+    "name": "MetLife, Inc.",
+    "addedDate": "2026-08-25",
+    "lastVerdictDate": "2026-08-25",
     "history": []
   }
 }
