@@ -150,9 +150,14 @@
   "MP": {
     "ticker": "MP",
     "name": "MP Materials Corp.",
-    "addedDate": "2026-08-11",
-    "lastVerdictDate": "2026-08-16",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-11",
+        "lastVerdictDate": "2026-08-16",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-26"
+      }
+    ]
   },
   "6857.T": {
     "ticker": "6857.T",
@@ -275,29 +280,82 @@
   "4493.T": {
     "ticker": "4493.T",
     "name": "Cyber Security Cloud, Inc.",
-    "addedDate": "2026-08-24",
-    "lastVerdictDate": "2026-08-25",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-24",
+        "lastVerdictDate": "2026-08-25",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-26"
+      }
+    ]
   },
   "ICL": {
     "ticker": "ICL",
     "name": "ICL Group Ltd",
-    "addedDate": "2026-08-24",
-    "lastVerdictDate": "2026-08-25",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-24",
+        "lastVerdictDate": "2026-08-25",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-26"
+      }
+    ]
   },
   "4097.T": {
     "ticker": "4097.T",
     "name": "Koatsu Gas Kogyo Co., Ltd.",
-    "addedDate": "2026-08-25",
-    "lastVerdictDate": "2026-08-25",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-25",
+        "lastVerdictDate": "2026-08-25",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-26"
+      }
+    ]
   },
   "MET": {
     "ticker": "MET",
     "name": "MetLife, Inc.",
-    "addedDate": "2026-08-25",
-    "lastVerdictDate": "2026-08-25",
+    "history": [
+      {
+        "addedDate": "2026-08-25",
+        "lastVerdictDate": "2026-08-25",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-26"
+      }
+    ]
+  },
+  "8088.T": {
+    "ticker": "8088.T",
+    "name": "Iwatani Corporation",
+    "history": [
+      {
+        "addedDate": "2026-08-25",
+        "lastVerdictDate": "2026-08-25",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-26"
+      }
+    ]
+  },
+  "SMTC": {
+    "ticker": "SMTC",
+    "name": "Semtech Corporation",
+    "addedDate": "2026-08-26",
+    "lastVerdictDate": "2026-08-26",
+    "history": []
+  },
+  "5698.T": {
+    "ticker": "5698.T",
+    "name": "Envipro Holdings Inc.",
+    "addedDate": "2026-08-26",
+    "lastVerdictDate": "2026-08-26",
+    "history": []
+  },
+  "6460.T": {
+    "ticker": "6460.T",
+    "name": "Sega Sammy Holdings Inc.",
+    "addedDate": "2026-08-26",
+    "lastVerdictDate": "2026-08-26",
     "history": []
   }
 }
