@@ -150,6 +150,8 @@
   "MP": {
     "ticker": "MP",
     "name": "MP Materials Corp.",
+    "addedDate": "2026-08-27",
+    "lastVerdictDate": "2026-08-27",
     "history": [
       {
         "addedDate": "2026-08-11",
@@ -341,7 +343,7 @@
     "ticker": "SMTC",
     "name": "Semtech Corporation",
     "addedDate": "2026-08-26",
-    "lastVerdictDate": "2026-08-26",
+    "lastVerdictDate": "2026-08-27",
     "history": []
   },
   "5698.T": {
@@ -356,6 +358,13 @@
     "name": "Sega Sammy Holdings Inc.",
     "addedDate": "2026-08-26",
     "lastVerdictDate": "2026-08-26",
+    "history": []
+  },
+  "VRNS": {
+    "ticker": "VRNS",
+    "name": "Varonis Systems, Inc.",
+    "addedDate": "2026-08-27",
+    "lastVerdictDate": "2026-08-27",
     "history": []
   }
 }
