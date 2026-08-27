@@ -3511,14 +3511,14 @@
     {
       "symbol": "MRNA",
       "nameJa": "モデルナ",
-      "urgent": false,
+      "urgent": true,
       "decision": "保持"
     },
     {
       "symbol": "JOBY",
       "nameJa": "ジョビー・アビエーション",
       "urgent": false,
-      "decision": "保持"
+      "decision": "一部売却"
     },
     {
       "symbol": "HII",
@@ -3530,13 +3530,13 @@
       "symbol": "POWL",
       "nameJa": "パウエル・インダストリーズ",
       "urgent": false,
-      "decision": "保持"
+      "decision": "一部売却"
     },
     {
       "symbol": "EE",
       "nameJa": "エクセラレート・エナジー",
       "urgent": false,
-      "decision": "保持"
+      "decision": "買増"
     },
     {
       "symbol": "8522.T",
@@ -3564,13 +3564,13 @@
     },
     {
       "symbol": "NXT",
-      "nameJa": "ネクストラッカー",
+      "nameJa": "ネクストパワー",
       "urgent": false,
-      "decision": "一部売却"
+      "decision": "保持"
     },
     {
       "symbol": "BWMX",
-      "nameJa": "ベターウェア・デ・メキシコ",
+      "nameJa": "ベタウェア・デ・メキシコ",
       "urgent": false,
       "decision": "保持"
     },
@@ -3588,8 +3588,8 @@
     },
     {
       "symbol": "IRTC",
-      "nameJa": "iリズム・テクノロジーズ",
-      "urgent": true,
+      "nameJa": "アイリズム・テクノロジーズ",
+      "urgent": false,
       "decision": "保持"
     }
   ]

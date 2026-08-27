@@ -366,5 +366,33 @@
     "addedDate": "2026-08-27",
     "lastVerdictDate": "2026-08-27",
     "history": []
+  },
+  "MOD": {
+    "ticker": "MOD",
+    "name": "Modine Manufacturing Company",
+    "addedDate": "2026-08-27",
+    "lastVerdictDate": "2026-08-27",
+    "history": []
+  },
+  "NOC": {
+    "ticker": "NOC",
+    "name": "Northrop Grumman Corporation",
+    "addedDate": "2026-08-27",
+    "lastVerdictDate": "2026-08-27",
+    "history": []
+  },
+  "CRWD": {
+    "ticker": "CRWD",
+    "name": "CrowdStrike Holdings, Inc.",
+    "addedDate": "2026-08-27",
+    "lastVerdictDate": "2026-08-27",
+    "history": []
+  },
+  "4587.T": {
+    "ticker": "4587.T",
+    "name": "PeptiDream Inc.",
+    "addedDate": "2026-08-27",
+    "lastVerdictDate": "2026-08-27",
+    "history": []
   }
 }
