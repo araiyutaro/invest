@@ -245,7 +245,7 @@
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
     "addedDate": "2026-08-21",
-    "lastVerdictDate": "2026-08-21",
+    "lastVerdictDate": "2026-08-28",
     "history": []
   },
   "RTX": {
@@ -384,15 +384,39 @@
   "CRWD": {
     "ticker": "CRWD",
     "name": "CrowdStrike Holdings, Inc.",
-    "addedDate": "2026-08-27",
-    "lastVerdictDate": "2026-08-27",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-27",
+        "lastVerdictDate": "2026-08-27",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-28"
+      }
+    ]
   },
   "4587.T": {
     "ticker": "4587.T",
     "name": "PeptiDream Inc.",
-    "addedDate": "2026-08-27",
-    "lastVerdictDate": "2026-08-27",
+    "history": [
+      {
+        "addedDate": "2026-08-27",
+        "lastVerdictDate": "2026-08-27",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-28"
+      }
+    ]
+  },
+  "ZS": {
+    "ticker": "ZS",
+    "name": "Zscaler, Inc.",
+    "addedDate": "2026-08-28",
+    "lastVerdictDate": "2026-08-28",
+    "history": []
+  },
+  "8377.T": {
+    "ticker": "8377.T",
+    "name": "Hokuhoku Financial Group, Inc.",
+    "addedDate": "2026-08-28",
+    "lastVerdictDate": "2026-08-28",
     "history": []
   }
 }
