@@ -86,9 +86,14 @@
   "FDX": {
     "ticker": "FDX",
     "name": "FedEx Corporation",
-    "addedDate": "2026-07-29",
-    "lastVerdictDate": "2026-07-29",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-07-29",
+        "lastVerdictDate": "2026-07-29",
+        "removedReason": "expired",
+        "removedDate": "2026-08-29"
+      }
+    ]
   },
   "JCI": {
     "ticker": "JCI",
@@ -238,15 +243,20 @@
     "ticker": "1605.T",
     "name": "Inpex Corporation",
     "addedDate": "2026-08-17",
-    "lastVerdictDate": "2026-08-19",
+    "lastVerdictDate": "2026-08-29",
     "history": []
   },
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
-    "addedDate": "2026-08-21",
-    "lastVerdictDate": "2026-08-28",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-21",
+        "lastVerdictDate": "2026-08-28",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-29"
+      }
+    ]
   },
   "RTX": {
     "ticker": "RTX",
@@ -408,15 +418,25 @@
   "ZS": {
     "ticker": "ZS",
     "name": "Zscaler, Inc.",
-    "addedDate": "2026-08-28",
-    "lastVerdictDate": "2026-08-28",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-28",
+        "lastVerdictDate": "2026-08-28",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-29"
+      }
+    ]
   },
   "8377.T": {
     "ticker": "8377.T",
     "name": "Hokuhoku Financial Group, Inc.",
-    "addedDate": "2026-08-28",
-    "lastVerdictDate": "2026-08-28",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-28",
+        "lastVerdictDate": "2026-08-28",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-29"
+      }
+    ]
   }
 }
