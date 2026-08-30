@@ -170,7 +170,7 @@
     "ticker": "6857.T",
     "name": "Advantest Corporation",
     "addedDate": "2026-08-12",
-    "lastVerdictDate": "2026-08-12",
+    "lastVerdictDate": "2026-08-31",
     "history": []
   },
   "3110.T": {
@@ -243,7 +243,7 @@
     "ticker": "1605.T",
     "name": "Inpex Corporation",
     "addedDate": "2026-08-17",
-    "lastVerdictDate": "2026-08-29",
+    "lastVerdictDate": "2026-08-31",
     "history": []
   },
   "8331.T": {
@@ -438,5 +438,12 @@
         "removedDate": "2026-08-29"
       }
     ]
+  },
+  "1662.T": {
+    "ticker": "1662.T",
+    "name": "Japan Petroleum Exploration Co., Ltd.",
+    "addedDate": "2026-08-31",
+    "lastVerdictDate": "2026-08-31",
+    "history": []
   }
 }
