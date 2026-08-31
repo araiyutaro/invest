@@ -242,9 +242,14 @@
   "1605.T": {
     "ticker": "1605.T",
     "name": "Inpex Corporation",
-    "addedDate": "2026-08-17",
-    "lastVerdictDate": "2026-08-31",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-17",
+        "lastVerdictDate": "2026-08-31",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-31"
+      }
+    ]
   },
   "8331.T": {
     "ticker": "8331.T",
@@ -442,8 +447,13 @@
   "1662.T": {
     "ticker": "1662.T",
     "name": "Japan Petroleum Exploration Co., Ltd.",
-    "addedDate": "2026-08-31",
-    "lastVerdictDate": "2026-08-31",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-31",
+        "lastVerdictDate": "2026-08-31",
+        "removedReason": "downgraded",
+        "removedDate": "2026-08-31"
+      }
+    ]
   }
 }
