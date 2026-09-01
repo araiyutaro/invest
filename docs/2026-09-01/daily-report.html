@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Investment Report - 2026-09-01</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      color: #fff;
+      border-bottom: 2px solid #3b82f6;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: #60a5fa;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #3b82f6;
+      padding-left: 0.8rem;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #93c5fd;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: #a5b4fc;
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+    p { margin-bottom: 0.8rem; }
+    ul { list-style: none; padding-left: 0; margin-bottom: 1rem; }
+    li {
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.3rem;
+      background: #1e1e2e;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+    }
+    strong { color: #fbbf24; }
+    hr {
+      border: none;
+      border-top: 1px solid #333;
+      margin: 2rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #1e1e2e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    tr:first-child td {
+      background: #2a2a3e;
+      font-weight: bold;
+      color: #93c5fd;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+    .timestamp {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .agent-card {
+      background: #1e1e2e;
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #6366f1;
+    }
+    .agent-card h4 { color: #a5b4fc; margin-top: 0; }
+    .discussion-card {
+      background: #1a1a28;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #f59e0b;
+    }
+    .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    .ticker-pill {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #3f3f5a;
+    }
+    .news-meta {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .digest-crossref-chip {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #a78bfa;
+    }
+    .digest-crossref-row {
+      margin-bottom: 0.5rem;
+    }
+    .news-card a {
+      color: #93c5fd;
+    }
+    .news-card a:visited {
+      color: #c4b5fd;
+    }
+    .news-card a:hover {
+      color: #bfdbfe;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Investment Report - 2026-09-01</h1>
+    <p class="timestamp">Generated: 2026/9/2 8:30:07</p>
+    <hr>
+    <h2>市場概況</h2>
+    <div class="agent-card">
+      <p><strong>トレンド:</strong> <span style="color:#ef4444">下降</span></p>
+      <p>S&amp;P500・NASDAQ・ダウ揃って下落し、VIXが+9.52%急伸。対イラン紛争激化によるホルムズ海峡封鎖リスクと米30年債19年ぶり高水準が重なりリスクオフ加速。エネルギー・公益・ヘルスケアに資金流入、テクノロジー・消費裁量が大幅安。AIトークン価格最低水準も重石。</p>
+      <ul><li>S&amp;P500: <span style="color:#ef4444">-0.71%</span></li>
+<li>NASDAQ: <span style="color:#ef4444">-1.03%</span></li>
+<li>日経225: <span style="color:#ef4444">-0.15%</span></li>
+<li>VIX: <span style="color:#10b981">+9.52%</span></li></ul>
+    </div>
+    <hr>
+    <h2>セクターパフォーマンス</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 400 352" width="100%" role="img" aria-label="セクターパフォーマンス">
+    <line x1="270" y1="0" x2="270" y2="352" stroke="#333" stroke-width="1"/>
+    
+      <text x="132" y="16" font-size="13" fill="#e0e0e0" text-anchor="end">Energy</text>
+      <rect x="270" y="0" width="93.02012929853505" height="24" fill="#10b981" rx="2"/>
+      <text x="367.02012929853504" y="16" font-size="13" fill="#e0e0e0" text-anchor="start">+1.27%</text>
+    
+      <text x="132" y="48" font-size="13" fill="#e0e0e0" text-anchor="end">Utilities</text>
+      <rect x="270" y="32" width="57.3981228977329" height="24" fill="#10b981" rx="2"/>
+      <text x="331.3981228977329" y="48" font-size="13" fill="#e0e0e0" text-anchor="start">+0.78%</text>
+    
+      <text x="132" y="80" font-size="13" fill="#e0e0e0" text-anchor="end">Healthcare</text>
+      <rect x="270" y="64" width="48.669474936021125" height="24" fill="#10b981" rx="2"/>
+      <text x="322.6694749360211" y="80" font-size="13" fill="#e0e0e0" text-anchor="start">+0.66%</text>
+    
+      <text x="132" y="112" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Staples</text>
+      <rect x="270" y="96" width="23.336967838592525" height="24" fill="#10b981" rx="2"/>
+      <text x="297.3369678385925" y="112" font-size="13" fill="#e0e0e0" text-anchor="start">+0.32%</text>
+    
+      <text x="132" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">Real Estate</text>
+      <rect x="258.34370908412563" y="128" width="11.656290915874338" height="24" fill="#ef4444" rx="2"/>
+      <text x="254.34370908412563" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">-0.16%</text>
+    
+      <text x="132" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">Communication Services</text>
+      <rect x="231.7780192490425" y="160" width="38.2219807509575" height="24" fill="#ef4444" rx="2"/>
+      <text x="227.7780192490425" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">-0.52%</text>
+    
+      <text x="132" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">Financials</text>
+      <rect x="205.08870998769973" y="192" width="64.91129001230027" height="24" fill="#ef4444" rx="2"/>
+      <text x="201.08870998769973" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">-0.88%</text>
+    
+      <text x="132" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">Materials</text>
+      <rect x="183.56996869553052" y="224" width="86.43003130446948" height="24" fill="#ef4444" rx="2"/>
+      <text x="179.56996869553052" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">-1.18%</text>
+    
+      <text x="132" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">Industrials</text>
+      <rect x="169.34014608752426" y="256" width="100.65985391247573" height="24" fill="#ef4444" rx="2"/>
+      <text x="165.34014608752426" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">-1.37%</text>
+    
+      <text x="132" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">Technology</text>
+      <rect x="157.36088748462467" y="288" width="112.63911251537533" height="24" fill="#ef4444" rx="2"/>
+      <text x="153.36088748462467" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">-1.53%</text>
+    
+      <text x="132" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Discretionary</text>
+      <rect x="144" y="320" width="126" height="24" fill="#ef4444" rx="2"/>
+      <text x="140" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">-1.72%</text>
+    
+  </svg>
+    </div>
+    <hr>
+    <h2>VIX推移</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 600 200" width="100%" role="img" aria-label="VIX推移">
+    
+    <line x1="10" y1="132.89156626506025" x2="560" y2="132.89156626506025"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="136.89156626506025" font-size="13" fill="#6b7280">20</text>
+  
+    
+    <line x1="10" y1="50.96385542168676" x2="560" y2="50.96385542168676"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="54.96385542168676" font-size="13" fill="#6b7280">30</text>
+  
+    <polyline points="10,166.8096413669816 37.5,161.56626506024097 65,167.21927367061016 92.5,172.62650914939053 120,174.67470192047486 147.5,170.0867466754224 175,171.56144797083843 202.5,177.54216711205171 230,176.88674605036357 257.5,180 285,172.29879861854644 312.5,166.97349272578595 340,174.75662369325937 367.5,165.5807210163898 395,172.79036050819488 422.5,166.8915631397661 450,170.16867626144224 477.5,172.13493944650673 505,177.8698776428958 532.5,174.51084274843515 560,162.87710718361728" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="10" cy="166.8096413669816" r="3" fill="#3b82f6"/><circle cx="37.5" cy="161.56626506024097" r="3" fill="#3b82f6"/><circle cx="65" cy="167.21927367061016" r="3" fill="#3b82f6"/><circle cx="92.5" cy="172.62650914939053" r="3" fill="#3b82f6"/><circle cx="120" cy="174.67470192047486" r="3" fill="#3b82f6"/><circle cx="147.5" cy="170.0867466754224" r="3" fill="#3b82f6"/><circle cx="175" cy="171.56144797083843" r="3" fill="#3b82f6"/><circle cx="202.5" cy="177.54216711205171" r="3" fill="#3b82f6"/><circle cx="230" cy="176.88674605036357" r="3" fill="#3b82f6"/><circle cx="257.5" cy="180" r="3" fill="#3b82f6"/><circle cx="285" cy="172.29879861854644" r="3" fill="#3b82f6"/><circle cx="312.5" cy="166.97349272578595" r="3" fill="#3b82f6"/><circle cx="340" cy="174.75662369325937" r="3" fill="#3b82f6"/><circle cx="367.5" cy="165.5807210163898" r="3" fill="#3b82f6"/><circle cx="395" cy="172.79036050819488" r="3" fill="#3b82f6"/><circle cx="422.5" cy="166.8915631397661" r="3" fill="#3b82f6"/><circle cx="450" cy="170.16867626144224" r="3" fill="#3b82f6"/><circle cx="477.5" cy="172.13493944650673" r="3" fill="#3b82f6"/><circle cx="505" cy="177.8698776428958" r="3" fill="#3b82f6"/><circle cx="532.5" cy="174.51084274843515" r="3" fill="#3b82f6"/><circle cx="560" cy="162.87710718361728" r="3" fill="#3b82f6"/>
+    <text x="10" y="196" font-size="13" fill="#888">2026-08-03</text>
+    <text x="560" y="196" font-size="13" fill="#888" text-anchor="end">2026-09-01</text>
+  </svg>
+    </div>
+    <hr>
+    <h2>セクター推奨ランキング</h2>
+    <table>
+      <tr>
+        <td>ランク</td>
+        <td>セクター</td>
+        <td>理由</td>
+        <td>見通し</td>
+      </tr>
+      <tr>
+      <td>1</td>
+      <td><strong>エネルギー</strong></td>
+      <td>対イラン紛争激化・ホルムズ海峡封鎖警告でWTI85ドル台高止まり。XLE+1.27%と全セクタートップ。CHRD・1605.T・5019.Tが恩恵を受ける構図。円安（160円台）も日本エネルギー株の収益を押し上げ。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>2</td>
+      <td><strong>日本金融</strong></td>
+      <td>日本10年債が3%超に上昇し地域銀行の利ザヤ拡大が加速。TOPIX9日連続続伸の中、千葉銀行(8331.T)がテクニカル・マクロ双方でスコア高く注目。BOJ正常化継続シナリオで継続的な恩恵を見込む。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>3</td>
+      <td><strong>サイバーセキュリティ（国防）</strong></td>
+      <td>地政学リスク高まりで防衛・セキュリティ予算拡大が加速。FFRIセキュリティ(3692.T)が売上+43%・営業益+67%と圧倒的成長。ソリトンシステムズ(3040.T)も政府向けIT需要を底堅く取り込む。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>4</td>
+      <td><strong>テクノロジー</strong></td>
+      <td>XLK-1.53%と大幅安。AIトークン価格が過去最低水準に下落し収益化懸念が浮上。OpenAI Astraの能力閾値超えが規制強化の引き金となる可能性。DELLは決算好調で例外的にウォッチ継続だが、セクター全体はリスクオフ。</td>
+      <td style="color:#ef4444;font-weight:bold;">弱気</td>
+    </tr>
+<tr>
+      <td>5</td>
+      <td><strong>消費裁量</strong></td>
+      <td>XLY-1.72%と全セクター最大の下落。米30年債高水準が消費者の借入コストを引き上げ、アパレル・小売株に逆風。高金利長期化シナリオで消費支出の圧縮が続く見込み。G-III(GIII)は弱気判定で回避推奨。</td>
+      <td style="color:#ef4444;font-weight:bold;">弱気</td>
+    </tr>
+    </table>
+    <hr>
+    <h2>注目銘柄スコアリングマトリクス</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">各エージェントが10段階評価した結果です。平均7以上=強気、4〜6.9=中立、4未満=弱気。</p>
+    <table>
+      <tr>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;">銘柄</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">ファンダメンタルズアナリスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テンバガーハンター</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テクニカルストラテジスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">リスクマネージャー</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">マクロエコノミスト</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">平均</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">判定</td>
+      </tr>
+      <tr>
+      <td><strong>CHRD</strong><br><span style="font-size:0.8rem;color:#888;">地政学リスク（ホルムズ海峡封鎖警告）とWTI85ドル台維持でエネルギー株最注目。ファンダメンタルズ・テクニカル双方で高評価を獲得。リスク面は地政学依存への注意が必要だが、現環境では追い風が継続する構図。</span></td>
+      <td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">EV/EBITDA3.35xと極めて割安、FCF利回り11.7%は株主還元余力十分。原油集中リスクはあるが財務指標は申し分なく強気支持。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">FCF利回り11.7%・EV/EBITDA3.35xと割安感あり。ただし原油依存の成熟事業で爆発的成長性に欠ける。テンバガー視点では多重ベットのリスクを考慮し様子見。</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">RSI64で過熱感なく50日・200日線上方を維持。52週高値更新はブレイクアウト継続を示す最強のトレンドシグナル。押し目待ちの好機。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">ピークアーニングス懸念が最大リスク。原油価格下落局面でのマルチプル圧縮と地政学プレミアム剥落が重なれば、強気論拠が同時崩壊する二重リスク構造。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">WTI85ドル台＋ホルムズ封鎖警告で原油需給タイト。米長期金利高でも実物資産としてエネルギーは相対優位。FCF利回り11.7%はインフレ環境でも競争力あり。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.4</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+<tr>
+      <td><strong>GIII</strong><br><span style="font-size:0.8rem;color:#888;">米30年債高水準・消費者ローン金利上昇が直撃するアパレル株。XLY-1.72%の下落トレンドに連動し全アナリストが低評価。高金利長期化環境では消費裁量支出の圧縮が避けられず、現時点での投資は回避推奨。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">PBR0.74xは割安だがMarc Jacobs買収による負債増とブランドROE低下懸念。アパレル業界の構造的逆風もあり慎重姿勢。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">Marc Jacobs買収で成長戦略は評価できるが、アパレル業種はテンバガー候補として厳しい。PBR0.74x・RSI33は割安シグナルだが、短期モメンタム欠如。打診買いレベル。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">RSI33は売られ過ぎ寸前で短期反発余地はあるが、50日線割れは短期トレンド悪化を示す。200日線がサポートとして機能するか要確認。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">RSI33は底値ではなく下落継続シグナルの可能性。消費財セクター逆風下でのMark Jacobs買収はM&amp;Aプレミアムの過払いリスクを孕む。PBR割安は業績悪化の先行織り込みか。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">米30年債19年ぶり高水準＋消費者信頼感悪化で裁量消費は逆風。Marc Jacobs買収による負債拡大は高金利環境で財務リスク拡大。マクロ追い風なし。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">4</strong></td>
+      <td style="text-align:center;"><span style="color:#ef4444;font-weight:bold;">弱気</span></td>
+    </tr>
+<tr>
+      <td><strong>5019.T</strong><br><span style="font-size:0.8rem;color:#888;">中東情勢悪化でエネルギー株として恩恵を受けるが、テクニカル・成長性でやや見劣り。ファンダメンタルズとマクロは高評価。CHRDと比較すると2番手だが、円安追い風でポートフォリオのエネルギー分散先として有効。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">PER10.6x・ROE22.5%は日本エネルギー株では際立って優秀。RSI73過熱は短期調整リスクだが、バリュエーション的には割安圏を維持。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">PER10.6x・ROE22.5%と財務は優秀だが、エネルギー企業はテンバガー候補として不適。RSI73過熱で短期調整リスクも高い。成長ストーリーに乏しい。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">50日・200日線上方で基調は強いが、RSI73は過熱圏。追い買いは危険で調整を待つべき。トレンド自体は健全。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">RSI73は過熱域。協調介入で円高転換すれば円安メリット喪失、停戦で原油下落すれば価格メリット喪失という二翼同時喪失シナリオが現実的リスク。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">原油高＋ドル建て収益＋円安159円で為替差益二重取り。日本エネルギー安全保障強化の政策追い風も継続。RSI73過熱は要注意だがファンダ支持。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.4</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>3692.T</strong><br><span style="font-size:0.8rem;color:#888;">売上+43%・営業益+67%の決算でサイバーセキュリティ需要の爆発的成長を証明。テンバガーハンター最高スコア9を獲得。地政学リスク高まりで防衛・セキュリティ予算拡大が追い風。本日のベストピック。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">売上+43%の高成長と防衛国策の追い風が重なる。ファンダメンタルズとして成長性・政策支援の両面で買い材料が揃う。</span></td><td style="text-align:center;color:#10b981"><strong>10</strong><br><span style="font-size:0.75rem;color:#888;">売上+43%の高成長・防衛国策・RSI63でモメンタム継続。複数アナリスト支持も追い風。防衛AIの構造的成長テーマに乗る本命候補。テンバガー最有力。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">RSI63と勢いはあるが、50日線と200日線の間で迷走中。200日線奪回が確認できるまでトレンド未確立と判断。様子見継続。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">防衛国策銘柄として売上+43%は評価できるが、株価がすでに将来成長を織り込んでいる可能性が高い。数字が仮説を正当化するまで追いかけ買いは禁物。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">NATO加盟国の防衛予算拡大・日本GDP比2%目標でセクターローテーション継続。地政学リスク高止まりが防衛支出を構造的に押し上げ。国策×成長の強い組み合わせ。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.8</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+<tr>
+      <td><strong>INOD</strong><br><span style="font-size:0.8rem;color:#888;">AIデータアノテーション事業がAIトークン価格最低水準とAI能力向上による自動化圧力に直面。テクニカル・リスク双方が最低水準の評価。全アナリストが低スコアで14銘柄中最下位。現時点での投資価値は極めて低い。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">粗利率懸念は財務面での根本的な競争力低下を示唆。RSI37の下落トレンドと両移動平均割れが財務悪化を裏付け、回避推奨。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">テンバガー視点では成長性に期待するが、RSI37・両移動平均割れと技術面が弱い。粗利率懸念と他4名の反対も重い。モメンタム回復確認まで待機。</span></td><td style="text-align:center;color:#ef4444"><strong>2</strong><br><span style="font-size:0.75rem;color:#888;">RSI37で下方向の勢い、かつ50日・200日線ともに下方。デスクロス示唆の下降トレンド確立。新規参入は回避推奨。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">RSI37・両移動平均割れと4名反対は強い売りシグナル。テンバガー仮説は魅力的だが、テクニカル崩壊状態での参入は投機であり損失確定リスクが高い。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">高金利環境でグロース株の割引率上昇。AI関連でも収益性未証明の小型株はリスクオフ局面で資金逃避対象。粗利率懸念と移動平均割れがマクロ弱気と一致。</span></td>
+      <td style="text-align:center;"><strong style="color:#ef4444">3.6</strong></td>
+      <td style="text-align:center;"><span style="color:#ef4444;font-weight:bold;">弱気</span></td>
+    </tr>
+<tr>
+      <td><strong>3040.T</strong><br><span style="font-size:0.8rem;color:#888;">ネットワークセキュリティ・政府向けIT事業で地政学リスク高まりの恩恵を享受。テクニカル・マクロが高評価でリスク管理も合格点。国産セキュリティ銘柄として政府需要を底堅く取り込む事業基盤を評価する。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">防衛実績はあるが財務詳細データが乏しく、バリュエーション評価が困難。RSI59上昇トレンドは好材料だが確信度不足で様子見。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">防衛実績とRSI59上昇トレンドは好感。テンバガー候補として防衛テーマは魅力的だが、3692.Tと比較すると成長加速度が劣る。打診買いレベル。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">RSI59は適度な強さで過熱感なし。50日・200日線を上方維持するクリーンな上昇トレンド。押し目買いの好機として評価。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">RSI59は適正水準で防衛実績も評価できる。ただし防衛セクター全体の政策依存リスクと、地政学緊張緩和時の株価調整リスクは無視できない。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">日本防衛費倍増計画（GDP比2%）の直接受益セクター。世界的地政学リスク上昇による防衛支出拡大は5年以上続く構造変化。セクターローテーション継続見込み。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.4</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+<tr>
+      <td><strong>1605.T</strong><br><span style="font-size:0.8rem;color:#888;">日本最大の石油・天然ガス開発会社。中東情勢緊迫化でマクロ評価は最高水準だが、ホルムズ海峡封鎖時の操業リスクをリスクマネージャーが警告。ファンダメンタルズ堅実。既存保有者はホールド継続推奨。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">INPEXはPER・PBRともに割安圏。原油高＋円安の二重受益で業績上振れ期待大。RSI72過熱による短期調整を差し引いてもファンダは強い。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">原油+円安の二重受益は短期好材料だが、INPEXは成熟エネルギー企業でテンバガー期待値は低い。RSI72過熱で高値圏エントリーはリスク大。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">50日・200日線上方の強い基調だが、RSI72は過熱圏。エネルギー株として追い買いは高値掴みリスク大。調整後に再評価。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">RSI72の過熱に加え、地政学プレミアムが既に織り込み済み。停戦・緊張緩和ニュース一つで急落する非対称リスク。上値余地より下値リスクが大幅に上回る。</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">INPEXはドル建て原油収益＋円安で為替・コモディティの二重恩恵。ホルムズリスクが原油プレミアムを維持。LNG事業拡大も日本のエネルギー安保政策と整合。最強マクロ環境。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.6</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>8331.T</strong><br><span style="font-size:0.8rem;color:#888;">日本10年債3%超で地域銀行の利ザヤ改善が加速。テクニカル分析でブレイクアウト兆候を確認しスコア8。TOPIX9日続伸の中、BOJ正常化継続シナリオで継続的な恩恵を見込む日本金融セクターの代表銘柄。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">地銀のベアスティープ恩恵で利ざや改善期待は本物。ただしベアスティープ継続は信用コスト増も招くため、純益への影響は両面あり中立。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">地方銀行はテンバガー候補として魅力薄。金利上昇恩恵はあるがベアスティープ懸念と構造的成長限界。RSI61は中立も、成長ストーリーが描けない。</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">RSI61で過熱感なく50日・200日線を上方維持。地銀株として安定したトレンド形成。テクニカル的に最もクリーンな上昇シグナル。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">金利上昇の銀行株メリットは認める。しかし長期国債評価損と与信コスト上昇が同時発生する逆説的リスクあり。RSI61は適正だが潜在的損失は軽視できない。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">日銀正常化サイクルで短期金利上昇→NIM拡大が地銀に追い風。ベアスティープ懸念はJGB含み損リスクだが、短期的な利ざや改善効果が上回る。金利敏感セクターの勝ち組候補。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.2</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+<tr>
+      <td><strong>DELL</strong><br><span style="font-size:0.8rem;color:#888;">決算好調・通期ガイダンス引き上げで時間外+10%。AIサーバー需要の底堅さを実証。ただしXLK全体の下落トレンドと金利上昇リスクを考慮し中立判定。時間外上昇後の寄り付き値動きを確認してから判断推奨。</span></td>
+      <td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">決算後+10%AHはEPS・売上双方のビート示唆。AIインフラ需要でサーバー部門の収益拡大が続く見通し。バリュエーション面でも割高感はなく強気。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">決算+10%AHはポジティブサプライズ。AI/サーバー需要でDELLの成長加速に期待できる。ただし大型株でテンバガー余地は限定的。中期保有候補。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">RSI45でやや弱く、50日線と200日線の間に位置。方向感が定まらないレンジ相場。ブレイク方向を確認してから参入が妥当。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">決算+10%AHは材料出尽くしリスク。ギャップフィルで下落後に再評価が適切なエントリー判断。RSI45は中立水準で、サプライズ消化中の様子見が賢明。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">AIインフラ需要のAIサーバー受注は堅調。一方、米長期金利高による企業IT予算削減圧力も実在。決算ポジティブサプライズがマクロ逆風を一部相殺。中立評価が妥当。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+<tr>
+      <td><strong>285A.T</strong><br><span style="font-size:0.8rem;color:#888;">NAND型フラッシュメモリの需給サイクル改善期待があるが全アナリストが中庸評価。AI関連データストレージ需要は追い風だが、半導体セクター全体の調整リスクと競合圧力が重石。積極的な新規買いは不要な局面。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">キオクシアはNAND市況の価格サイクル依存が強く、財務安定性が低い。RSI46レンジの停滞は業績の不透明感を反映。投資妙味に乏しい。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">NAND市況回復で半導体テーマは有効。ただしRSI46レンジで方向感なく、キオクシアは上場したばかりで成長軌道の確認が必要。様子見継続。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">RSI46で中立圏、2本の移動平均線の間でレンジ推移。トレンドの方向性が不明確で、現時点では明確な売買シグナルなし。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">キオクシアはNAND市場の需給サイクルリスクに直結。RSI46はレンジ相場で方向性が不明確。半導体メモリの価格下落局面では業績悪化が急速に進む可能性。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">メモリ価格サイクル回復局面だが、米中半導体規制リスク＋高金利による在庫調整再燃懸念。円安は輸出メリットだが中国需要不透明。マクロ要因は拮抗しレンジ推移が続く。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">4.6</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>6592.T</strong><br><span style="font-size:0.8rem;color:#888;">国産ヒューマノイド連合KyoHA参画で精密モーター需要の新市場開拓を宣言。テクニカル・テンバガー双方で高評価。ロボティクス革命の恩恵を国内小型株で取り込める数少ない銘柄として注目度が急上昇している。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">マブチモーターはキャッシュリッチで財務健全だがEV移行期の需要不透明感が残る。KyoHA参画で成長期待は高まるが業績への反映は時間を要する。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">KyoHAパートナーシップでEV/ロボティクス市場開拓という新成長ドライバー出現。RSI64上昇トレンドでモメンタムも良好。中型株でテンバガー余地あり。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">RSI64と健全な強さ、50日・200日線上方維持。過熱感なく上昇トレンドが継続。モーメンタムが持続する可能性が高い。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">KyoHA参画は将来性あるがRSI64でバリュエーションが先行している懸念。成長率が低い現状では材料先食いリスクが高く、期待剥落時の下落幅が大きい。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">円安159円で輸出企業として為替追い風。一方、EV化加速でモーター製品の競合増加リスクとマクロ景気減速懸念。KyoHA参画は新たな成長軸だが短期的マクロ寄与は限定的。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+<tr>
+      <td><strong>SNOW</strong><br><span style="font-size:0.8rem;color:#888;">AIトークン価格最低水準でデータクラウドの差別化価値が問われる局面。米30年債高水準がグロース株バリュエーションを圧縮。テンバガー・テクニカルはポテンシャルを評価するが、ファンダメンタルズ・リスクが低く弱気判定。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">47%上昇後も高PSRが続き、ファンダメンタル的な割高感は解消されていない。黒字化時期の不透明さがバリュエーション正当化を困難にする。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">AIデータプラットフォームとして成長ストーリーは強力。47%上昇後の高PSRは懸念だが、テンバガー・テクニカルの支持も考慮し中立維持。押し目待ち。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">RSI55は中庸で50日・200日線上方を維持。トレンドは継続しているが勢いは緩やか。強気転換の材料があれば積極参入を検討できる水準。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">AIトークン価格デフレは同社の収益モデルへの直接的脅威。高PSRは収益化が遠い将来への賭けであり、金利上昇環境下では割高修正リスクが特に大きい。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">高PSR成長株は米30年債高水準で割引率上昇圧力が強い。47%上昇後の高値圏でリスクオフが重なれば売り圧力増大。クラウド支出鈍化懸念もあり弱気方向に傾く。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">4.8</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>3778.T</strong><br><span style="font-size:0.8rem;color:#888;">不正アクセス被害が136万アカウントに拡大し、リスクマネージャーが最低スコア2を付与。政府クラウド事業への信頼失墜が最大のリスク。被害規模確定・対策完了まで積極投資は回避推奨。テクニカルに下値支持あり。</span></td>
+      <td style="text-align:center;color:#ef4444"><strong>2</strong><br><span style="font-size:0.75rem;color:#888;">情報漏洩拡大は財務面での賠償リスク・顧客離れ・設備投資増を三重に招く。ファンダメンタルズ毀損が明確であり回避を推奨。</span></td><td style="text-align:center;color:#ef4444"><strong>2</strong><br><span style="font-size:0.75rem;color:#888;">セキュリティインシデント拡大は企業信頼の根幹を損なう。クラウド/AI国策銘柄としての魅力はあるが、漏洩問題解決まで投資不適。リスクオフ。</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">RSI58・両移動平均線上方で基調は上昇傾向。ただし悪材料の価格未反映リスクが存在。テクニカルは良好だが下方ギャップリスクに注意。</span></td><td style="text-align:center;color:#ef4444"><strong>1</strong><br><span style="font-size:0.75rem;color:#888;">情報漏洩が583万から136万への拡大は信頼毀損が深刻化しているシグナル。セキュリティインシデント継続中の企業は法的リスク・顧客離反リスクが高く、投資不適格。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">データ主権・クラウドインフラはマクロ政策追い風。ただし情報漏洩拡大は個別企業リスクでマクロ評価外。プラスマクロとマイナス信頼失墜が相殺し中立。情報管理改善を要観察。</span></td>
+      <td style="text-align:center;"><strong style="color:#ef4444">2.4</strong></td>
+      <td style="text-align:center;"><span style="color:#ef4444;font-weight:bold;">弱気</span></td>
+    </tr>
+<tr>
+      <td><strong>4004.T</strong><br><span style="font-size:0.8rem;color:#888;">半導体材料・化学素材メーカーとして半導体需要回復の恩恵期待があるが全アナリストが低評価。高金利環境での設備投資抑制リスクと原材料コスト上昇が重石。中長期テーマは面白いが現時点では見送りが妥当。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">PER54.9xは素材・化学株として著しく割高。レゾナックの構造改革コストが利益を圧迫しており、バリュエーション正当化には数年単位の回復が必要。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">レゾナックはマテリアル転換で成長期待あるが、PER54.9xの割高感と半導体素材の競争激化が重い。RSI51中立でモメンタムも弱く、テンバガー候補として優先度低。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">RSI51はほぼ中立で50日・200日線をわずかに上方維持するが勢いは弱い。弱い上昇トレンドで方向感に確信が持てず。積極的には動けない水準。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">PER54.9xは化学セクターとして著しく割高。RSI51で方向感なく、現在の収益水準を正当化できる成長ストーリーが見えない。バリュエーション是正リスクが大きい。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">化学セクターは景気サイクル敏感。中国景気減速＋欧州製造業低迷で需要鈍化リスク。PER54.9x割高は高金利下でバリュエーション圧縮リスク大。マクロ逆風が続く局面。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+    </table>
+    <hr>
+    <h2>ウォッチリスト 買いタイミング判定</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">ウォッチリスト銘柄の本日の買いタイミング判定です。</p>
+    <div class="agent-card">
+      <h4>3110.T — Nitto Boseki Co., Ltd. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 寄付き前時点)</span></h4>
+      <p>本日は+5.44%の強い上昇を示しているが、出来高比率が0.69と平均を大きく下回っており、反発の信頼性に乏しい。価格はMA50（3,329円）およびMA200（3,664円）を共に下回っており、トレンドラベルも「下降トレンド（50日線・200日線割れ）」と明示されている。52週高値（6,390円）からの下落率は約50%に達しており、構造的な下降トレンドの中に位置する。MA20（3,070円）超えは維持しているが、これ単独では上位トレンドの転換を意味しない。</p>
+      <span class="ticker-pill">MA50（3,329円）下方乖離-3.88%・MA200（3,664円）下方乖離-12.66%：上位トレンドが下降中であることを示す</span><span class="ticker-pill">出来高比率0.69：本日の急騰が薄商いによるものであり、トレンド転換シグナルとして弱い</span><span class="ticker-pill">52週高値比-49.9%：深刻な下降トレンド継続中であり、反発余地の確認前に参入するリスクが高い</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-13</p>
+    </div>
+<div class="agent-card">
+      <h4>5698.T — Envipro Holdings Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 寄付き前時点)</span></h4>
+      <p>現在値793円はMA20（815.5）・MA50（807.96）・MA200（822.035）の全移動平均線を下回っており、トレンドラベルも「下降トレンド（50日線・200日線割れ）」と明示されている。RSI14は47.32と中立域ながら50を割り込んでおり、買い転換の勢いを示していない。出来高比率も0.83と平均を下回り、上昇への確信度を裏付ける出来高増加がない。買いのconfluenceを形成する複数シグナルが存在しないため、本日は見送りが妥当。</p>
+      <span class="ticker-pill">価格がMA20・MA50・MA200の全移動平均線を下回る（三重デッドクロス状態）</span><span class="ticker-pill">RSI14が47.32と50未満で弱気バイアス</span><span class="ticker-pill">出来高比率0.83と平均以下で上昇の確信度なし</span><span class="ticker-pill">52週高値比-34.6%の強い下落圧力継続</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-26</p>
+    </div>
+<div class="agent-card">
+      <h4>6146.T — Disco Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 寄付き前時点)</span></h4>
+      <p>ディスコ（6146.T）は現時点でMA20・MA50・MA200のすべてを下回る明確な下降トレンドにある。特にMA50からの乖離率が-14.3%と大幅な下方乖離で、価格の位置は構造的に弱い。RSI14は40.4と中立ゾーン下部にあり、まだ売られすぎの水準（30以下）に達しておらず、さらなる下値余地を示唆する。本日-2.1%の続落かつ出来高比率0.92と平均以下で、買い圧力の高まりは確認できない。</p>
+      <span class="ticker-pill">MA50・MA200の双方を10%超下回っており、トレンドが下降局面にあることを複数の移動平均が確認</span><span class="ticker-pill">RSI14=40.4と中立ゾーン下限にあり、まだ売られすぎ圏に到達しておらず底打ちシグナルなし</span><span class="ticker-pill">出来高比率0.92と平均を下回り、買い勢力の参入を示す出来高急増が不在</span><span class="ticker-pill">本日-2.07%続落中で当日の勢いも弱気</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-14</p>
+    </div>
+<div class="agent-card">
+      <h4>6460.T — Sega Sammy Holdings Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 寄付き前時点)</span></h4>
+      <p>セガサミーHD（6460.T）は50日線・200日線の上方で明確な上昇トレンドを形成しているものの、現時点での新規エントリーは見送りが妥当と判断する。RSI14が73.48とオーバーボート圏（70超）に達しており、短期的な過熱が示唆される。加えて、株価はMA50から+20.25%・MA200から+24.50%と主要移動平均線から大幅に乖離しており、平均回帰圧力が高まりやすい水準にある。直近では52週高値3416円から9.19%の位置にあり、戻り売りのレジスタンスとして機能しやすい。関連ニュースによる新たな買い材料もなく、現時点で複数シグナルの買いコンフルエンスは成立しない。</p>
+      <span class="ticker-pill">RSI14=73.48でオーバーボート圏（&gt;70）に突入しており、短期過熱による調整リスクが高い</span><span class="ticker-pill">株価がMA50から+20.25%・MA200から+24.50%と大幅乖離し、伸び切りサインが複数の時間軸で同時点灯</span><span class="ticker-pill">52週高値3416円まで残り+9.9%の位置にあり、戻り売り圧力が想定されるレジスタンスゾーンに接近中</span><span class="ticker-pill">当日変化率-0.29%と小幅陰転しており、上値追いへの積極的な買い勢いが確認できない</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-26</p>
+    </div>
+<div class="agent-card">
+      <h4>6857.T — Advantest Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">買い → 待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 寄付き前時点)</span></h4>
+      <p>前営業日終値ベースで6857.Tは-4.48%の大幅下落を記録し、株価（33,690円）が20日移動平均線（34,551.5円）を割り込んでいる。中長期トレンドは50日線・200日線の上位で依然として上昇基調を維持しているが、短期的には直近サポートを失った状態で東京市場のセッションを迎える形となる。RSI14は50.60と中立圏にあり、売られ過ぎ（30以下）には程遠く、平均回帰的な押し目買いの根拠が成立しない。出来高比率1.04は平均をわずかに上回る程度で、底打ちを示す投げ売りや買い集めのシグナルとしては不十分。また、下落を説明するニュース材料がデータ上存在しないため、原因不明の急落後は様子見が定石となる。</p>
+      <span class="ticker-pill">株価（33,690円）が20日移動平均線（34,551.5円）を下回り、短期トレンドが悪化している</span><span class="ticker-pill">RSI14が50.60と中立圏にあり、売られ過ぎによるリバウンド根拠が不在</span><span class="ticker-pill">出来高比率1.04は平均並みで底打ちを示す特異な動きなし</span><span class="ticker-pill">下落を裏付けるニュース材料がデータ上存在せず、原因不明の急落後は様子見が妥当</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-12</p>
+    </div>
+<div class="agent-card">
+      <h4>6976.T — Taiyo Yuden Co., Ltd. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 寄付き前時点)</span></h4>
+      <p>現在価格9,184円は50日移動平均線（12,856円）から約28.6%下方に乖離しており、下降トレンドの強さを示している。RSI14は40.1と売られ過ぎ水準には達していないが、弱気バイアスを示す中立以下の水準にある。200日移動平均線（7,601円）からは約20.8%上方に位置しており、下値余地がなお残存する。52週高値（22,655円）から約59.5%の大幅下落局面にあり、複数のシグナルが買いへの合致を形成していない。出来高比率も0.82と低水準にとどまる。</p>
+      <span class="ticker-pill">RSI14=40.1は50を下回り、買いモメンタムの不在を示す（売られ過ぎの反発確認前）</span><span class="ticker-pill">50日移動平均線から-28.6%の大幅下方乖離は下降圧力が継続中であることを示す</span><span class="ticker-pill">出来高比率0.82は平均を下回り、買い勢力の参入が確認できない</span><span class="ticker-pill">200日移動平均線（7,601円）からの上方乖離（+20.8%）が下値余地の存在を示唆</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-13</p>
+    </div>
+<div class="agent-card">
+      <h4>ETN — Eaton Corporation plc <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>ETNは前日比-3.40%と大幅下落し、価格（401.88ドル）はMA20（434.87ドル）・MA50（417.22ドル）の双方を下回る位置にある。トレンドラベルが示す通り「50日線と200日線の間」のレンジに滑り込んでおり、短中期の下押し圧力が続いている状況。RSI14は40.86と中立域の下方に位置し、売られすぎ（30以下）には至っておらず、底打ちを確認できる水準ではない。出来高比率も0.95と平均をわずかに下回る水準で、投げ売りによる需給の転換が発生したとは言えない。</p>
+      <span class="ticker-pill">RSI14（40.86）は中立域の下方だが売られすぎ水準（≤30）に未達であり、底打ち確認には至っていない</span><span class="ticker-pill">出来高比率0.95と平均以下で、セリングクライマックスを示す需給転換の証拠がない</span><span class="ticker-pill">価格がMA20（434.87）・MA50（417.22）の双方を下回っており、短中期トレンドが下向き</span><span class="ticker-pill">単日-3.40%の急落にもかかわらず出来高が増加していないため、売り一巡を示すシグナルが不在</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-04</p>
+    </div>
+<div class="agent-card">
+      <h4>ETON — Eton Pharmaceuticals, Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>ETONはMA50・MA200の双方を大きく上回る強い上昇トレンドにあり、RSI14が64.31と過熱圏（70）に達していない点は相応の買い余地を示す。しかし本日は-3.56%の下落を記録し、その下落が出来高比率1.44xという平均以上の出来高を伴っている点が問題だ。これは高値圏での分配（売り圧力）を示唆しており、52週高値64.43ドルからわずか6.2%下という強いレジスタンス帯に当たっていることとも合致する。さらにMA50からの乖離率が+34%、MA200からは+122%と著しく過伸長しており、平均回帰リスクが高い水準にある。</p>
+      <span class="ticker-pill">本日-3.56%の下落が出来高比率1.44xという平均以上の出来高を伴っており、高値圏での分配・売り圧力を示唆する</span><span class="ticker-pill">52週高値64.43ドルの6.19%下という強いレジスタンス帯に位置しており、上値抑制リスクが高い</span><span class="ticker-pill">MA50乖離率+34%・MA200乖離率+122%と著しく過伸長しており、平均回帰リスクが高い</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-14</p>
+    </div>
+<div class="agent-card">
+      <h4>GEV — GE Vernova Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>本日-5.80%の急落を出来高比1.28倍（平均超）で記録しており、売り圧力が増勢であることを示している。価格はMA20比-9.5%、MA50比-12.88%と短中期線の双方を大きく割り込んでおり、トレンド構造は明確に弱気。RSI14は35.57と売られ過ぎゾーン（30）に接近中だが、まだ底打ち確認には至っておらず下落継続の可能性を排除できない。MA200（877.36）の+2.41%水準が中長期サポートとして機能する可能性はあるものの、今日の急落勢いと関連ニュースの不在を鑑みると、翌セッションでMA200をも下抜けるリスクが残る。</p>
+      <span class="ticker-pill">RSI14=35.57と売られ過ぎ（30）に近づきつつあるが未達のため反転確認なし</span><span class="ticker-pill">出来高比1.28倍の増量を伴う-5.80%急落は売り勢力の主導を示す弱気シグナル</span><span class="ticker-pill">価格はMA50比-12.88%・MA20比約-9.5%と短中期線の双方を下回るベアトレンド構造</span><span class="ticker-pill">関連ニュース不在のため急落要因・反発トリガーが不明確</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-13</p>
+    </div>
+<div class="agent-card">
+      <h4>JAZZ — Jazz Pharmaceuticals plc <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">買い → 待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>JAZZは50日線・200日線をともに上回る中長期的な上昇トレンドを維持しており、出来高比率1.32倍という平均超えの商いが続いているものの、足元の終値（250.68ドル）が20日移動平均線（252.73ドル）を下回っており、短期的には上値抵抗が意識される状況にある。RSI14が49.75と中立水準に位置し、強い買い圧力を示していない。本日のセッションに向けて価格が20日線を明確に上抜いて引けるまでエントリーを見送り、突破確認を待つのが合理的と判断する。</p>
+      <span class="ticker-pill">価格が20日移動平均線（252.73ドル）を下回っており、短期的な上値抵抗が存在する</span><span class="ticker-pill">RSI14が49.75と中立域にあり、強い上方モメンタムの裏付けがない</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-11</p>
+    </div>
+<div class="agent-card">
+      <h4>MOD — Modine Manufacturing Company <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>MODは価格がMA20（195.58）・MA50（223.33）・MA200（209.30）の全移動平均線を下回る明確な下降トレンド中にある。本日も-4.23%の下落を記録しており売り圧力は継続中。RSI14は35.25と弱さを示しているが、過売り水準の目安となる30にはまだ到達しておらず、底打ち・反転の確認には至っていない。出来高比率0.79と平均を下回り、買い手の参入を示す出来高の裏付けがない。</p>
+      <span class="ticker-pill">全移動平均線（MA20/MA50/MA200）を下回る下降トレンド継続中で、MA50比-20.1%・MA200比-14.7%と乖離が大きい</span><span class="ticker-pill">RSI14=35.25と弱水準ながら過売りライン（30以下）未達で反転確認なし</span><span class="ticker-pill">出来高比率0.79と平均割れ：買い手参入を示す出来高の裏付けなし</span><span class="ticker-pill">本日-4.23%の下落継続で売り圧力が衰えておらず底打ちシグナルなし</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-27</p>
+    </div>
+<div class="agent-card">
+      <h4>MP — MP Materials Corp. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>本日-7.25%という急落が発生しているにもかかわらず、出来高比率は0.695と平均を下回っており、典型的な売り枯れの形を示していない。価格はMA200（57.76ドル）を-5.21%下回っており、長期トレンドでは上値抵抗帯の下に位置している。トレンドラベルが示す通り「MA50とMA200の間のレンジ／転換点」という不確実ゾーンに滞留しており、方向性が定まっていない。52週高値（98.65ドル）から44.5%も下落した水準にあるにもかかわらず、RSIは51と中立圏にとどまり、買い根拠となる複数シグナルの合致が確認できない。</p>
+      <span class="ticker-pill">MA200を-5.21%下回っており長期的な下落トレンドの抵抗帯下に位置（上値が重い）</span><span class="ticker-pill">-7.25%の急落に対し出来高比率0.695と低水準（売り枯れ不在＝底打ちの確証なし）</span><span class="ticker-pill">RSI14が51と中立圏で、売られ過ぎによる反発余地を示していない</span><span class="ticker-pill">52週高値から-44.5%の深い下落にあるが反転を裏付けるニュース・カタリストなし</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-27</p>
+    </div>
+<div class="agent-card">
+      <h4>NOC — Northrop Grumman Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>NOCは200日移動平均線を10.6%下回り、20日線も4.2%下回る明確な下降トレンド中にある。RSI14は42.55と中立水準（50）を下回っているが、まだ売られすぎ（30以下）の水準には達しておらず、反発の底打ちシグナルとして機能するには早い。52週高値（768.02ドル）からの下落幅は約30%に達しており、構造的な売り圧力が継続中であることを示す。出来高レシオが0.78と平均を下回る水準での下落は、機関投資家による本格的な買い支えが入っていないことを示唆する。</p>
+      <span class="ticker-pill">RSI14=42.55：中立以下だが30未満の売られすぎ水準に未到達のため底打ち確認なし</span><span class="ticker-pill">200日移動平均線比-10.6%：下降トレンドが長期足でも継続中</span><span class="ticker-pill">52週高値比-29.7%：大幅な価格破壊が継続しており上値回復の勢いなし</span><span class="ticker-pill">出来高レシオ0.78：平均以下の出来高での下落は買い手不在を示唆</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-27</p>
+    </div>
+<div class="agent-card">
+      <h4>RTX — RTX Corporation <span style="background:#10b981;color:#0f0f1a;font-size:0.8rem;font-weight:bold;padding:0.2rem 0.6rem;margin-left:0.5rem;border-radius:999px;">今日買うべき</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>RTXは50日線（$205.77）をわずか+0.95%上回る水準まで押し目が進んでおり、上昇トレンド内のサポートゾーンに接近している。RSI14が42.28まで低下し売られすぎ近傍に入ってきた一方、下落は出来高比率0.77と平均を下回る低出来高で進んでおり、売り圧力の弱さが示唆される。52週高値からの乖離は-7.88%と意味ある押し目を形成しており、200日線乖離（+7.97%）が示す長期トレンドの健全さも支持材料。短期的には20日線（$217.92）を大きく下回っている点がリスクだが、上昇トレンド継続・低出来高の押し目・RSI反発候補ゾーンの3シグナルが合致するため、本日の米国セッションは買いと判定する。</p>
+      <span class="ticker-pill">MA50への接近（現値はMA50比+0.95%）: 上昇トレンド継続中のサポートレベルでの買い場</span><span class="ticker-pill">出来高比率0.77: 低出来高での下落は売り圧力の弱さを示し、下降継続の説得力に欠ける</span><span class="ticker-pill">RSI14=42.28: 中立ゾーン下限に達しており、反発候補シグナル</span><span class="ticker-pill">52週高値からの乖離-7.88%: 上昇トレンド内での健全な押し目形成</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-21</p>
+    </div>
+<div class="agent-card">
+      <h4>SMTC — Semtech Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>本日-6.65%の急落により株価（132.96ドル）は50日移動平均線（135.57ドル）を下回った。トレンドラベルも「レンジ/転換点（50日線と200日線の間）」を示しており、方向性が定まっていない局面にある。RSI14は50.23と中立圏で売られ過ぎではなく、200日線（105.75ドル）を25.7%上回る長期上昇トレンドは維持されているが、これらは押し目買いの積極的根拠としては不十分。出来高比率0.58と低水準での急落は売り圧力の弱さを示唆するものの、下落の起点・要因が不明のまま次セッション直前にエントリーするリスクは高い。</p>
+      <span class="ticker-pill">価格（132.96ドル）がMA50（135.57ドル）を-1.93%下回り、中期トレンドが悪化している</span><span class="ticker-pill">当日変動率-6.65%という大幅下落が発生しており、短期モメンタムが明確にネガティブ</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-26</p>
+    </div>
+<div class="agent-card">
+      <h4>TEAM — Atlassian Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>TEAMは前営業日終値時点で52週高値に完全に張り付いており（高値乖離率0%）、RSI14が80.03と明確な過熱圏に達している。さらに現値はMA50から+68.9%、MA200から+79.2%と平均回帰リスクが極めて高い水準まで乖離している。単日+4.61%の上昇が加わったことで過熱は一段と強まっており、関連ニュースも供給されていないため上昇の持続根拠を確認できない。出来高比率1.025と平均並みにとどまっており、52週高値ブレイクアウトを裏付ける出来高急増も見られない。</p>
+      <span class="ticker-pill">RSI14が80.03と過熱圏（70超）を大きく上回っており、短期的な反落リスクが高い</span><span class="ticker-pill">現値がMA50から+68.9%・MA200から+79.2%と極端に乖離しており、平均回帰圧力が強い</span><span class="ticker-pill">52週高値（194.17）に完全到達（乖離0%）しており強い上値抵抗帯が存在する</span><span class="ticker-pill">出来高比率1.025と平均水準にとどまり、高値ブレイクアウトを裏付ける出来高急増が確認できない</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-07</p>
+    </div>
+<div class="agent-card">
+      <h4>VRNS — Varonis Systems, Inc. <span style="background:#10b981;color:#0f0f1a;font-size:0.8rem;font-weight:bold;padding:0.2rem 0.6rem;margin-left:0.5rem;border-radius:999px;">今日買うべき</span> <span style="display:inline-block;background:#10b981;color:#0f0f1a;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">シグナル点灯: 待ち → 買い</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>上昇トレンドが継続している中、本日-2.26%の下落でMA50（$42.84）から2.17%上まで接近した。RSI14は53.89と中立圏にあり過熱感はなく、次米国セッションでの反発余地がある。ボリュームレシオは0.72と低調で強い買い確信には欠けるが、トレンド・RSI・押し目の3シグナルが合致しており打診買いを支持する。52週高値（$63.31）からは30.86%下に位置するため上値余地も大きい。</p>
+      <span class="ticker-pill">MA50・MA200の上位に位置し上昇トレンドが継続中（pctFromMa50=+2.17%、pctFromMa200=+35.43%）</span><span class="ticker-pill">RSI14=53.89でニュートラルゾーン（過熱なく上昇余地あり）</span><span class="ticker-pill">本日-2.26%の押し目でMA50近傍に接近しており押し目買いの好機</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-27</p>
+    </div>
+<div class="agent-card">
+      <h4>XOM — ExxonMobil Holdings Corporation <span style="background:#10b981;color:#0f0f1a;font-size:0.8rem;font-weight:bold;padding:0.2rem 0.6rem;margin-left:0.5rem;border-radius:999px;">今日買うべき</span> <span style="display:inline-block;background:#10b981;color:#0f0f1a;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">シグナル点灯: 待ち → 買い</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-09-01 前日終値時点)</span></h4>
+      <p>XOMはMA20（159.50）・MA50（150.63）・MA200（143.67）の全移動平均線を上回る強い上昇トレンドにあり、短期〜長期すべてのトレンドが揃った強気配置となっている。RSI(14)は55.85と中立域にあり過熱感がなく、さらなる上昇余地を残している。当日+2.88%の力強い上昇を出来高比率1.14（平均以上）が裏付けており、勢いに実需を伴っている点も評価できる。52週高値（171.47）まで約6%の上値余地があり、直近の高値圏への回帰シナリオも視野に入る。</p>
+      <span class="ticker-pill">全移動平均線（MA20/MA50/MA200）の上方に位置し、短期・中期・長期すべてのトレンドが強気配置で揃っている</span><span class="ticker-pill">RSI(14)=55.85と中立域にあり過熱感がなく、上昇余地が残存している</span><span class="ticker-pill">出来高比率1.14で平均を上回る水準の出来高が当日の+2.88%上昇を裏付けており、勢いに実需を伴っている</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-13</p>
+    </div>
+<div class="agent-card" style="border-left-color:#4b5563;opacity:0.7;">
+      <h4>8331.T — The Chiba Bank, Ltd. <span style="color:#6b7280;font-size:0.8rem;">判定不能（データ不足）</span></h4>
+    </div>
+<div class="agent-card" style="border-left-color:#4b5563;opacity:0.7;">
+      <h4>CHRD — Chord Energy Corporation <span style="color:#6b7280;font-size:0.8rem;">判定不能（データ不足）</span></h4>
+    </div>
+<div class="agent-card" style="border-left-color:#4b5563;opacity:0.7;">
+      <h4>3692.T — FFRI Security, Inc. <span style="color:#6b7280;font-size:0.8rem;">判定不能（データ不足）</span></h4>
+    </div>
+<div class="agent-card" style="border-left-color:#4b5563;opacity:0.7;">
+      <h4>3040.T — Soliton Systems K.K. <span style="color:#6b7280;font-size:0.8rem;">判定不能（データ不足）</span></h4>
+    </div>
+<div class="agent-card" style="border-left-color:#4b5563;opacity:0.7;">
+      <h4>6592.T — Mabuchi Motor Co., Ltd. <span style="color:#6b7280;font-size:0.8rem;">判定不能（データ不足）</span></h4>
+    </div>
+    <hr>
+    <h2>WebSearch リサーチ結果</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">注目銘柄に関する最新の定性情報をWebリサーチした結果です。</p>
+    <div class="agent-card" style="border-left-color: #10b981;">
+      <h4>1605.T</h4>
+      <p>2026年12月期純利益を前期比29%増の5100億円に上方修正。自社株買い1400億円・増配で株主還元強化。豪州LNG事業が堅調な一方、ホルムズ海峡正常化の遅延（7月→10月見直し）がアブダビ権益の重石。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年12月期純利益を前期比29%増の5100億円に上方修正（8月発表）。中東情勢緊迫化による原油価格上昇が主因</li><li>1400億円の自社株買い（発行済み株式の4.3%）を決定。年間配当は112円（前期比12円増）と株主還元を大幅強化</li><li>主力の豪州イクシスLNG事業が堅調。ホルムズ海峡を迂回可能な地理的分散ポートフォリオで、供給不足時にプレミアム価格が付きやすい構造</li><li>850億円の成長投資計画を策定し、石油・天然ガス事業拡大に向けた中期的な布石を打つ</li><li>業績予想にブレント63ドル・円151円と保守的前提を採用しており、実勢との乖離で上振れ余地あり</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>UAE・アブダビの原油販売量は減少見込み。ホルムズ海峡の物流正常化見通しを7月→10月に延期し、年内未正常化なら70〜80億円の追加減益リスク</li><li>RSI72で短期過熱圏。地政学リスク期待先取りで株価が急騰しており、材料出尽くし・調整リスクが高まっている</li><li>円安依存の収益構造（円高1円で年間30億円の損益影響）。円高進行時は業績下振れリスクが顕在化しやすい</li><li>脱炭素化の長期トレンドが事業モデルへの構造的逆風。エネルギー転換リスクは投資家の評価に割引率として反映されやすい</li><li>売上収益は2%減（1兆9730億円）と増益の一方で収益規模は縮小。原油・LNG価格の変動依存度が高く、価格反落時の下振れ幅が大きい</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>INPEX純利益上振れ 26年12月期29%増、自社株買い1400億円（日経新聞）</strong>: 8月決算発表で純利益5100億円に上方修正。1400億円自社株買いと年間配当112円（前期比+12円）を決定。ホルムズ正常化を10月見通しに延期。</li><li><strong>INPEXの未来を読み解く：2026年の事業見通しと地政学リスクの「正体」</strong>: 業績予想が保守的設定（ブレント63ドル）で上振れ余地あり。豪州・インドネシア権益はホルムズ封鎖を迂回可能で、供給不足時にプレミアム価格が付く構造。</li><li><strong>INPEX（1605）、石油・天然ガス分野拡大を視野に8,500億円の成長投資を計画</strong>: 2026年度8円増配を発表。石油・天然ガス事業の拡大投資として8500億円規模の成長計画を策定し、中期的な収益基盤強化を図る。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>285A.T</h4>
+      <p>AI推論需要拡大でデータセンター向けNAND需要が急騰し、2026年Q1営業利益は前年比29倍・約1.3兆円見通し。サンディスクとの約5兆円新工場投資も発表。ただしNAND一本足の構造リスク、PER75倍超の高バリュエーション、シリコンサイクル反転懸念が重なり先行き不透明感が残る。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>AI推論フェーズへの移行でデータセンター向けeSSD需要が爆発的に拡大。2026年Q1営業利益が前年同期比29倍の約1.3兆円見通しと過去最高水準</li><li>キオクシア＋サンディスクが日本国内で約5兆円の新工場投資を発表（北上工場K3棟含む）。中長期の生産能力強化で業界リーダーシップを強化</li><li>eSSD市場は年間35%成長率で拡大予想（マッキンゼー試算）。大企業のAI採用は初期段階であり需要拡大の余地は大きい</li><li>8層BiCS FLASH搭載の122TB～245TB超大容量SSDを2026年中に本格量産予定。エンタープライズ向け製品競争力が向上</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>NAND単一事業への集中リスク。サムスン・SK HynixはDRAM/HBMで分散しているが、キオクシアはNAND一本足で市況反転時に代替収益源がない</li><li>株価が公募価格1,455円から約53倍に急騰しPER約75倍と歴史的高水準。信用買い残の積み上がりによる需給懸念もあり、業績モメンタム鈍化で急落リスク大</li><li>一部ハイエンドサーバー向け需要が2027〜2028年にずれ込む可能性を同社も示唆。2026年内の需要予測に不確実性が残る</li><li>NAND市場は3〜4年周期のシリコンサイクルで繰り返し急落してきた歴史あり。各社増産競争による過剰供給フェーズへの反転リスクが常在</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>キオクシア「営業益29倍」見通しの衝撃。AIブーム需要がSSDに直撃したのはなぜか</strong>: AI推論フェーズへの移行でeSSD需要が急拡大。2026年Q1営業利益が前年比29倍見通し。マッキンゼーはeSSD市場の年35%成長を予測。</li><li><strong>キオクシアは2期連続で過去最高更新へ、AI需要追い風：NAND市場「26年も需要が供給超え」</strong>: 2026年はNAND需要が供給を上回る見通し。ただし一部ハイエンドサーバー需要の2027〜2028年ずれ込みリスクも指摘。</li><li><strong>キオクシアは危ない？暴落リスクと今買うべきかを解説【2026年最新】</strong>: NAND一本足・PER75倍超・信用買い残蓄積・シリコンサイクル反転リスクなど複数の構造的懸念を詳説。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>3040.T</h4>
+      <p>ソリトンシステムズは国内認証基盤No.1（NetAttest EPS）を持ち、2026年Q1は売上高+12.7%・営業利益+53.2%と急成長。政府主導のSCS評価制度（サプライチェーン強靭化）が強力な追い風。中計で2028年売上245億・営業利益50億を目標。一方、新規事業は投資先行で赤字継続リスクあり。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年Q1業績が急拡大：売上高+12.7%・営業利益+53.2%・純利益+71.1%、営業利益率も12.9%→17.6%に大幅改善</li><li>政府のSCS（サプライチェーン強靭化セキュリティ評価制度）が2026年から本格始動、認証・アクセス管理ソリューションへの需要を構造的に押し上げ</li><li>企業間取引でセキュリティ対策が「取引条件化」と64.3%が回答し、市場義務化トレンドが同社製品の普及を加速</li><li>2026年8月に業績予想の上方修正＋増配を発表、業績の先行きに自信の表れ</li><li>中期経営計画（2026-2028）で売上245億・営業利益50億を目標設定し、公共DX・防衛・防災領域を成長ドライバーに据える</li><li>クラウドサービスのストック収益拡大で収益基盤が安定化</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>新規事業（次世代技術開発領域）は投資フェーズで短期的に赤字継続リスク、全体利益を圧迫する可能性</li><li>SCS評価制度対応で発注側と受注側に31.6ポイントの準備格差があり、市場の普及ペースに不確実性</li><li>セキュリティ人材不足が業界全体の課題で、同社内部のデリバリー能力・採用コストへの影響懸念</li><li>米中対立・地政学リスクの高まりはビジネス機会である一方、IT調達制限や輸出規制リスクも内包</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>セキュリティ×公共DXで成長するIT企業──認証基盤No.1の収益構造と今後の投資領域</strong>: NetAttest EPSで国内認証基盤シェアNo.1。官公庁・重要インフラ向けに製品販売とクラウドストック収益を組み合わせ、防衛・防災・教育分野での案件拡大が成長ドライバー。</li><li><strong>セキュリティ対策の取引条件化が進行 ― サプライチェーンセキュリティ実態調査2026</strong>: 64.3%がセキュリティ対策を取引条件化済みと回答。政府SCS評価制度で認証・アクセス管理需要が急増。受注側の準備遅れが市場機会を拡大。</li><li><strong>2026年12月期連結業績予想および期末配当予想の修正（増配）に関するお知らせ（日経、2026年8月12日）</strong>: 2026年8月に業績予想を上方修正し、期末配当も増配。Q1の急成長を受けた通期見通しの引き上げ。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>3692.T</h4>
+      <p>2026年3月期Q3で売上+56.9%・営業益+365.7%と加速成長。純国産技術FFRI yaraiが経済安全保障の国策銘柄として政府契約拡大。新子会社設立でセキュリティ教育・診断市場に進出。ただしPER88.5倍と高バリュエーション、海外大手との競合激化がリスク。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年3月期Q3決算：売上高28.85億円（+56.9%）・営業利益9.04億円（+365.7%）と加速成長、期末通期も経常利益+65.7%の14.5億円で4期連続過去最高益更新見込み</li><li>純国産エンドポイントセキュリティ「FFRI yarai」が経済安全保障重要技術育成プログラム（K Program）対象として政府・防衛案件での採用拡大</li><li>ナショナルセキュリティ関連サービス（防衛・官公庁向け）が長期契約増加により+67.2%の大幅伸長、OEM販売も前年超え</li><li>セキュリティ教育・診断特化の新子会社「FFRIセキュリティワークス」設立により人材不足を収益機会に転換する布石</li><li>日本のサイバーセキュリティ市場は年平均成長率11.89%で2030年に39.8億ドル規模まで拡大見込み、構造的追い風継続</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>PER88.5倍・PBR22.0倍と極めて高バリュエーション、成長期待が先行して株価に織り込まれており下方修正時の下落リスク大</li><li>配当利回り0.18%と低水準で株主還元に乏しく、成長株として機関投資家のセンチメント変化に株価が敏感</li><li>ナショナルセキュリティ部門の長期契約拡大で一時的に利益率低下、ソフトウェア開発・テスト部門は人員再配置で売上減少</li><li>クラウドストライク・パロアルトネットワークスなど海外大手との競合激化が想定され、エンタープライズ市場でのシェア確保が課題</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>FFRIセキュリティ 2026年3月期第3四半期 売上高2,885百万円・営業利益904百万円の大幅増益</strong>: Q3単体で売上+56.9%・営業利益+365.7%。エンジニア稼働率向上とセキュリティ製品販売拡大が主因。スケールメリットで粗利率も改善。</li><li><strong>FFRIセキュリティ（3692）の将来性は？業績や事業内容から徹底分析</strong>: 純国産技術・経済安保の政策追い風・市場CAGR11.89%がポジティブ。PER88.5倍の高評価と海外大手競合がリスクとして指摘される。</li><li><strong>FFRIセキュリティ 事業計画及び成長可能性に関する事項 2026年6月29日（適時開示）</strong>: 中期成長戦略として防衛・官公庁向けナショナルセキュリティと民間企業向けエンタープライズの二軸拡大方針を開示。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>3778.T</h4>
+      <p>2026年8月、さくらインターネットの販売管理システムへの不正アクセスにより最大136万アカウントの契約情報が流出の可能性。同年3月のガバメントクラウド国内初採択という好材料の直後に発生した重大セキュリティ事故により、政府事業継続に懸念が生じている。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年3月にガバメントクラウドサービス提供事業者として国内初の正式採択を達成（令和5年度・令和8年度）</li><li>GPUインフラストラクチャーサービス急拡大により2026年Q1売上高が前年同期比48.6%増（111億円）と過去最高を更新し黒字転換</li><li>欧州系大手証券が目標株価6,870円へ引き上げ・強気継続評価を維持</li><li>不正アクセスはさくらのクラウドとは別システムであり、ガバメントクラウド本番環境への直接影響は現時点で限定的</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>2026年8月、販売管理システムへの不正アクセスにより最大136万アカウント（1,360,563件）の契約情報が閲覧された可能性、うち30アカウントはハッシュ化パスワードへのアクセスリスクあり</li><li>レンタルサーバー583アカウントへの不正ログインおよびマルウェア設置が確認され、サーバー領域内の情報漏洩リスクが発生</li><li>ガバメントクラウド正式採択直後のセキュリティ事故により、デジタル庁・政府機関からの信頼性が問われる状況となっている</li><li>侵入経路・2件の事案の関連性を含めた根本原因調査が継続中であり、追加被害の有無が不明</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>当社システムへの不正アクセスに関するお知らせ（第二報）2026年8月26日更新</strong>: 販売管理システムへの不正アクセスにより136万アカウントの契約情報閲覧の可能性を公表。クレカ情報は非保存と説明。調査は継続中。</li><li><strong>さくらインターネットへの不正アクセスについてまとめてみた（piyolog）</strong>: レンタルサーバー583件不正ログイン＋販売管理136万件流出の2段階被害。マルウェア設置確認。攻撃経路は未公表。</li><li><strong>さくらインターネット、令和5年度および令和8年度ガバメントクラウドサービス提供事業者に採択（2026年3月）</strong>: 国内クラウド事業者として初めて全技術要件を満たしガバメントクラウド正式採択。しかしその5か月後にセキュリティ事故が発生した。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>4004.T</h4>
+      <p>2026年上期コア営業利益が前年同期比2.6倍の888億円と大幅増益。AI向け後工程材料（NCF・CCL・TIM）が急拡大し、半導体・電子材料セグメントの営業利益は92%増の815億円。通期純利益を355億円上方修正。モデレーター評価の弱気見通しとは乖離した強い業績が続く。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年上期コア営業利益が前年同期比2.6倍（888億円）と大幅超過。5月の上方修正予想をさらに大幅に超過した</li><li>AI向け後工程材料が絶好調。CCLは2025年度比4倍弱、NCF・TIMは2倍弱の通期売上規模を見込む</li><li>EBITDAマージンが27.8%から35.2%へと大幅改善し、米競合に迫る収益性を達成</li><li>米系大手証券がレーティング強気継続・目標株価24,000円に引き上げ</li><li>CCL供給目詰まり解消により下期のさらなる販売量増加が期待できる状況</li><li>データセンター向けHDメディア需要が堅調で多角的な成長ドライバーを確保</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>クラサスケミカルなど非半導体セグメントで減収が続いており、全社売上は前年比5%増にとどまる</li><li>半導体産業の周期性リスク。AI投資サイクルが想定より早期に減速した場合の反動減が懸念</li><li>2026年10月にパワーシリコン事業のスピンオフを予定しており、事業構造の変化による不確実性</li><li>製造装置のリードタイム長期化が投資判断を複雑にし、顧客の設備投資が一時的に停滞するリスク</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>レゾナック26年度上期は156.5％増益 後工程材料が大幅成長</strong>: 上期コア営業利益888億円で前年比2.6倍。半導体後工程材料が46%増、CCLのQ2はQ1比約1.5倍に拡大。EBITDAマージン23.4%へ改善。</li><li><strong>レゾナックの2026年12月期上期コア営業利益は前年同期比2.6倍の888億円、AI向け半導体材料が好調</strong>: AI需要で後工程材料の売上収益2,990億円（30%増）、コア営業利益815億円（92%増）。通期純利益を112.5億円へ上方修正。</li><li><strong>決算:レゾナック、米競合に迫る収益性 半導体材料メーカーへの脱皮加速</strong>: 日経が「米競合に迫る収益性」と評価。2026年12月期EBITDAマージン24%超の見通し。半導体材料専業化が着実に進捗。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>5019.T</h4>
+      <p>出光興産は2025年度純利益が前期比65%増と好調だったが、2026年度はIFRS移行後の純利益750億円と大幅減益見通し。中東情勢を背景に国内エネルギー安全保障の要として存在感を高める一方、原油価格下落によるタイムラグ悪化が短期業績の重荷。長期はOLED材料・全固体電池・LNGで成長戦略を推進。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2025年度純利益は前期比65.2%増の1,719億円、Q4は赤字から1,193億円の黒字へ劇的回復</li><li>精製所稼働率が82%→86%に改善し、デジタル技術活用による運営効率化が進む</li><li>有機EL青色発光材料で世界シェアトップ、2033年まで年率13%成長の市場拡大が見込まれる</li><li>トヨタと共同で2027〜2028年の全固体電池実用化を目指す成長ドライバーあり</li><li>5カ年設備投資1.8兆円でLNG拡大・再エネ推進、2030年ROE13%・利益50%増を計画</li><li>累進配当方針（総還元50%以上）・自社株買い300億円を維持し株主還元を強化</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>2026年度（IFRS）純利益予想は750億円と2025年度比で大幅減益見通し</li><li>原油価格がQ1の100ドルから年末65ドルへ下落する前提でタイムラグ損失1,897億円の悪化を想定</li><li>石炭価格下落により資源セグメント利益が396億円押し下げられ、資源事業の収益安定性に課題</li><li>RSI73と短期テクニカル指標が過熱圏にあり、需給面での過買いリスクが存在する</li><li>原油調達の地政学的リスク（中東情勢）が供給コスト不安定要因として残存</li><li>ストレスシナリオ（原油50ドル/バレル）下でもPBR低水準が継続する構造的バリュートラップの懸念</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>出光興産 純利益65%増で着地、IFRS移行後の来期は減益見通しも株主還元強化へ</strong>: 2025年度純利益1,719億円と65%増の好決算。2026年度はIFRS移行・原油価格下落前提で750億円の減益見通しだが、累進配当と自社株買いで株主還元を強化。</li><li><strong>割安感際立つ出光興産を「買い」推奨ー2030年には利益50%増を計画</strong>: PBR0.6倍と割安。OLED材料・全固体電池・LNGが長期成長ドライバー。過去20年で営業キャッシュフロー5.5倍に拡大。配当利回り4.2%も魅力。</li><li><strong>出光興産株、原油高で上場来高値 調達難がリスク</strong>: 中東情勢悪化による原油高で株価は上場来高値圏。一方で原油調達難がリスク要因として浮上しており、地政学的不確実性が両刃の剣となっている。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>6592.T</h4>
+      <p>マブチモーターはKyoHA（国産ヒューマノイド連合）参画でロボット向け精密モーター需要の先制確保を狙う。2026年中間決算は売上12.1%増・営業利益8.5%増の増収増益。ただし通期純利益は15.5%減予想。配当は過去最高70円。EV市場の構造変化と量産品質検証が残課題。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年12月期中間決算：売上高1,063億円（前年同期比12.1%増）、営業利益131億円（同8.5%増）と増収増益達成</li><li>KyoHA参画により「マシーナリー」分野でヒューマノイドロボット向けブラシレスモーターのラインナップ拡充を宣言、業界標準策定に参加</li><li>年間配当70円（中間35円・期末35円）を予定しており過去最高水準を更新</li><li>既存工業用量産品質をロボット転用できるため、専用ライン投資不要でTCO競争力を発揮できると分析されている</li><li>通期純利益予想を215億円→222億円へ上方修正（円安による為替差益が寄与）</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>通期経常利益は313億円（前期比10.8%減）、当期純利益は222億円（同15.5%減）と減益予想が継続しており株価の重荷</li><li>KyoHAの検証機SEIMEIで足首パーツ破損が報じられており、ヒューマノイド向け量産品質・耐久性基準の詰めはまだ途上段階</li><li>複数企業参画による事故・保証・品質の責任分界が公開情報に明記されておらず、導入企業の採用判断を鈍らせるリスクあり</li><li>EV市場ではモーター単体供給だけでなく高効率・軽量・制御精度・システム統合が要求されており、従来の量産モデルの競争力が構造的に低下するリスク</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>「KyoHA（京都ヒューマノイドアソシエーション）」へ参画 — マブチモーター公式</strong>: 早稲田大・テムザック・村田製作所等が設立したKyoHAに参画。「マシーナリー」領域でロボット用ブラシレスモーター拡販を目指す。</li><li><strong>KyoHAとは？国産ヒューマノイド連合の参画企業と勝ち筋【2026年版】</strong>: マブチは駆動系B層（量産支配層）に分類。量産前に仕様策定へ参加し業界標準に影響力を持つ戦略。一方、歩留まり・耐久試験・責任分界が未整備との指摘あり。</li><li><strong>2026年12月期第2四半期決算短信 — BigGoファイナンス</strong>: 売上高1,063億円（+12.1%）、営業利益131億円（+8.5%）。自動車電装・ライフ産業とも2桁成長。通期純利益は15.5%減予想で為替・コスト圧力が継続。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>8331.T</h4>
+      <p>千葉銀行は金利上昇環境を追い風に業績が大幅改善。Q3 FY2026経常利益+25%・純利益+26%増。FY2027純利益1000億円超（初）で5期連続最高益を見込む。千葉興業銀行との2027年4月経営統合（総資産約25兆円・国内第2位規模）も発表済みで長期戦略も明確。リスクは統合承認・預金調達コスト上昇。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>FY2026通期経常利益予想を1243億円から1316億円へ上方修正（前期比+22.4%増）し4期連続過去最高益を更新見込み</li><li>国内業務の預貸利ざやが0.14ポイント改善し1.04%に拡大。BOJ正常化で貸出金利息が業績をけん引</li><li>FY2027純利益1070億円（+14%）予想で初の1000億円超到達・5期連続最高益に向け順調</li><li>千葉興業銀行との経営統合で「ちばFG」設立へ（2027年4月）。総資産約25兆円でふくおかFGに次ぐ国内第2位の地銀グループへ</li><li>第16次中期経営計画を2026年3月に策定し、金利ある世界への対応と広域連携戦略を明示</li><li>5年ぶりのドル債発行（2026年8月）により海外融資向け資金調達を強化</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>千葉興業銀行との経営統合（2027年4月）には規制当局の承認が必要で、スケジュール遅延・条件付き承認のリスクあり</li><li>BOJ利上げへの対応として2025年12月・2026年2月・6月と複数回の預金金利引き上げを実施しており、調達コストが継続的に上昇</li><li>東洋経済の分析では地銀生存には「総資産20兆円以上」が必要とされ、人口減少による構造的な収益圧力は統合後も継続</li><li>千葉興業銀行株は2027年3月30日に上場廃止予定。統合プロセス中の市場不確実性あり</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>千葉銀行・千葉興業銀行、経営統合で最終合意 効果は最大160億円（日経新聞 2026年3月）</strong>: 両行が2027年4月に持ち株会社「ちばFG」を設立し経営統合で最終合意。統合効果は最大160億円と試算。総資産約25兆円でふくおかFGに次ぐ規模となる。</li><li><strong>千葉銀行、27年3月期の純利益1000億円超 貸出金利息けん引（日経新聞 2026年5月）</strong>: FY2027純利益1070億円（前期比+14%）を予想。初の1000億円超・5期連続最高益見通し。金利上昇による貸出金利息拡大が主要因。</li><li><strong>千葉県経済、金利引き上げに対応 銀行は業績上振れ・建設は影響注視（日経新聞 2026年6月）</strong>: 短プラ2.75%引き上げを受け、千葉銀行の業績はさらに上振れする可能性が高いと分析。預貸利ざや拡大が継続的に追い風。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>CHRD</h4>
+      <p>Q2 2026は生産量がガイダンス上限達成も利益がコンセンサス比4.6%未達。一方で資本効率は業界トップ水準（2022年比リグ25%削減で生産14%増）、4マイル横坑戦略で競争優位を強化。2026年通期EBITDAは約30億ドル見通し、株主還元もQ3から75%へ引き上げ予定で基本的な事業モデルは堅固。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>資本効率が業界最高水準: 2022年以来、掘削リグを25%削減しながら石油生産を14%増加、4マイル横坑で掘削コストを前年比16%削減（$680→$566/ft）</li><li>4マイル横坑の採掘量: 従来2マイル井戸比で推定最終回収率90〜100%増と大幅優位、2026年中に26本を実施済み</li><li>2026年通期ガイダンス上方修正: 石油生産量を161MBopd（中値）に引き上げ、Adjusted EBITDA約30億ドル・フリーキャッシュフロー13億ドルを見込む</li><li>株主還元強化: Q3から調整後フリーキャッシュフローの75%以上を還元予定、9月4日に配当$1.30/株支払い予定</li><li>アナリスト目標株価が約155ドルから約212ドルへ大幅引き上げ、フェアバリュー比23%の上昇余地との試算あり</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>Q2 2026決算は売上・利益ともにコンセンサス未達: EPS $6.44（予想$6.75、-4.6%）、売上$14.9億（予想$16.1億）</li><li>EVP兼ゼネラルカウンセルのShannon Kinney氏が2026年8月31日付でConocoPhillipsへ転職、経営陣の安定性に軽微なリスク</li><li>イラン制裁解除リスク: 市場への約300万バレル/日の追加供給が実現すれば米国シェール生産者への持続的な価格抑制圧力となる懸念</li><li>ウィリストン盆地への地理的集中リスク: 地域特有の規制変更・操業コスト上昇に対する脆弱性が他社比で高い</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Chord Energy Q2 2026 slides: capital efficiency leads peers despite miss</strong>: Q2 EPS・売上がコンセンサス未達も、資本効率は業界トップ。4マイル横坑戦略でコスト削減と生産増を両立、Q3株主還元75%へ引き上げ方針を発表。</li><li><strong>Does Chord Energy&#39;s (CHRD) Dividend, Buybacks and EVP Exit Reframe Its Risk–Reward Profile?</strong>: EVP退任はマネジメント可能なイベントと評価。ウィリストン集中リスクを抱えつつも配当・自社株買いの持続性は現業績が裏付け。フェアバリューは現値比23%上昇余地。</li><li><strong>Chord Energy Reports Second Quarter 2026 Financial and Operating Results</strong>: 調整後EBITDA $9.24億、フリーキャッシュフロー $4.14億を計上。油生産はガイダンス高位達成、2026年通期EBITDA約30億ドル見通しを維持・更新。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>DELL</h4>
+      <p>Q2 FY2027決算が大幅上振れ（売上高+58% YoY・$47B）。AIサーバー売上高は前年比倍増の$164億。通期ガイダンスをAIサーバー$740億・EPS$25.50に大幅引き上げ。米軍$97億契約獲得。ただしDRAM/NAND高騰・バリュエーション懸念・PCセグメント苦戦が課題。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q2 FY2027売上高$470億（前年比+58%）、EPS$7.04と市場予想を大幅上回る好決算</li><li>AIサーバー売上高$164億（前年比+100%超）、通期AI見通しを$600億→$740億に引き上げ</li><li>バックログ過去最高$950億・受注$609億で構造的・継続的需要を実証</li><li>AI Factoryの顧客数が5,000社到達（Eli Lilly・Honeywell・Samsungなど大手エンタープライズが採用）</li><li>米軍向け約$97億（5年間）のソフトウェア供給契約を獲得</li><li>営業利益+204%・フリーキャッシュフロー+224%と収益性も急改善</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>DRAM・NAND価格高騰とコンポーネント不足がサーバー・PCのマージンを圧迫</li><li>UBS・GF Securitiesが割高懸念からBuy→Neutral/Holdへ格下げ</li><li>AIサーバーの粗利率がミッドシングルデジット水準にとどまり高成長の割に利益率が低い</li><li>AI対応PCのマーケティング施策が期待以下で、クライアント部門（CSG）は意図的なマージン圧縮戦略継続中</li><li>大口AI案件が少数の大手バイヤーに集中しており実行・供給リスクが残存</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Dell raises full-year guidance after AI server revenue doubles (ProactiveInvestors)</strong>: Q2 FY2027売上$47B（+58%）、AIサーバー$16.4B（+100%）。通期収益$192B・AI$74Bへ大幅引き上げ。EPS見通しも$17.90→$25.50に急騰。</li><li><strong>Dell Q4 FY 2026 Earnings Highlight AI-Optimized Server Ramp (Futurum)</strong>: Q4売上+39%・AIサーバー+342%。バックログ$430億。コンポーネント制約・CSGマージン圧迫が近期リスクとして言及された。</li><li><strong>DELL risk concerns 2026（複数媒体統合）</strong>: DRAM/NAND高騰・バリュエーション割高・PCマーケ不振・大口集中リスク・サイバーセキュリティ課題が主要リスクとして浮上。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>GIII</h4>
+      <p>FY2026は売上7%減・純利益65%減と苦戦。ただしマーク・ジェイコブス買収（約5億ドル）で自社ブランド主導へ転換中。粗利は+350bps改善し初配当も開始。統合リスク・関税恩恵依存・欧州卸売軟調が下押し要因で高金利長期化による消費圧縮と相まって不透明感が残る。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>マーク・ジェイコブス買収（約5億ドル）によりライセンス依存から自社ブランド主導へ転換。中期的に同ブランド単体で年間10億ドル規模の売上を見込む</li><li>Q1粗利率が42.2%→45.7%へ+350bps改善、通年でも+400bps改善を見込み、収益構造が高品質化</li><li>FY2026第3四半期に史上初の四半期配当（1株0.10ドル）を開始、株主還元姿勢を明示</li><li>FY2027非GAAPEPSガイダンスを2.00〜2.10ドルから2.15〜2.25ドルへ上方修正</li><li>現金残高3.94億ドル・在庫8%削減と財務規律を維持、アナリスト平均「買い」・目標株価39.33ドル（約18%上値余地）</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>FY2026通年で売上高-7.04%（29.6億ドル）、純利益-65.2%と大幅悪化。カルバン・クライン・トミーヒルフィガーのライセンス終了に伴う売上剥落が響く</li><li>マーク・ジェイコブス買収は初年度（FY2027前半）希薄化見込み。買収完了はQ3 2027予定で統合実行リスクが高い</li><li>粗利改善の一部は関税会計上の恩恵（1.40億ドルの未収金）に依拠しており、関税政策変更時の持続可能性に懸念</li><li>欧州卸売市場が「軟調」と経営陣が明言。グローバル消費低迷と高金利長期化が裁量消費を下押し</li><li>PVHライセンス喪失後の売上代替はマーク・ジェイコブスが中心だが、ブランド育成には時間とコストがかかり短期的な業績回復は見えにくい</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>GIII Q1 Earnings Call Centers on Marc Jacobs and Margin Lift (Yahoo Finance)</strong>: Q1売上8%減も粗利+350bps改善。マーク・ジェイコブス買収の戦略的意義と初年度希薄化・欧州軟調・関税依存リスクを詳説。FY2027ガイダンス上方修正。</li><li><strong>G-III Apparel Group Reports Q3 FY2026 Results; Initiates First Quarterly Dividend (GlobeNewsWire)</strong>: FY2026第3四半期決算とともに史上初の四半期配当を発表。自社ブランド強化の進捗と厳しい消費環境下での規律ある経営を強調。</li><li><strong>G-III Expands With Marc Jacobs But Remains Pricy For Apparel (Seeking Alpha)</strong>: マーク・ジェイコブス買収でブランド資産価値向上を狙うが、アパレルセクターとしてバリュエーションが割高との懸念。統合リスクとライセンス剥落が重荷。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>INOD</h4>
+      <p>Q2 2026売上$92.1M（前年比+58%）と連続12四半期成長を記録し、EPS$0.41がコンセンサス$0.25を64%超過。アジェンティックRL・AIセキュリティ・ロボティクスへ多角化中。一方、上位2顧客が売上約71%を占める集中リスクと9月末CEO交代が近期の不確実性。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q2 2026売上$92.1M（前年比+58%）・Q1も$90.1M（+54%）と連続12四半期の前年比成長を達成、フルイヤー2026ガイダンスを40%以上増収で据え置き</li><li>EPS $0.41がアナリスト予想$0.25を64%上回り、調整後EBITDA $25.4M（売上比27.5%）と前年比ほぼ倍増</li><li>最大顧客比率が56%→37%に低下し顧客多角化が進展、アジェンティックRL・AIセキュリティ訓練・ロボティクスデータ収集・連邦政府契約へ事業拡大中</li><li>調整後売上総利益率49%（目標40%を9ポイント上回る）、アナリスト4名全員が買い推奨・コンセンサス目標株価$122.75</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>上位2顧客が四半期売上の約71%を占める高い顧客集中リスク（最大顧客37%・第2顧客34%）、プロジェクトベース・随意解約可能な契約形態が収益安定性を制約</li><li>9月30日のCEO交代（Rahul Singhal就任）発表後に株価約10.7%下落、ATM公募（増資希薄化）が同時発表され投資家センチメント悪化</li><li>長期的にはAIモデルの自律化がデータアノテーション需要を圧迫するリスクが構造的に残存、AI能力向上により人手作業の代替が進む可能性</li><li>AIインフラ・サイバーセキュリティ訓練スイートへの先行投資が短期マージン圧縮要因となっており、需要実現までの執行リスクが継続</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Innodata Reports Record Second Quarter 2026 Results</strong>: Q2売上$92.1M(+58%)・EPS$0.41が大幅超過。顧客多角化進展・アジェンティックRL等新領域へ拡大・フルイヤー40%以上成長ガイダンス据え置き。</li><li><strong>Innodata (INOD) Is Down 10.7% After New CEO, ATM Offering And AI Cyber Suite Launch</strong>: 新CEO就任発表・ATM公募・AIセキュリティスイート開始が同時発表され株価急落。短期的センチメント悪化とリスク要因を分析。</li><li><strong>Innodata: A Potential High-Risk, High-Reward Play in AI (Motley Fool)</strong>: 成長モメンタムは強いが顧客集中・プロジェクト依存・自動化置換リスクが高リスク高リターン銘柄の性格を付与。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>SNOW</h4>
+      <p>Q1 FY2027は前年比34%増収・過去最大の連続増収額を記録しAI消費加速が鮮明。ただし高PSR・継続的GAAP純損失・SBC希薄化・競合圧力が残存し、バリュエーション正当化には持続的AI成長が必須。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q1 FY2027製品収益が前年比34%増（過去最大の連続ドル増加）、通期ガイダンスを31%成長に上方修正</li><li>Snowflake Intelligenceが3ヶ月で2,500アカウントに急拡大、AI消費が「一時的触媒」でなく「構造的ドライバー」と経営陣が明言</li><li>RPO（残存履行義務）が前年比42%増の97.7億ドル、年間100万ドル超顧客が733社（前年比27%増）</li><li>Anthropic・Google Cloud・OpenAIとのパートナーシップ強化でマルチクラウド・ガバナンス型AI基盤として差別化</li><li>非GAAPフリーキャッシュフローマージン61%を維持しながら営業利益率も改善、財務規律を確保</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>FY2026通期GAAP純損失13.3億ドルが継続、多額のSBC（株式報酬）による株主希薄化リスクが高い</li><li>FY2027ガイダンス27〜31%成長は直近四半期比で減速方向、保守的消費前提が示すマクロ慎重姿勢</li><li>消費型課金モデルの特性上、企業がクレジット最適化を進めると一時的収益ヘッドウィンドが発生しうる</li><li>AI価格最低水準競争環境のなか高PSRを正当化するにはAI消費の継続的加速が必須で執行リスクが高い</li><li>Databricks・AWS・Googleなど競合がAI機能を急拡大しており価格決定力への圧力が増大中</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Snowflake Q4 FY2026 Results Highlight AI-Led Consumption and Platform Expansion</strong>: AI消費が構造的成長ドライバーに転換、最大400億円超ディール締結。FY2027は27%成長ガイダンスで保守的姿勢を維持。</li><li><strong>Snowflake Q1 FY2027 Earnings: AI-Driven Growth Accelerates with 33% Revenue Jump</strong>: 過去最大の連続増収額を記録、Cortex AIとSnowflake Intelligenceのアカウント数が四半期比2倍に急拡大。</li><li><strong>How The Snowflake (SNOW) Investment Narrative Is Shifting With AI Hopes And Valuation Risks</strong>: AI期待でナラティブは好転も高PSRとGAAP赤字・SBC希薄化がバリュエーション圧縮リスクとして継続。</li></ul>
+    </div>
+    <hr>
+    <h2>再評価ラウンド結果（WebSearch後）</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">WebSearchリサーチ結果を踏まえて各アナリストがスコアを再評価した結果です。</p>
+    <div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>ファンダメンタルズアナリスト</h4>
+        <ul><li>
+      <strong>GIII</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">粗利+350bps・FY2027 EPS上方修正・初配当開始は転換点の証拠。短期痛みは残るが、中期バリュー・シナリオとして再評価。</span>
+    </li><li>
+      <strong>INOD</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">EPS$0.41がコンセンサス$0.25を64%超過・粗利率49%は構造的強さ。CEO交代・顧客集中リスク残存も業績現実は想定より強く上方修正。</span>
+    </li><li>
+      <strong>3040.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q1営業益+53%・純益+71%・8月業績上方修正+増配で実力確認。SCS制度本格始動が構造的需要を創出。財務詳細不足の懸念が解消。</span>
+    </li><li>
+      <strong>8331.T</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">経常利益+22.4%・4期連続最高益に加え千葉興業合併による規模拡大で中期収益力が向上。金利正常化の恩恵も継続的。上方修正。</span>
+    </li><li>
+      <strong>DELL</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#10b981">8</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">売上+58%・営業益+204%・FCF+224%・バックログ$95Bと全指標で予想超。AIサーバー$74B通期ガイダンスと米軍契約が可視性を大幅向上。</span>
+    </li><li>
+      <strong>285A.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q1営業益29倍・eSSD市場年率35%成長は好材料。NAND単一依存・PER75倍・シリコンサイクル反転リスクが残り強気に転換不可。小幅引き上げ。</span>
+    </li><li>
+      <strong>SNOW</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">製品売上+34%・RPO+42%($97.7B)・AI消費加速は想定超の強さ。GAAP純損失$13億継続・高PSR・競合圧力は解消せず。微小引き上げ。</span>
+    </li><li>
+      <strong>3778.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#ef4444">2</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">ガバメントクラウド採択直後に136万件漏洩事故は致命的。別システムとはいえ政府機関の信頼喪失リスクと賠償負担が財務を圧迫。格下げ。</span>
+    </li><li>
+      <strong>4004.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">上期コア営業益2.6倍・EBITDAマージン27.8%→35.2%・純益355億上方修正は想定を大幅超過。AI後工程材料の構造的成長が実証され、旧データに基づく弱気判断を大幅修正。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>マクロエコノミスト</h4>
+        <ul><li>
+      <strong>3778.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引き下げ。ガバメントクラウド採択直後に136万件漏洩という致命的事故。政府契約の信頼失墜リスクが顕在化し、データ主権マクロ追い風を相殺。政府事業継続が最大の不確実性に。</span>
+    </li><li>
+      <strong>4004.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">大幅引き上げ。上期OP2.6倍・AI後工程材料（CCL約4倍・NCF/TIM約2倍）の急拡大はAIインフラ投資の構造的恩恵。景気サイクル感応度よりAI資本支出の持続性が上回ると判断。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>リスクマネージャー</h4>
+        <ul><li>
+      <strong>INOD</strong>:
+      <span style="color:#ef4444">2</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q2 EPS64%ビートは認めるが、71%顧客集中（随意解約可）・CEO交代・ATM公募の三重リスクは依然深刻。RSI37下降トレンド継続。</span>
+    </li><li>
+      <strong>3778.T</strong>:
+      <span style="color:#ef4444">2</span>
+      → <span style="color:#ef4444">1</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">マルウェア設置確認・136万件漏洩でガバメントクラウド契約継続が危機的状況。RSI57で悪材料未織り込み。根本原因調査継続中で追加被害拡大リスク。投資不適格。</span>
+    </li><li>
+      <strong>4004.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">上期OP2.6倍（888億円）はPER54.9xの根拠を大幅修正。AI後工程材料の構造的成長を認める。ただしMA200+31%の技術的過熱・10月スピンオフ不確実性・半導体サイクルリスク残存で中立に引き上げ。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>テクニカルストラテジスト</h4>
+        <ul><li>
+      <strong>3692.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">売上+56.9%・営業利益+365.7%とKProgram政府採用拡大が予想超過の強さ。RSI63・出来高比1.42の上昇圧力が50日線上方固めを支持。MA200回復が次の関門。</span>
+    </li><li>
+      <strong>1605.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">純利益+29%上方修正・1400億円自社株買い・増配という強力な株主還元3点セットが、RSI71過熱圏でも下値を支持。ホルムズ延期リスク残るが基本面の強さを評価し1段階引き上げ。</span>
+    </li><li>
+      <strong>285A.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">営業利益29倍にもかかわらずMA50比-19.6%・52週高値比-53.1%という大幅乖離は深刻な売り圧力の証拠。出来高0.70と低調で底入れ確認なし。技術的ブレイクダウン評価に引き下げ。</span>
+    </li><li>
+      <strong>SNOW</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">製品収益+34%の過去最大増収とAI消費加速が、RSI55・MA50上方+10.7%の上昇トレンドを基本面から強化。52週高値337ドル付近でのブレイクアウト試行に注目、1段階引き上げ。</span>
+    </li><li>
+      <strong>3778.T</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">136万アカウント情報漏洩・583件不正ログイン＋マルウェア設置確認という重大事故が株価に未反映。RSI57・上昇トレンドは見せかけで、悪材料開示時のギャップダウンリスクが高い。2段階引き下げ。</span>
+    </li><li>
+      <strong>4004.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">上期コアOP2.6倍・通期355億円上方修正の強い基本面がMA50近傍(+0.4%)での底堅さを支持。RSI51の中立は下落ではなく蓄積局面の可能性。出来高増加でMA50ブレイクアウトを確認できれば本格上昇のトリガー。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>テンバガーハンター</h4>
+        <ul><li>
+      <strong>3692.T</strong>:
+      <span style="color:#10b981">9</span>
+      → <span style="color:#10b981">10</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">上方修正。売上+56.9%・営業益+365.7%加速。国産技術KProgram採択・防衛契約拡大・新子会社展開の三重カタリスト。テンバガー本命候補として最高評価に引き上げ。</span>
+    </li><li>
+      <strong>INOD</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">小幅上方修正。EPS$0.41がコンセンサスを64%超過・粗利率49%は素直に評価。CEO交代・顧客71%集中・MA割れが重く、大幅引き上げには至らず。</span>
+    </li><li>
+      <strong>3778.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#ef4444">2</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">下方修正。136万アカウント漏洩・583件の不正ログイン・マルウェア設置確認はクラウド企業として致命的。ガバメントクラウド採択直後の重大インシデントで政府信頼の根幹が崩壊。</span>
+    </li><li>
+      <strong>4004.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">上方修正。上期コア営業利益2.6倍・EBITDAマージン35.2%・純利益355億円上方修正はAI材料企業として実力を証明。時価総額規模でテンバガーは困難だが中期成長株として評価引き上げ。</span>
+    </li></ul>
+      </div>
+    <hr>
+    <h2>リスク警告</h2>
+    <ul><li><span style="color:#ef4444;font-weight:bold;">[高]</span> ホルムズ海峡封鎖リスク：対イラン紛争激化により原油・LNGの供給途絶シナリオが現実味を帯びる。エネルギー以外のセクター全体に急激なコスト上昇圧力が波及する可能性があり、製造業・輸送業に深刻な影響。</li>
+<li><span style="color:#ef4444;font-weight:bold;">[高]</span> さくらインターネット(3778.T)不正アクセス被害拡大：583万から136万アカウントへと深刻化（修正後）。政府クラウド事業への信頼失墜・顧客離脱リスクが高く、追加的な制裁や契約解除の可能性を警戒。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> 米長期金利急騰リスク：米30年債が19年ぶり高水準に達し、グロース株全体のバリュエーション圧縮が続く。SNOW・INODなど赤字成長株は特に要注意。金利上昇長期化シナリオでは回避が賢明。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> VIX急伸（+9.52%）によるボラティリティ上昇：短期的なセンチメント悪化が続く可能性。レバレッジポジションの強制損切りリスクに備え、ポジションサイズの縮小を検討。</li>
+<li><span style="color:#10b981;font-weight:bold;">[低]</span> AIトークン価格最低水準・規制強化リスク：AIサービスの収益化圧力が高まり、AIインフラ関連銘柄の中長期成長期待に影響する可能性。OpenAI Astraの能力閾値超え発表は規制強化のトリガーとなりうる。</li></ul>
+    <hr>
+    <h2>アクションアイテム</h2>
+    <ul><li>WebSearch再評価で4004.T（レゾナック）が弱気→強気に大幅格上げ。上期コア営業益2.6倍・AI後工程材料急拡大の実力が確認された。新規買いを検討。</li>
+<li>DELL（デル・テクノロジーズ）も中立→強気に格上げ。AIサーバー+100%・米軍97億ドル契約が収益の可視性を大幅向上。</li>
+<li>SNOW（スノーフレーク）は弱気→中立に格上げ。製品収益+34%・RPO+42%・AI消費加速が評価されたが、GAAP赤字継続でウォッチ継続。</li>
+<li>3778.T（さくらインターネット）は136万件漏洩+583件マルウェア設置確認により最低スコア2.4へ急落。リスクマネージャーが投資不適格判定。即時回避。</li>
+<li>強気銘柄（CHRD・3692.T・3040.T・8331.T・6592.T・DELL・4004.T）の中から、テクニカルが確認できている3040.T・8331.T・4004.Tへの打診買いを優先。</li>
+<li>3692.T（FFRIセキュリティ）はテンバガースコア10（最高値）に引き上げ。売上+56.9%・営業益+365.7%とKProgram国策銘柄として注目最高位。</li></ul>
+    <hr>
+    <h2>週間注目イベント</h2>
+    <table>
+      <tr>
+        <td>日付</td>
+        <td>イベント</td>
+        <td>インパクト</td>
+      </tr>
+      <tr>
+      <td>2026-09-01</td>
+      <td>対イラン紛争激化・ホルムズ海峡封鎖警告</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-09-01</td>
+      <td>米30年債が19年ぶり高水準到達</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-09-01</td>
+      <td>Dell Technologies決算・通期ガイダンス引き上げ（時間外+10%）</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-09-01</td>
+      <td>FFRIセキュリティ(3692.T)売上+43%・営業益+67%決算発表</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-09-01</td>
+      <td>さくらインターネット(3778.T)不正アクセス被害136万アカウントに拡大</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-09-01</td>
+      <td>マブチモーター(6592.T)国産ヒューマノイド連合KyoHA参画発表</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-09-01</td>
+      <td>OpenAI AstraモデルがCriticalなサイバー能力閾値超えを発表</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-09-02</td>
+      <td>TOPIX9日連続続伸の継続確認・USD/JPY 160円台維持</td>
+      <td style="color:#10b981;font-weight:bold;">低</td>
+    </tr>
+    </table>
+    <hr>
+    <h2>インデックス投資家へのアドバイス</h2>
+    <div class="agent-card">
+      <p>高金利・地政学リスク局面では、インデックス投資の積立継続が最も有効な戦略です。個別株のリスクが高まっている今こそ、S&amp;P500や全世界株式インデックスへの毎月定額積立を維持してください。本日はVIX+9.52%急伸とリスクオフ相場が加速していますが、長期の積立投資家にとっては一時的な下落はむしろ安値取得の好機です。エネルギー・防衛セクターが相対的に強い一方、テクノロジー・消費裁量は逆風が続いているため、セクター偏重を避けた分散ポートフォリオの維持を強くお勧めします。</p>
+    </div>
+  </div>
+</body>
+</html>

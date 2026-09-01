@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Investment Report - 2026-08-31</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      color: #fff;
+      border-bottom: 2px solid #3b82f6;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: #60a5fa;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #3b82f6;
+      padding-left: 0.8rem;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #93c5fd;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: #a5b4fc;
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+    p { margin-bottom: 0.8rem; }
+    ul { list-style: none; padding-left: 0; margin-bottom: 1rem; }
+    li {
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.3rem;
+      background: #1e1e2e;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+    }
+    strong { color: #fbbf24; }
+    hr {
+      border: none;
+      border-top: 1px solid #333;
+      margin: 2rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #1e1e2e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    tr:first-child td {
+      background: #2a2a3e;
+      font-weight: bold;
+      color: #93c5fd;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+    .timestamp {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .agent-card {
+      background: #1e1e2e;
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #6366f1;
+    }
+    .agent-card h4 { color: #a5b4fc; margin-top: 0; }
+    .discussion-card {
+      background: #1a1a28;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #f59e0b;
+    }
+    .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    .ticker-pill {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #3f3f5a;
+    }
+    .news-meta {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .digest-crossref-chip {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #a78bfa;
+    }
+    .digest-crossref-row {
+      margin-bottom: 0.5rem;
+    }
+    .news-card a {
+      color: #93c5fd;
+    }
+    .news-card a:visited {
+      color: #c4b5fd;
+    }
+    .news-card a:hover {
+      color: #bfdbfe;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Investment Report - 2026-08-31</h1>
+    <p class="timestamp">Generated: 2026/9/1 8:07:32</p>
+    <hr>
+    <h2>市場概況</h2>
+    <div class="agent-card">
+      <p><strong>トレンド:</strong> <span style="color:#ef4444">下降</span></p>
+      <p>主要指数は揃って続落し、S&amp;P500は7,686.14(-0.33%)、ダウ53,185.90(-0.70%)、日経平均66,311.93(-0.14%)で引けた。11セクター中プラスはエネルギー(XLE)+2.04%のみという極端な一極集中で、指数の小幅安が内部のbreadth劣化を覆い隠している。イラン紛争長期化とカーグ島(ハルグ島)リスクで原油が高止まりし、米住宅ローン金利は2025年6月以来の高水準へ跳ね、公益-1.17%・資本財-1.13%・不動産-0.83%といった金利敏感セクターが総崩れとなった。バリュエーションは二極化が極端で、アドバンテスト(6857.T)のPER65倍やCrowdStrike(CRWD)の営業赤字・PBR50.8倍には安全マージンが残っていない一方、EV/EBITDA4倍未満かつ純現金が時価総額の3〜4割という「キャッシュフロー前倒し型」に資金が移動している。VIXは14.92(+3.40%)と戦時・原油高・金利高の三重苦に対し明白に低く、ヘッジコストが歴史的に安い局面である。</p>
+      <ul><li>S&amp;P 500: <span style="color:#ef4444">-0.33%</span></li>
+<li>NASDAQ: <span style="color:#ef4444">-0.12%</span></li>
+<li>ダウ平均: <span style="color:#ef4444">-0.7%</span></li>
+<li>日経225: <span style="color:#ef4444">-0.14%</span></li>
+<li>VIX: <span style="color:#10b981">+3.4%</span></li></ul>
+    </div>
+    <hr>
+    <h2>セクターパフォーマンス</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 400 352" width="100%" role="img" aria-label="セクターパフォーマンス">
+    <line x1="270" y1="0" x2="270" y2="352" stroke="#333" stroke-width="1"/>
+    
+      <text x="132" y="16" font-size="13" fill="#e0e0e0" text-anchor="end">Energy</text>
+      <rect x="270" y="0" width="126" height="24" fill="#10b981" rx="2"/>
+      <text x="400" y="16" font-size="13" fill="#e0e0e0" text-anchor="start">+2.04%</text>
+    
+      <text x="132" y="48" font-size="13" fill="#e0e0e0" text-anchor="end">Technology</text>
+      <rect x="270" y="32" width="26.914412473312048" height="24" fill="#10b981" rx="2"/>
+      <text x="300.91441247331204" y="48" font-size="13" fill="#e0e0e0" text-anchor="start">+0.44%</text>
+    
+      <text x="132" y="80" font-size="13" fill="#e0e0e0" text-anchor="end">Healthcare</text>
+      <rect x="247.64957984839285" y="64" width="22.350420151607153" height="24" fill="#ef4444" rx="2"/>
+      <text x="243.64957984839285" y="80" font-size="13" fill="#e0e0e0" text-anchor="end">-0.36%</text>
+    
+      <text x="132" y="112" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Discretionary</text>
+      <rect x="237.36242630207823" y="96" width="32.637573697921766" height="24" fill="#ef4444" rx="2"/>
+      <text x="233.36242630207823" y="112" font-size="13" fill="#e0e0e0" text-anchor="end">-0.53%</text>
+    
+      <text x="132" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Staples</text>
+      <rect x="236.0633204708832" y="128" width="33.936679529116795" height="24" fill="#ef4444" rx="2"/>
+      <text x="232.0633204708832" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">-0.55%</text>
+    
+      <text x="132" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">Financials</text>
+      <rect x="228.583173368852" y="160" width="41.41682663114803" height="24" fill="#ef4444" rx="2"/>
+      <text x="224.583173368852" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">-0.67%</text>
+    
+      <text x="132" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">Real Estate</text>
+      <rect x="218.6754784243825" y="192" width="51.32452157561749" height="24" fill="#ef4444" rx="2"/>
+      <text x="214.6754784243825" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">-0.83%</text>
+    
+      <text x="132" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">Materials</text>
+      <rect x="213.14895696628994" y="224" width="56.85104303371006" height="24" fill="#ef4444" rx="2"/>
+      <text x="209.14895696628994" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">-0.92%</text>
+    
+      <text x="132" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">Industrials</text>
+      <rect x="199.98896245078646" y="256" width="70.01103754921355" height="24" fill="#ef4444" rx="2"/>
+      <text x="195.98896245078646" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">-1.13%</text>
+    
+      <text x="132" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">Utilities</text>
+      <rect x="197.8016766889311" y="288" width="72.19832331106889" height="24" fill="#ef4444" rx="2"/>
+      <text x="193.8016766889311" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">-1.17%</text>
+    
+      <text x="132" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">Communication Services</text>
+      <rect x="186.45123694983644" y="320" width="83.54876305016356" height="24" fill="#ef4444" rx="2"/>
+      <text x="182.45123694983644" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">-1.35%</text>
+    
+  </svg>
+    </div>
+    <hr>
+    <h2>VIX推移</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 600 200" width="100%" role="img" aria-label="VIX推移">
+    
+    <line x1="10" y1="132.89156626506025" x2="560" y2="132.89156626506025"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="136.89156626506025" font-size="13" fill="#6b7280">20</text>
+  
+    
+    <line x1="10" y1="50.96385542168676" x2="560" y2="50.96385542168676"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="54.96385542168676" font-size="13" fill="#6b7280">30</text>
+  
+    <polyline points="10,166.8096413669816 38.94736842105263,161.56626506024097 67.89473684210526,167.21927367061016 96.84210526315789,172.62650914939053 125.78947368421052,174.67470192047486 154.73684210526315,170.0867466754224 183.68421052631578,171.56144797083843 212.6315789473684,177.54216711205171 241.57894736842104,176.88674605036357 270.52631578947364,180 299.4736842105263,172.29879861854644 328.42105263157896,166.97349272578595 357.36842105263156,174.75662369325937 386.3157894736842,165.5807210163898 415.2631578947368,172.79036050819488 444.2105263157895,166.8915631397661 473.1578947368421,170.16867626144224 502.10526315789474,172.13493944650673 531.0526315789473,177.8698776428958 560,174.51084274843515" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="10" cy="166.8096413669816" r="3" fill="#3b82f6"/><circle cx="38.94736842105263" cy="161.56626506024097" r="3" fill="#3b82f6"/><circle cx="67.89473684210526" cy="167.21927367061016" r="3" fill="#3b82f6"/><circle cx="96.84210526315789" cy="172.62650914939053" r="3" fill="#3b82f6"/><circle cx="125.78947368421052" cy="174.67470192047486" r="3" fill="#3b82f6"/><circle cx="154.73684210526315" cy="170.0867466754224" r="3" fill="#3b82f6"/><circle cx="183.68421052631578" cy="171.56144797083843" r="3" fill="#3b82f6"/><circle cx="212.6315789473684" cy="177.54216711205171" r="3" fill="#3b82f6"/><circle cx="241.57894736842104" cy="176.88674605036357" r="3" fill="#3b82f6"/><circle cx="270.52631578947364" cy="180" r="3" fill="#3b82f6"/><circle cx="299.4736842105263" cy="172.29879861854644" r="3" fill="#3b82f6"/><circle cx="328.42105263157896" cy="166.97349272578595" r="3" fill="#3b82f6"/><circle cx="357.36842105263156" cy="174.75662369325937" r="3" fill="#3b82f6"/><circle cx="386.3157894736842" cy="165.5807210163898" r="3" fill="#3b82f6"/><circle cx="415.2631578947368" cy="172.79036050819488" r="3" fill="#3b82f6"/><circle cx="444.2105263157895" cy="166.8915631397661" r="3" fill="#3b82f6"/><circle cx="473.1578947368421" cy="170.16867626144224" r="3" fill="#3b82f6"/><circle cx="502.10526315789474" cy="172.13493944650673" r="3" fill="#3b82f6"/><circle cx="531.0526315789473" cy="177.8698776428958" r="3" fill="#3b82f6"/><circle cx="560" cy="174.51084274843515" r="3" fill="#3b82f6"/>
+    <text x="10" y="196" font-size="13" fill="#888">2026-08-03</text>
+    <text x="560" y="196" font-size="13" fill="#888" text-anchor="end">2026-08-31</text>
+  </svg>
+    </div>
+    <hr>
+    <h2>セクター推奨ランキング</h2>
+    <table>
+      <tr>
+        <td>ランク</td>
+        <td>セクター</td>
+        <td>理由</td>
+        <td>見通し</td>
+      </tr>
+      <tr>
+      <td>1</td>
+      <td><strong>エネルギー(上流開発・油田サービス)</strong></td>
+      <td>XLE+2.04%が11セクター中唯一の大幅高。カーグ島リスクと米SPR枯渇で供給ショックの緩衝材が失われ、地政学プレミアムが構造化しつつある。ただしSLB(RSI76.2)・VLO(RSI70.5)・PBF(200日線比+68.2%)の先行組は過熱圏で追撃不可であり、HAL(200日線を出来高比1.47で奪回)やMTDR(52週高値まで-11.4%)のような未過熱の出遅れ組に妙味が偏在する。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>2</td>
+      <td><strong>日本の銀行(地方銀行)</strong></td>
+      <td>大手2行の9月変動型住宅ローン金利引き上げにより、日銀正常化が貸出金利へ本格転嫁される段階に入った。預貸率と変動金利比率の高い地銀は利ざや改善が最も直接的に効き、PBR1倍前後・PER11倍とバリュエーション拡大余地が残る。ただし保有国債・外債の含み損拡大(SVB型リスク)と与信費用増という逆側面が同時進行する両刃の剣である点は忘れてはならない。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>3</td>
+      <td><strong>海運(タンカー)</strong></td>
+      <td>7月の日本の原油輸入で米国産が1989年以降初めて最大となり、供給網再編によるトンマイル(航海距離)拡大が構造的な追い風となる。TNKは純現金が時価総額の38%、INSWはRSI57.7と未過熱。一方で海運の純現金はサイクル頂点でのみ厚く、停戦報道1本でスポット運賃が数日で半減しうるピークアーニングス・リスクを内包する。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中立</td>
+    </tr>
+<tr>
+      <td>4</td>
+      <td><strong>テクノロジー(半導体・サイバーセキュリティ)</strong></td>
+      <td>XLK+0.44%と相対的に堅調でAI設備投資自体は加速中だが、絶対バリュエーションが金利上昇に耐えられない。6857.TはPER65倍・PBR23.4倍・EV/EBITDA43倍で本日-4.48%と20日線を割り込み、CRWDは営業赤字でMA200比+64.4%。エヌビディアの半導体リース「新たな資産クラス」構想は1999〜2000年の光ファイバーバブル末期と構造が酷似する。</td>
+      <td style="color:#ef4444;font-weight:bold;">弱気</td>
+    </tr>
+<tr>
+      <td>5</td>
+      <td><strong>不動産・REIT・公益・住宅建設</strong></td>
+      <td>米住宅ローン金利の2025年6月以来の高水準への急騰と30年債利回り上昇が、デュレーション資産の理論価値を直撃している。XLU-1.17%、XLRE-0.83%と実際に売られ、REIT系はRSI38.3と軟調。金利低下シナリオが消滅した現局面では、実質金利のピークアウト確認まで回避が妥当である。</td>
+      <td style="color:#ef4444;font-weight:bold;">弱気</td>
+    </tr>
+    </table>
+    <hr>
+    <h2>注目銘柄スコアリングマトリクス</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">各エージェントが10段階評価した結果です。平均7以上=強気、4〜6.9=中立、4未満=弱気。</p>
+    <table>
+      <tr>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;">銘柄</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">ファンダメンタルズアナリスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テンバガーハンター</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">マクロエコノミスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テクニカルストラテジスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">リスクマネージャー</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">平均</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">判定</td>
+      </tr>
+      <tr>
+      <td><strong>1605.T</strong><br><span style="font-size:0.8rem;color:#888;">INPEX(国際石油開発帝石)。原油高が利益に直結する上流開発の中核でマクロ9の最高評価。全MA上位・RSI65.3・52週高値まで-19.2%と上値余地も残る。ただしPER8倍・PBR0.6倍の割安さは原油85ドル前提に依存し、確率25%の停戦シナリオではEPSが3〜4割毀損する点に留意。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">PER8倍・PBR0.6倍と割安だが停戦シナリオでEPSが3〜4割毀損、原油前提付きの割安さ</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">地政学リスクで原油上昇の恩恵。時価総額が大きすぎてテンバガーの論理なし。RSI65で過熱に近い</span></td><td style="text-align:center;color:#10b981"><strong>9</strong><br><span style="font-size:0.75rem;color:#888;">原油高が直接利益に転嫁される上流開発の中核。円安追い風・SPR枯渇で価格緩衝力低下・米国産原油輸入増が供給網再編の恩恵をもたらすマクロ最優先銘柄</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">全MA上位の上昇トレンド、RSI65.3と適度、52週高値まで-19.2%の伸びしろ大。MA200を9%上回り出来高比1.12と安定的</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">原油上昇への自然ヘッジ、テクニカル健全。停戦25%シナリオでは20%超調整リスクあり中立</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.4</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>HAL</strong><br><span style="font-size:0.8rem;color:#888;">Halliburton(ハリバートン)。200日線34.56ドルを出来高比1.47で奪回した教科書的ブレイクアウトで、RSI64.1と過熱前・52週高値まで-14.3%。SLB(RSI76.2)が走り切った後だけにセクター内で最も歪みが小さいとテクニカル・マクロが一致。ただし原油価格の従属変数でエネルギー過集中の一角である点は割引が必要。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">油田サービス。原油高でEV/EBITDA合理的水準、FCFポジティブで財務健全な中型株</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">大手油田サービス。RSI64で中立圏。循環株で10倍化に原油価格連動が必須</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">200日線奪回直後で歪みが偏在。RSI64.1とSLBより過熱なく52週高値-14.3%と出遅れ。地政学プレミアムの資金が先行組から流入する段階</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">200日線(34.56ドル)を出来高比1.47で奪回した教科書的ブレイクアウト。RSI64.1と過熱前、52週高値まで-14.3%の伸びしろ。セクター内で歪みが最も小さい</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">油田サービスで原油価格連動。停戦シナリオで収益環境が急変。エネルギー集中リスクも考慮</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.4</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>8331.T</strong><br><span style="font-size:0.8rem;color:#888;">千葉銀行。2,820円で52週高値2,843.5円まで-0.83%、RSI58.6・出来高比1.37とブレイクアウト直前の最良の形状。9月の変動金利改定で下期NIM改善の蓋然性が高く、マクロ・テクニカル・ファンダの3名が強気で揃った。反証は保有国債の含み損拡大と与信費用増というSVB型リスクで、論点としては未決着。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">PBR約1倍・PER11倍。9月変動金利改定がNIMに直撃し下期業績上方修正の蓋然性大</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">地方銀行でテンバガー候補外。成長ドライバー不明。RSI59と中立圏だが構造的成長力なし</span></td><td style="text-align:center;color:#10b981"><strong>9</strong><br><span style="font-size:0.75rem;color:#888;">9月からの変動金利引き上げで日銀正常化が貸出金利に本格転嫁。高預貸率地銀として利ざや改善の最大受益者。52週高値-0.8%と強い相対力</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">52週高値(2,843円)まで-0.83%でブレイクアウト直前の最高の形状。RSI58.6と過熱前に十分な余裕、出来高比1.37と商い伴う。全MA上位で条件が最も整っている</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">金利上昇で利ざや改善と同時に国債含み損拡大・与信費用増のSVB型リスクが存在。両刃の剣</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.2</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>5021.T</strong><br><span style="font-size:0.8rem;color:#888;">コスモエネルギーホールディングス。EV/EBITDA3.8倍と割安で、上流・精製の複合事業により原油高の恩恵を総合的に享受する。4,279円(+2.08%)で全MA上位、RSI64.4と適度、52週高値まで-13.4%の伸びしろ。純粋上流ほどの直接性はなく、油価反転リスクは残存する。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">EV/EBITDA3.8倍のコスモエネルギー。原油高で業績拡大、バランスシートが下値を支持</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">石油元売り。原油高の恩恵あるが本質的に循環株。RSI64・50日線比+8%で中立</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">上流・精製の複合事業で原油高恩恵。RSI64.4・上昇トレンド。純粋上流ほどの直接性はないが総合的なエネルギー高の受益者</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">全MA上位の上昇トレンド、RSI64.4と適度な水準、52週高値まで-13.4%の伸びしろあり。出来高比0.99とほぼ平均で安定的な上昇継続</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">テクニカル健全(RSI64・MA200+3.4%)で精製マージン恩恵あり。油価反転リスクは残存</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.2</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>MTDR</strong><br><span style="font-size:0.8rem;color:#888;">Matador Resources(パーミアン盆地の独立系E&amp;P)。EV/EBITDA一桁前半・ネットデット/EBITDA1倍未満で、WTI60ドル台でもFCFが回る低ブレークイーブンがそのまま安全マージンになるとファンダが最高評価。58.01ドルで全MA上位・RSI63.1・52週高値まで-11.4%。出来高比0.71と商いが薄く、増加確認後のエントリーが望ましい。</span></td>
+      <td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">EV/EBITDA一桁前半・ネットデット/EBITDA1倍未満。WTI60ドル台でもFCF黒字の低ブレークイーブン</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">独立系E&amp;P。RSI63・50日線比+11%。原油高の恩恵あるが循環株で10倍ストーリーなし</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">パーミアン盆地E&amp;P。RSI63.1・52週高値-11.4%とエネルギーセクター内での出遅れ組。原油高が直接利益に転嫁され、過熱感なく良好なリスクリワード</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">全MA上位の上昇トレンド、RSI63.1と適度、52週高値まで-11.4%の伸びしろ。出来高比0.71とやや薄いため出来高増加を確認後のエントリーが望ましい</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">E&amp;P企業で原油価格一本足。停戦報道で即日10%超下落しうる。エネルギー過集中の一角</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.2</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>1662.T</strong><br><span style="font-size:0.8rem;color:#888;">石油資源開発(JAPEX)。1,916円で200日線1,894.52円を奪回した重要な転換シグナルが点灯し、RSI65.3・52週高値まで-29.4%と上値余地は最大級。原油高の直接受益者でPBR1倍前後と下値も固い。出来高比0.82と商いが薄く、需要側リスクが下値を持続的に圧迫する点が懸念。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">国内石油会社。原油85ドル環境で業績拡大余地あり。PBR1倍前後で下値は固い</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">石油探鉱の中小型株。RSI65・50日線比+10.8%と堅調。CCS関連の間接オプションあり</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">日本の原油上流開発として原油高の直接受益者。RSI65.3・上昇トレンドで技術的にも整合。52週高値-29.4%と上値余地が残る</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">MA200(1,894円)を奪回した重要な転換シグナル、RSI65.3、52週高値まで-29.4%の伸びしろ大。出来高比0.82と薄いのが唯一の懸念点</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">52週高値比-29.4%の大幅乖離で200日線付近に留まる。石油需要側リスクが下値を持続的に圧迫</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>TNK</strong><br><span style="font-size:0.8rem;color:#888;">Teekay Tankers(タンカー中堅)。EV/EBITDA3.7倍・PER5.3倍・純現金が時価総額の38%とファンダは8の最高評価だが、リスクは3。海運の純現金はサイクル頂点でのみ厚く、実績PER5.3倍→予想8.2倍は市場が既に減益を織り込んだ証左というピーク利益論と真っ向から対立し、本日最大の未決着論点となった。</span></td>
+      <td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">EV/EBITDA3.7倍・PER5.3倍で極端に割安、純現金が時価総額の38%。ROE28%・OP利益率50%で安全マージンが厚い</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">シクリカルタンカー。売上+63%はトンマイル拡大だが予想PER悪化で減益トレンド入り。テンバガー要件外</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">原油高とホルムズ海峡リスクによる迂回航路長期化がタンカー運賃を押し上げ。エネルギー安全保障テーマの直接受益者。RSI61.6で過熱なし</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">上昇トレンド継続、RSI61.6と過熱前、52週高値まで-2.6%でブレイクアウト間近。出来高比1.63と商い伴う。MA200乖離+27.8%が唯一の懸念</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">停戦で運賃半減リスク、実績PER5.3倍→予想8.2倍はピーク利益への課金。純現金38%は下値保証にならない</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.8</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>1663.T</strong><br><span style="font-size:0.8rem;color:#888;">K&amp;Oエナジーグループ。無借金で現金418億円が時価総額の39%、PBR0.98倍と資産価値は厚い。ファンダは「ROE7.5%のバリュートラップ」、テンバガーは「首都圏CCS15%出資の地下貯留権という簿価未反映の無料オプション」と評価理由が正反対。RSI71.7の過熱かつ200日線割れという形状は短期エントリーには不利。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">無借金・現金が時価総額の39%で下値堅いが、ROE7.5%低位でバリュートラップリスクあり。RSI72過熱にも注意</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">首都圏CCS15%出資という未評価オプション付きバリュー。RSI72過熱で短期調整リスクあるが中長期本命</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">日本上流開発の原油高直接受益者。RSI71.7とやや過熱気味だが52週高値-28.4%と上値余地あり。マクロ追い風は継続</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">RSI71.7と過熱圏突入、MA200(2,103円)下で推移中に過熱は危険。出来高比2.27だが52週高値から-28.4%の位置での過熱は戻り売り圧力を示唆</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">RSI71.7で過熱圏かつ200日線割れ、52週高値比-28.4%。油価反落時のダウンサイドが大きい</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.6</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>6592.T</strong><br><span style="font-size:0.8rem;color:#888;">マブチモーター。純現金1,161億円(時価総額の28%)を控除した実質PERは約10倍、配当利回り3.97%。海外売上比率9割超で159円台の円安が直接効く。全MA上位・RSI60.5と整った形状。ただし原油高が世界景気を減速させる経路ではエネルギー株と前提が正面衝突し、分散になっていないとマクロが指摘。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">純現金控除の実質PER約10倍・配当利回り3.97%。円安159円台の海外売上9割超が直接追い風</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">売上成長+16.8%は30%基準未達。成熟モーターメーカーでテンバガー母集団外。RSI61は中立圏</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">円安(159円台)は輸出収益を押し上げるが、原油高起因の世界景気減速リスクが海外需要を脅かす。マクロ前提が相反しており中立</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">全MA上位の整った上昇トレンド、RSI60.5と過熱前、52週高値まで-6.4%の伸びしろあり。出来高比1.18と安定的で追撃可能な局面</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">自動車向け小型モーターでテクニカル健全(RSI60・MA200+12.6%)。自動車需要減速リスクは注視</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.6</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>INSW</strong><br><span style="font-size:0.8rem;color:#888;">International Seaways(国際海上タンカー)。98.64ドルで52週高値まで-1.3%、RSI57.7と未過熱・出来高比1.54でブレイクアウト寸前。一方でPER一桁はスポット運賃のピーク利益由来で割安ではなく、MA200比+35.3%と既に走った位置。TNKと同質の停戦リスクを抱えるため、押し目分割エントリーに限定すべき。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">PER一桁はタンカースポット運賃のピーク利益由来。純現金の厚みもTNKに劣り中立維持</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">タンカー大手。RSI58・200日線比+35%。シクリカル循環株でTNK同様テンバガー要件外</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">国際海上タンカー。TNK同様に原油高とホルムズ海峡リスクによる迂回航路長期化の恩恵。RSI57.7で過熱なく、52週高値-1.3%とモメンタム強い</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">上昇トレンド継続、52週高値まで-1.3%でブレイクアウト寸前、RSI57.7と過熱前に余裕、出来高比1.54。MA200乖離+35.3%はやや懸念だが条件概ね良好</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">MA200比+35.3%と過伸張。停戦で運賃急落リスクはTNKと同質。52週高値圏での追随は危険</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.4</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+    </table>
+    <hr>
+    <h2>ウォッチリスト 買いタイミング判定</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">ウォッチリスト銘柄の本日の買いタイミング判定です。</p>
+    <div class="agent-card">
+      <h4>3110.T — Nitto Boseki Co., Ltd. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 寄付き前時点)</span></h4>
+      <p>本日は+5.44%の強い上昇を示しているが、出来高比率が0.69と平均を大きく下回っており、反発の信頼性に乏しい。価格はMA50（3,329円）およびMA200（3,664円）を共に下回っており、トレンドラベルも「下降トレンド（50日線・200日線割れ）」と明示されている。52週高値（6,390円）からの下落率は約50%に達しており、構造的な下降トレンドの中に位置する。MA20（3,070円）超えは維持しているが、これ単独では上位トレンドの転換を意味しない。</p>
+      <span class="ticker-pill">MA50（3,329円）下方乖離-3.88%・MA200（3,664円）下方乖離-12.66%：上位トレンドが下降中であることを示す</span><span class="ticker-pill">出来高比率0.69：本日の急騰が薄商いによるものであり、トレンド転換シグナルとして弱い</span><span class="ticker-pill">52週高値比-49.9%：深刻な下降トレンド継続中であり、反発余地の確認前に参入するリスクが高い</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-13</p>
+    </div>
+<div class="agent-card">
+      <h4>5698.T — Envipro Holdings Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 寄付き前時点)</span></h4>
+      <p>現在値793円はMA20（815.5）・MA50（807.96）・MA200（822.035）の全移動平均線を下回っており、トレンドラベルも「下降トレンド（50日線・200日線割れ）」と明示されている。RSI14は47.32と中立域ながら50を割り込んでおり、買い転換の勢いを示していない。出来高比率も0.83と平均を下回り、上昇への確信度を裏付ける出来高増加がない。買いのconfluenceを形成する複数シグナルが存在しないため、本日は見送りが妥当。</p>
+      <span class="ticker-pill">価格がMA20・MA50・MA200の全移動平均線を下回る（三重デッドクロス状態）</span><span class="ticker-pill">RSI14が47.32と50未満で弱気バイアス</span><span class="ticker-pill">出来高比率0.83と平均以下で上昇の確信度なし</span><span class="ticker-pill">52週高値比-34.6%の強い下落圧力継続</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-26</p>
+    </div>
+<div class="agent-card">
+      <h4>6146.T — Disco Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 寄付き前時点)</span></h4>
+      <p>ディスコ（6146.T）は現時点でMA20・MA50・MA200のすべてを下回る明確な下降トレンドにある。特にMA50からの乖離率が-14.3%と大幅な下方乖離で、価格の位置は構造的に弱い。RSI14は40.4と中立ゾーン下部にあり、まだ売られすぎの水準（30以下）に達しておらず、さらなる下値余地を示唆する。本日-2.1%の続落かつ出来高比率0.92と平均以下で、買い圧力の高まりは確認できない。</p>
+      <span class="ticker-pill">MA50・MA200の双方を10%超下回っており、トレンドが下降局面にあることを複数の移動平均が確認</span><span class="ticker-pill">RSI14=40.4と中立ゾーン下限にあり、まだ売られすぎ圏に到達しておらず底打ちシグナルなし</span><span class="ticker-pill">出来高比率0.92と平均を下回り、買い勢力の参入を示す出来高急増が不在</span><span class="ticker-pill">本日-2.07%続落中で当日の勢いも弱気</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-14</p>
+    </div>
+<div class="agent-card">
+      <h4>6460.T — Sega Sammy Holdings Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 寄付き前時点)</span></h4>
+      <p>セガサミーHD（6460.T）は50日線・200日線の上方で明確な上昇トレンドを形成しているものの、現時点での新規エントリーは見送りが妥当と判断する。RSI14が73.48とオーバーボート圏（70超）に達しており、短期的な過熱が示唆される。加えて、株価はMA50から+20.25%・MA200から+24.50%と主要移動平均線から大幅に乖離しており、平均回帰圧力が高まりやすい水準にある。直近では52週高値3416円から9.19%の位置にあり、戻り売りのレジスタンスとして機能しやすい。関連ニュースによる新たな買い材料もなく、現時点で複数シグナルの買いコンフルエンスは成立しない。</p>
+      <span class="ticker-pill">RSI14=73.48でオーバーボート圏（&gt;70）に突入しており、短期過熱による調整リスクが高い</span><span class="ticker-pill">株価がMA50から+20.25%・MA200から+24.50%と大幅乖離し、伸び切りサインが複数の時間軸で同時点灯</span><span class="ticker-pill">52週高値3416円まで残り+9.9%の位置にあり、戻り売り圧力が想定されるレジスタンスゾーンに接近中</span><span class="ticker-pill">当日変化率-0.29%と小幅陰転しており、上値追いへの積極的な買い勢いが確認できない</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-26</p>
+    </div>
+<div class="agent-card">
+      <h4>6857.T — Advantest Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">買い → 待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 寄付き前時点)</span></h4>
+      <p>前営業日終値ベースで6857.Tは-4.48%の大幅下落を記録し、株価（33,690円）が20日移動平均線（34,551.5円）を割り込んでいる。中長期トレンドは50日線・200日線の上位で依然として上昇基調を維持しているが、短期的には直近サポートを失った状態で東京市場のセッションを迎える形となる。RSI14は50.60と中立圏にあり、売られ過ぎ（30以下）には程遠く、平均回帰的な押し目買いの根拠が成立しない。出来高比率1.04は平均をわずかに上回る程度で、底打ちを示す投げ売りや買い集めのシグナルとしては不十分。また、下落を説明するニュース材料がデータ上存在しないため、原因不明の急落後は様子見が定石となる。</p>
+      <span class="ticker-pill">株価（33,690円）が20日移動平均線（34,551.5円）を下回り、短期トレンドが悪化している</span><span class="ticker-pill">RSI14が50.60と中立圏にあり、売られ過ぎによるリバウンド根拠が不在</span><span class="ticker-pill">出来高比率1.04は平均並みで底打ちを示す特異な動きなし</span><span class="ticker-pill">下落を裏付けるニュース材料がデータ上存在せず、原因不明の急落後は様子見が妥当</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-12</p>
+    </div>
+<div class="agent-card">
+      <h4>6976.T — Taiyo Yuden Co., Ltd. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 寄付き前時点)</span></h4>
+      <p>現在価格9,184円は50日移動平均線（12,856円）から約28.6%下方に乖離しており、下降トレンドの強さを示している。RSI14は40.1と売られ過ぎ水準には達していないが、弱気バイアスを示す中立以下の水準にある。200日移動平均線（7,601円）からは約20.8%上方に位置しており、下値余地がなお残存する。52週高値（22,655円）から約59.5%の大幅下落局面にあり、複数のシグナルが買いへの合致を形成していない。出来高比率も0.82と低水準にとどまる。</p>
+      <span class="ticker-pill">RSI14=40.1は50を下回り、買いモメンタムの不在を示す（売られ過ぎの反発確認前）</span><span class="ticker-pill">50日移動平均線から-28.6%の大幅下方乖離は下降圧力が継続中であることを示す</span><span class="ticker-pill">出来高比率0.82は平均を下回り、買い勢力の参入が確認できない</span><span class="ticker-pill">200日移動平均線（7,601円）からの上方乖離（+20.8%）が下値余地の存在を示唆</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-13</p>
+    </div>
+<div class="agent-card">
+      <h4>ETN — Eaton Corporation plc <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>ETNは前日比-3.40%と大幅下落し、価格（401.88ドル）はMA20（434.87ドル）・MA50（417.22ドル）の双方を下回る位置にある。トレンドラベルが示す通り「50日線と200日線の間」のレンジに滑り込んでおり、短中期の下押し圧力が続いている状況。RSI14は40.86と中立域の下方に位置し、売られすぎ（30以下）には至っておらず、底打ちを確認できる水準ではない。出来高比率も0.95と平均をわずかに下回る水準で、投げ売りによる需給の転換が発生したとは言えない。</p>
+      <span class="ticker-pill">RSI14（40.86）は中立域の下方だが売られすぎ水準（≤30）に未達であり、底打ち確認には至っていない</span><span class="ticker-pill">出来高比率0.95と平均以下で、セリングクライマックスを示す需給転換の証拠がない</span><span class="ticker-pill">価格がMA20（434.87）・MA50（417.22）の双方を下回っており、短中期トレンドが下向き</span><span class="ticker-pill">単日-3.40%の急落にもかかわらず出来高が増加していないため、売り一巡を示すシグナルが不在</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-04</p>
+    </div>
+<div class="agent-card">
+      <h4>ETON — Eton Pharmaceuticals, Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>ETONはMA50・MA200の双方を大きく上回る強い上昇トレンドにあり、RSI14が64.31と過熱圏（70）に達していない点は相応の買い余地を示す。しかし本日は-3.56%の下落を記録し、その下落が出来高比率1.44xという平均以上の出来高を伴っている点が問題だ。これは高値圏での分配（売り圧力）を示唆しており、52週高値64.43ドルからわずか6.2%下という強いレジスタンス帯に当たっていることとも合致する。さらにMA50からの乖離率が+34%、MA200からは+122%と著しく過伸長しており、平均回帰リスクが高い水準にある。</p>
+      <span class="ticker-pill">本日-3.56%の下落が出来高比率1.44xという平均以上の出来高を伴っており、高値圏での分配・売り圧力を示唆する</span><span class="ticker-pill">52週高値64.43ドルの6.19%下という強いレジスタンス帯に位置しており、上値抑制リスクが高い</span><span class="ticker-pill">MA50乖離率+34%・MA200乖離率+122%と著しく過伸長しており、平均回帰リスクが高い</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-14</p>
+    </div>
+<div class="agent-card">
+      <h4>GEV — GE Vernova Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>本日-5.80%の急落を出来高比1.28倍（平均超）で記録しており、売り圧力が増勢であることを示している。価格はMA20比-9.5%、MA50比-12.88%と短中期線の双方を大きく割り込んでおり、トレンド構造は明確に弱気。RSI14は35.57と売られ過ぎゾーン（30）に接近中だが、まだ底打ち確認には至っておらず下落継続の可能性を排除できない。MA200（877.36）の+2.41%水準が中長期サポートとして機能する可能性はあるものの、今日の急落勢いと関連ニュースの不在を鑑みると、翌セッションでMA200をも下抜けるリスクが残る。</p>
+      <span class="ticker-pill">RSI14=35.57と売られ過ぎ（30）に近づきつつあるが未達のため反転確認なし</span><span class="ticker-pill">出来高比1.28倍の増量を伴う-5.80%急落は売り勢力の主導を示す弱気シグナル</span><span class="ticker-pill">価格はMA50比-12.88%・MA20比約-9.5%と短中期線の双方を下回るベアトレンド構造</span><span class="ticker-pill">関連ニュース不在のため急落要因・反発トリガーが不明確</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-13</p>
+    </div>
+<div class="agent-card">
+      <h4>JAZZ — Jazz Pharmaceuticals plc <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">買い → 待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>JAZZは50日線・200日線をともに上回る中長期的な上昇トレンドを維持しており、出来高比率1.32倍という平均超えの商いが続いているものの、足元の終値（250.68ドル）が20日移動平均線（252.73ドル）を下回っており、短期的には上値抵抗が意識される状況にある。RSI14が49.75と中立水準に位置し、強い買い圧力を示していない。本日のセッションに向けて価格が20日線を明確に上抜いて引けるまでエントリーを見送り、突破確認を待つのが合理的と判断する。</p>
+      <span class="ticker-pill">価格が20日移動平均線（252.73ドル）を下回っており、短期的な上値抵抗が存在する</span><span class="ticker-pill">RSI14が49.75と中立域にあり、強い上方モメンタムの裏付けがない</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-11</p>
+    </div>
+<div class="agent-card">
+      <h4>MOD — Modine Manufacturing Company <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>MODは価格がMA20（195.58）・MA50（223.33）・MA200（209.30）の全移動平均線を下回る明確な下降トレンド中にある。本日も-4.23%の下落を記録しており売り圧力は継続中。RSI14は35.25と弱さを示しているが、過売り水準の目安となる30にはまだ到達しておらず、底打ち・反転の確認には至っていない。出来高比率0.79と平均を下回り、買い手の参入を示す出来高の裏付けがない。</p>
+      <span class="ticker-pill">全移動平均線（MA20/MA50/MA200）を下回る下降トレンド継続中で、MA50比-20.1%・MA200比-14.7%と乖離が大きい</span><span class="ticker-pill">RSI14=35.25と弱水準ながら過売りライン（30以下）未達で反転確認なし</span><span class="ticker-pill">出来高比率0.79と平均割れ：買い手参入を示す出来高の裏付けなし</span><span class="ticker-pill">本日-4.23%の下落継続で売り圧力が衰えておらず底打ちシグナルなし</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-27</p>
+    </div>
+<div class="agent-card">
+      <h4>MP — MP Materials Corp. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>本日-7.25%という急落が発生しているにもかかわらず、出来高比率は0.695と平均を下回っており、典型的な売り枯れの形を示していない。価格はMA200（57.76ドル）を-5.21%下回っており、長期トレンドでは上値抵抗帯の下に位置している。トレンドラベルが示す通り「MA50とMA200の間のレンジ／転換点」という不確実ゾーンに滞留しており、方向性が定まっていない。52週高値（98.65ドル）から44.5%も下落した水準にあるにもかかわらず、RSIは51と中立圏にとどまり、買い根拠となる複数シグナルの合致が確認できない。</p>
+      <span class="ticker-pill">MA200を-5.21%下回っており長期的な下落トレンドの抵抗帯下に位置（上値が重い）</span><span class="ticker-pill">-7.25%の急落に対し出来高比率0.695と低水準（売り枯れ不在＝底打ちの確証なし）</span><span class="ticker-pill">RSI14が51と中立圏で、売られ過ぎによる反発余地を示していない</span><span class="ticker-pill">52週高値から-44.5%の深い下落にあるが反転を裏付けるニュース・カタリストなし</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-27</p>
+    </div>
+<div class="agent-card">
+      <h4>NOC — Northrop Grumman Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>NOCは200日移動平均線を10.6%下回り、20日線も4.2%下回る明確な下降トレンド中にある。RSI14は42.55と中立水準（50）を下回っているが、まだ売られすぎ（30以下）の水準には達しておらず、反発の底打ちシグナルとして機能するには早い。52週高値（768.02ドル）からの下落幅は約30%に達しており、構造的な売り圧力が継続中であることを示す。出来高レシオが0.78と平均を下回る水準での下落は、機関投資家による本格的な買い支えが入っていないことを示唆する。</p>
+      <span class="ticker-pill">RSI14=42.55：中立以下だが30未満の売られすぎ水準に未到達のため底打ち確認なし</span><span class="ticker-pill">200日移動平均線比-10.6%：下降トレンドが長期足でも継続中</span><span class="ticker-pill">52週高値比-29.7%：大幅な価格破壊が継続しており上値回復の勢いなし</span><span class="ticker-pill">出来高レシオ0.78：平均以下の出来高での下落は買い手不在を示唆</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-27</p>
+    </div>
+<div class="agent-card">
+      <h4>RTX — RTX Corporation <span style="background:#10b981;color:#0f0f1a;font-size:0.8rem;font-weight:bold;padding:0.2rem 0.6rem;margin-left:0.5rem;border-radius:999px;">今日買うべき</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>RTXは50日線（$205.77）をわずか+0.95%上回る水準まで押し目が進んでおり、上昇トレンド内のサポートゾーンに接近している。RSI14が42.28まで低下し売られすぎ近傍に入ってきた一方、下落は出来高比率0.77と平均を下回る低出来高で進んでおり、売り圧力の弱さが示唆される。52週高値からの乖離は-7.88%と意味ある押し目を形成しており、200日線乖離（+7.97%）が示す長期トレンドの健全さも支持材料。短期的には20日線（$217.92）を大きく下回っている点がリスクだが、上昇トレンド継続・低出来高の押し目・RSI反発候補ゾーンの3シグナルが合致するため、本日の米国セッションは買いと判定する。</p>
+      <span class="ticker-pill">MA50への接近（現値はMA50比+0.95%）: 上昇トレンド継続中のサポートレベルでの買い場</span><span class="ticker-pill">出来高比率0.77: 低出来高での下落は売り圧力の弱さを示し、下降継続の説得力に欠ける</span><span class="ticker-pill">RSI14=42.28: 中立ゾーン下限に達しており、反発候補シグナル</span><span class="ticker-pill">52週高値からの乖離-7.88%: 上昇トレンド内での健全な押し目形成</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-21</p>
+    </div>
+<div class="agent-card">
+      <h4>SMTC — Semtech Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>本日-6.65%の急落により株価（132.96ドル）は50日移動平均線（135.57ドル）を下回った。トレンドラベルも「レンジ/転換点（50日線と200日線の間）」を示しており、方向性が定まっていない局面にある。RSI14は50.23と中立圏で売られ過ぎではなく、200日線（105.75ドル）を25.7%上回る長期上昇トレンドは維持されているが、これらは押し目買いの積極的根拠としては不十分。出来高比率0.58と低水準での急落は売り圧力の弱さを示唆するものの、下落の起点・要因が不明のまま次セッション直前にエントリーするリスクは高い。</p>
+      <span class="ticker-pill">価格（132.96ドル）がMA50（135.57ドル）を-1.93%下回り、中期トレンドが悪化している</span><span class="ticker-pill">当日変動率-6.65%という大幅下落が発生しており、短期モメンタムが明確にネガティブ</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-26</p>
+    </div>
+<div class="agent-card">
+      <h4>TEAM — Atlassian Corporation <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>TEAMは前営業日終値時点で52週高値に完全に張り付いており（高値乖離率0%）、RSI14が80.03と明確な過熱圏に達している。さらに現値はMA50から+68.9%、MA200から+79.2%と平均回帰リスクが極めて高い水準まで乖離している。単日+4.61%の上昇が加わったことで過熱は一段と強まっており、関連ニュースも供給されていないため上昇の持続根拠を確認できない。出来高比率1.025と平均並みにとどまっており、52週高値ブレイクアウトを裏付ける出来高急増も見られない。</p>
+      <span class="ticker-pill">RSI14が80.03と過熱圏（70超）を大きく上回っており、短期的な反落リスクが高い</span><span class="ticker-pill">現値がMA50から+68.9%・MA200から+79.2%と極端に乖離しており、平均回帰圧力が強い</span><span class="ticker-pill">52週高値（194.17）に完全到達（乖離0%）しており強い上値抵抗帯が存在する</span><span class="ticker-pill">出来高比率1.025と平均水準にとどまり、高値ブレイクアウトを裏付ける出来高急増が確認できない</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-07</p>
+    </div>
+<div class="agent-card">
+      <h4>VRNS — Varonis Systems, Inc. <span style="background:#10b981;color:#0f0f1a;font-size:0.8rem;font-weight:bold;padding:0.2rem 0.6rem;margin-left:0.5rem;border-radius:999px;">今日買うべき</span> <span style="display:inline-block;background:#10b981;color:#0f0f1a;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">シグナル点灯: 待ち → 買い</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>上昇トレンドが継続している中、本日-2.26%の下落でMA50（$42.84）から2.17%上まで接近した。RSI14は53.89と中立圏にあり過熱感はなく、次米国セッションでの反発余地がある。ボリュームレシオは0.72と低調で強い買い確信には欠けるが、トレンド・RSI・押し目の3シグナルが合致しており打診買いを支持する。52週高値（$63.31）からは30.86%下に位置するため上値余地も大きい。</p>
+      <span class="ticker-pill">MA50・MA200の上位に位置し上昇トレンドが継続中（pctFromMa50=+2.17%、pctFromMa200=+35.43%）</span><span class="ticker-pill">RSI14=53.89でニュートラルゾーン（過熱なく上昇余地あり）</span><span class="ticker-pill">本日-2.26%の押し目でMA50近傍に接近しており押し目買いの好機</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-27</p>
+    </div>
+<div class="agent-card">
+      <h4>XOM — ExxonMobil Holdings Corporation <span style="background:#10b981;color:#0f0f1a;font-size:0.8rem;font-weight:bold;padding:0.2rem 0.6rem;margin-left:0.5rem;border-radius:999px;">今日買うべき</span> <span style="display:inline-block;background:#10b981;color:#0f0f1a;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">シグナル点灯: 待ち → 買い</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-08-31 前日終値時点)</span></h4>
+      <p>XOMはMA20（159.50）・MA50（150.63）・MA200（143.67）の全移動平均線を上回る強い上昇トレンドにあり、短期〜長期すべてのトレンドが揃った強気配置となっている。RSI(14)は55.85と中立域にあり過熱感がなく、さらなる上昇余地を残している。当日+2.88%の力強い上昇を出来高比率1.14（平均以上）が裏付けており、勢いに実需を伴っている点も評価できる。52週高値（171.47）まで約6%の上値余地があり、直近の高値圏への回帰シナリオも視野に入る。</p>
+      <span class="ticker-pill">全移動平均線（MA20/MA50/MA200）の上方に位置し、短期・中期・長期すべてのトレンドが強気配置で揃っている</span><span class="ticker-pill">RSI(14)=55.85と中立域にあり過熱感がなく、上昇余地が残存している</span><span class="ticker-pill">出来高比率1.14で平均を上回る水準の出来高が当日の+2.88%上昇を裏付けており、勢いに実需を伴っている</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-08-13</p>
+    </div>
+    <hr>
+    <h2>WebSearch リサーチ結果</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">注目銘柄に関する最新の定性情報をWebリサーチした結果です。</p>
+    <div class="agent-card" style="border-left-color: #10b981;">
+      <h4>1605.T</h4>
+      <p>2026年中間期に過去最高益を達成し、通期当期利益を5,100億円へ上方修正。1,400億円の自己株取得・112円増配を決定し株主還元を強化。社長自身が株価アンダーバリューと明言。イクシス好調な一方、実効税率55.8%の高税負担とプロジェクト集中リスクが課題。脱炭素対応として水素・CCSへ約2,000億円を投資計画。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年中間期純利益が前年同期比+17.4%増の2,631億円で過去最高を達成し、通期当期利益予想も5,100億円（過去最高）へ上方修正</li><li>1,400億円の自己株取得を決定、年間配当を前年比+12円増の112円へ増配（過去5年で24円→112円と約5倍）。総還元性向約53%</li><li>社長・上田隆之氏が「現在の株価は成長性を反映しきれていない」と明言し、積極的な株主還元を継続する強い意思表示</li><li>イクシス・プロジェクトが前年比+17.5%成長と好調。豪州・インドネシア権益によりホルムズ海峡封鎖リスクを地理的に分散</li><li>原油価格1ドル上昇で約256億円の増収感応度を持ち、中東情勢悪化局面ではプレミアム価格での販売も可能な事業構造</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>実効税率が約55.8%と高く、上流資源税制がROEを構造的に圧迫。増益を稼いでも税負担で相殺されやすい</li><li>売上の約65.9%が「その他プロジェクト」に集中（同セグメントは前年比-12.0%）。プロジェクト集中リスクが高く、単一事業の減産・操業停止が業績全体に直撃するリスク</li><li>イクシスLNGプロジェクトで賃金紛争が浮上。操業停滞リスクが懸念材料として新たに指摘されている</li><li>脱炭素化・エネルギー転換トレンドが長期的な収益基盤を侵食するリスク。水素・アンモニア・CCSへの2,000億円投資は対応策だが収益化時期が不透明</li><li>為替1円の円安で約122億円の増収感応度は双方向リスク。円高進行・中東停戦シナリオでは原油安・円高が同時に業績を下押しする可能性</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>INPEX 2026年度第2四半期決算（IR Tracker）</strong>: 中間期は減収増益。通期進捗率50%超で計画線に沿う。実効税率55.8%の高税負担とプロジェクト集中リスクを指摘。</li><li><strong>INPEX、通期当期利益5,100億円へ上方修正・1,400億円自己株取得決定（ログミーファイナンス）</strong>: 過去最高益更新見込み。社長が株価アンダーバリューを明言し株主還元強化。中間配当56円・年間112円に増配。</li><li><strong>INPEXの2026年事業見通しと地政学リスクの正体（note/資産形成のレシピ）</strong>: 原油1ドル上昇で256億円増収。ホルムズ封鎖リスクは豪州・インドネシア権益で分散。水素・CCSへ2,000億円投資計画。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>1662.T</h4>
+      <p>2026年4月に原油生産量4倍・過去最大1兆円投資の中期経営計画を発表。中東情勢緊迫化でエネルギー安保の重要性が高まり受益ポジション明確。ただし直近Q1は売上21.4%減・営業利益62.9%減と大幅減収減益。経常利益は27%悪化予想で原油価格感応度の高さがリスク。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年4月に「JAPEX経営計画2026-2035」を策定し、原油・ガス生産量を4倍にする方針と過去最大の1兆円投資計画を発表。地政学リスク対応を最優先する姿勢に転換</li><li>中東情勢緊迫化（米・イスラエル-イラン衝突）を受け、石油・天然ガスの戦略的重要性が再認識されており、国内E&amp;P企業として政策的追い風が続く</li><li>2027年3月期の親会社純利益は600億円（前期比+12%）を予想。北海道・ガス事業譲渡に伴う特別利益（純利益影響額220億円）が上積み</li><li>原油価格感応度が高く、WTI+1ドル/バレルで営業利益+7,600万円増の構造。原油高局面での直接受益者</li><li>米国での原油・天然ガス販売量増加により、2027年3月期の営業利益は5%増を見込む</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>2027年3月期Q1（2026年4〜6月）は売上高前年同期比21.4%減・営業利益62.9%減と大幅な減収減益。通期回復への道のりは険しい</li><li>2026年3月期は原油・天然ガス価格下落とLNG販売量減少で営業利益37.2%減。2027年3月期も経常利益は27%悪化予想（為替差益・デリバティブ利益の剥落）</li><li>純利益増加は北海道・ガス事業譲渡益（一時的な特別利益）に依存しており、事業の実力ベースの収益回復とは言えない</li><li>国際エネルギー機関等の予測ではBrent原油価格が$55/bbl水準に下落すると見込む向きもあり、需要側リスクが業績を継続的に圧迫する懸念</li><li>1兆円の大型投資計画はROI回収に長期間を要し、原油価格下落局面ではキャッシュフローへの圧迫リスクが高まる</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>石油資源開発が「原油生産4倍」地政学リスク受け投資最大の1兆円（日本経済新聞 2026年4月）</strong>: 中期経営計画で2026-2030年に1兆円を投資し原油・ガス生産量を4倍にする方針を発表。中東情勢緊迫化を受けエネルギー安保優先へ戦略転換。</li><li><strong>2026年3月期決算説明資料（JAPEX 2026年5月13日）</strong>: FY2025は大幅減益。FY2026は米国販売量増で営業利益5%増も、経常利益は為替差益剥落で27%悪化予想。原油・為替感応度が高い構造を確認。</li><li><strong>石油資源開発[1662]：中東情勢の緊迫化に伴う当社業績への影響について（2026年4月17日適時開示）</strong>: 米・イスラエルによるイラン攻撃を受け適時開示。ホルムズ海峡封鎖リスクと業績への影響を開示したが詳細は有料会員限定。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>1663.T</h4>
+      <p>無借金・現金418億円の財務基盤に加え、関東天然瓦斯開発（子会社）経由での首都圏CCS15%出資がJOGMEC委託契約締結で実質フェーズ入り。ただし2026年通期は連結営業利益-12%の減益見通し、掘削現場の燃料油流出事案、ROE6%台のバリュートラップが懸念材料。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>首都圏CCS株式会社（INPEX85%・関東天然瓦斯開発15%出資）が2025年5月にJOGMEC令和7年度委託契約（先進的CCS事業設計作業）を締結し、CCS事業が実証フェーズへ前進</li><li>累進配当政策を導入済み。2025年年間配当54円→2026年予定60円へ増配、中計2027最終年度でDOE1.5%目標</li><li>2026年8月12日発表の第2四半期中間決算で通期業績を上方修正（売上999億円、純利益68億円）</li><li>2025年決算は営業利益前年比+20.1%・純利益+35.9%と大幅改善の実績あり</li><li>無借金経営で現金418億円保有（時価総額の約39%）、PBR0.98倍と簿価割れ水準に近く下値余地が限定的</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>2026年通期は連結営業利益-12.0%の減益見通しで、2025年好業績の反動が出る構図</li><li>九十九里沖J-1掘削現場（首都圏CCS実証サイト）で燃料油流出事案が2026年8月時点で発生中、CCS事業の進捗リスク</li><li>ROE予想6.17%と低水準が継続、カーボンニュートラル移行に伴う主力ガス事業の大口需要減少リスク</li><li>ヨウ素輸出の海外市況変動リスクおよびガス生産設備の老朽化・輸入エネルギー価格変動リスク</li><li>RSI71.7の過熱感と200日移動平均線割れが同時発生しており、短期の需給悪化懸念</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>JOGMECによる先進的CCS事業委託契約の締結について（日本製鉄ニュースリリース）</strong>: 首都圏CCS株式会社がJOGMECとの令和7年度先進的CCS事業設計作業委託契約を2025年5月に締結、千葉県外房沖地下貯留を目指す実証フェーズへ</li><li><strong>K&amp;Oエナジーグループ 2026年第2四半期中間決算発表（IRBank）</strong>: 2026年8月12日発表。通期売上999億円・純利益68億円へ上方修正。中間純利益は前年比-18.7%と減益、2026年通期は連結営業利益-12%見通し</li><li><strong>K&amp;Oエナジーグループ リスク・経営戦略（キタイシホン）</strong>: カーボンニュートラル移行に伴う競合激化・需要減少リスクを明示。累進配当（DOE1.5%目標）と国産天然ガス安定供給・再エネ多角化を中計2027で推進</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>5021.T</h4>
+      <p>2027年3月期Q1（4-6月）は840億円の純利益と劇的回復。ホルムズ海峡緊張による原油高で精製マージンが拡大し業績急改善。ただし通期ガイダンスは営業利益29.6%減と慎重で、Q1の上振れが下期に相殺される見込みを示す。地政学リスクと国内石油需要の長期縮小が懸念材料。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2027年3月期Q1（2026年4-6月）に劇的な業績回復：売上高17.4%増の7,615億円、営業利益前年同期の80億円→1,269億円、純利益は20億円赤字から840億円黒字へ転換</li><li>価格上昇前に調達済みの原油から製造した石油製品の販売が進み、正の在庫評価差益（タイムラグ効果）により精製マージンが大幅拡大</li><li>2026年3月期（通期）は純利益28.4%増の740億円・営業利益12.9%増と、前期比で増益を達成</li><li>石油事業セグメント利益763億円（前期比+145億円増）と過去水準を超える貢献。再生可能エネルギー事業も黒字拡大</li><li>自己資本比率27.6%へ微改善。上流（石油開発）・精製（石油事業）の複合事業モデルが原油高局面で総合的に恩恵を享受</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>通期ガイダンス（2027年3月期）は営業利益1,020億円（前期比29.6%減）と大幅減益見通し：中東情勢正常化時に石油製品価格が原油価格下落に追随し、Q1の上振れ分が下期に相殺される想定</li><li>石油開発事業（上流）は原油価格が前期比下落したことにより利益171億円減。石油化学事業は製品市況低迷で31億円の赤字継続</li><li>国内石油製品需要は長期的な緩やかな縮小トレンドにあり、中長期的な事業環境の不確実性が高い</li><li>中東依存の調達構造が諸刃の剣：ホルムズ海峡緊張は短期的に精製マージンを押し上げるが、封鎖が深刻化すれば原油調達そのものが制約されるリスク。経営陣も情勢正常化時期を「本当にわからない」と回答</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>決算:コスモHD最終黒字840億円に回復 4〜6月、石油製品の価格上昇で（日本経済新聞）</strong>: ホルムズ海峡事実上の封鎖で原油価格上昇・石油製品の利幅拡大によりQ1 FY2027業績が劇的回復。通期は価格下落で相殺と慎重予想。</li><li><strong>コスモエネルギーHD 2026年3月期 決算短信（BigGo Finance）</strong>: FY2026通期は純利益28.4%増の740億円。石油事業増益・上流減益。FY2027ガイダンスは営業利益29.6%減と慎重。ホルムズリスク・需要縮小を明記。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>6592.T</h4>
+      <p>2026年中間期は売上+12.1%・純利益+41.9%と好調で通期予想を上方修正（売上2,250億円・配当過去最高70円）。ただし経常利益-10.8%・純利益-15.5%見込みで、為替差損益悪化と市況品コスト増（銅等+27億円）が下押し。車載比率77%の集中リスクと世界自動車生産台数の微減見通しが懸念材料。経営計画2030で売上3,000億円・日本パルスモーター子会社化等M&amp;A多角化推進中。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年中間期：売上高1,064億円（+12.1%）・親会社帰属純利益1,269億円（+41.9%）と大幅増益、通期予想を売上2,250億円に上方修正</li><li>年間配当70円（中間35円＋期末35円）は過去最高水準、現在の株価水準で配当利回り約4%を維持</li><li>2025年度に売上2,000億円突破・純利益過去最高を達成し、財務基盤が強固（純現金1,161億円）</li><li>日本パルスモーター（マブチNPM）子会社化でサーボ制御技術を獲得、ヒューマノイドロボット市場への参入検討など中長期成長戦略が具体化</li><li>実績為替158.18円の円安が売上・プロダクトミックス改善に寄与、海外売上比率9割超の恩恵が継続</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>2026年通期経常利益313億円（-10.8%）・純利益222億円（-15.5%）と大幅減益見通し：為替差損益の悪化と銅・鋼材等市況品コスト増約27億円が主因</li><li>通期為替前提が1ドル155円（実績158円より円高想定）で、円高転換時の下振れリスクが織り込み不足の可能性</li><li>売上の77%が車載一本足で、世界自動車生産台数の微減（特に北米在庫増・生産伸び悩み）が直接業績を圧迫するリスク</li><li>ミラー用・ドアロック用モーターで既に世界シェア70-80%超を持ち成長余地が限定的、EV移行による既存製品の置き換えリスクも存在</li><li>地政学リスク（中東情勢・米通商政策関税）、レアアース調達コスト変動、技術革新への対応遅れリスク</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>マブチモーター 2026年12月期第2四半期（中間期）決算短信</strong>: 中間期売上+12.1%・純利益+41.9%の好決算。通期を上方修正し配当過去最高70円。ただし経常・純利益は前年比大幅減見通し。</li><li><strong>マブチモーター 売上高2,000億円突破、M&amp;Aで3つのM領域に成長加速（ログミーファイナンス）</strong>: 2025年度売上2,000億円超・純利益過去最高。2026年度は経営計画2030に向け日本パルスモーター子会社化等M&amp;Aで多角化推進。</li><li><strong>マブチ「車載一本足」に危機感、規模追わぬM&amp;A戦略（日経BP）</strong>: 車載依存77%のリスクを自覚し3度目の事業転換へ。モビリティ・マシーナリー・メディカルの多角化を「規模追わず」に推進。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>8331.T</h4>
+      <p>2026年3月期は経常利益+29%の1,388億円と大幅増益。日銀6月利上げ（1%）でNIM改善が期待よりさらに上振れる見通し。FY2027予想は経常利益1,543億円（+11%）。一方、長期金利急騰により地銀全体で国債含み損が前年比96%拡大し、千葉銀行も業界内上位圏のリスク先として指摘あり。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年3月期（FY2026）は経常利益1,388億円（前期比+29.1%）、当期純利益941億円（+26.7%）と5期連続の最高益更新の見込み</li><li>日銀が2026年6月に政策金利を0.75%→1.0%へ引き上げ。千葉銀行は業績のさらなる上振れを示唆（FY2027通期予想は0.75%シナリオベース）</li><li>変動金利住宅ローンの基準利率改定は年2回（4月・10月）に実施されており、2026年10月の改定がNIM押し上げの主因となる下期業績改善シナリオが現実的</li><li>FY2027予想：経常利益1,543億円（+11.2%）、当期純利益1,070億円（+13.8%）、ROE8.31%と収益性の継続的改善を見込む</li><li>配当は年52円（前期比+30%）と株主還元も積極化</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>長期金利が2025年10月〜12月で1.66%→2.06%へ急騰し、地銀の円建て債券含み損が前年同期比96%拡大。業界全体で4兆円規模の含み損リスクが警告されている</li><li>千葉銀行は含み損ランキングの上位圏に位置するとする分析があり（詳細は有料記事）、SVBが保有国債価格下落をきっかけに破綻した構図との類似性が指摘されている</li><li>利上げに伴う預金金利の引き上げ（2026年2月に固定性預金金利引き上げ実施）がコスト増要因となり、NIM改善幅を部分的に相殺するリスクがある</li><li>住宅・企業向け融資における金利上昇が借り手の返済負担を高め、与信費用（クレジットコスト）拡大につながる可能性が地元経済報道で指摘されている</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>8331 千葉銀行 | 2026年3月期第3四半期決算短信（IRBANK）</strong>: 9ヶ月累計で経常収益3,237億円（+23.2%）、経常利益997億円（+25.1%）、純利益688億円（+26.2%）と大幅増益。通期予想は経常利益1,316億円、純利益900億円。</li><li><strong>千葉県経済、金利引き上げに対応 銀行は業績上振れ・建設は影響注視（日本経済新聞）</strong>: 日銀の1%利上げで千葉銀行はNIM拡大による業績上振れを示唆。一方、住宅需要や中小企業の借入負担増が懸念材料として浮上。</li><li><strong>地銀の国債「含み損」は金利上昇で「4兆円」近くまで拡大か（ダイヤモンド・オンライン）</strong>: 金利急騰で地銀の円建て債券含み損が前年比96%拡大。SVB型リスク構造との類似性を指摘。千葉銀行は含み損ランキング上位圏とされる。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>HAL</h4>
+      <p>Q2 2026は売上57億ドルで予想超え、国際売上高は10年超ぶりの最高水準を達成。アラムコ・TotalEnergiesとの大型長期契約でバックログ拡大。ただしCEO自身が油田サービス市場の軟化を警告。原油価格と中東地政学リスクへの高い依存は構造的懸念。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q2 2026の国際売上高34億ドルは10年超ぶりの最高水準。中東外では2026年通年で低二桁成長を見込む</li><li>アラムコ（サウジUCG・複数陸上フィールド）、クウェート石油公社（アフマディ技術イノベーション）、TotalEnergies（スリナム沖深海）など大型・長期契約を複数獲得し、地理的に多様化したバックログを構築</li><li>ZEUS IQ・LOGIX・OCTIVなどの独自技術でノルウェーで記録的な掘削成果を達成。価格競争を超えた技術差別化が競争優位として機能</li><li>Q2 2026実績：売上57.1億ドル（市場予想51.5億ドル超え）・EPS $0.64。通期ガイダンス（中一桁成長・EBITDA益100〜150bps拡大）を維持</li><li>Informatiq AS買収（2026年6月）でデジタル・データ分析ケイパビリティを強化。ベネズエラ油田でのChevronとの機会探索も進行中</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>CEOジェフ・ミラー自身が「油田サービス市場は予想より軟化する見込み」と警告。Q2決算後に株価が6%超下落するトリガーとなった</li><li>グローバル上流部門支出の減少と北米掘削活動の低迷が続いており、短〜中期の需要圧力が継続</li><li>中東（イラク・クウェート・バーレーン等）での地政学リスクが運営コストと収益の可視性を低下させており、ガイダンスは紛争前水準への回帰を前提としていない</li><li>原油価格への外部依存が収益変動を増大させ、長期計画と投資家信頼を損なうリスク。規制・制裁環境の厳格化による事業中断リスクも残存</li><li>アナリスト目標株価42.76ドルに対して現在株価は36.91ドル圏で、強気見通しと市場軟化警告の乖離が投資判断を複雑にしている</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Halliburton tops Q2 earnings estimates as CEO warns of softer oilfield services market</strong>: Q2実績はEPS・売上ともに予想超えも、CEO自身が油田サービス市場の短中期軟化を警告。株価6%超下落のトリガーとなった。</li><li><strong>Halliburton&#39;s Profit Outlook Pressured by Oilfield Cycles, Regulatory Risks and Geopolitical Uncertainty</strong>: 業界サイクル下降・商品価格依存・規制/制裁リスクが利益見通しを圧迫。資産稼働率低下でコスト競争力も懸念される。</li><li><strong>Halliburton&#39;s Outlook Improves as Contract Wins Fuel Global Growth Ahead</strong>: スリナム・サウジ・クウェート等で大型長期契約を連続獲得。国際バックログが多地域・多顧客に多様化し成長基盤が強化。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>INSW</h4>
+      <p>Q2 2026決算は大幅超過（EPS $5.91、売上+139%YoY・記録的フリーキャッシュフロー$261M）。タンカー運賃高水準継続も、ホルムズ海峡封鎖リスク・Q3以降の収益見通し改善鈍化が下押し圧力。バランスシートは健全（net LTV 6%）。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q2 2026 EPS $5.91（コンセンサス$5.28を11.9%上回る）、売上$467.3M（+138.8%YoY、推定比+15%）で記録的決算</li><li>記録的フリーキャッシュフロー$261M・純利益$295M。流動性約$935M、net LTV 6%と財務基盤が極めて健全</li><li>Q3は48%を$61,000/日でブック済み（VLCC $118,300・Suezmax $91,800）、先行き可視性あり</li><li>史上最大の四半期配当$5.05/株（配当利回り14%）を宣言。fleet近代化（デュアルフェル LR1×2隻受領、LR1×4隻追加発注$244M）</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>ホルムズ海峡は2026年4月以降の米イラン緊張で通航リスク最高水準。タンカールート・戦争リスク保険コスト急増が利ざやを圧迫</li><li>Q3・Q4・通年2026/2027の収益見通し修正は「not impressive」。Zacks Momentum Score Dで上値追いは期待薄</li><li>VLCCスポット運賃は2026年3月に$423,000/日のピーク後に急落、スポット依存型収益の変動リスクが大きい</li><li>既に株価がMA200比+35.3%上昇済み。停戦合意・運賃正常化局面では急落リスクあり（TNK同様の構造）</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>International Seaways Q2 Earnings Beat Estimates, Revenues Surge Y/Y</strong>: Q2 EPS $5.91（+372%YoY）・売上$467M（+139%）で記録更新。配当$5.05、Q3の48%を$61K/日でブック済み。</li><li><strong>International Seaways and the Tanker Trends Reshaping Shipping in 2026</strong>: 老朽船退役・環境規制による供給タイト化は追い風。一方でホルムズ・赤海リスクとコスト上昇が収益圧迫要因。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>MTDR</h4>
+      <p>Q2 2026は売上11.9億ドル・コンセンサス比24.7%超過と好決算。生産ガイダンス引き上げ・FCF900億ドル目標・掘削効率倍増と強い実態。一方でQ1赤字・Wahaガス価格82%暴落・M&amp;A負債増でバランスシートリスクが台頭。WTI60ドル割れが最大の下方トリガー。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q2 2026決算：売上11.9億ドル・EPS $3.15、非GAAPベースでコンセンサス比+24.7%超過と大幅ビート</li><li>石油生産量が1日12.6万バレルと過去最高更新、FY2026通期ガイダンスを12.75万〜12.9万バレルに引き上げ</li><li>2026年FCF目標約9億ドル、Q2単独で近過去最高の3.03億ドルを達成し、2億ドルを即時返済に充当</li><li>3マイル井の掘削日数を約20日→10日に半減、資本効率が大幅改善</li><li>Cardinal Midstream買収完了・Paloma/Ridge Runner取引進行中。新資産のIRR80%超見込みで成長パイプライン拡充</li><li>ミッドストリーム部門が2026年約4億ドルEBITDA創出見込み、統合ビジネスモデルが収益安定化に寄与</li><li>過去6ヶ月でインサイダーが計72万ドル購入（売却ゼロ）、経営陣の自社株への強い信認を示す</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>Q1 2026は純損失3,587万ドルを計上。商品価格の弱さが生産増でも相殺できず、価格依存の脆弱性が露呈</li><li>Wahaガス価格がQ1 2026に前年比82%暴落（0.64ドル/Mcf）、デラウェア盆地に集中する事業モデルのエリアリスクが顕在化</li><li>M&amp;A積み増しで負債増加、Moody&#39;sが格付け見通しを「安定的」に変更。WTI60ドル割れ時に返済ペース維持が困難との懸念</li><li>一部アナリストが2029年にかけて売上高が約34億ドルへ緩やかに減少と予測、成長シナリオへの懐疑的見方も残存</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Matador Resources posts $1.19 billion Q2 revenue and lifts 2026 guidance</strong>: Q2決算は売上11.9億ドル・記録的石油生産・コンセンサス大幅超過。FY生産ガイダンス引き上げとM&amp;A進捗を報告。</li><li><strong>Can Matador Resources (MTDR) Turn Rising Output Into Sustainable Cash Generation After Its Q1 2026 Loss?</strong>: Q1純損失・Wahaガス価格崩落・資本集約度の高さを指摘。生産増をFCFに転換できるかが課題と分析。</li><li><strong>Matador Resources Targets Growth, $900M Free Cash Flow as Delaware Basin Footprint Expands</strong>: FY2026のFCF900億ドル目標・掘削効率倍増・資産買収IRR80%超を詳報。成長と効率化の両立を強調。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>TNK</h4>
+      <p>Q2 2026に記録更新（調整後EPS $5.56、Suezmax運賃$109K/日、純利益$226M）。純現金12億超・無借金・損益分岐点$9,700とファンダは超強固。一方でタンカー受注残が船腹比25%超に膨張し2030年以降の供給過剰懸念が台頭。中国需要低迷と地政学リスク正常化でサイクルピーク論も根強い。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q2 2026は過去最高益を更新：調整後純利益$194M（EPS $5.56）はQ1比+50%増で2023年Q1の旧記録を更新。Suezmax平均スポット運賃$109,200/日、Aframax/LR2が$74,100/日と異例の高水準</li><li>財務要塞：現金$1.2B超・純有利子負債ゼロ・損益分岐点$9,700/日（市場運賃の約9%水準）で景気後退耐性が極めて高い。上半期年率FCFは約$684M（EPS換算約$20/株）</li><li>フリート刷新戦略の進展：Suezmax新造船2隻（計$190M、2027年引渡し）を発注する一方、老朽船2隻を$138Mで売却し船隊若返りと資産価値維持を両立</li><li>BofAが2026年8月に目標株価を$75→$78に再引き上げ。2026年EPS予想が$10.40→$13.29に大幅上方修正され、アナリストコンセンサスも強気方向</li><li>Q3初期エビデンス良好：Suezmax向けQ3スポット日数の44%が$100,000/日超で既にブック済み。石油在庫が20年来の低水準で在庫積み増しが需要追い風になる可能性</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>タンカー受注残が船腹の25%超（6月時点）に膨張：2026年の新規発注急増で引渡しが2030年まで続く。スクラップが追いつかない場合、中期の運賃下押し圧力が確実視される</li><li>サイクルピーク論：実績PER5.3倍→予想PER8.2倍の乖離は市場が既に大幅減益を織り込んだ証左。Seeking Alpha分析も「cyclical high接近」と明示的に警告</li><li>中国需要低迷：中国の原油輸入量が10年来の低水準に低下し製油所稼働率も縮小。世界最大の原油輸入国の需要回復が遅れると市場全体の運賃を押し下げるリスク</li><li>地政学的運賃プレミアムの脆弱性：ホルムズ海峡・紅海・黒海の3海域混乱が現在の記録的運賃の主因であり、外交的解決や海峡再開が実現した場合に運賃が急落するシナリオが最大のテールリスク</li><li>新造船コスト上昇と資本配分の不確実性：フリート刷新投資が継続する中でキャッシュリターン（配当$0.25/四半期固定）の引き上げ期待とのバランスが課題</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Teekay Tankers Rides Record Rates to Peak Earnings (Globe and Mail)</strong>: Q2 2026記録更新：調整後純益$194M・Suezmax $109K/日・Q3の44%が$100K超でブック済み。地政学起因の運賃高と船隊老齢化が追い風。</li><li><strong>Teekay Tankers Ltd. Q2 2026 Earnings Call Summary (Yahoo Finance)</strong>: 純現金$1.2B超・ゼロ債務・BEP$9,700。石油在庫20年低・フリート老齢化が需給支援要因だが中国需要低迷と受注残25%超が中期リスク。</li><li><strong>Teekay Tankers Market Update June 2026 (Teekay公式ブログ)</strong>: 上半期を地政学イベントが定義。受注残が船腹比25%超に膨張し将来の供給過剰を自社も認識。ホルムズ正常化なら短期的な運賃ボラティリティを警告。</li></ul>
+    </div>
+    <hr>
+    <h2>再評価ラウンド結果（WebSearch後）</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">WebSearchリサーチ結果を踏まえて各アナリストがスコアを再評価した結果です。</p>
+    <div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>ファンダメンタルズアナリスト</h4>
+        <ul><li>
+      <strong>1605.T</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">中間期純利益過去最高・上方修正・1,400億円自己株取得・53%総還元性向とファンダメンタルズ改善が顕著。社長の「アンダーバリュー」発言も材料。実効税率55.8%の構造的課題は残るが上方修正に値する。</span>
+    </li><li>
+      <strong>HAL</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q2売上はコンセンサス大幅超過だがCEO自身が市場軟化を警告し株価6%超下落。北米低迷継続・原油価格依存の構造課題を踏まえ、ファンダメンタルズの持続性に懸念あり。</span>
+    </li><li>
+      <strong>5021.T</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q1黒字回復はホルムズ緊張による在庫評価差益が主因で一過性。通期ガイダンス営業利益▲29.6%・石化赤字継続・国内需要縮小と構造的課題が重く、ファンダメンタルズ評価は引き下げ。</span>
+    </li><li>
+      <strong>MTDR</strong>:
+      <span style="color:#10b981">8</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q2売上コンセンサス比24.7%超・過去最高生産量・掘削日数半減は優秀。ただしQ1純損失・Wahaガス82%暴落・負債増加・WTI60ドル割れリスクを加味しスコアを1段階引き下げ。</span>
+    </li><li>
+      <strong>1662.T</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q1営業利益▲62.9%・売上▲21.4%と大幅悪化。通期も経常利益27%悪化予想で、純利益増は北海道ガス事業譲渡の一時利益依存。野心的な中計も現業績悪化を覆せずファンダメンタルズ評価引き下げ。</span>
+    </li><li>
+      <strong>INSW</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">売上+138.8%YoY・FCF261M・net LTV6%・配当利回り14%と財務実績が極めて強力。Momentum Score DとMA200比+35.3%は警戒材料だが、基礎収益力の強さからファンダメンタルズ評価を2段階引き上げ。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>マクロエコノミスト</h4>
+        <ul><li>
+      <strong>HAL</strong>:
+      <span style="color:#10b981">8</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">CEO自身が市場軟化を警告、北米掘削低迷が構造的。国際部門好調も北米ウエイトの重さがマクロ逆風。スコア引き下げ。</span>
+    </li><li>
+      <strong>8331.T</strong>:
+      <span style="color:#10b981">9</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">日銀利上げでNIM改善は確実だが、国債含み損96%拡大・4兆円規模のSVB型リスクがマクロ金利急騰局面で致命的。</span>
+    </li><li>
+      <strong>5021.T</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q1黒字回復はホルムズ地政学プレミアムによる一過性。通期営業利益-30%見通しが示すように情勢正常化で収益消滅リスク。</span>
+    </li><li>
+      <strong>1662.T</strong>:
+      <span style="color:#10b981">8</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">中計の1兆円投資・生産量4倍は長期テーマだが、売上-21%・営業利益-63%の直近実績と為替差益剥落が深刻。大幅引き下げ。</span>
+    </li><li>
+      <strong>1663.T</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">CCSフェーズ入りは長期バリュー。ただし通期営業利益-12%・RSI71.7の過熱圏はマクロ調整局面での下落リスクを示唆。</span>
+    </li><li>
+      <strong>6592.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">中間期+42%好決算とヒューマノイドロボット参入検討は新たなマクロテーマ。通期-15%の為替逆風を考慮しても上方修正。</span>
+    </li><li>
+      <strong>INSW</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#10b981">8</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">EPS+12%超過・売上+139%YoY・流動性935Mと財務盤石。ホルムズ地政学プレミアムが直接恩恵。スコア引き上げ。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>リスクマネージャー</h4>
+        <ul><li>
+      <strong>1605.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">実効税率55.8%の構造的ROE圧迫と、円高・停戦同時発生による二重業績下押しリスクを重視し引下げ。</span>
+    </li><li>
+      <strong>HAL</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">CEO自身による市場軟化警告は深刻なインサイダーシグナル。北米掘削低迷継続で下方リスク優位。</span>
+    </li><li>
+      <strong>8331.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">国債含み損96%拡大・SVB型リスク構造類似は金利急騰局面での最大テールリスク。金利は両刃の剣。</span>
+    </li><li>
+      <strong>5021.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q1回復は在庫評価差益の一時要因。通期-29.6%が実態で、ホルムズ封鎖は原油調達制約リスクに転化。</span>
+    </li><li>
+      <strong>MTDR</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Wahaガス82%暴落・Q1純損失・M&amp;A負債増の三重苦。WTI60ドル割れでCF崩壊シナリオが現実的。</span>
+    </li><li>
+      <strong>1662.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">営業利益-62.9%が本質。純利益増は事業譲渡特別利益の一時依存。1兆円投資のROI不確実性も深刻。</span>
+    </li><li>
+      <strong>1663.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI71.7過熱と200日MA割れの同時発生は短期調整リスク高。燃料油流出でCCS進捗懸念も加わる。</span>
+    </li><li>
+      <strong>6592.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">通期経常-10.8%・純利-15.5%見通し、155円想定の円高下振れリスク大。車載77%集中も構造的懸念。</span>
+    </li><li>
+      <strong>INSW</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">MA200比+35.3%高値・Momentum D・VLCC運賃ピーク後急落が重なり、高値追いリスクが最大級。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>テクニカルストラテジスト</h4>
+        <ul><li>
+      <strong>HAL</strong>:
+      <span style="color:#10b981">8</span>
+      → <span style="color:#60a5fa">7</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI64.11・MA上昇と健全だが、CEO市場軟化警告と株価6%急落でモメンタムが鈍化。上昇トレンドの継続力に疑問符。</span>
+    </li><li>
+      <strong>MTDR</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#10b981">8</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI63.08・MA上昇で上昇トレンド健全。Q2大幅ビートがモメンタムを加速、FCF拡大でブレイクアウト継続の可能性。</span>
+    </li><li>
+      <strong>1662.T</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI65.32でやや過熱圏に突入。Q1売上-21%・営業利益-63%の大幅悪化がテクニカルの天井形成リスクを高める。</span>
+    </li><li>
+      <strong>1663.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI71.67と明確な過熱圏・MAレンジ/転換点。CCS新カタリストも燃料油流出と通期減益がネック。テクニカル的に売り圧力優勢。</span>
+    </li><li>
+      <strong>INSW</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">RSI57.66と過熱感はないがMA200比+35.3%上昇済みで高値圏に乖離。利確売り圧力が高く、短期調整リスクを重視。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>テンバガーハンター</h4>
+        <ul><li>
+      <strong>1605.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">過去最高益・自己株買い1400億円・社長自らアンダーバリュー宣言は強力なカタリスト。ただし実効税率55.8%がROE構造的圧迫で成長倍率限定。</span>
+    </li><li>
+      <strong>HAL</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">CEO自ら市場軟化を警告・株価6%急落は需給悪化のシグナル。北米低迷継続で爆発的成長シナリオ後退。テンバガー観点では魅力薄。</span>
+    </li><li>
+      <strong>5021.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">Q1黒字回復は好材料だが通期ガイダンスは営業利益29.6%減と慎重。国内石油需要長期縮小は構造的逆風。成長ストーリーが描きにくい。</span>
+    </li><li>
+      <strong>MTDR</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">掘削日数半減（20日→10日）の資本効率革命とFCF9億ドル目標は説得力あり。生産量過去最高も魅力。ただしWahaガス82%暴落とQ1赤字が懸念。</span>
+    </li><li>
+      <strong>1662.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">生産量4倍・1兆円投資の中計は壮大だがQ1で売上21%減・営業利益63%減と現実が乖離。純利益増は一時的特別利益依存で成長の実態なし。</span>
+    </li><li>
+      <strong>TNK</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">調整後純利益$194M・無借金・純現金$1.2Bは財務的に圧倒的。損益分岐点$9,700の低コスト構造も魅力。受注残25%超の供給過剰懸念が上値抑制。</span>
+    </li><li>
+      <strong>1663.T</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">CCSフェーズ入りは将来性あるが、RSI71.7過熱圏・通期営業利益-12%・燃料油流出事案が重なり短期リスク高。現金比率39%の割安感は継続。</span>
+    </li><li>
+      <strong>6592.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">中間期純利益+41.9%は力強く、ヒューマノイドロボット参入検討は新TAM開拓の萌芽。ただし車載77%集中と世界シェア70-80%での成長余地限定が課題。</span>
+    </li><li>
+      <strong>INSW</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#f59e0b">5</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">EPS $5.91・売上YoY+138.8%・配当利回り14%は数字として圧巻。ただしVLCCスポット運賃ピーク後急落リスクとホルムズ地政学が上値を制約。</span>
+    </li></ul>
+      </div>
+    <hr>
+    <h2>リスク警告</h2>
+    <ul><li><span style="color:#ef4444;font-weight:bold;">[高]</span> エネルギー・原油という単一ファクターへの集中。本日チームが提示した銘柄の過半(TNK・INSW・HAL・MTDR・1605.T・1662.T・1663.T・5021.T)が原油の従属変数であり、分散に見えて実質は紛争継続への一点賭けとなっている。相関1に近い集中を分散と誤認することが最も典型的な破綻経路であり、エネルギー総エクスポージャーは純資産の15%以内に抑えるべきである。</li>
+<li><span style="color:#ef4444;font-weight:bold;">[高]</span> 停戦・和平報道による逆回転リスク(確率25%)。ブレントが70ドル台へ急落すればエネルギー関連は同時に20〜35%調整し、タンカースポット運賃は数日で半減しうる。TNKの実績PER5.3倍→予想8.2倍という切り上がりは、市場が既に減益を織り込んだピーク利益への課金である可能性が高い。</li>
+<li><span style="color:#ef4444;font-weight:bold;">[高]</span> VIX14.92の低位安定によるテールリスク未織り込み。戦時・原油高・金利高の三重苦に対しオプション市場は明白に楽観的で、11セクター中9つ下落・ダウ劣後という物色狭隘化はディストリビューション初期の形状。9月の季節性悪化と重なればギャップダウン耐性が乏しい。逆に言えばヘッジコストが歴史的に安い局面である。</li>
+<li><span style="color:#ef4444;font-weight:bold;">[高]</span> 原油スパイクによるインフレ再加速シナリオ(確率20〜25%)。カーグ島(ハルグ島)攻撃やホルムズ海峡の実質封鎖でブレントが110〜130ドルへ跳ねれば、米CPI4%台復帰・利下げ期待消滅・30年債5.5%超を経てS&amp;P500が15〜20%調整しうる。米SPR(戦略石油備蓄)が枯渇し価格緩衝力を失っている点が事態を深刻にしている。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> 割高AI・サイバー関連の過伸張。アドバンテスト(6857.T)はPER65倍・PBR23.4倍・EV/EBITDA43倍でMA200比+29.5%、CrowdStrike(CRWD)は営業赤字でPBR50.8倍・MA200比+64.4%。エヌビディアの半導体リース「新たな資産クラス」構想は償却資産のベンダーファイナンス化であり、1999〜2000年の光ファイバーバブル末期と構造が酷似する。追随買いは高値掴みとなる。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> 金利上昇によるデュレーション資産の毀損。米住宅ローン金利が2025年6月以来の高水準へ跳ね、REIT(RSI38.3)・公益(-1.17%)・住宅建設(DHIは50日線・200日線双方割れ)が構造的逆風下にある。金利低下シナリオが消滅した以上、実質金利のピークアウト確認までは回避が妥当。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> 地銀の金利上昇は両刃の剣。千葉銀行(8331.T)の利ざや改善シナリオは、保有する国債・外債の含み損拡大によるSVB型の自己資本毀損と、住宅ローン金利引き上げに伴う与信費用増加という逆側面を無視している。マクロ・ファンダ・テクニカルの3名が強気で揃ったが、反証の質が高く未解決の論点である。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> 国内小型グロースの流動性リスク。イーソル(4420.T)は本日+19.1%・RSI73.8・出来高比5.36のスパイクで、上期営業益2.43億円対通期計画10.9億円という極端な下期偏重を抱える。Terra Drone(278A.T)は-17.81%急落後も200日線比+170%・経常赤字・PBR30倍。板の薄い小型株は未達判明時に-30%のギャップダウンでしか手仕舞えない。</li>
+<li><span style="color:#10b981;font-weight:bold;">[低]</span> 政策不確実性。トランプ政権による製薬十数社との薬価引き下げ交渉はイーライリリー(LLY)等のターミナルマージンを構造的に切り下げる。日本側では燃料価格抑制のための予備費6,000億円超の追加支出が財政悪化と長期金利上昇を招き、日銀の追加利上げ観測と重なる。</li></ul>
+    <hr>
+    <h2>アクションアイテム</h2>
+    <ul><li>VIX14.92でプロテクションが歴史的に安い今、S&amp;P500プットスプレッドまたはVIXコールでテールリスクをヘッジする。マクロ・テクニカル・リスク・テンバガーの4名が一致した本日最優先のアクション。</li>
+<li>エネルギー関連の総エクスポージャーを純資産の15%以内、1銘柄あたり3%以内に制限する。個別に割安・未過熱でも、原油という共通ファクターが崩れれば同時に無効化されるため。</li>
+<li>エネルギーの先行過熱組(SLB RSI76.2・VLO RSI70.5・PBF 200日線比+68.2%)への追撃を停止し、200日線を奪回したばかりの出遅れ組(HAL・MTDR)へ入れ替える。エントリーは押し目分割に限定。</li>
+<li>アドバンテスト(6857.T)を明確に格下げする。本日-4.48%で20日線34,551円を割り込みRSI50.6へ低下、PER65倍・PBR23.4倍・EV/EBITDA43倍と割高さとチャートの崩れが同時進行しており、4名が評価を引き下げた。</li>
+<li>CrowdStrike(CRWD)・Zscaler(ZS)など営業赤字かつ高倍率のAI/サイバー関連への追随買いを見送る。金利上昇局面で無収益ロングデュレーション資産の割引現在価値が最も削られる。</li>
+<li>千葉銀行(8331.T)は2,820円で52週高値2,843.5円まで-0.83%とブレイクアウト直前。高値を出来高を伴って明確に抜けた場合のみ順張り参入し、保有債券の含み損拡大リスクを踏まえてポジションは3%以内に抑える。</li>
+<li>Terra Drone(278A.T)は本日のエントリーを見送る。-17.81%急落後の下げ止まりが未確認で、出来高を伴う反発を確認するまで待機する点で全員一致。</li>
+<li>イーソル(4420.T)は+19.1%・RSI73.8・出来高5.36倍のスパイク直後で追撃不可。仕込むなら通期営業益8億円・PER23倍相当まで割り引いた保守ケースで耐えるか検証し、下期進捗の確認後に分割エントリーする。</li>
+<li>9月は歴史的に最弱の月であり、レバレッジを外して現金比率を高め、下落時の買い余力を確保する。住宅関連(DHI)は空売り対象ではなく現金で待つ対象と位置づける。</li></ul>
+    <hr>
+    <h2>週間注目イベント</h2>
+    <table>
+      <tr>
+        <td>日付</td>
+        <td>イベント</td>
+        <td>インパクト</td>
+      </tr>
+      <tr>
+      <td>2026-09-01</td>
+      <td>米8月ISM製造業景況指数 — 供給ショック型インフレ下での製造業活動と支払価格指数を確認</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-09-02</td>
+      <td>米週間原油在庫統計およびOPEC+の供給方針を巡る報道 — 原油ファクターに紐づく推奨銘柄群の前提を直接左右する</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-09-04</td>
+      <td>米8月雇用統計 — FRBの短期据え置き＋長期上昇というベアスティープ観の分岐点</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-09-07</td>
+      <td>日本の大手行による9月変動型住宅ローン金利改定の適用開始 — 地銀のNIM改善が数字で見え始める</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-09-10</td>
+      <td>米8月CPI — 原油高がヘッドラインとコアにどこまで波及したかで年内利下げ期待の存否が決まる</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-09-14</td>
+      <td>Terra Drone(278A.T)決算 — 経常赤字-14.2億円の縮小と受注積み上がりの確認ポイント</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-09-16</td>
+      <td>FOMC(9月会合) — 供給要因インフレに対しFRBが動きにくい中でのドットプロット更新</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-09-18</td>
+      <td>日銀金融政策決定会合 — 円159円台と住宅ローン金利引き上げを受けた追加利上げ観測の織り込み</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+    </table>
+    <hr>
+    <h2>インデックス投資家へのアドバイス</h2>
+    <div class="agent-card">
+      <p>米インデックス約8割の現ポートフォリオは、原油スパイク→CPI再加速→FRBタカ派転換というシナリオでほぼ全額が市場ベータに晒される。積立の継続自体は変える必要がないが、VIX14.92でプロテクションが歴史的に安い今こそ、S&amp;P500プットスプレッドで下方15〜20%のテールを限定しておくことの費用対効果が高い。指数は高値圏を維持しつつ11セクター中9つが下落しダウが劣後する典型的なディストリビューション初期の形状にあり、9月は歴史的に最弱の月でもある。したがって新規の一括投入は避け、レバレッジを外して現金比率を10〜20%まで高め、5〜10%の調整が来た局面で機械的に買い増せる余力を確保しておくことを推奨する。個別銘柄で味付けするなら、インデックスとの相関が低くスタグフレーション耐性のあるエネルギー上流を全体の10〜15%以内に留め、無収益の高倍率グロースへの上乗せは行わないこと。</p>
+    </div>
+  </div>
+</body>
+</html>
