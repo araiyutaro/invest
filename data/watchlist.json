@@ -255,7 +255,7 @@
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
     "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-01",
+    "lastVerdictDate": "2026-09-03",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -380,9 +380,14 @@
   "VRNS": {
     "ticker": "VRNS",
     "name": "Varonis Systems, Inc.",
-    "addedDate": "2026-08-27",
-    "lastVerdictDate": "2026-08-27",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-27",
+        "lastVerdictDate": "2026-08-27",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-03"
+      }
+    ]
   },
   "MOD": {
     "ticker": "MOD",
@@ -462,28 +467,33 @@
     "ticker": "CHRD",
     "name": "Chord Energy Corporation",
     "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-01",
+    "lastVerdictDate": "2026-09-03",
     "history": []
   },
   "3692.T": {
     "ticker": "3692.T",
     "name": "FFRI Security, Inc.",
     "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-01",
+    "lastVerdictDate": "2026-09-03",
     "history": []
   },
   "3040.T": {
     "ticker": "3040.T",
     "name": "Soliton Systems K.K.",
     "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-01",
+    "lastVerdictDate": "2026-09-03",
     "history": []
   },
   "6592.T": {
     "ticker": "6592.T",
     "name": "Mabuchi Motor Co., Ltd.",
-    "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-01",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-01",
+        "lastVerdictDate": "2026-09-01",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-03"
+      }
+    ]
   }
 }
