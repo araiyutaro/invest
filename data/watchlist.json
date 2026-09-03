@@ -254,14 +254,18 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
-    "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-03",
     "history": [
       {
         "addedDate": "2026-08-21",
         "lastVerdictDate": "2026-08-28",
         "removedReason": "downgraded",
         "removedDate": "2026-08-29"
+      },
+      {
+        "addedDate": "2026-09-01",
+        "lastVerdictDate": "2026-09-03",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-04"
       }
     ]
   },
@@ -430,6 +434,8 @@
   "ZS": {
     "ticker": "ZS",
     "name": "Zscaler, Inc.",
+    "addedDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-04",
     "history": [
       {
         "addedDate": "2026-08-28",
@@ -466,23 +472,38 @@
   "CHRD": {
     "ticker": "CHRD",
     "name": "Chord Energy Corporation",
-    "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-03",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-01",
+        "lastVerdictDate": "2026-09-03",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-04"
+      }
+    ]
   },
   "3692.T": {
     "ticker": "3692.T",
     "name": "FFRI Security, Inc.",
-    "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-03",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-01",
+        "lastVerdictDate": "2026-09-03",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-04"
+      }
+    ]
   },
   "3040.T": {
     "ticker": "3040.T",
     "name": "Soliton Systems K.K.",
-    "addedDate": "2026-09-01",
-    "lastVerdictDate": "2026-09-03",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-01",
+        "lastVerdictDate": "2026-09-03",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-04"
+      }
+    ]
   },
   "6592.T": {
     "ticker": "6592.T",
@@ -495,5 +516,54 @@
         "removedDate": "2026-09-03"
       }
     ]
+  },
+  "DELL": {
+    "ticker": "DELL",
+    "name": "Dell Technologies Inc.",
+    "addedDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-04",
+    "history": []
+  },
+  "SNOW": {
+    "ticker": "SNOW",
+    "name": "Snowflake Inc.",
+    "addedDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-04",
+    "history": []
+  },
+  "8058.T": {
+    "ticker": "8058.T",
+    "name": "Mitsubishi Corporation",
+    "addedDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-04",
+    "history": []
+  },
+  "JXN": {
+    "ticker": "JXN",
+    "name": "Jackson Financial Inc.",
+    "addedDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-04",
+    "history": []
+  },
+  "4478.T": {
+    "ticker": "4478.T",
+    "name": "freee K.K.",
+    "addedDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-04",
+    "history": []
+  },
+  "6440.T": {
+    "ticker": "6440.T",
+    "name": "Juki Corporation",
+    "addedDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-04",
+    "history": []
+  },
+  "IBKR": {
+    "ticker": "IBKR",
+    "name": "Interactive Brokers Group, Inc.",
+    "addedDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-04",
+    "history": []
   }
 }
