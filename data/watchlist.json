@@ -254,6 +254,8 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
+    "addedDate": "2026-09-05",
+    "lastVerdictDate": "2026-09-06",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -434,14 +436,18 @@
   "ZS": {
     "ticker": "ZS",
     "name": "Zscaler, Inc.",
-    "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-04",
     "history": [
       {
         "addedDate": "2026-08-28",
         "lastVerdictDate": "2026-08-28",
         "removedReason": "downgraded",
         "removedDate": "2026-08-29"
+      },
+      {
+        "addedDate": "2026-09-04",
+        "lastVerdictDate": "2026-09-04",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-05"
       }
     ]
   },
@@ -521,15 +527,20 @@
     "ticker": "DELL",
     "name": "Dell Technologies Inc.",
     "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-04",
+    "lastVerdictDate": "2026-09-05",
     "history": []
   },
   "SNOW": {
     "ticker": "SNOW",
     "name": "Snowflake Inc.",
-    "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-04",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-04",
+        "lastVerdictDate": "2026-09-04",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-05"
+      }
+    ]
   },
   "8058.T": {
     "ticker": "8058.T",
@@ -541,16 +552,26 @@
   "JXN": {
     "ticker": "JXN",
     "name": "Jackson Financial Inc.",
-    "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-04",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-04",
+        "lastVerdictDate": "2026-09-04",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-05"
+      }
+    ]
   },
   "4478.T": {
     "ticker": "4478.T",
     "name": "freee K.K.",
-    "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-04",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-04",
+        "lastVerdictDate": "2026-09-04",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-05"
+      }
+    ]
   },
   "6440.T": {
     "ticker": "6440.T",
@@ -562,8 +583,34 @@
   "IBKR": {
     "ticker": "IBKR",
     "name": "Interactive Brokers Group, Inc.",
-    "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-04",
+    "history": [
+      {
+        "addedDate": "2026-09-04",
+        "lastVerdictDate": "2026-09-04",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-05"
+      }
+    ]
+  },
+  "AGX": {
+    "ticker": "AGX",
+    "name": "Argan, Inc.",
+    "addedDate": "2026-09-06",
+    "lastVerdictDate": "2026-09-06",
+    "history": []
+  },
+  "8354.T": {
+    "ticker": "8354.T",
+    "name": "Fukuoka Financial Group, Inc.",
+    "addedDate": "2026-09-06",
+    "lastVerdictDate": "2026-09-06",
+    "history": []
+  },
+  "PBF": {
+    "ticker": "PBF",
+    "name": "PBF Energy Inc.",
+    "addedDate": "2026-09-06",
+    "lastVerdictDate": "2026-09-06",
     "history": []
   }
 }
