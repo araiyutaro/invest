@@ -110,9 +110,14 @@
   "ETN": {
     "ticker": "ETN",
     "name": "Eaton Corporation plc",
-    "addedDate": "2026-08-04",
-    "lastVerdictDate": "2026-08-07",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-04",
+        "lastVerdictDate": "2026-08-07",
+        "removedReason": "expired",
+        "removedDate": "2026-09-07"
+      }
+    ]
   },
   "BRC": {
     "ticker": "BRC",
@@ -129,9 +134,14 @@
   "TEAM": {
     "ticker": "TEAM",
     "name": "Atlassian Corporation",
-    "addedDate": "2026-08-07",
-    "lastVerdictDate": "2026-08-07",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-07",
+        "lastVerdictDate": "2026-08-07",
+        "removedReason": "expired",
+        "removedDate": "2026-09-07"
+      }
+    ]
   },
   "IRTC": {
     "ticker": "IRTC",
@@ -169,9 +179,14 @@
   "6857.T": {
     "ticker": "6857.T",
     "name": "Advantest Corporation",
-    "addedDate": "2026-08-12",
-    "lastVerdictDate": "2026-08-31",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-12",
+        "lastVerdictDate": "2026-08-31",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-07"
+      }
+    ]
   },
   "3110.T": {
     "ticker": "3110.T",
@@ -254,8 +269,6 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
-    "addedDate": "2026-09-05",
-    "lastVerdictDate": "2026-09-06",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -268,6 +281,12 @@
         "lastVerdictDate": "2026-09-03",
         "removedReason": "downgraded",
         "removedDate": "2026-09-04"
+      },
+      {
+        "addedDate": "2026-09-05",
+        "lastVerdictDate": "2026-09-06",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-07"
       }
     ]
   },
@@ -595,22 +614,37 @@
   "AGX": {
     "ticker": "AGX",
     "name": "Argan, Inc.",
-    "addedDate": "2026-09-06",
-    "lastVerdictDate": "2026-09-06",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-06",
+        "lastVerdictDate": "2026-09-06",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-07"
+      }
+    ]
   },
   "8354.T": {
     "ticker": "8354.T",
     "name": "Fukuoka Financial Group, Inc.",
-    "addedDate": "2026-09-06",
-    "lastVerdictDate": "2026-09-06",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-06",
+        "lastVerdictDate": "2026-09-06",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-07"
+      }
+    ]
   },
   "PBF": {
     "ticker": "PBF",
     "name": "PBF Energy Inc.",
-    "addedDate": "2026-09-06",
-    "lastVerdictDate": "2026-09-06",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-06",
+        "lastVerdictDate": "2026-09-06",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-07"
+      }
+    ]
   }
 }
