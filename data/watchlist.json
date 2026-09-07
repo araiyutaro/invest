@@ -269,6 +269,8 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
+    "addedDate": "2026-09-08",
+    "lastVerdictDate": "2026-09-08",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -646,5 +648,33 @@
         "removedDate": "2026-09-07"
       }
     ]
+  },
+  "3093.T": {
+    "ticker": "3093.T",
+    "name": "Treasure Factory Co.,LTD.",
+    "addedDate": "2026-09-08",
+    "lastVerdictDate": "2026-09-08",
+    "history": []
+  },
+  "1965.T": {
+    "ticker": "1965.T",
+    "name": "Techno Ryowa Ltd.",
+    "addedDate": "2026-09-08",
+    "lastVerdictDate": "2026-09-08",
+    "history": []
+  },
+  "9697.T": {
+    "ticker": "9697.T",
+    "name": "Capcom Co., Ltd.",
+    "addedDate": "2026-09-08",
+    "lastVerdictDate": "2026-09-08",
+    "history": []
+  },
+  "4011.T": {
+    "ticker": "4011.T",
+    "name": "Headwaters Co.,Ltd",
+    "addedDate": "2026-09-08",
+    "lastVerdictDate": "2026-09-08",
+    "history": []
   }
 }
