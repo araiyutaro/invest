@@ -269,8 +269,6 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
-    "addedDate": "2026-09-08",
-    "lastVerdictDate": "2026-09-09",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -289,6 +287,12 @@
         "lastVerdictDate": "2026-09-06",
         "removedReason": "downgraded",
         "removedDate": "2026-09-07"
+      },
+      {
+        "addedDate": "2026-09-08",
+        "lastVerdictDate": "2026-09-09",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-10"
       }
     ]
   },
@@ -499,14 +503,18 @@
   "CHRD": {
     "ticker": "CHRD",
     "name": "Chord Energy Corporation",
-    "addedDate": "2026-09-09",
-    "lastVerdictDate": "2026-09-09",
     "history": [
       {
         "addedDate": "2026-09-01",
         "lastVerdictDate": "2026-09-03",
         "removedReason": "downgraded",
         "removedDate": "2026-09-04"
+      },
+      {
+        "addedDate": "2026-09-09",
+        "lastVerdictDate": "2026-09-09",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-10"
       }
     ]
   },
@@ -696,6 +704,20 @@
     "name": "GungHo Online Entertainment, Inc.",
     "addedDate": "2026-09-09",
     "lastVerdictDate": "2026-09-09",
+    "history": []
+  },
+  "MGY": {
+    "ticker": "MGY",
+    "name": "Magnolia Oil & Gas Corporation",
+    "addedDate": "2026-09-10",
+    "lastVerdictDate": "2026-09-10",
+    "history": []
+  },
+  "9513.T": {
+    "ticker": "9513.T",
+    "name": "Electric Power Development Co., Ltd.",
+    "addedDate": "2026-09-10",
+    "lastVerdictDate": "2026-09-10",
     "history": []
   }
 }
