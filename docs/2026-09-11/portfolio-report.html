@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Report - 2026-09-11</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      color: #fff;
+      border-bottom: 2px solid #10b981;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: #34d399;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #10b981;
+      padding-left: 0.8rem;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #6ee7b7;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: #a5b4fc;
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+    p { margin-bottom: 0.8rem; }
+    ul { list-style: none; padding-left: 0; margin-bottom: 1rem; }
+    li {
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.3rem;
+      background: #1e1e2e;
+      border-radius: 6px;
+      border-left: 3px solid #10b981;
+    }
+    strong { color: #fbbf24; }
+    hr {
+      border: none;
+      border-top: 1px solid #333;
+      margin: 2rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #1e1e2e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    tr:first-child td {
+      background: #2a2a3e;
+      font-weight: bold;
+      color: #6ee7b7;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+    .timestamp {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .agent-card {
+      background: #1e1e2e;
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #6366f1;
+    }
+    .agent-card h4 { color: #a5b4fc; margin-top: 0; }
+    .discussion-card {
+      background: #1a1a28;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #f59e0b;
+    }
+    .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    .ticker-pill {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #3f3f5a;
+    }
+    .news-meta {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .digest-crossref-chip {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #a78bfa;
+    }
+    .digest-crossref-row {
+      margin-bottom: 0.5rem;
+    }
+    .news-card a {
+      color: #93c5fd;
+    }
+    .news-card a:visited {
+      color: #c4b5fd;
+    }
+    .news-card a:hover {
+      color: #bfdbfe;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Portfolio Report - 2026-09-11</h1>
+    <p class="timestamp">生成日時: 2026/9/11 8:18:13</p>
+    <h2>総括コメント</h2>
+    <div class="agent-card">
+      <p>米金利上昇とVIX急伸（17.84、10営業日で+24%）を受け、ポートフォリオはディフェンシブ寄りへの再配置が必要な局面。高PER・無収益銘柄（MRNA・JOBY・IRTC・NXT）がバリュエーション圧縮の直撃を受けやすく、ここを縮小して現金比率10〜15%を確保する。一方、HII（PER16.8・防衛需要）と8522.T（日銀9月利上げ観測の直接受益）は金利上昇のプラス面を取れるため積み増し余地がある。ASML・POWL・5885.TはAI・電力インフラの構造需要が崩れていないため保持を継続するが、VIX20超えでは全ての新規リスクテイクを停止する。EEとNXTは原油・エネルギー単一ファクター相関が高く、合算エクスポージャーの上限管理を徹底したい。</p>
+    </div>
+    <h2>今週の緊急・判断変更ロールアップ</h2>
+    <div class="agent-card">
+      <h4>5885.T -- ジーデップ・アドバンス</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 09/09, 09/10</p>
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/07 保持 → 買い増し</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/08 買い増し → 買増</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/09 買増 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>7711.T -- 助川電気工業</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/09 保持 → 一部売却</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/11 一部売却 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>8522.T -- 名古屋銀行</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/07 保持 → 買い増し</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/08 買い増し → 買増</p>
+    </div>
+<div class="agent-card">
+      <h4>BWMX -- ベターウェア・デ・メヒコ</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 09/06</p>
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/07 買増 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>EE -- エクセラレート・エナジー</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 09/09, 09/10</p>
+      
+    </div>
+<div class="agent-card">
+      <h4>HII -- ハンティントン・インガルス</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/09 保持 → 買増</p>
+    </div>
+<div class="agent-card">
+      <h4>IRTC -- アイリズム・ホールディングス</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 09/11</p>
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/11 保持 → 一部売却</p>
+    </div>
+<div class="agent-card">
+      <h4>JOBY -- ジョビー・アビエーション</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/11 保持 → 一部売却</p>
+    </div>
+<div class="agent-card">
+      <h4>MRNA -- モデルナ</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 09/09, 09/10</p>
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/09 保持 → 一部売却</p>
+    </div>
+<div class="agent-card">
+      <h4>NXT -- ネクストパワー</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 09/07, 09/08</p>
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/07 保持 → 一部売却</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/09 一部売却 → 保持</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/11 保持 → 一部売却</p>
+    </div>
+<div class="agent-card">
+      <h4>POWL -- パウエル・インダストリーズ</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/09 保持 → 買増</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/11 買増 → 保持</p>
+    </div>
+<div class="agent-card">
+      <h4>YOU -- クリア・セキュア</h4>
+      
+      <p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/09 保持 → 買増</p>
+<p style="color:#f59e0b;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">判断変更: 09/11 買増 → 保持</p>
+    </div>
+    <p style="color:#888;font-size:0.85rem;margin-top:0.4rem;">（過去6日分の履歴に基づく）</p>
+    <h2>保有銘柄 個別評価</h2>
+    <div class="agent-card news-card" style="border-left-color:#f59e0b;">
+      <h4>MRNA -- モデルナ <span style="float:right;color:#f59e0b;font-weight:bold;">一部売却</span></h4>
+      <p>リサーチ通りmRNA-4157のPhase3成功（KEYTRUDA併用で再発・死亡リスク49%低減）は歴史的な好材料で、52週安値22.28ドルから136.62ドルへ約5倍化した。ただしQ1に8.78億ドル（総額最大22.5億ドル）の訴訟和解費用を計上し、2028年までキャッシュ損益分岐点に達しない無収益銘柄。米10年債高止まりによる長期デュレーション資産の圧縮局面では、利益確定で現金化する優先度が最も高い。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 訴訟和解総額22.5億ドルへの拡大リスクと2028年までのキャッシュバーン継続。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#f59e0b;">
+      <h4>JOBY -- ジョビー・アビエーション <span style="float:right;color:#f59e0b;font-weight:bold;">一部売却</span></h4>
+      <p>リサーチではFAA型式認証Stage4完了で残るはStage5のみと最終関門に到達したが、株価は2026年に約50%下落し6.31ドルと52週安値6.25ドルに接近。四半期200億円超のキャッシュバーンと7.5億ドルATM増資による希薄化が続き、認証時期のスリップが即座に資金繰りリスクに直結する。金利上昇・VIX上昇局面で最も脆弱な無収益・長期デュレーション銘柄であり、段階的な縮小を継続する。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 52週安値割れで下値目処が消失。追加増資発表時は一段の希薄化下落に注意。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#3b82f6;">
+      <h4>HII -- ハンティントン・インガルス <span style="float:right;color:#3b82f6;font-weight:bold;">買増</span></h4>
+      <p>リサーチではQ2造船売上が前年同期比16%増で4四半期連続の二桁成長、SOUTHCOM22億ドルのタスクオーダー獲得と2026年ガイダンス上方修正を確認。PER16.78と割安で、価格281.67ドルは52週高値460ドルから約39%調整した水準。政府長期契約による収益可視性はスタグフレーション・高金利局面で希少なディフェンシブ属性であり、現在のリスク環境における中核として積み増す。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 売上の70〜80%が米政府向けで国防予算削減に脆弱。高債務とインサイダー売りも要監視。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>POWL -- パウエル・インダストリーズ <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>リサーチではQ3新規受注934百万ドル（前年比+158%）、うちデータセンター向けは79年の社史上最大となる400百万ドル超、バックログ24億ドルと構造需要は健在。一方でペトロケミカル向けが前年比49%減とシクリカル依存の弱さが露呈し、PER33.82は高金利下でのマルチプル圧縮に晒される。株価は52週高値328ドルから176.89ドルへ半値近く調整済みで、追加売却も追加投資も見送り保持が妥当。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: PER33.8は金利上昇局面で圧縮余地。受注の実行遅延とマージン希薄化に注意。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>EE -- エクセラレート・エナジー <span style="display:inline-block;background:#f59e0b;color:#1a1a28;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">判断変更: 買増 → 保持</span> <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>リサーチ通り2026年通年調整済みEBITDAガイダンスを4.90〜5.15億ドルへ引き上げ、コロンビア・イラク向けFSRU契約も獲得と事業は順調。原油100ドル超の環境はLNG需要にプラスだが、株価38.61ドルは52週高値43.175ドルに接近しており織り込みが進む。リスクミーティングが指摘するエネルギー銘柄の原油単一ファクター相関ほぼ1を踏まえ、前日の買増判断からトーンを落とし現状維持とする。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 停戦・OPEC増産で-20〜30%の急落シナリオ。イラク端末は2027年Q2へ遅延（EBITDA影響約35百万ドル）。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#3b82f6;">
+      <h4>8522.T -- 名古屋銀行 <span style="float:right;color:#3b82f6;font-weight:bold;">買増</span></h4>
+      <p>本日+3.92%と急伸し7150円。日銀9月利上げ観測が市場の6割超に高まる局面で、地銀の利鞘拡大は最も直接的な受益テーマ。リサーチでは2027年3月期経常利益が前期比20%増の337億円で3期連続最高益予想を確認しており、PER16.69は増益ペースに対し過大でない。円安・インフレ・金利上昇というマクロ環境がそのまま追い風になる数少ない保有銘柄として積み増しを継続する。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 2026年4月開示の有価証券含み損が金利上昇でさらに拡大する可能性。52週高値7350円に接近。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>5885.T -- ジーデップ・アドバンス <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>リサーチでは2026年5月期に営業利益33.0%増・経常利益47.0%増で10期連続増益、次期も売上+27%と強気ガイダンスを確認。NVIDIA国内首位代理店としてAI設備投資需要を取り込む構図は不変。ただしトランプ関税で製造・自動車セクター中心に約1億円規模の案件が停滞しリカバリーが必要と会社自ら言及しており、PER23.7の水準では上積み材料が不足。保持で次の決算を待つ。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 関税による案件停滞が長引けばガイダンス未達リスク。日経のAI関連調整に高ベータで連動。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>5576.T -- オービーシステム <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>リサーチでは2026年3月期経常利益が前期比19.1%増で2期連続最高益、2027年3月期もさらに23.6%増見込みと堅調。PER11.65は増益率対比で明確に割安であり、金融・社会公共のDX案件は内需型でドル円154円や原油高の影響を受けにくいディフェンシブ属性を持つ。ただし日立グループ依存57%（日立単独33.1%）の顧客集中と、出来高1100株（平均2634株）という流動性の薄さから買増は見送る。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 日立グループ依存57%の集中リスク。出来高極薄で有事の売却執行コストが高い。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>7711.T -- 助川電気工業 <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>リサーチではエネルギー関連が核融合・原子力再稼働需要で前年同期比29.3%増収・セグメント利益30.2%増、受注残高は前年同期比128%増と長期基盤は強固。一方で産業システムが16.8%減収・利益23.7%減、来期利益成長がほぼゼロ見通しで市場は失望し、株価は52週高値12250円から5030円へ約59%下落。PER32.2と成長ゼロの組み合わせは弱いが、受注残の厚みを評価し保持とする。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 来期増益ゼロ見通しでPER32.2は割高。52週安値3955円割れなら縮小を検討。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#f59e0b;">
+      <h4>NXT -- ネクストパワー <span style="float:right;color:#f59e0b;font-weight:bold;">一部売却</span></h4>
+      <p>リサーチではQ4がEPS1.05ドル・売上8.81億ドルで2期連続コンセンサス超過、バックログ52.5億ドルと過去最高、FY2027ガイダンスも上方修正と足元の業績は良好。しかし成長率は2025年の35%から2026年5%未満へ急減速見通しで、太陽光プロジェクトのIRRは金利上昇に直撃される。米10年債がさらに30bp上昇する確率50%というリスク前提では逆風が勝るため、縮小を継続する。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 金利上昇でプロジェクトファイナンスが悪化。M&amp;A（Prevalon/Zigor）統合と顧客集中も未消化リスク。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>BWMX -- ベターウェア・デ・メヒコ <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>リサーチではTupperware中南米事業の買収完了により2026年売上ガイダンスを4-8%から18-22%成長へ大幅引き上げ、Jafra部門も成長軌道に回帰。PER5.86はポートフォリオ内で最も割安で、メキシコ内需中心のため米金利・原油・ドル円のいずれとも相関が低く、分散効果の観点で価値がある。ただしアルゼンチン配送ライセンスが2026年9月に期限切れとなる不確実性があり現状維持とする。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: アルゼンチン事業の営業不確実性とTupperware統合の実行リスク。時価総額6億ドルで流動性が薄い。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>YOU -- クリア・セキュア <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>リサーチではQ2に前年比26.6%増収、EPS・FCFともガイダンス超過、通期FCFガイダンスを4.65〜4.80億ドルへ引き上げと収益力は高い。株価42.74ドルは52週高値69.07ドルから38%調整済みでPER28.88まで低下した。ただしTSAが独自の本人確認技術を拡大しており政府による直接競合リスクが高まっているうえ、原油100ドル超は旅客需要の逆風。新規保有として当面は保持で様子見。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: TSAの内製化が会員価値を毀損する構造リスク。原油高による航空旅客需要減速にも連動。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>ASML -- ASMLホールディング <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>本日は-2.43%と下落。本日のニュースはTSMCとのHigh-NA EUVフォトマスク技術で生産コスト効率40%改善を目指すという内容だが、目標時期は2033年で足元の株価materialityは低い。リサーチ通り2026年通年ガイダンスは2度引き上げられ売上430〜450億ユーロ、粗利率54-56%と本業は極めて強い。ただしPER57.07は高PER圧縮ループの標的となるため、押し目買いは急がず保持とする。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 米MATCH法によるDUV輸出・中国既設機サービス禁止リスク。中国売上比率は33%→約20%へ低下見込み。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><ul style="list-style:none;padding-left:0;margin:0;"><li style="padding:0.4rem 0;border-top:1px solid #2a2a3e;background:transparent;border-radius:0;margin-bottom:0;">
+      <a href="https://finnhub.io/api/news?id=14772238ce84f6f230f1d4aa656bf2bb8eae0d91ac6b96c0f9ab01634a23c10c" target="_blank" rel="noopener noreferrer">ASML, TSMC Target 40% High-NA Productivity Gain. The Catch Is a 2033 Timeline</a>
+      <p style="color:#888;font-size:0.85rem;margin:0.15rem 0 0;">Yahoo ・ 9/10 21:51</p>
+    </li></ul></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#f59e0b;">
+      <h4>IRTC -- アイリズム・ホールディングス <span style="display:inline-block;background:#ef4444;color:#fff;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">⚠ 緊急</span> <span style="float:right;color:#f59e0b;font-weight:bold;">一部売却</span></h4>
+      <p>本日-5.60%と急落し112.88ドル、52週安値100.846ドルに接近。リサーチではQ2売上20.1%増・粗利率72.8%と成長は続くものの、2026年6月に患者PHIを含むサイバーセキュリティ侵害が発生、FDAウォーニングレターが未解決、証券集団訴訟4500万ドル和解と規制・訴訟リスクが三重に積み上がっている。無収益かつリスク要因が未消化の銘柄はこの環境で保有優先度が最も低く、縮小する。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: PHI流出に伴う規制制裁とFDAウォーニングレター未解決が並存。52週安値割れなら追加縮小を実行。</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+    <h2>リバランス提案</h2>
+    <ul><li>IRTC（アイリズム）を優先的に一部売却：本日-5.60%で52週安値圏、PHI流出・FDAウォーニングレター未解決・訴訟和解のリスクが未消化で、現金化の第一候補とする</li>
+<li>MRNA（モデルナ）を一部売却して利益確定：52週安値22.28ドルから約5倍化した水準で、訴訟和解最大22.5億ドルと2028年までのキャッシュバーンを踏まえリスク量を縮小</li>
+<li>JOBY（ジョビー）とNXT（ネクストパワー）を段階的に縮小：無収益・長期デュレーション資産と太陽光プロジェクト案件は米10年債のさらなる上昇（+30bpの確率50%）に最も脆弱</li>
+<li>上記の売却資金でHII（ハンティントン・インガルス、PER16.8・防衛長期契約）と8522.T（名古屋銀行、日銀9月利上げの直接受益）を買増し、残りは現金比率10〜15%の確保に充てる</li>
+<li>EE（エクセラレート）とNXTのエネルギー関連合算エクスポージャーに上限を設定し、VIXが20を超えた時点で全ての新規リスクテイクを停止する</li></ul>
+  </div>
+</body>
+</html>
