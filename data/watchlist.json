@@ -271,6 +271,8 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
+    "addedDate": "2026-09-12",
+    "lastVerdictDate": "2026-09-12",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -560,7 +562,7 @@
     "ticker": "DELL",
     "name": "Dell Technologies Inc.",
     "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-05",
+    "lastVerdictDate": "2026-09-12",
     "history": []
   },
   "SNOW": {
@@ -720,6 +722,20 @@
     "name": "Electric Power Development Co., Ltd.",
     "addedDate": "2026-09-10",
     "lastVerdictDate": "2026-09-10",
+    "history": []
+  },
+  "6266.T": {
+    "ticker": "6266.T",
+    "name": "Tazmo Co., Ltd.",
+    "addedDate": "2026-09-12",
+    "lastVerdictDate": "2026-09-12",
+    "history": []
+  },
+  "3433.T": {
+    "ticker": "3433.T",
+    "name": "TOCALO Co.,Ltd.",
+    "addedDate": "2026-09-12",
+    "lastVerdictDate": "2026-09-12",
     "history": []
   }
 }
