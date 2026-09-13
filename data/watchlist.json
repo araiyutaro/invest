@@ -191,44 +191,74 @@
   "3110.T": {
     "ticker": "3110.T",
     "name": "Nitto Boseki Co., Ltd.",
-    "addedDate": "2026-08-13",
-    "lastVerdictDate": "2026-08-13",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-13",
+        "lastVerdictDate": "2026-08-13",
+        "removedReason": "expired",
+        "removedDate": "2026-09-13"
+      }
+    ]
   },
   "6976.T": {
     "ticker": "6976.T",
     "name": "Taiyo Yuden Co., Ltd.",
-    "addedDate": "2026-08-13",
-    "lastVerdictDate": "2026-08-13",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-13",
+        "lastVerdictDate": "2026-08-13",
+        "removedReason": "expired",
+        "removedDate": "2026-09-13"
+      }
+    ]
   },
   "GEV": {
     "ticker": "GEV",
     "name": "GE Vernova Inc.",
-    "addedDate": "2026-08-13",
-    "lastVerdictDate": "2026-08-13",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-13",
+        "lastVerdictDate": "2026-08-13",
+        "removedReason": "expired",
+        "removedDate": "2026-09-13"
+      }
+    ]
   },
   "XOM": {
     "ticker": "XOM",
     "name": "ExxonMobil Holdings Corporation",
-    "addedDate": "2026-08-13",
-    "lastVerdictDate": "2026-08-13",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-13",
+        "lastVerdictDate": "2026-08-13",
+        "removedReason": "expired",
+        "removedDate": "2026-09-13"
+      }
+    ]
   },
   "ETON": {
     "ticker": "ETON",
     "name": "Eton Pharmaceuticals, Inc.",
-    "addedDate": "2026-08-14",
-    "lastVerdictDate": "2026-08-14",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-14",
+        "lastVerdictDate": "2026-08-14",
+        "removedReason": "expired",
+        "removedDate": "2026-09-14"
+      }
+    ]
   },
   "6146.T": {
     "ticker": "6146.T",
     "name": "Disco Corporation",
-    "addedDate": "2026-08-14",
-    "lastVerdictDate": "2026-08-14",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-14",
+        "lastVerdictDate": "2026-08-14",
+        "removedReason": "expired",
+        "removedDate": "2026-09-14"
+      }
+    ]
   },
   "3923.T": {
     "ticker": "3923.T",
@@ -257,22 +287,24 @@
   "1605.T": {
     "ticker": "1605.T",
     "name": "Inpex Corporation",
-    "addedDate": "2026-09-11",
-    "lastVerdictDate": "2026-09-11",
     "history": [
       {
         "addedDate": "2026-08-17",
         "lastVerdictDate": "2026-08-31",
         "removedReason": "downgraded",
         "removedDate": "2026-08-31"
+      },
+      {
+        "addedDate": "2026-09-11",
+        "lastVerdictDate": "2026-09-13",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-14"
       }
     ]
   },
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
-    "addedDate": "2026-09-12",
-    "lastVerdictDate": "2026-09-12",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -297,6 +329,12 @@
         "lastVerdictDate": "2026-09-09",
         "removedReason": "downgraded",
         "removedDate": "2026-09-10"
+      },
+      {
+        "addedDate": "2026-09-12",
+        "lastVerdictDate": "2026-09-13",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-14"
       }
     ]
   },
@@ -495,6 +533,8 @@
   "1662.T": {
     "ticker": "1662.T",
     "name": "Japan Petroleum Exploration Co., Ltd.",
+    "addedDate": "2026-09-14",
+    "lastVerdictDate": "2026-09-14",
     "history": [
       {
         "addedDate": "2026-08-31",
@@ -507,6 +547,8 @@
   "CHRD": {
     "ticker": "CHRD",
     "name": "Chord Energy Corporation",
+    "addedDate": "2026-09-14",
+    "lastVerdictDate": "2026-09-14",
     "history": [
       {
         "addedDate": "2026-09-01",
@@ -561,9 +603,14 @@
   "DELL": {
     "ticker": "DELL",
     "name": "Dell Technologies Inc.",
-    "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-12",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-04",
+        "lastVerdictDate": "2026-09-12",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-13"
+      }
+    ]
   },
   "SNOW": {
     "ticker": "SNOW",
@@ -713,9 +760,16 @@
   "MGY": {
     "ticker": "MGY",
     "name": "Magnolia Oil & Gas Corporation",
-    "addedDate": "2026-09-10",
-    "lastVerdictDate": "2026-09-10",
-    "history": []
+    "addedDate": "2026-09-14",
+    "lastVerdictDate": "2026-09-14",
+    "history": [
+      {
+        "addedDate": "2026-09-10",
+        "lastVerdictDate": "2026-09-10",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-13"
+      }
+    ]
   },
   "9513.T": {
     "ticker": "9513.T",
@@ -736,6 +790,27 @@
     "name": "TOCALO Co.,Ltd.",
     "addedDate": "2026-09-12",
     "lastVerdictDate": "2026-09-12",
+    "history": []
+  },
+  "INSW": {
+    "ticker": "INSW",
+    "name": "International Seaways, Inc.",
+    "addedDate": "2026-09-13",
+    "lastVerdictDate": "2026-09-14",
+    "history": []
+  },
+  "6481.T": {
+    "ticker": "6481.T",
+    "name": "THK Co., Ltd.",
+    "addedDate": "2026-09-13",
+    "lastVerdictDate": "2026-09-13",
+    "history": []
+  },
+  "TNK": {
+    "ticker": "TNK",
+    "name": "Teekay Tankers Ltd.",
+    "addedDate": "2026-09-14",
+    "lastVerdictDate": "2026-09-14",
     "history": []
   }
 }
