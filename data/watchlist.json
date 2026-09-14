@@ -305,6 +305,8 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
+    "addedDate": "2026-09-15",
+    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -372,6 +374,8 @@
   "4493.T": {
     "ticker": "4493.T",
     "name": "Cyber Security Cloud, Inc.",
+    "addedDate": "2026-09-15",
+    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-08-24",
@@ -534,7 +538,7 @@
     "ticker": "1662.T",
     "name": "Japan Petroleum Exploration Co., Ltd.",
     "addedDate": "2026-09-14",
-    "lastVerdictDate": "2026-09-14",
+    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-08-31",
@@ -548,7 +552,7 @@
     "ticker": "CHRD",
     "name": "Chord Energy Corporation",
     "addedDate": "2026-09-14",
-    "lastVerdictDate": "2026-09-14",
+    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-09-01",
@@ -761,7 +765,7 @@
     "ticker": "MGY",
     "name": "Magnolia Oil & Gas Corporation",
     "addedDate": "2026-09-14",
-    "lastVerdictDate": "2026-09-14",
+    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-09-10",
@@ -796,7 +800,7 @@
     "ticker": "INSW",
     "name": "International Seaways, Inc.",
     "addedDate": "2026-09-13",
-    "lastVerdictDate": "2026-09-14",
+    "lastVerdictDate": "2026-09-15",
     "history": []
   },
   "6481.T": {
@@ -809,8 +813,27 @@
   "TNK": {
     "ticker": "TNK",
     "name": "Teekay Tankers Ltd.",
-    "addedDate": "2026-09-14",
-    "lastVerdictDate": "2026-09-14",
+    "history": [
+      {
+        "addedDate": "2026-09-14",
+        "lastVerdictDate": "2026-09-14",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-15"
+      }
+    ]
+  },
+  "QLYS": {
+    "ticker": "QLYS",
+    "name": "Qualys, Inc.",
+    "addedDate": "2026-09-15",
+    "lastVerdictDate": "2026-09-15",
+    "history": []
+  },
+  "S": {
+    "ticker": "S",
+    "name": "SentinelOne, Inc.",
+    "addedDate": "2026-09-15",
+    "lastVerdictDate": "2026-09-15",
     "history": []
   }
 }
