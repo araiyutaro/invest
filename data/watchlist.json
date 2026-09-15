@@ -537,22 +537,24 @@
   "1662.T": {
     "ticker": "1662.T",
     "name": "Japan Petroleum Exploration Co., Ltd.",
-    "addedDate": "2026-09-14",
-    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-08-31",
         "lastVerdictDate": "2026-08-31",
         "removedReason": "downgraded",
         "removedDate": "2026-08-31"
+      },
+      {
+        "addedDate": "2026-09-14",
+        "lastVerdictDate": "2026-09-15",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-15"
       }
     ]
   },
   "CHRD": {
     "ticker": "CHRD",
     "name": "Chord Energy Corporation",
-    "addedDate": "2026-09-14",
-    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-09-01",
@@ -565,6 +567,12 @@
         "lastVerdictDate": "2026-09-09",
         "removedReason": "downgraded",
         "removedDate": "2026-09-10"
+      },
+      {
+        "addedDate": "2026-09-14",
+        "lastVerdictDate": "2026-09-15",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-15"
       }
     ]
   },
@@ -764,14 +772,18 @@
   "MGY": {
     "ticker": "MGY",
     "name": "Magnolia Oil & Gas Corporation",
-    "addedDate": "2026-09-14",
-    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-09-10",
         "lastVerdictDate": "2026-09-10",
         "removedReason": "downgraded",
         "removedDate": "2026-09-13"
+      },
+      {
+        "addedDate": "2026-09-14",
+        "lastVerdictDate": "2026-09-15",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-15"
       }
     ]
   },
@@ -799,9 +811,14 @@
   "INSW": {
     "ticker": "INSW",
     "name": "International Seaways, Inc.",
-    "addedDate": "2026-09-13",
-    "lastVerdictDate": "2026-09-15",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-13",
+        "lastVerdictDate": "2026-09-15",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-15"
+      }
+    ]
   },
   "6481.T": {
     "ticker": "6481.T",
