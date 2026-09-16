@@ -306,7 +306,7 @@
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
     "addedDate": "2026-09-15",
-    "lastVerdictDate": "2026-09-15",
+    "lastVerdictDate": "2026-09-17",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -851,6 +851,13 @@
     "name": "SentinelOne, Inc.",
     "addedDate": "2026-09-15",
     "lastVerdictDate": "2026-09-15",
+    "history": []
+  },
+  "8524.T": {
+    "ticker": "8524.T",
+    "name": "North Pacific Bank,Ltd.",
+    "addedDate": "2026-09-17",
+    "lastVerdictDate": "2026-09-17",
     "history": []
   }
 }
