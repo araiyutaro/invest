@@ -306,7 +306,7 @@
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
     "addedDate": "2026-09-15",
-    "lastVerdictDate": "2026-09-17",
+    "lastVerdictDate": "2026-09-18",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -752,7 +752,7 @@
     "ticker": "4011.T",
     "name": "Headwaters Co.,Ltd",
     "addedDate": "2026-09-08",
-    "lastVerdictDate": "2026-09-09",
+    "lastVerdictDate": "2026-09-18",
     "history": []
   },
   "VRT": {
@@ -823,9 +823,14 @@
   "6481.T": {
     "ticker": "6481.T",
     "name": "THK Co., Ltd.",
-    "addedDate": "2026-09-13",
-    "lastVerdictDate": "2026-09-13",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-13",
+        "lastVerdictDate": "2026-09-13",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-18"
+      }
+    ]
   },
   "TNK": {
     "ticker": "TNK",
@@ -856,8 +861,20 @@
   "8524.T": {
     "ticker": "8524.T",
     "name": "North Pacific Bank,Ltd.",
-    "addedDate": "2026-09-17",
-    "lastVerdictDate": "2026-09-17",
+    "history": [
+      {
+        "addedDate": "2026-09-17",
+        "lastVerdictDate": "2026-09-17",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-18"
+      }
+    ]
+  },
+  "8418.T": {
+    "ticker": "8418.T",
+    "name": "Yamaguchi Financial Group, Inc.",
+    "addedDate": "2026-09-18",
+    "lastVerdictDate": "2026-09-18",
     "history": []
   }
 }
