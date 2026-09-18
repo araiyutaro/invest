@@ -305,8 +305,6 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
-    "addedDate": "2026-09-15",
-    "lastVerdictDate": "2026-09-18",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -337,6 +335,12 @@
         "lastVerdictDate": "2026-09-13",
         "removedReason": "downgraded",
         "removedDate": "2026-09-14"
+      },
+      {
+        "addedDate": "2026-09-15",
+        "lastVerdictDate": "2026-09-18",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-19"
       }
     ]
   },
@@ -875,6 +879,13 @@
     "name": "Yamaguchi Financial Group, Inc.",
     "addedDate": "2026-09-18",
     "lastVerdictDate": "2026-09-18",
+    "history": []
+  },
+  "4259.T": {
+    "ticker": "4259.T",
+    "name": "ExaWizards Inc.",
+    "addedDate": "2026-09-19",
+    "lastVerdictDate": "2026-09-19",
     "history": []
   }
 }

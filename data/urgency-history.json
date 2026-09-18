@@ -4954,5 +4954,91 @@
       "urgent": false,
       "decision": "保持"
     }
+  ],
+  "2026-09-19": [
+    {
+      "symbol": "MRNA",
+      "nameJa": "モデルナ",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "JOBY",
+      "nameJa": "ジョビー・アビエーション",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "HII",
+      "nameJa": "ハンティントン・インガルス",
+      "urgent": true,
+      "decision": "買増"
+    },
+    {
+      "symbol": "POWL",
+      "nameJa": "パウエル・インダストリーズ",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "EE",
+      "nameJa": "エクセレレート・エナジー",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "NXT",
+      "nameJa": "ネクストラッカー",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "BWMX",
+      "nameJa": "ベタランス・デ・メキシコ",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "YOU",
+      "nameJa": "クリア・セキュア",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "ASML",
+      "nameJa": "ASMLホールディング",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "IRTC",
+      "nameJa": "アイリズム・テクノロジーズ",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "8522.T",
+      "nameJa": "愛知銀行",
+      "urgent": true,
+      "decision": "買増"
+    },
+    {
+      "symbol": "5885.T",
+      "nameJa": "SOLIZE",
+      "urgent": false,
+      "decision": "買増"
+    },
+    {
+      "symbol": "5576.T",
+      "nameJa": "日鉄テクノロジー",
+      "urgent": false,
+      "decision": "保持"
+    },
+    {
+      "symbol": "7711.T",
+      "nameJa": "島津製作所",
+      "urgent": true,
+      "decision": "一部売却"
+    }
   ]
 }
