@@ -158,9 +158,14 @@
   "JAZZ": {
     "ticker": "JAZZ",
     "name": "Jazz Pharmaceuticals plc",
-    "addedDate": "2026-08-11",
-    "lastVerdictDate": "2026-08-20",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-11",
+        "lastVerdictDate": "2026-08-20",
+        "removedReason": "expired",
+        "removedDate": "2026-09-20"
+      }
+    ]
   },
   "MP": {
     "ticker": "MP",
@@ -305,6 +310,8 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
+    "addedDate": "2026-09-20",
+    "lastVerdictDate": "2026-09-20",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -762,9 +769,14 @@
   "VRT": {
     "ticker": "VRT",
     "name": "Vertiv Holdings Co",
-    "addedDate": "2026-09-09",
-    "lastVerdictDate": "2026-09-09",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-09",
+        "lastVerdictDate": "2026-09-09",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-20"
+      }
+    ]
   },
   "3765.T": {
     "ticker": "3765.T",
@@ -886,6 +898,41 @@
     "name": "ExaWizards Inc.",
     "addedDate": "2026-09-19",
     "lastVerdictDate": "2026-09-19",
+    "history": []
+  },
+  "HRI": {
+    "ticker": "HRI",
+    "name": "Herc Holdings Inc.",
+    "addedDate": "2026-09-20",
+    "lastVerdictDate": "2026-09-20",
+    "history": []
+  },
+  "AVAV": {
+    "ticker": "AVAV",
+    "name": "AeroVironment, Inc.",
+    "addedDate": "2026-09-20",
+    "lastVerdictDate": "2026-09-20",
+    "history": []
+  },
+  "6920.T": {
+    "ticker": "6920.T",
+    "name": "Lasertec Corporation",
+    "addedDate": "2026-09-20",
+    "lastVerdictDate": "2026-09-20",
+    "history": []
+  },
+  "MU": {
+    "ticker": "MU",
+    "name": "Micron Technology, Inc.",
+    "addedDate": "2026-09-20",
+    "lastVerdictDate": "2026-09-20",
+    "history": []
+  },
+  "8725.T": {
+    "ticker": "8725.T",
+    "name": "MS&AD Insurance Group Holdings, Inc.",
+    "addedDate": "2026-09-20",
+    "lastVerdictDate": "2026-09-20",
     "history": []
   }
 }
