@@ -354,9 +354,14 @@
   "RTX": {
     "ticker": "RTX",
     "name": "RTX Corporation",
-    "addedDate": "2026-08-21",
-    "lastVerdictDate": "2026-08-21",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-21",
+        "lastVerdictDate": "2026-08-21",
+        "removedReason": "expired",
+        "removedDate": "2026-09-21"
+      }
+    ]
   },
   "8750.T": {
     "ticker": "8750.T",
@@ -447,9 +452,14 @@
   "SMTC": {
     "ticker": "SMTC",
     "name": "Semtech Corporation",
-    "addedDate": "2026-08-26",
-    "lastVerdictDate": "2026-08-27",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-26",
+        "lastVerdictDate": "2026-08-27",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-21"
+      }
+    ]
   },
   "5698.T": {
     "ticker": "5698.T",
@@ -461,9 +471,14 @@
   "6460.T": {
     "ticker": "6460.T",
     "name": "Sega Sammy Holdings Inc.",
-    "addedDate": "2026-08-26",
-    "lastVerdictDate": "2026-08-26",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-26",
+        "lastVerdictDate": "2026-08-26",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-21"
+      }
+    ]
   },
   "VRNS": {
     "ticker": "VRNS",
