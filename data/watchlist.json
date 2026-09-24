@@ -280,6 +280,8 @@
   "8306.T": {
     "ticker": "8306.T",
     "name": "Mitsubishi UFJ Financial Group, Inc.",
+    "addedDate": "2026-09-25",
+    "lastVerdictDate": "2026-09-25",
     "history": [
       {
         "addedDate": "2026-08-16",
@@ -304,6 +306,12 @@
         "lastVerdictDate": "2026-09-13",
         "removedReason": "downgraded",
         "removedDate": "2026-09-14"
+      },
+      {
+        "addedDate": "2026-09-24",
+        "lastVerdictDate": "2026-09-24",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-25"
       }
     ]
   },
@@ -968,21 +976,33 @@
     "ticker": "ALAB",
     "name": "Astera Labs, Inc.",
     "addedDate": "2026-09-23",
-    "lastVerdictDate": "2026-09-23",
+    "lastVerdictDate": "2026-09-24",
     "history": []
   },
   "LSCC": {
     "ticker": "LSCC",
     "name": "Lattice Semiconductor Corporation",
-    "addedDate": "2026-09-23",
-    "lastVerdictDate": "2026-09-23",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-23",
+        "lastVerdictDate": "2026-09-23",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-24"
+      }
+    ]
   },
   "3891.T": {
     "ticker": "3891.T",
     "name": "Nippon Kodoshi Corporation",
     "addedDate": "2026-09-23",
     "lastVerdictDate": "2026-09-23",
+    "history": []
+  },
+  "5334.T": {
+    "ticker": "5334.T",
+    "name": "Niterra Co., Ltd.",
+    "addedDate": "2026-09-24",
+    "lastVerdictDate": "2026-09-24",
     "history": []
   }
 }
