@@ -280,14 +280,18 @@
   "8306.T": {
     "ticker": "8306.T",
     "name": "Mitsubishi UFJ Financial Group, Inc.",
-    "addedDate": "2026-09-25",
-    "lastVerdictDate": "2026-09-25",
     "history": [
       {
         "addedDate": "2026-08-16",
         "lastVerdictDate": "2026-08-16",
         "removedReason": "downgraded",
         "removedDate": "2026-08-17"
+      },
+      {
+        "addedDate": "2026-09-25",
+        "lastVerdictDate": "2026-09-25",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-26"
       }
     ]
   },
@@ -318,8 +322,6 @@
   "8331.T": {
     "ticker": "8331.T",
     "name": "The Chiba Bank, Ltd.",
-    "addedDate": "2026-09-20",
-    "lastVerdictDate": "2026-09-20",
     "history": [
       {
         "addedDate": "2026-08-21",
@@ -356,6 +358,12 @@
         "lastVerdictDate": "2026-09-18",
         "removedReason": "downgraded",
         "removedDate": "2026-09-19"
+      },
+      {
+        "addedDate": "2026-09-20",
+        "lastVerdictDate": "2026-09-20",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-26"
       }
     ]
   },
@@ -472,9 +480,14 @@
   "5698.T": {
     "ticker": "5698.T",
     "name": "Envipro Holdings Inc.",
-    "addedDate": "2026-08-26",
-    "lastVerdictDate": "2026-08-26",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-08-26",
+        "lastVerdictDate": "2026-08-26",
+        "removedReason": "expired",
+        "removedDate": "2026-09-26"
+      }
+    ]
   },
   "6460.T": {
     "ticker": "6460.T",
@@ -947,9 +960,14 @@
   "MU": {
     "ticker": "MU",
     "name": "Micron Technology, Inc.",
-    "addedDate": "2026-09-20",
-    "lastVerdictDate": "2026-09-20",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-20",
+        "lastVerdictDate": "2026-09-20",
+        "removedReason": "downgraded",
+        "removedDate": "2026-09-26"
+      }
+    ]
   },
   "8725.T": {
     "ticker": "8725.T",
