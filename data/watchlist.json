@@ -700,9 +700,14 @@
   "8058.T": {
     "ticker": "8058.T",
     "name": "Mitsubishi Corporation",
-    "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-04",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-04",
+        "lastVerdictDate": "2026-09-04",
+        "removedReason": "downgraded",
+        "removedDate": "2026-10-04"
+      }
+    ]
   },
   "JXN": {
     "ticker": "JXN",
