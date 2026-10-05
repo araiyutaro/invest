@@ -736,9 +736,14 @@
   "6440.T": {
     "ticker": "6440.T",
     "name": "Juki Corporation",
-    "addedDate": "2026-09-04",
-    "lastVerdictDate": "2026-09-04",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-04",
+        "lastVerdictDate": "2026-09-04",
+        "removedReason": "expired",
+        "removedDate": "2026-10-06"
+      }
+    ]
   },
   "IBKR": {
     "ticker": "IBKR",
