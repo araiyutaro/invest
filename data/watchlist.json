@@ -410,14 +410,18 @@
   "4493.T": {
     "ticker": "4493.T",
     "name": "Cyber Security Cloud, Inc.",
-    "addedDate": "2026-09-15",
-    "lastVerdictDate": "2026-09-15",
     "history": [
       {
         "addedDate": "2026-08-24",
         "lastVerdictDate": "2026-08-25",
         "removedReason": "downgraded",
         "removedDate": "2026-08-26"
+      },
+      {
+        "addedDate": "2026-09-15",
+        "lastVerdictDate": "2026-09-15",
+        "removedReason": "downgraded",
+        "removedDate": "2026-10-09"
       }
     ]
   },
