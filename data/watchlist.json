@@ -885,9 +885,14 @@
   "9513.T": {
     "ticker": "9513.T",
     "name": "Electric Power Development Co., Ltd.",
-    "addedDate": "2026-09-10",
-    "lastVerdictDate": "2026-09-10",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-10",
+        "lastVerdictDate": "2026-09-10",
+        "removedReason": "expired",
+        "removedDate": "2026-10-11"
+      }
+    ]
   },
   "6266.T": {
     "ticker": "6266.T",
