@@ -897,16 +897,26 @@
   "6266.T": {
     "ticker": "6266.T",
     "name": "Tazmo Co., Ltd.",
-    "addedDate": "2026-09-12",
-    "lastVerdictDate": "2026-09-12",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-12",
+        "lastVerdictDate": "2026-09-12",
+        "removedReason": "expired",
+        "removedDate": "2026-10-13"
+      }
+    ]
   },
   "3433.T": {
     "ticker": "3433.T",
     "name": "TOCALO Co.,Ltd.",
-    "addedDate": "2026-09-12",
-    "lastVerdictDate": "2026-09-12",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-12",
+        "lastVerdictDate": "2026-09-12",
+        "removedReason": "expired",
+        "removedDate": "2026-10-13"
+      }
+    ]
   },
   "INSW": {
     "ticker": "INSW",
