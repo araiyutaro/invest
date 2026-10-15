@@ -957,16 +957,26 @@
   "QLYS": {
     "ticker": "QLYS",
     "name": "Qualys, Inc.",
-    "addedDate": "2026-09-15",
-    "lastVerdictDate": "2026-09-15",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-15",
+        "lastVerdictDate": "2026-09-15",
+        "removedReason": "expired",
+        "removedDate": "2026-10-16"
+      }
+    ]
   },
   "S": {
     "ticker": "S",
     "name": "SentinelOne, Inc.",
-    "addedDate": "2026-09-15",
-    "lastVerdictDate": "2026-09-15",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-15",
+        "lastVerdictDate": "2026-09-15",
+        "removedReason": "expired",
+        "removedDate": "2026-10-16"
+      }
+    ]
   },
   "8524.T": {
     "ticker": "8524.T",

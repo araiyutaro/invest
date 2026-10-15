@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Report - 2026-10-16</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      color: #fff;
+      border-bottom: 2px solid #10b981;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: #34d399;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #10b981;
+      padding-left: 0.8rem;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #6ee7b7;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: #a5b4fc;
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+    p { margin-bottom: 0.8rem; }
+    ul { list-style: none; padding-left: 0; margin-bottom: 1rem; }
+    li {
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.3rem;
+      background: #1e1e2e;
+      border-radius: 6px;
+      border-left: 3px solid #10b981;
+    }
+    strong { color: #fbbf24; }
+    hr {
+      border: none;
+      border-top: 1px solid #333;
+      margin: 2rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #1e1e2e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    tr:first-child td {
+      background: #2a2a3e;
+      font-weight: bold;
+      color: #6ee7b7;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+    .timestamp {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .agent-card {
+      background: #1e1e2e;
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #6366f1;
+    }
+    .agent-card h4 { color: #a5b4fc; margin-top: 0; }
+    .discussion-card {
+      background: #1a1a28;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #f59e0b;
+    }
+    .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    .ticker-pill {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #3f3f5a;
+    }
+    .news-meta {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .digest-crossref-chip {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #a78bfa;
+    }
+    .digest-crossref-row {
+      margin-bottom: 0.5rem;
+    }
+    .news-card a {
+      color: #93c5fd;
+    }
+    .news-card a:visited {
+      color: #c4b5fd;
+    }
+    .news-card a:hover {
+      color: #bfdbfe;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Portfolio Report - 2026-10-16</h1>
+    <p class="timestamp">生成日時: 2026/10/16 7:14:20</p>
+    <h2>総括コメント</h2>
+    <div class="agent-card">
+      <p>本日はCoreWeaveの信用不安による「コアウィーブショック」で日経平均が-4.90%と急落し、名古屋銀行（-4.0%）や助川電気工業（-5.8%）など日本株の保有銘柄が下げました。米国はヘルスケアへの資金移動でモデルナが52週高値圏まで上昇した一方、テクノロジーは50日線を割り込んでいます。ASML、ジーデップ・アドバンス、パウエル、ネクストパワーはAI・電力インフラのテーマで値動きが連動しやすく、AI債務の信用不安が広がった場合に同時に下がるリスクがあります。新規の強気材料は乏しいため、高値圏のモデルナと安値圏のジョビーの比率を下げて現金を確保し、ほかの銘柄は保持で様子を見る方針を維持します。</p>
+    </div>
+    <h2>今週の緊急・判断変更ロールアップ</h2>
+    <div class="agent-card">
+      <h4>8522.T -- 名古屋銀行</h4>
+      <p style="color:#ef4444;font-size:0.9rem;font-weight:bold;margin:0.2rem 0;">⚠ 緊急フラグ: 10/10, 10/11, 10/13, 10/14, 10/15, 10/16</p>
+      
+    </div>
+    <p style="color:#888;font-size:0.85rem;margin-top:0.4rem;">（過去6日分の履歴に基づく）</p>
+    <h2>保有銘柄 個別評価</h2>
+    <div class="agent-card news-card" style="border-left-color:#f59e0b;">
+      <h4>MRNA -- モデルナ <span style="float:right;color:#f59e0b;font-weight:bold;">一部売却</span></h4>
+      <p>236.5ドル（+4.5%）で、52週高値242.29ドルに迫っています。ヘルスケアへの資金移動が追い風です。リサーチでは、Arbutus/Genevantとの9.5億ドルの和解、EUでのmNEXSPIKEとmCOMBRIAXの承認が好材料です。一方で、控訴審で敗訴した場合の最大13億ドルの追加支払い、四半期13億ドルの純損失、FDAによるインフルエンザワクチン申請の受理拒否、JPMorganのSell再確認が重しです。前日と同じく、高値圏で一部の利益を確定するのが妥当と判断します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 連邦巡回控訴裁の判断次第で最大13億ドルの追加支払い（未計上）。米国のワクチン政策の不確実性</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#f59e0b;">
+      <h4>JOBY -- ジョビー・アビエーション <span style="float:right;color:#f59e0b;font-weight:bold;">一部売却</span></h4>
+      <p>4.81ドル（+4.3%）と反発しましたが、52週安値4.43ドルに近く、高値18.77ドルから約74%下落した下降トレンドのままです。リサーチでは、通期売上ガイダンスの1.15〜1.25億ドルへの引き上げ、FAA型式認証の最終段階入り、トヨタとの製造JVが好材料です。一方で、ArcherのSection 337申立によるITC調査（輸入差止の可能性）、下期の現金消費3.85〜4.15億ドルによる希薄化懸念が残ります。前日と同じく比率の縮小を推奨します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: ITC調査で電動機・部品の米国輸入差止の可能性（最終決定は2027年9月予定）、増資による希薄化</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>HII -- ハンティントン・インガルス <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>267.22ドル（+1.0%）で、52週安値255ドル付近からの反発が続いています。PERは約15.5倍です。リサーチでは、FY26造船売上ガイダンスの102〜104億ドルへの引き上げ、受注残573億ドル、フリゲートFF(X)のリードヤード支援契約が好材料です。一方で、上期のFCFが-6.11億ドルで現金が1,200万ドルまで減ったこと、Ingallsの利益率低下、LHA 8の遅延が懸念です。AIとの相関が低い防衛株として保持します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 上期FCFの大幅マイナスと手元現金の減少。固定価格契約でのコスト超過と国防予算の不確実性</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>POWL -- パウエル・インダストリーズ <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>170.82ドル（+0.8%）で、前日の-7.3%からは小幅に戻しましたが、高値328ドルのほぼ半分の水準です。リサーチでは、データセンター需要による過去最高水準の受注残、JPMorganの目標株価360ドルへの引き上げ、受注キャンセルが発生していないとの経営陣の説明が好材料です。一方で、Q1・Q2の予想未達とコスト増による利益率低下、PER約35倍の割高感が懸念です。AIインフラの信用不安を見極めるまで、買い増しはせず保持します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: AIデータセンター投資が見直された場合、受注残のキャンセルリスク。メガプロジェクトの執行リスク</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>EE -- エクセラレート・エナジー <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>32.51ドル（-1.9%）で、エネルギーセクター（XLE -1.58%）とともに下げました。リサーチでは、2026年通期の調整後粗営業利益ガイダンスの4.9〜5.15億ドルへの引き上げ、コロンビア向けFSRUの7年契約、ヨルダン向けのタイムチャーター契約が好材料です。一方で、イラク案件の遅延、上位3顧客で売上の約40%という集中、ジャマイカ施設の約3,300万ドルの仲裁請求、Q2売上の予想比約7%未達が懸念です。長期契約の安定性を評価して保持します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: イラクLNGターミナルの遅延、顧客集中、Montego Bay施設の仲裁請求</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>8522.T -- 名古屋銀行 <span style="display:inline-block;background:#ef4444;color:#fff;font-size:0.75rem;font-weight:bold;padding:0.15rem 0.5rem;margin-left:0.5rem;border-radius:999px;">⚠ 緊急</span> <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>6,180円（-4.0%）で、日経平均の急落に連れて下げました。リサーチでは、27/3期1Qの経常利益+35.8%（上期計画に対する進捗62.5%）、通期20%増益の見通し、JCRのA（ポジティブ）が好材料です。最大の材料は、2028年4月を目処とするしずおかFGの完全子会社化で、株式交換の条件が株価を左右します。有価証券の含み損の開示は金利次第で変動するリスクがあります。前日と同じく、交換条件の発表まで保持します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: しずおかFGによる完全子会社化（株式交換）を予定。交換比率と実行面の不確実性、有価証券の含み損</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>5885.T -- ジーデップ・アドバンス <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>2,934円（-1.5%）で、出来高は平均の約4.7倍に膨らみました。リサーチでは、26/5期の営業利益+33%・純利益+46.6%、27/5期の売上約27%増の会社予想、NVIDIAのエリートパートナーという立場が好材料です。一方で、営業CFが約14.5億円のマイナスに転じたこと、来期の経常利益の伸びが約8%にとどまること、為替リスクが懸念です。AIインフラの信用不安が続くため、買い増しはせず保持します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: AI関連株への売り圧力と出来高急増。営業CFのマイナスと為替変動リスク</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>5576.T -- オービーシステム <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>3,045円（-1.0%）で、日経平均が急落する中でも小幅安にとどまり、52週高値3,240円に近い水準を保っています。PERは約11倍と割安です。リサーチでは、26/3期の売上+12.6%・純利益+23.6%、27/3期の売上100億円で過去最高を更新する計画、自己資本比率約75%、配当予想125円が好材料です。一方で、日立グループなどへの顧客集中、オービックの約28.4%保有、生成AIによる受託開発の代替リスクが懸念です。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 出来高が非常に少なく流動性が低い。生成AIによるソフト開発の機械化リスク</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>7711.T -- 助川電気工業 <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>4,430円（-5.8%）で、52週安値4,030円に近づき、高値12,250円から約64%下げています。リサーチでは、2025年9月期の業績が直近5年で最高、26年9月期の単独業績予想の上方修正、原発・研究機関向けの試験装置や熱計測部品が好材料です。一方で、株価が原発政策のテーマに左右されやすく、決算後に材料出尽くしで反落した事例があります。業績は堅調なため保持しますが、安値の更新には注意が必要です。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 52週安値4,030円を割り込んだ場合は下値の目処が見えにくい。原発政策の変更リスク</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>NXT -- ネクストパワー <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>83.45ドル（+1.1%）で、52週安値76.7ドルに近い水準にあります。リサーチでは、FY27見通しの引き上げ（調整後EBITDA 8.25〜9.0億ドル）、Q1 FY27の過去最高の売上と受注残、PrevalonとZimmermannの買収、サウジ合弁が好材料です。一方で、EBITDA未達の指摘、電力変換参入に伴う約5,000万ドルの追加コスト、IRA 45Xクレジットなどの政策リスクが懸念です。PER約23倍で、保持が妥当です。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 政策（IRA）と関税の不確実性、大口顧客への依存、マージン執行リスク</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>BWMX -- ベターウェア・デ・メヒコ <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>16.31ドル（-0.9%）で、PERは約8.7倍と割安です。リサーチでは、Tupperware中南米事業の買収完了によるQ2売上16.8%増、オーガニック売上+4.1%によるコアブランドの成長回復、アナリストのStrong Buyのコンセンサスが好材料です。一方で、Jafra Mexicoへの投資と一時費用によるオーガニックEBITDAと純利益の減少、統合リスク、高い負債比率が懸念です。AIとの相関が低い分散先として保持します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: 買収後の統合リスクと高レバレッジ、メキシコペソの為替変動</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>YOU -- クリア・セキュア <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>45.02ドル（+1.6%）で、高値69.07ドルから調整した水準です。リサーチでは、Q2の売上・EPSの予想超過、通期FCFガイダンスの4.8億ドル以上への再引き上げ、CLEAR+の62空港・eGateの50空港への拡大、Medicareの不正防止契約が好材料です。一方で、TSAの顔認証Touchless IDとの競合、旅行需要の減速、経営陣の交代、Q3のAmerican Expressへの約3.15億ドルの支払いが懸念です。PER約30倍で、保持が妥当です。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: TSA Touchless IDによる需要侵食。Q3はAmex支払いで当該四半期のFCFがマイナスになる見込み</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>ASML -- ASMLホールディング <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>1,657.44ドル（+0.5%）で、高値1,999.96ドルを約17%下回っています。リサーチでは、2026年通期売上ガイダンスの440〜450億ユーロへの3度目の上方修正、2028年まで需要が供給を上回る見通し、主力製品の値上げ合意が好材料です。一方で、Q3売上の小幅な予想未達とPER約56倍の割高感による決算後の下落、対中輸出規制、メモリ顧客の設備投資削減リスクが懸念です。AI・半導体の比率を抑える方針のもと、買い増しはせず保持します。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: AIインフラの信用不安が広がった場合、半導体株が20〜30%調整するリスク。対中輸出規制の強化</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+<div class="agent-card news-card" style="border-left-color:#10b981;">
+      <h4>IRTC -- アイリズム・ホールディングス <span style="float:right;color:#10b981;font-weight:bold;">保持</span></h4>
+      <p>109.35ドル（+3.1%）で、52週安値100.7ドル付近から反発し、ヘルスケアへの資金移動の恩恵を受けています。リサーチでは、Q2売上の前年比20.1%増と粗利率72.8%への改善、通期売上ガイダンスの8.8〜8.9億ドルへの引き上げ、VitalConnectの2.875億ドルでの買収が好材料です。一方で、FDA警告書への是正対応、償還率への依存、PhilipsやBoston Scientificとの競合、増資による希薄化が懸念です。保持が妥当です。</p>
+      <p style="color:#f59e0b;font-size:0.85rem;">リスク: FDA警告書の是正状況によって新製品の承認時期が遅れるリスク、CMSの償還率の変更</p>
+      <div style="margin-top:0.8rem;"><p style="font-size:0.85rem;font-weight:600;color:#a5b4fc;margin-bottom:0.4rem;">関連ニュース</p><p style="color:#888;font-size:0.85rem;">本日の関連ニュースなし</p></div>
+    </div>
+    <h2>リバランス提案</h2>
+    <ul><li>モデルナ（MRNA）を52週高値圏で一部売却して利益を確定し、控訴審で敗訴した場合の最大13億ドルの追加支払いやワクチン政策のリスクを減らす</li>
+<li>ジョビー・アビエーション（JOBY）を一部売却して比率を下げる。52週安値4.43ドルの近辺で推移している間は買い増ししない</li>
+<li>AI・電力インフラのテーマで重なるASMLホールディング（ASML）、ジーデップ・アドバンス（5885.T）、パウエル・インダストリーズ（POWL）、ネクストパワー（NXT）は買い増しを凍結し、合算で1つのリスク単位として管理する。日経平均が約66,085円を回復できず、VIXが17を上抜けた場合は縮小を検討する</li>
+<li>MRNAとJOBYの売却代金で現金比率を5〜10%確保し、防衛のハンティントン・インガルス（HII）やベターウェア（BWMX）など、AIとの相関が低い銘柄で分散を維持する</li>
+<li>名古屋銀行（8522.T）は、しずおかFGとの株式交換比率の発表まで保持し、発表後に交換条件と市場価格を比べて継続保有か売却かを判断する</li></ul>
+  </div>
+</body>
+</html>
