@@ -836,9 +836,14 @@
   "4011.T": {
     "ticker": "4011.T",
     "name": "Headwaters Co.,Ltd",
-    "addedDate": "2026-09-08",
-    "lastVerdictDate": "2026-09-18",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-08",
+        "lastVerdictDate": "2026-09-18",
+        "removedReason": "expired",
+        "removedDate": "2026-10-19"
+      }
+    ]
   },
   "VRT": {
     "ticker": "VRT",
@@ -993,16 +998,26 @@
   "8418.T": {
     "ticker": "8418.T",
     "name": "Yamaguchi Financial Group, Inc.",
-    "addedDate": "2026-09-18",
-    "lastVerdictDate": "2026-09-18",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-18",
+        "lastVerdictDate": "2026-09-18",
+        "removedReason": "expired",
+        "removedDate": "2026-10-19"
+      }
+    ]
   },
   "4259.T": {
     "ticker": "4259.T",
     "name": "ExaWizards Inc.",
-    "addedDate": "2026-09-19",
-    "lastVerdictDate": "2026-09-19",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-19",
+        "lastVerdictDate": "2026-09-19",
+        "removedReason": "expired",
+        "removedDate": "2026-10-20"
+      }
+    ]
   },
   "HRI": {
     "ticker": "HRI",
