@@ -1022,23 +1022,38 @@
   "HRI": {
     "ticker": "HRI",
     "name": "Herc Holdings Inc.",
-    "addedDate": "2026-09-20",
-    "lastVerdictDate": "2026-09-20",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-20",
+        "lastVerdictDate": "2026-09-20",
+        "removedReason": "expired",
+        "removedDate": "2026-10-21"
+      }
+    ]
   },
   "AVAV": {
     "ticker": "AVAV",
     "name": "AeroVironment, Inc.",
-    "addedDate": "2026-09-20",
-    "lastVerdictDate": "2026-09-20",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-20",
+        "lastVerdictDate": "2026-09-20",
+        "removedReason": "expired",
+        "removedDate": "2026-10-21"
+      }
+    ]
   },
   "6920.T": {
     "ticker": "6920.T",
     "name": "Lasertec Corporation",
-    "addedDate": "2026-09-20",
-    "lastVerdictDate": "2026-09-20",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-20",
+        "lastVerdictDate": "2026-09-20",
+        "removedReason": "expired",
+        "removedDate": "2026-10-21"
+      }
+    ]
   },
   "MU": {
     "ticker": "MU",
@@ -1055,9 +1070,14 @@
   "8725.T": {
     "ticker": "8725.T",
     "name": "MS&AD Insurance Group Holdings, Inc.",
-    "addedDate": "2026-09-20",
-    "lastVerdictDate": "2026-09-20",
-    "history": []
+    "history": [
+      {
+        "addedDate": "2026-09-20",
+        "lastVerdictDate": "2026-09-20",
+        "removedReason": "expired",
+        "removedDate": "2026-10-21"
+      }
+    ]
   },
   "6668.T": {
     "ticker": "6668.T",
