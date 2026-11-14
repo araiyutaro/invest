@@ -177,12 +177,12 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     {
       "agentId": "fundamentals",
       "agentRole": "ファンダメンタルズアナリスト",
-      "analysis": "## 市場認識\n[1段落以上、200〜400文字]\n\n## 専門領域からの洞察\n[財務指標・バリュエーション視点で1段落以上、200〜400文字]\n\n## 注目銘柄の詳細分析\n[推奨銘柄のファンダメンタルズ詳細で1段落以上、200〜400文字]\n\n## リスクと懸念\n[1段落以上、200〜400文字]",
+      "analysis": "## 市場認識\n[1段落以上]\n\n## 専門領域からの洞察\n[財務指標・バリュエーション視点で1段落以上]\n\n## 注目銘柄の詳細分析\n[推奨銘柄のファンダメンタルズ詳細で1段落以上]\n\n## リスクと懸念\n[1段落以上]",
       "summary": "全体サマリー（300文字以内）",
       "highlights": ["注目ポイント1", "注目ポイント2", "注目ポイント3"],
       "risks": ["リスク1", "リスク2"],
       "picks": [
-        {"ticker": "AAPL", "direction": "強気", "rationale": "推奨理由（300文字以内）"}
+        {"ticker": "<TICKER>", "direction": "強気", "rationale": "推奨理由（300文字以内）"}
       ],
       "sectorView": "セクター見通し（1-2文）"
     }
@@ -223,12 +223,12 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     {
       "agentId": "tenbagger",
       "agentRole": "テンバガーハンター",
-      "analysis": "## 市場認識\n[1段落以上、200〜400文字]\n\n## 専門領域からの洞察\n[成長ストーリー・TAM視点で1段落以上、200〜400文字]\n\n## 注目銘柄の詳細分析\n[テンバガー候補の詳細分析で1段落以上、200〜400文字]\n\n## リスクと懸念\n[1段落以上、200〜400文字]",
+      "analysis": "## 市場認識\n[1段落以上]\n\n## 専門領域からの洞察\n[成長ストーリー・TAM視点で1段落以上]\n\n## 注目銘柄の詳細分析\n[テンバガー候補の詳細分析で1段落以上]\n\n## リスクと懸念\n[1段落以上]",
       "summary": "全体サマリー（300文字以内）",
       "highlights": ["注目ポイント1", "注目ポイント2", "注目ポイント3"],
       "risks": ["リスク1", "リスク2"],
       "picks": [
-        {"ticker": "AAPL", "direction": "強気", "rationale": "推奨理由（300文字以内）"}
+        {"ticker": "<TICKER>", "direction": "強気", "rationale": "推奨理由（300文字以内）"}
       ],
       "sectorView": "セクター見通し（1-2文）"
     }
@@ -269,12 +269,12 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     {
       "agentId": "macro",
       "agentRole": "マクロエコノミスト",
-      "analysis": "## 市場認識\n[1段落以上、200〜400文字]\n\n## 専門領域からの洞察\n[セクターローテーション・マクロ視点で1段落以上、200〜400文字]\n\n## 注目銘柄の詳細分析\n[テーマ銘柄や関連ETF等の詳細で1段落以上、200〜400文字]\n\n## リスクと懸念\n[1段落以上、200〜400文字]",
+      "analysis": "## 市場認識\n[1段落以上]\n\n## 専門領域からの洞察\n[セクターローテーション・マクロ視点で1段落以上]\n\n## 注目銘柄の詳細分析\n[テーマ銘柄や関連ETF等の詳細で1段落以上]\n\n## リスクと懸念\n[1段落以上]",
       "summary": "全体サマリー（300文字以内）",
       "highlights": ["注目ポイント1", "注目ポイント2", "注目ポイント3"],
       "risks": ["リスク1", "リスク2"],
       "picks": [
-        {"ticker": "AAPL", "direction": "強気", "rationale": "推奨理由（300文字以内）"}
+        {"ticker": "<TICKER>", "direction": "強気", "rationale": "推奨理由（300文字以内）"}
       ],
       "sectorView": "セクター見通し（1-2文）"
     }
@@ -315,12 +315,12 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     {
       "agentId": "technical",
       "agentRole": "テクニカルストラテジスト",
-      "analysis": "## 市場認識\n[1段落以上、200〜400文字]\n\n## 専門領域からの洞察\n[チャートパターン・テクニカル指標視点で1段落以上、200〜400文字]\n\n## 注目銘柄の詳細分析\n[エントリー/エグジットポイント含む詳細で1段落以上、200〜400文字]\n\n## リスクと懸念\n[1段落以上、200〜400文字]",
+      "analysis": "## 市場認識\n[1段落以上]\n\n## 専門領域からの洞察\n[チャートパターン・テクニカル指標視点で1段落以上]\n\n## 注目銘柄の詳細分析\n[エントリー/エグジットポイント含む詳細で1段落以上]\n\n## リスクと懸念\n[1段落以上]",
       "summary": "全体サマリー（300文字以内）",
       "highlights": ["注目ポイント1", "注目ポイント2", "注目ポイント3"],
       "risks": ["リスク1", "リスク2"],
       "picks": [
-        {"ticker": "AAPL", "direction": "強気", "rationale": "推奨理由（300文字以内）"}
+        {"ticker": "<TICKER>", "direction": "強気", "rationale": "推奨理由（300文字以内）"}
       ],
       "sectorView": "セクター見通し（1-2文）"
     }
@@ -361,12 +361,12 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
     {
       "agentId": "risk-manager",
       "agentRole": "リスクマネージャー",
-      "analysis": "## 市場認識\n[1段落以上、200〜400文字]\n\n## 専門領域からの洞察\n[リスク要因・地政学的リスク視点で1段落以上、200〜400文字]\n\n## 注目銘柄の詳細分析\n[リスク銘柄や弱気推奨銘柄の詳細で1段落以上、200〜400文字]\n\n## リスクと懸念\n[最悪シナリオを含む1段落以上、200〜400文字]",
+      "analysis": "## 市場認識\n[1段落以上]\n\n## 専門領域からの洞察\n[リスク要因・地政学的リスク視点で1段落以上]\n\n## 注目銘柄の詳細分析\n[リスク銘柄や弱気推奨銘柄の詳細で1段落以上]\n\n## リスクと懸念\n[最悪シナリオを含む1段落以上]",
       "summary": "全体サマリー（300文字以内）",
       "highlights": ["注目ポイント1", "注目ポイント2", "注目ポイント3"],
       "risks": ["リスク1", "リスク2"],
       "picks": [
-        {"ticker": "AAPL", "direction": "弱気", "rationale": "警戒理由（300文字以内）"}
+        {"ticker": "<TICKER>", "direction": "弱気", "rationale": "警戒理由（300文字以内）"}
       ],
       "sectorView": "セクター見通し（1-2文）"
     }
@@ -519,13 +519,13 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     {
       "agentId": "fundamentals",
-      "discussion": "[テンバガーハンター] の〇〇という主張については...という観点から同意/異議があります。[マクロエコノミスト] の...については...（800〜1500文字、複数段落可）",
-      "comment": "500文字以内のディスカッションサマリー",
+      "discussion": "[テンバガーハンター] の〇〇という主張については...という観点から同意/異議があります。[マクロエコノミスト] の...については...（複数段落）",
+      "comment": "discussion の要旨（数文。Round 3 と最終統合の入力に使われる）",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
 
-    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[テンバガーハンター] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
+    discussion は議事録レポートにそのまま掲載される本文です。他の各アナリストの主要な主張を [テンバガーハンター] のように角括弧の名前で指し、賛成・反対・補足とその根拠を複数段落で述べてください。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -560,13 +560,13 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     {
       "agentId": "tenbagger",
-      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[マクロエコノミスト] の...については...（800〜1500文字、複数段落可）",
-      "comment": "500文字以内のディスカッションサマリー",
+      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[マクロエコノミスト] の...については...（複数段落）",
+      "comment": "discussion の要旨（数文。Round 3 と最終統合の入力に使われる）",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
 
-    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[ファンダメンタルズアナリスト] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
+    discussion は議事録レポートにそのまま掲載される本文です。他の各アナリストの主要な主張を [ファンダメンタルズアナリスト] のように角括弧の名前で指し、賛成・反対・補足とその根拠を複数段落で述べてください。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -601,13 +601,13 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     {
       "agentId": "macro",
-      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（800〜1500文字、複数段落可）",
-      "comment": "500文字以内のディスカッションサマリー",
+      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（複数段落）",
+      "comment": "discussion の要旨（数文。Round 3 と最終統合の入力に使われる）",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
 
-    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[ファンダメンタルズアナリスト] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
+    discussion は議事録レポートにそのまま掲載される本文です。他の各アナリストの主要な主張を [ファンダメンタルズアナリスト] のように角括弧の名前で指し、賛成・反対・補足とその根拠を複数段落で述べてください。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -642,13 +642,13 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     {
       "agentId": "technical",
-      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（800〜1500文字、複数段落可）",
-      "comment": "500文字以内のディスカッションサマリー",
+      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（複数段落）",
+      "comment": "discussion の要旨（数文。Round 3 と最終統合の入力に使われる）",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
 
-    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[ファンダメンタルズアナリスト] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
+    discussion は議事録レポートにそのまま掲載される本文です。他の各アナリストの主要な主張を [ファンダメンタルズアナリスト] のように角括弧の名前で指し、賛成・反対・補足とその根拠を複数段落で述べてください。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -683,13 +683,13 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     {
       "agentId": "risk-manager",
-      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（800〜1500文字、複数段落可）",
-      "comment": "500文字以内のディスカッションサマリー",
+      "discussion": "[ファンダメンタルズアナリスト] の〇〇という主張については...という観点から同意/異議があります。[テンバガーハンター] の...については...（複数段落）",
+      "comment": "discussion の要旨（数文。Round 3 と最終統合の入力に使われる）",
       "agreements": ["同意点1", "同意点2"],
       "disagreements": ["異議点1"]
     }
 
-    最重要: discussion フィールドが最も重要な出力です。必ず800〜1500文字で、他のアナリスト名（[ファンダメンタルズアナリスト] 等）を角括弧で指定した具体的な相互参照を含めてください。各アナリストの主張に対して賛成・反対・補足を明確に述べてください。discussion が空や短文の場合は出力として不合格です。
+    discussion は議事録レポートにそのまま掲載される本文です。他の各アナリストの主要な主張を [ファンダメンタルズアナリスト] のように角括弧の名前で指し、賛成・反対・補足とその根拠を複数段落で述べてください。
     discussion フィールドは必ずエスケープされた JSON 文字列（改行は \n）として出力してください。
     ```
 
@@ -905,7 +905,7 @@ picks: [tmp/round-1/{agentId}.json の picks フィールド]
   "agentId": "[エージェントID]",
   "agentRole": "[エージェントロール名]",
   "scores": [
-    {"ticker": "AAPL", "score": 7, "reason": "100文字以内の理由（スコアの根拠を具体的に）"},
+    {"ticker": "<TICKER>", "score": 7, "reason": "100文字以内の理由（スコアの根拠を具体的に）"},
     {"ticker": "7203.T", "score": 8, "reason": "100文字以内の理由（スコアの根拠を具体的に）"}
   ]
 }
@@ -1075,7 +1075,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 
     ## 重要な注意事項
     - highlightedStocks には Round 3 でスコアリングされた銘柄（tmp/moderator-tickers.json のリスト）のみを含めること
-    - ポートフォリオ保有銘柄（MRNA, JOBY, HII, POWL, BRBR, EE, 8522.T, 5885.T, 5576.T, 7711.T, NXT, BWMX）は highlightedStocks に絶対に含めないこと。デイリーミーティングはポートフォリオとは独立した市場分析である
+    - ポートフォリオ保有銘柄（`src/portfolio/holdings.ts` の PORTFOLIO_HOLDINGS）は highlightedStocks に含めないこと。デイリーミーティングはポートフォリオとは独立した市場分析であり、保有銘柄は extract-tickers.ts が tmp/moderator-tickers.json から除外済みである
     - 注目銘柄は中小型株を優先（NVIDIA、Apple、Microsoft、Google等の大型株は避ける）
     - 各銘柄の verdict は必ずスコア計算結果に基づく
     - レポート内容は日本語で記述
@@ -1368,11 +1368,11 @@ rm -rf /Users/arai/invest/tmp/portfolio-research && mkdir -p /Users/arai/invest/
 `PORTFOLIO_HOLDINGS`（`src/portfolio/holdings.ts`）の全銘柄（symbol / name / nameJa）それぞれに対して、**以下の Agent ツールを同時に（1つのメッセージで全銘柄分並列）呼び出してください:**
 
 各銘柄について以下の設定で Agent を呼び出してください:
-- name: `portfolio-research-{symbol}`（例: portfolio-research-MRNA、symbol の `/` は `-` に置換）
+- name: `portfolio-research-{symbol}`（例: portfolio-research-MRNA。Agent 名に `.` は使えないため symbol の `.` は除去し `/` は `-` に置換。例: 8522.T → portfolio-research-8522T）
 - model: `sonnet`
-- 以下の prompt を使用（米国株など8銘柄はティッカー+社名併記の英語クエリ、日本株4銘柄（8522.T / 5885.T / 5576.T / 7711.T）は nameJa による日本語クエリを使用してください。bareティッカーのみのクエリは使用しないでください）:
+- 以下の prompt を使用（`.T` サフィックスのない銘柄はティッカー+社名併記の英語クエリ、`.T` サフィックスの日本株は nameJa による日本語クエリを使用してください。bareティッカーのみのクエリは使用しないでください）:
 
-米国/その他8銘柄（例: EE = Excelerate Energy）向け prompt:
+米国/その他の銘柄（例: EE = Excelerate Energy）向け prompt:
 
 ```
 以下の保有銘柄について、最新の定性情報をリサーチしてください。
@@ -1404,7 +1404,7 @@ rm -rf /Users/arai/invest/tmp/portfolio-research && mkdir -p /Users/arai/invest/
 }
 ```
 
-日本株4銘柄（8522.T / 5885.T / 5576.T / 7711.T）向け prompt:
+日本株（`.T` サフィックス）向け prompt:
 
 ```
 以下の保有銘柄について、最新の定性情報をリサーチしてください。
@@ -1538,7 +1538,7 @@ rm -rf /Users/arai/invest/tmp/watchlist-judgment-raw && mkdir -p /Users/arai/inv
 対象銘柄それぞれについて、**以下の Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
 
 各銘柄について以下の設定で Agent を呼び出してください:
-- name: `watchlist-judgment-{ticker}`（例: watchlist-judgment-MRNA、日本株は watchlist-judgment-8522.T のように `.T` サフィックスを保持。ticker 内の `/` は `-` に置換）
+- name: `watchlist-judgment-{ticker}`（例: watchlist-judgment-MRNA。Agent 名に `.` は使えないため ticker の `.` は除去し `/` は `-` に置換。例: 8522.T → watchlist-judgment-8522T）
 - model: `sonnet`
 - 自己完結プロンプト（他銘柄のデータを一切含めないこと）を組み立て、以下を含めてください:
 
@@ -1624,7 +1624,7 @@ fs.writeFileSync('/Users/arai/invest/tmp/pipeline-metrics.json', JSON.stringify(
 `highlightedStocks` の各銘柄に対して、**以下の Agent ツールを同時に（1つのメッセージで並列）呼び出してください:**
 
 各銘柄について以下の設定で Agent を呼び出してください:
-- name: `websearch-{ticker}`（例: websearch-AAPL、ティッカーの `/` は `-` に置換。例: BRK/B → websearch-BRK-B）
+- name: `websearch-{ticker}`（例: websearch-AAPL。Agent 名に `.` は使えないため ticker の `.` は除去し `/` は `-` に置換。例: 8306.T → websearch-8306T、BRK/B → websearch-BRK-B）
 - model: `sonnet`
 - 以下の prompt を使用:
 
