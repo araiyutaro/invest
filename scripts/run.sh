@@ -21,48 +21,41 @@ mkdir -p "$LOG_DIR"
 
 echo "=== Investment Pipeline Started: $(date) ===" | tee "$LOG_FILE"
 
-terminal-notifier -title "Investment Agent" -message "パイプライン開始 (約40分)" -sound Tink
+terminal-notifier -title "Investment Agent" -message "パイプライン開始 (約15分)" -sound Tink
 
-# HTML Protection: record checksums before pipeline
+# HTML 保護: index / portfolio の <head>（タイトル・スタイル）は日次更新で変わらない。
+# 実行前後でハッシュを比べ、変わっていたら通知する（エントリ追加は <body> 側なので誤検知しない）。
+# LIMITATION: <body> の構造破壊は検知しない。そこは update-index.ts のテストで担保する。
 PROTECT_FILES=("docs/index.html" "docs/portfolio.html")
-CHECKSUM_FILE="/tmp/invest-html-checksums-${TIMESTAMP}.txt"
+head_hash() {
+  sed -n '/<head>/,/<\/head>/p' "$1" | shasum -a 256 | awk '{print $1}'
+}
+HEAD_BEFORE=()
 for f in "${PROTECT_FILES[@]}"; do
-  if [ -f "$PROJECT_DIR/$f" ]; then
-    shasum -a 256 "$PROJECT_DIR/$f" >> "$CHECKSUM_FILE"
-  fi
+  HEAD_BEFORE+=("$(head_hash "$PROJECT_DIR/$f")")
 done
 
 EXIT_CODE=0
-claude --dangerously-skip-permissions \
+# caffeinate -i: 実行中のアイドルスリープを防ぐ
+# --strict-mcp-config: 無人実行に MCP（Gmail / Drive / Neon など）を読み込ませない
+caffeinate -i claude --dangerously-skip-permissions \
   -p "/invest" \
   --model sonnet \
   --max-turns 200 \
+  --strict-mcp-config \
   --output-format stream-json --verbose \
   >> "$LOG_FILE" 2>&1 || EXIT_CODE=$?
 
-# HTML Protection: verify checksums and restore if changed
-if [ -f "$CHECKSUM_FILE" ]; then
-  RESTORED=""
-  for f in "${PROTECT_FILES[@]}"; do
-    if [ -f "$PROJECT_DIR/$f" ]; then
-      EXPECTED=$(grep -F "$PROJECT_DIR/$f" "$CHECKSUM_FILE" 2>/dev/null | awk '{print $1}') || true
-      if [ -n "$EXPECTED" ]; then
-        ACTUAL=$(shasum -a 256 "$PROJECT_DIR/$f" | awk '{print $1}')
-        if [ "$EXPECTED" != "$ACTUAL" ]; then
-          if git -C "$PROJECT_DIR" checkout -- "$f"; then
-            RESTORED="$RESTORED $f"
-            echo "HTML保護: $f を復元しました" | tee -a "$LOG_FILE"
-          else
-            echo "HTML保護: $f の復元に失敗しました" | tee -a "$LOG_FILE"
-          fi
-        fi
-      fi
-    fi
-  done
-  rm -f "$CHECKSUM_FILE"
-  if [ -n "$RESTORED" ]; then
-    echo "HTML保護: 復元されたファイル:$RESTORED" | tee -a "$LOG_FILE"
+HTML_CHANGED=""
+for i in "${!PROTECT_FILES[@]}"; do
+  f="${PROTECT_FILES[$i]}"
+  if [ "$(head_hash "$PROJECT_DIR/$f")" != "${HEAD_BEFORE[$i]}" ]; then
+    HTML_CHANGED="$HTML_CHANGED $f"
   fi
+done
+if [ -n "$HTML_CHANGED" ]; then
+  echo "HTML保護: <head> が変更されました:$HTML_CHANGED（git log -p で確認し、必要なら revert してください）" | tee -a "$LOG_FILE"
+  terminal-notifier -title "Investment Agent" -message "HTML の <head> が変更されました:$HTML_CHANGED" -sound Basso
 fi
 
 echo "=== Investment Pipeline Finished: $(date) (exit: $EXIT_CODE) ===" | tee -a "$LOG_FILE"
