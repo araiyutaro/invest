@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import type { MockInstance } from "vitest";
 import type { RawNewsArticle } from "../data/news/types.js";
 
 vi.mock("node:fs/promises", () => ({
@@ -205,7 +206,7 @@ describe("collect-data script", () => {
 
 describe("news filter integration (INTG-01/FILT-03/FILT-04)", () => {
   let writeFileMock: ReturnType<typeof vi.fn>;
-  let consoleLogSpy: ReturnType<typeof vi.spyOn>;
+  let consoleLogSpy: MockInstance<typeof console.log>;
   let filterMock: ReturnType<typeof vi.fn>;
 
   function makeArticle(overrides?: Partial<RawNewsArticle>): RawNewsArticle {
