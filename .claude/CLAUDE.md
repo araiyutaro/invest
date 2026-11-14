@@ -18,3 +18,4 @@ GSD コマンドは常にハイフン (`-`) を使用すること。コロン (`
 - `docs/index.html` と `docs/portfolio.html` は手で編集しない。エントリの追加は `src/scripts/update-index.ts`、各日のレポート HTML は `src/scripts/generate-*.ts` が生成する
 - 保有銘柄は `src/portfolio/holdings.ts` の `PORTFOLIO_HOLDINGS` が唯一の定義
 - 変更後の確認: `npm test` と `npx tsc --noEmit`
+- このプロジェクトでは引き継ぎファイル（`.planning/HANDOFF-*.md`）を作らない。`/handoff` の手順も使わない。パイプラインの状態は `tmp/` と `docs/` にあり、引き継ぎを書いて止まった日はレポートが欠落した（グローバル設定の「状態はディスクに置く」より本ルールを優先する）

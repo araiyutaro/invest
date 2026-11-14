@@ -58,6 +58,13 @@ if [ -n "$HTML_CHANGED" ]; then
   terminal-notifier -title "Investment Agent" -message "HTML の <head> が変更されました:$HTML_CHANGED" -sound Basso
 fi
 
+# 終了コード 0 でも、途中で止まって当日のレポートが出ていない場合は失敗として扱う
+REPORT_FILE="$PROJECT_DIR/docs/${TIMESTAMP%%_*}/daily-report.html"
+if [ "$EXIT_CODE" -eq 0 ] && [ ! -f "$REPORT_FILE" ]; then
+  echo "[STEP:report-missing:FAIL] 当日のレポートが生成されていません: $REPORT_FILE" | tee -a "$LOG_FILE"
+  EXIT_CODE=1
+fi
+
 echo "=== Investment Pipeline Finished: $(date) (exit: $EXIT_CODE) ===" | tee -a "$LOG_FILE"
 
 if [ "$EXIT_CODE" -eq 0 ]; then

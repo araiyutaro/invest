@@ -13,6 +13,7 @@ allowed-tools:
 - `docs/index.html` および `docs/portfolio.html` のデザイン・スタイル・HTML構造を直接編集しないこと。エントリの追加は `update-index.ts` が行う
 - `src/scripts/generate-report.ts` が生成する HTML テンプレートを直接編集しないこと
 - docs/ 配下の既存 HTML ファイルの見た目を変更する行為は禁止
+- このコマンドは無人で 1 回の実行のまま Step 4（デプロイ）まで走り切ること。途中で引き継ぎファイル（`.planning/HANDOFF-*.md`）を書いたり、`/handoff`・`/clear`・`/pickup` を案内して止まったりしない。文脈が長くなっても自動コンパクションに任せて続行する（中間結果はすべて `tmp/` にあるので、要約後は `tmp/` の状態から現在の Step を特定して再開する）
 
 ---
 
