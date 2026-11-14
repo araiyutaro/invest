@@ -2,11 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc --noEmit)",
-      "Bash(npx tsx src/index.ts)",
-      "Bash(echo $GEMINI_API_KEY)",
       "WebSearch",
-      "Bash(npx tsx /Users/arai/invest/scripts/list-models.ts)",
-      "Bash(git pull origin master)",
       "Bash(git pull:*)",
       "Bash(git stash:*)",
       "WebFetch(domain:www.investing.com)",
