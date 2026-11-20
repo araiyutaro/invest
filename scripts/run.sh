@@ -38,11 +38,13 @@ done
 EXIT_CODE=0
 # caffeinate -i: 実行中のアイドルスリープを防ぐ
 # --strict-mcp-config: 無人実行に MCP（Gmail / Drive / Neon など）を読み込ませない
+# --disallowedTools: 自分を再起動できるツールを外す（ScheduleWakeup が完了後に /invest を再実行した）
 caffeinate -i claude --dangerously-skip-permissions \
   -p "/invest" \
   --model sonnet \
   --max-turns 200 \
   --strict-mcp-config \
+  --disallowedTools ScheduleWakeup CronCreate RemoteTrigger \
   --output-format stream-json --verbose \
   >> "$LOG_FILE" 2>&1 || EXIT_CODE=$?
 
