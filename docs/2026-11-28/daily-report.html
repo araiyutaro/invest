@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Investment Report - 2026-11-28</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      color: #fff;
+      border-bottom: 2px solid #3b82f6;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: #60a5fa;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #3b82f6;
+      padding-left: 0.8rem;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #93c5fd;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h4 {
+      font-size: 1rem;
+      color: #a5b4fc;
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+    p { margin-bottom: 0.8rem; }
+    ul { list-style: none; padding-left: 0; margin-bottom: 1rem; }
+    li {
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.3rem;
+      background: #1e1e2e;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+    }
+    strong { color: #fbbf24; }
+    hr {
+      border: none;
+      border-top: 1px solid #333;
+      margin: 2rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #1e1e2e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    tr:first-child td {
+      background: #2a2a3e;
+      font-weight: bold;
+      color: #93c5fd;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+    .timestamp {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .agent-card {
+      background: #1e1e2e;
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #6366f1;
+    }
+    .agent-card h4 { color: #a5b4fc; margin-top: 0; }
+    .discussion-card {
+      background: #1a1a28;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #f59e0b;
+    }
+    .discussion-card h4 { color: #fbbf24; margin-top: 0; }
+    .ticker-pill {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #3f3f5a;
+    }
+    .news-meta {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .digest-crossref-chip {
+      display: inline-block;
+      background: #2a2a3e;
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      padding: 0.15rem 0.5rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #a78bfa;
+    }
+    .digest-crossref-row {
+      margin-bottom: 0.5rem;
+    }
+    .news-card a {
+      color: #93c5fd;
+    }
+    .news-card a:visited {
+      color: #c4b5fd;
+    }
+    .news-card a:hover {
+      color: #bfdbfe;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .container { max-width: 100%; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      h1 { font-size: 1.4rem; }
+      .report-links a, summary { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Investment Report - 2026-11-28</h1>
+    <p class="timestamp">Generated: 2026/11/28 7:13:29</p>
+    <hr>
+    <h2>市場概況</h2>
+    <div class="agent-card">
+      <p><strong>トレンド:</strong> <span style="color:#f59e0b">混合</span></p>
+      <p>結論から述べると、11/27の全面高（S&amp;P500 +1.60%、NASDAQ +2.31%、SOX +4.69%、日経平均 +2.11%の58,711円）は業績の上方修正を伴わない、感謝祭明け短縮取引での薄商いの買い戻しであり、トレンド転換とは判断しません。XLKは当日+2.80%でも50日線を12.2%、200日線を6.7%下回る下降トレンド内の戻りにとどまり、VIXも23.81と20を上回る高ボラティリティのレジームが続いています。AI投資に伴う社債・国債の増発と原油83ドル台が長期金利を支えるなか、資金はXLY・XLV・日本の金融など非AIへ分散し始めています。チームの結論は、5視点がほぼ一致した東京海上HD（8766.T、平均7.0）を中核の強気とし、シェニエール・エナジー（LNG、平均6.8）を安定枠として押し目で段階的に買うことです。不祥事のタマホーム（1419.T）と下降トレンドのサイバーセキュリティクラウド（4493.T）は弱気、米国インデックスのAI集中を踏まえて現金10〜15%の確保を推奨します。</p>
+      <ul><li>S&amp;P 500: <span style="color:#10b981">+1.6%</span></li>
+<li>NASDAQ: <span style="color:#10b981">+2.31%</span></li>
+<li>Dow Jones: <span style="color:#10b981">+1.18%</span></li>
+<li>Nikkei 225: <span style="color:#10b981">+2.11%</span></li>
+<li>VIX: <span style="color:#ef4444">-11.16%</span></li></ul>
+    </div>
+    <hr>
+    <h2>セクターパフォーマンス</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 400 352" width="100%" role="img" aria-label="セクターパフォーマンス">
+    <line x1="270" y1="0" x2="270" y2="352" stroke="#333" stroke-width="1"/>
+    
+      <text x="132" y="16" font-size="13" fill="#e0e0e0" text-anchor="end">Technology</text>
+      <rect x="270" y="0" width="126" height="24" fill="#10b981" rx="2"/>
+      <text x="400" y="16" font-size="13" fill="#e0e0e0" text-anchor="start">+2.80%</text>
+    
+      <text x="132" y="48" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Discretionary</text>
+      <rect x="270" y="32" width="95.03305891432981" height="24" fill="#10b981" rx="2"/>
+      <text x="369.0330589143298" y="48" font-size="13" fill="#e0e0e0" text-anchor="start">+2.11%</text>
+    
+      <text x="132" y="80" font-size="13" fill="#e0e0e0" text-anchor="end">Communication Services</text>
+      <rect x="270" y="64" width="89.71912786210446" height="24" fill="#10b981" rx="2"/>
+      <text x="363.7191278621045" y="80" font-size="13" fill="#e0e0e0" text-anchor="start">+1.99%</text>
+    
+      <text x="132" y="112" font-size="13" fill="#e0e0e0" text-anchor="end">Materials</text>
+      <rect x="270" y="96" width="82.64124003087214" height="24" fill="#10b981" rx="2"/>
+      <text x="356.64124003087215" y="112" font-size="13" fill="#e0e0e0" text-anchor="start">+1.84%</text>
+    
+      <text x="132" y="144" font-size="13" fill="#e0e0e0" text-anchor="end">Industrials</text>
+      <rect x="270" y="128" width="72.11242603550296" height="24" fill="#10b981" rx="2"/>
+      <text x="346.11242603550295" y="144" font-size="13" fill="#e0e0e0" text-anchor="start">+1.60%</text>
+    
+      <text x="132" y="176" font-size="13" fill="#e0e0e0" text-anchor="end">Energy</text>
+      <rect x="270" y="160" width="56.92384872652432" height="24" fill="#10b981" rx="2"/>
+      <text x="330.92384872652434" y="176" font-size="13" fill="#e0e0e0" text-anchor="start">+1.26%</text>
+    
+      <text x="132" y="208" font-size="13" fill="#e0e0e0" text-anchor="end">Financials</text>
+      <rect x="270" y="192" width="51.785953177257525" height="24" fill="#10b981" rx="2"/>
+      <text x="325.7859531772575" y="208" font-size="13" fill="#e0e0e0" text-anchor="start">+1.15%</text>
+    
+      <text x="132" y="240" font-size="13" fill="#e0e0e0" text-anchor="end">Real Estate</text>
+      <rect x="270" y="224" width="28.741600205814255" height="24" fill="#10b981" rx="2"/>
+      <text x="302.7416002058143" y="240" font-size="13" fill="#e0e0e0" text-anchor="start">+0.64%</text>
+    
+      <text x="132" y="272" font-size="13" fill="#e0e0e0" text-anchor="end">Consumer Staples</text>
+      <rect x="270" y="256" width="18.535412914844358" height="24" fill="#10b981" rx="2"/>
+      <text x="292.53541291484436" y="272" font-size="13" fill="#e0e0e0" text-anchor="start">+0.41%</text>
+    
+      <text x="132" y="304" font-size="13" fill="#e0e0e0" text-anchor="end">Healthcare</text>
+      <rect x="270" y="288" width="12.745825829688707" height="24" fill="#10b981" rx="2"/>
+      <text x="286.7458258296887" y="304" font-size="13" fill="#e0e0e0" text-anchor="start">+0.28%</text>
+    
+      <text x="132" y="336" font-size="13" fill="#e0e0e0" text-anchor="end">Utilities</text>
+      <rect x="270" y="320" width="12.388397221507592" height="24" fill="#10b981" rx="2"/>
+      <text x="286.3883972215076" y="336" font-size="13" fill="#e0e0e0" text-anchor="start">+0.28%</text>
+    
+  </svg>
+    </div>
+    <hr>
+    <h2>VIX推移</h2>
+    <div class="chart-container">
+      <svg viewBox="0 0 600 200" width="100%" role="img" aria-label="VIX推移">
+    
+    <line x1="10" y1="139.3106737752612" x2="560" y2="139.3106737752612"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="143.3106737752612" font-size="13" fill="#6b7280">20</text>
+  
+    
+    <line x1="10" y1="57.93202132578355" x2="560" y2="57.93202132578355"
+          stroke="#6b7280" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="564" y="61.93202132578355" font-size="13" fill="#6b7280">30</text>
+  
+    <polyline points="10,164.45667862388947 35,162.09669025241647 60,144.03063499646103 85,129.9521318479205 110,132.5562462428244 135,166.89803198867534 160,72.7429335881091 185,93.41311876071457 210,139.96170237398715 235,143.7051284579711 260,159.7367174026896 285,149.88989238499482 310,145.0071856554231 335,115.62948715420289 360,94.87793698828455 385,102.2020126043883 410,70.62708676181313 435,10 460,85.43799902413869 485,87.55384585043466 510,71.84776344420608 535,83.97319631831486 560,108.30541153809914" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="10" cy="164.45667862388947" r="3" fill="#3b82f6"/><circle cx="35" cy="162.09669025241647" r="3" fill="#3b82f6"/><circle cx="60" cy="144.03063499646103" r="3" fill="#3b82f6"/><circle cx="85" cy="129.9521318479205" r="3" fill="#3b82f6"/><circle cx="110" cy="132.5562462428244" r="3" fill="#3b82f6"/><circle cx="135" cy="166.89803198867534" r="3" fill="#3b82f6"/><circle cx="160" cy="72.7429335881091" r="3" fill="#3b82f6"/><circle cx="185" cy="93.41311876071457" r="3" fill="#3b82f6"/><circle cx="210" cy="139.96170237398715" r="3" fill="#3b82f6"/><circle cx="235" cy="143.7051284579711" r="3" fill="#3b82f6"/><circle cx="260" cy="159.7367174026896" r="3" fill="#3b82f6"/><circle cx="285" cy="149.88989238499482" r="3" fill="#3b82f6"/><circle cx="310" cy="145.0071856554231" r="3" fill="#3b82f6"/><circle cx="335" cy="115.62948715420289" r="3" fill="#3b82f6"/><circle cx="360" cy="94.87793698828455" r="3" fill="#3b82f6"/><circle cx="385" cy="102.2020126043883" r="3" fill="#3b82f6"/><circle cx="410" cy="70.62708676181313" r="3" fill="#3b82f6"/><circle cx="435" cy="10" r="3" fill="#3b82f6"/><circle cx="460" cy="85.43799902413869" r="3" fill="#3b82f6"/><circle cx="485" cy="87.55384585043466" r="3" fill="#3b82f6"/><circle cx="510" cy="71.84776344420608" r="3" fill="#3b82f6"/><circle cx="535" cy="83.97319631831486" r="3" fill="#3b82f6"/><circle cx="560" cy="108.30541153809914" r="3" fill="#3b82f6"/>
+    <text x="10" y="196" font-size="13" fill="#888">2026-10-28</text>
+    <text x="560" y="196" font-size="13" fill="#888" text-anchor="end">2026-11-27</text>
+  </svg>
+    </div>
+    <hr>
+    <h2>セクター推奨ランキング</h2>
+    <table>
+      <tr>
+        <td>ランク</td>
+        <td>セクター</td>
+        <td>理由</td>
+        <td>見通し</td>
+      </tr>
+      <tr>
+      <td>1</td>
+      <td><strong>日本の金融（損保・銀行）</strong></td>
+      <td>損保3社の中間決算で東京海上HDだけが最終増益となり、政策保有株ゼロの時代に引受の規律と海外事業の質で選別される局面に入った。国内金利の正常化による運用利回りの改善と円安の恩恵を同時に受けられる。東京海上（8766.T）はマクロ・ファンダメンタルズ・テクニカルの評価が一致した本日唯一の強気銘柄。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>2</td>
+      <td><strong>ヘルスケア</strong></td>
+      <td>XLVは全移動平均の上、200日線+14.1%、RSI54.3で過熱感がなく、5名の平均スコアは6.6と高い。マクロエコノミストは、金利上振れのシナリオでも機能しやすい米国インデックスのAI集中に対するヘッジとして、公益よりヘルスケアを優先すべきと主張した。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>3</td>
+      <td><strong>エネルギー（LNG輸出・タンカー）</strong></td>
+      <td>米国の対イラン封鎖とWTI83ドル台で、米国産LNGは地政学的に安全な供給源として相対的な価値が高まっている。長期契約主体のLNG輸出はキャッシュフローが安定する。一方、タンカー（INSW）は50日線割れ・薄商いで市況のピークアウトを織り込み始めており、LNGと同じイラン要因に依存するため、両方を同時に厚く持つと相関リスクを抱える。</td>
+      <td style="color:#10b981;font-weight:bold;">強気</td>
+    </tr>
+<tr>
+      <td>4</td>
+      <td><strong>一般消費財</strong></td>
+      <td>XLYは50日線・200日線の上でRSI56.6と堅調で、非AIの資金の受け皿になっている。ただし原油高と10月卸売在庫の予想外の積み上がりが実質購買力を圧迫しており、年末商戦が期待を下回れば反落リスクがある。ブラックフライデー・サイバーマンデーの結果を見極めたい。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中立</td>
+    </tr>
+<tr>
+      <td>5</td>
+      <td><strong>素材・資源</strong></td>
+      <td>英FTSE100が鉱業株・銀行株主導で8カ月ぶりの週間上昇率を記録し、XLBも+1.84%と、グローバルにバリュー回帰の兆しがある。ただしOPECプラス会合を控え、原油・資源価格は二方向のリスクを抱える。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中立</td>
+    </tr>
+<tr>
+      <td>6</td>
+      <td><strong>公益</strong></td>
+      <td>XLUは50日線を上回るが200日線を1.4%下回る転換点にある。ディフェンシブとしてベータを下げる効果はあるが、長期金利の上振れシナリオでは金利感応度の高さが逆風となり、ヘッジとしての信頼性はヘルスケアに劣る。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中立</td>
+    </tr>
+<tr>
+      <td>7</td>
+      <td><strong>サイバーセキュリティ（国内小型株）</strong></td>
+      <td>米空軍Cloud One侵入、GMOペパボ51万件・大丸松坂屋88万件の漏えいで構造的な需要は浮上した。しかし4493.Tは漏えい報道の日も出来高0.13倍で無反応、3692.Tも+4.95%ながら出来高0.31倍と資金フローが伴っていない。50日線を回復するまでは監視対象にとどめる。</td>
+      <td style="color:#f59e0b;font-weight:bold;">中立</td>
+    </tr>
+<tr>
+      <td>8</td>
+      <td><strong>テクノロジー・AI半導体</strong></td>
+      <td>SOX+4.69%の急騰も買い戻し主導で、XLKは全移動平均を割り込んだ下降トレンドのまま。エヌビディアの統治不安、アンソロピックのIPO価格割れ、AI社債の増発による金利上昇圧力が残り、戻りは売り場という見方が大勢。VRT・CRDO・SMCI・アドバンテスト（6857.T）は1日の反発でトレンド転換とは見なさない。</td>
+      <td style="color:#ef4444;font-weight:bold;">弱気</td>
+    </tr>
+<tr>
+      <td>9</td>
+      <td><strong>日本の住宅・内需</strong></td>
+      <td>国内金利の上昇と内需の縮小が住宅受注の逆風になっている。タマホーム（1419.T）は保険金の不正請求問題も抱え、リスクオンの日にも出来高を伴って逆行安となった。</td>
+      <td style="color:#ef4444;font-weight:bold;">弱気</td>
+    </tr>
+    </table>
+    <hr>
+    <h2>注目銘柄スコアリングマトリクス</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">各エージェントが10段階評価した結果です。平均7以上=強気、4〜6.9=中立、4未満=弱気。</p>
+    <table>
+      <tr>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;">銘柄</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">ファンダメンタルズアナリスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テンバガーハンター</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">マクロエコノミスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">テクニカルストラテジスト</td><td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;font-size:0.8rem;">リスクマネージャー</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">平均</td>
+        <td style="background:#2a2a3e;font-weight:bold;color:#93c5fd;text-align:center;">判定</td>
+      </tr>
+      <tr>
+      <td><strong>8766.T</strong><br><span style="font-size:0.8rem;color:#888;">東京海上ホールディングス（損害保険）。損保3社の中間決算で唯一の最終増益となり、引受の規律と海外事業の質が裏付けになった。円安と国内金利の上昇の恩恵を同時に受ける。テクニカルも50日線+6.4%・200日線+19.4%の順配列でRSI57.3と健全で、マクロ・ファンダメンタルズ・テクニカルの評価が一致した本日の中核銘柄。ただし株価594.4円は52週高値606円まで-1.9%の高値圏にあるため、一括で買わず、50日線558円付近までの押し目で段階的に買う。テンバガーハンターは大型保険株に10倍の筋書きはないとして中立の5点。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">損保3社で唯一の増益、引受規律と海外事業の質が裏付け。上昇基調だが52週高値まで-1.9%で押し目買いが望ましい</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">200日線+19.4%、52週高値-1.9%、RSI57.3と堅調。安定枠だが大型保険で10倍の筋書きはない</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">唯一の最終増益で海外比率も高く円安・金利上昇が追い風。50日線を6.4%上回りRSI57.3。</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">順配列、RSI57.3。高値606円まで-1.9%でブレイク接近。50日線558円が支持、出来高0.75倍</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">50日線+6.4%、200日線+19.4%、RSI57.3の健全な上昇。52週高値まで1.9%で大口の追随買いは分割で。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">7</strong></td>
+      <td style="text-align:center;"><span style="color:#10b981;font-weight:bold;">強気</span></td>
+    </tr>
+<tr>
+      <td><strong>LNG</strong><br><span style="font-size:0.8rem;color:#888;">シェニエール・エナジー（米国LNG輸出）。平均6.8で判定上は中立だが、強気の基準にあと一歩で、論点整理では全員が保有に前向きだった。対イラン封鎖で米国産LNGの相対的な優位が高まり、長期契約によってキャッシュフローが安定している。株価305.04ドルは50日線+5.7%・200日線+15.2%の順配列でRSI57.0と過熱感はなく、52週高値まで-7.7%の上値余地がある。ポートフォリオの安定枠・ヘッジとして押し目で組み入れる候補。出来高0.61倍と薄い点と、イラン情勢が緩和したときの反転リスク、INSWとの相関に注意。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">長期契約でキャッシュフローが安定し還元余力もある。50日線+5.7%・200日線+15.2%の上昇基調で過熱感は限定的</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">50日線+5.7%、200日線+15.2%、RSI57.0の健全な上昇。安定枠として妥当だが大型で10倍は狙えない</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">イラン封鎖で米国産LNGの相対優位が拡大。長期契約で収益安定、50日・200日線上でRSI57.0。</span></td><td style="text-align:center;color:#10b981"><strong>8</strong><br><span style="font-size:0.75rem;color:#888;">順配列、RSI57.0で健全な上昇。50日線+5.7%、高値まで-7.7%と余地あり。出来高0.61倍は注意</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">50日線+5.7%、200日線+15.2%、RSI57.0で過熱なし。ただ出来高0.61で地政学の反転リスクは残る。</span></td>
+      <td style="text-align:center;"><strong style="color:#60a5fa">6.8</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>INSW</strong><br><span style="font-size:0.8rem;color:#888;">インターナショナル・シーウェイズ（原油・石油製品タンカー）。ファンダメンタルズアナリストはEV/EBITDA4〜5倍・低レバレッジ・高還元でNAVが下値を支えるとして強気（7点）を主張した。しかし株価102.56ドルは50日線107.78ドルを4.8%下回り、RSI48.9、出来高0.34倍と方向感がない。他の4名は運賃市況のピークアウトを織り込み始めていると見て中立〜やや弱気とした。LNGと同じイラン要因に依存する相関リスクもあり、50日線を回復するまでは新規の買いを見送る。</span></td>
+      <td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">EV/EBITDA4〜5倍前後、低レバレッジと高還元で安全マージンあり。50日線を4.8%下回り運賃市況の反落に注意</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">50日線-4.8%、200日線+14.3%の転換点で出来高比0.34。海運市況株で安定枠にはなるが10倍の筋書きはない</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">中東緊張は支援材料だが50日線を4.8%下回り出来高比0.34。ピークアウト警戒で中立。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">200日線+14.3%も50日線107.78ドル割れ。RSI48.9、出来高0.34倍で方向感なし。50日線回復待ち</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">50日線を4.8%下回り出来高倍率0.34。運賃循環のピーク懸念があり、LNGとイラン要因で相関する。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5.2</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>8153.T</strong><br><span style="font-size:0.8rem;color:#888;">モスフードサービス（ハンバーガーチェーン）。4〜9月期は売上高+16%と客数増と和食業態の買収で伸びたが、営業利益-24%・純利益-35%の減益で、36年ぶりの上場来高値は期待が先行している。株価4,885円は50日線+16.1%、RSI68.3と過熱に近く、予想PERは40倍超と推定される。テクニカルストラテジストは上値にしこり玉のないブレイクアウト形状を評価して7点としたが、Round 2で押し目待ちに同意した。高値追いはせず、20日線4,586円近辺までの調整と下期の利益率回復を確認してから拾う。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">上期売上+16%だが営業益-24%・純益-35%。予想PER40倍超と推定、RSI68.3で期待先行。利益率回復を待つ</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">50日線+16.1%、RSI68.3と短期過熱が近い。モスは安定枠だが成熟した外食で10倍の成長余地は乏しい</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">50日線を16.1%上回る上昇基調だがRSI68.3と過熱接近。マクロ上の固有材料は乏しく中立。</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">全移動平均上で高値まで-3.1%。ただしRSI68.3、50日線+16.1%と過熱気味。押し目待ち</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">RSI68.3、50日線から+16.1%で52週高値まで3.1%。過熱感が強く、高値追いは避けるべき。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>3692.T</strong><br><span style="font-size:0.8rem;color:#888;">FFRIセキュリティ（国産エンドポイント防御・防衛/官公庁向け脅威調査）。テンバガーハンターは能動的サイバー防御という国策の受益と小型株ならではの成長余地から7点をつけた。他の4名は受託主体で利益の質が低いこと、当日+4.95%でも出来高0.31倍と資金フローが伴わないことを指摘した。株価7,000円は50日線7,593円を7.8%下回り、52週高値から-35.0%。200日線（6,535円）の上で長期上昇トレンド内の調整ともいえるが、50日線を回復するまでは監視にとどめる。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">セキュリティ需要は構造的だが受託主体で利益の質が低い。52週高値比-35.0%、50日線割れで中立</span></td><td style="text-align:center;color:#60a5fa"><strong>7</strong><br><span style="font-size:0.75rem;color:#888;">国産防御と防衛・官公庁実績が国策に合致。50日線-7.8%、200日線+7.1%の調整は妥当な位置。出来高は細い</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">当日4.9%高でも50日線を7.8%下回り出来高比0.31。高ボラ下の小型株に資金流入が伴わない。</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">前日比+4.9%も50日線7593円割れ。RSI49.7、出来高0.31倍で反発の裏付けが弱い</span></td><td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">50日線-7.8%、52週高値-35.0%、出来高0.31。当日+4.9%でも50日線回復までは監視にとどめる。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">5</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>3633.T</strong><br><span style="font-size:0.8rem;color:#888;">GMOペパボ（レンタルサーバー・EC支援）。利用者情報51万件余り（一部パスワードを含む）の漏えいが発覚した。リスクマネージャーとファンダメンタルズアナリストは、解約・補償費用が遅れて業績に効くことと、件数の上方修正による追加下落を警戒する。一方、株価2,372円は漏えい後も+2.64%、出来高1.35倍で上昇し、200日線を15.5%上回っており、テクニカルストラテジストは20日線2,300円を割るまで弱気の判断を保留した。平均は中立の下限で、新規の買いは控え、20日線を割り込めば弱気に転じる前提で見守る。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">当日+2.6%で200日線+15.5%だが50日線-4.0%。利益成長に対する割安さの根拠が乏しく安全マージンは薄い</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">51万件漏えいで信用と対応費用が懸念。当日+2.6%、200日線+15.5%だが50日線-4.0%で様子見</span></td><td style="text-align:center;color:#f59e0b"><strong>5</strong><br><span style="font-size:0.75rem;color:#888;">200日線を15.5%上回るが50日線を4.0%下回る。内需性はあるがマクロの追い風は限定的。</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">+2.6%、出来高1.35倍で反発、200日線+15.5%。50日線2471円の回復が次の関門</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">51万件超の漏えいで解約・補償リスク。50日線-4.0%、当日+2.6%の反発は織り込み不足の恐れ。</span></td>
+      <td style="text-align:center;"><strong style="color:#f59e0b">4.2</strong></td>
+      <td style="text-align:center;"><span style="color:#f59e0b;font-weight:bold;">中立</span></td>
+    </tr>
+<tr>
+      <td><strong>4493.T</strong><br><span style="font-size:0.8rem;color:#888;">サイバーセキュリティクラウド（クラウド型WAF『攻撃遮断くん』『WafCharm』）。テンバガーハンターは漏えいが相次ぐなかでWAF需要が直接高まると見て打診買い（6点）を主張した。しかし株価1,770円は52週高値4,180円から-57.7%、50日線を30.2%、200日線を8.9%下回る下降トレンドにある。漏えい報道の日も出来高0.13倍・+0.28%と市場は無反応で、他の4名は成長の減速を疑い、強気化に反対した。事業ストーリーではなく価格と資金フローが否定している局面のため、50日線（2,535円）を回復するまでは買わない。</span></td>
+      <td style="text-align:center;color:#f59e0b"><strong>4</strong><br><span style="font-size:0.75rem;color:#888;">高値比-57.7%、50日線-30.2%・200日線割れで出来高倍率0.13。成長減速が疑われ、値下がりだけでは割安と言えない</span></td><td style="text-align:center;color:#60a5fa"><strong>6</strong><br><span style="font-size:0.75rem;color:#888;">WAF需要は追い風だが50日線-30.2%、52週高値-57.7%、出来高比0.13。50日線回復まで打診買い</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">50日線を30.2%、200日線を8.9%下回る下降基調。出来高比0.13で資金流出局面。</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">全移動平均割れ、高値から-57.7%。RSI36.2、出来高0.13倍で底打ち確認なし</span></td><td style="text-align:center;color:#ef4444"><strong>2</strong><br><span style="font-size:0.75rem;color:#888;">50日線-30.2%、52週高値-57.7%の下降トレンド。漏えい報道日も出来高0.13で+0.28%と買いが薄い。</span></td>
+      <td style="text-align:center;"><strong style="color:#ef4444">3.6</strong></td>
+      <td style="text-align:center;"><span style="color:#ef4444;font-weight:bold;">弱気</span></td>
+    </tr>
+<tr>
+      <td><strong>1419.T</strong><br><span style="font-size:0.8rem;color:#888;">タマホーム（注文住宅）。保険金の不正請求問題で、金融庁の業務改善命令、損保各社による代理店契約の見直し、不正範囲の拡大がそれぞれ下落のトリガーになりうる。国内金利の上昇と内需縮小という住宅受注の逆風も重なる。株価2,292円は全移動平均を割り込み（200日線-28.7%）、リスクオンの日にも出来高1.47倍で-2.05%と逆行安となり、52週安値2,285円が目前。5名全員が弱気で、RSI29.8の売られ過ぎだけを根拠にした逆張りは避ける。</span></td>
+      <td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">200日線-28.7%で52週安値圏、出来高増の下落。RSI29.8でも業績底打ちが未確認でバリュートラップ懸念</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">50日線-15.3%、200日線-28.7%、RSI29.8で安値圏、出来高比1.47。売られ過ぎでも成長の材料がない</span></td><td style="text-align:center;color:#ef4444"><strong>3</strong><br><span style="font-size:0.75rem;color:#888;">国内金利上昇は住宅需要に逆風。200日線を28.7%下回りRSI29.8でも反転の確認がない。</span></td><td style="text-align:center;color:#ef4444"><strong>2</strong><br><span style="font-size:0.75rem;color:#888;">全線割れ、-2.1%を出来高1.47倍で下落。52週安値2285円目前。RSI29.8でも反転未確認</span></td><td style="text-align:center;color:#ef4444"><strong>2</strong><br><span style="font-size:0.75rem;color:#888;">不正請求問題に下降トレンド。200日線-28.7%、出来高1.47で安値圏。RSI29.8の反発は戻り売り。</span></td>
+      <td style="text-align:center;"><strong style="color:#ef4444">2.6</strong></td>
+      <td style="text-align:center;"><span style="color:#ef4444;font-weight:bold;">弱気</span></td>
+    </tr>
+    </table>
+    <hr>
+    <h2>ウォッチリスト 買いタイミング判定</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">ウォッチリスト銘柄の本日の買いタイミング判定です。</p>
+    <div class="agent-card">
+      <h4>8766.T — Tokio Marine Holdings, Inc. <span style="color:#9ca3af;font-size:0.8rem;margin-left:0.5rem;">待ち</span> <span style="color:#888;font-size:0.75rem;margin-left:0.5rem;">(2026-11-27 寄付き前時点)</span></h4>
+      <p>次の実行可能セッションである2026-11-30（月）9:00 JSTからの東京市場については、「待つべき」と判定します。2026-11-27（金）終値594.4円は20日線（約585.1円）、50日線（約558.4円）、200日線（約498.0円）をいずれも上回り、移動平均線も短期から長期の順に上に並んでいるため、上昇トレンドは維持されています。RSI(14)は約57.3で、過熱を示す水準には達していません。一方、終値は52週高値606円まで約1.9%の位置にあるものの、出来高比率は約0.75にとどまり、高値を上抜ける勢いは出来高面で確認できません。50日線から約6.4%、200日線から約19.4%上方に離れていることも、高値圏で新規に買う際の慎重材料です。本日の関連ニュースはなく、買いを後押しする材料も供給データ内では確認できません。バリュエーションと業績に関する指標はデータなしです。11-30以降のセッションで、出来高を伴って52週高値を上抜けるか、移動平均線に向けた調整の後に下げ止まりが確認できるかを見極めるのが妥当です。</p>
+      <span class="ticker-pill">トレンド（支持材料）: 2026-11-27終値594.4円は20日線約585.1円・50日線約558.4円・200日線約498.0円をすべて上回る上昇トレンド</span><span class="ticker-pill">モメンタム（中立〜支持材料）: RSI(14)は約57.3で過熱水準には達していない。前日比は約+0.56%</span><span class="ticker-pill">出来高（慎重材料）: 出来高比率は約0.75と低下しており、上昇の勢いを裏付けていない</span><span class="ticker-pill">価格位置（慎重材料）: 52週高値606円まで約-1.9%の高値圏で、上抜けは未確認</span><span class="ticker-pill">乖離（慎重材料）: 50日線から約+6.4%、200日線から約+19.4%上方に位置する</span><span class="ticker-pill">ニュース: 本日の関連ニュースなし（買いを後押しする材料は確認できない）</span>
+      <p style="color:#666;font-size:0.75rem;margin-top:0.3rem;">登録日: 2026-11-28</p>
+    </div>
+    <hr>
+    <h2>WebSearch リサーチ結果</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">注目銘柄に関する最新の定性情報をWebリサーチした結果です。</p>
+    <div class="agent-card" style="border-left-color: #10b981;">
+      <h4>1419.T</h4>
+      <p>社員による火災保険金の不正請求問題が最大の懸念。保険代理業の廃業を申し入れ、11/26に特別調査委の設置を公表したが、調査は3カ月が目安で業績影響は精査中。注文住宅の受注低迷も重なり、当面は不透明感が強い。戸建分譲の受注好調は下支え材料。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>利害関係のない外部弁護士4人による特別調査委員会を設置し、事実関係・類似事案・内部管理体制・発生原因の調査と再発防止策の提言を進める方針</li><li>調査中に新たな問題が判明した場合は、顧客保護を優先して報告書提出前でも関係する損保会社と事実関係を共有する方針</li><li>信頼回復の一環として保険代理業の廃業を損保各社に申し入れ、既存顧客の別代理店への移管も想定している</li><li>戸建分譲の受注は2026年8月・9月とも前年同月を大きく上回ったと報じられている（二次情報サイト経由）</li><li>2026年7月公表の会社予想では、2027年5月期は大幅な増益と増配を計画している（不正請求問題の発覚前の公表）</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>社員が過去の損傷写真を使い回すなどして火災保険金を不正請求した疑いが発覚。2020年ごろから高松支店で約340件と報じられ、全店調査により範囲が広がる可能性がある</li><li>損保ジャパンと三井住友海上がタマホーム経由の保険新規販売を停止し、東京海上日動も同様の方向で検討と報じられた</li><li>損保側のサンプル調査では会社の自主調査で把握されなかった疑義事案も見つかったと報じられ、内部調査の網羅性に疑問がある</li><li>会社は業績に応じた報酬や社内評価を得ようとしたことが動機の可能性があるとしており、報酬制度や内部管理体制の問題が問われる</li><li>火災保険の加入手続きを扱えなくなることで顧客の利便性が低下し、戸建住宅の販売に影響が出る可能性がある</li><li>特別調査委の調査は3カ月が目安で延長の可能性もあり、業績への影響は精査中</li><li>注文住宅の受注は2026年8月・9月とも前年同月割れと報じられ、2027年5月期第1四半期は減収で経常赤字が前年同期より拡大した</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>タマホーム、保険金不正請求で特別調査委 外部弁護士が3カ月調査（日本経済新聞、11/26）</strong>: 外部弁護士4人の特別調査委を設置。3カ月を目安に事実関係と原因を究明し、業績影響は精査中。</li><li><strong>タマホーム保険代理廃業へ 不正請求で各社に申し入れ（熊本日日新聞・共同、11/14）</strong>: 保険代理業の廃業を損保各社に申し入れ。全店調査を開始し、住宅販売に影響が出る可能性もある。</li><li><strong>【独自】タマホーム不正請求で損保各社が火災保険の新規販売停止を検討（東洋経済、11/13）</strong>: 損保3社の調査で自主調査にない疑義事案も判明。追加調査と第三者委の設置を要求と報道。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>3633.T</h4>
+      <p>11/27に51万件超の漏えいを公表。パスワード平文保存や退会者情報の残存が批判され、調査は継続中で業績影響は未開示。持株会社化とEC統合は中期の材料だが、当面は信用低下と解約・対応費用を警戒。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>不審なダウンロードを監査ログで検知後、認証情報の無効化、経路遮断、パスワードの強制リセット、総務省への報告を実施。公表時点で不正利用や二次被害は未確認で、クレジットカード・口座情報は漏えい対象外</li><li>持株会社体制への移行とGMOメイクショップの完全子会社化協議を発表。小規模から法人向けまで支援するECプラットフォーム群を目指す</li><li>AIエージェント向けインフラなどストック型の新サービスを展開し、ドメイン・レンタルサーバー事業は第3四半期累計で増収増益と説明</li><li>人件費削減やAI活用による販促費の効率化で、連結の営業利益は減収下でも増益と説明</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>ロリポップ！関連サービスで516,564件の顧客情報が漏えい。一部は初期パスワードや利用者設定のBasic認証ID・パスワードを含む</li><li>パスワードの平文保存や、退会時に削除すべき情報の残存が判明し、管理体制への批判が出ている</li><li>侵入原因やサーバー内データへの影響、関連サービス（ムームードメイン、heteml）への波及は調査中で、被害範囲が広がる可能性がある</li><li>漏えいの公表資料に業績影響の記載はなく、解約・信用低下・対応費用の影響は不透明。なりすましフィッシングなど二次被害のリスクも残る</li><li>第3四半期累計の経常利益は前年同期比で減益。SUZURIやminneは流通額の伸び悩み・減少が課題で、主力のロリポップ！もAI投資で減益</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>当社サービスに対する不正アクセスによるお客様情報の漏えいについて（GMOペパボ公式、2026/11/27）</strong>: 11/24に不正アクセスを検知。516,564件が対象で、パスワードのリセットと総務省報告を実施し調査継続。</li><li><strong>GMOペパボ「ロリポップ！」にサイバー攻撃、51万6,564件の顧客情報漏洩（セキュリティ対策Lab）</strong>: パスワード平文保存や退会者情報の残存を指摘。フィッシングや関連サービスへの波及を懸念。</li><li><strong>GMOペパボ、持株会社化とメイクショップ統合協議へ（ログミーファイナンス、2026/11）</strong>: 2027年4月の持株会社設立を予定し、メイクショップ子会社化でEC基盤拡大とAI活用を目指す。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>3692.T</h4>
+      <p>安全保障案件の需要とサイバー防御の政策整備が追い風で、会社は中間期を計画通りとし通期予想を維持。一方、利益排除案件の増加と採用コストで中間期は減益。技術者不足、官公庁の大口解約、テーマ株としての値動きの大きさに注意。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>官公庁・防衛産業向けナショナルセキュリティ・サービスが、Kプログラム関連と安全保障案件の需要拡大で増収</li><li>能動的サイバー防御法の段階的施行（2026年10月）、重要インフラ統一基準、緊急対策パッケージなど政策面の追い風</li><li>戦略的販売パートナー経由のOEM販売が好調で、FFRI yaraiのライセンス数は前期末比で増加に転じた</li><li>研究成果が自社に帰属する開発案件が増え、会社は将来の製品・サービス化による利益貢献を見込む</li><li>NEC等と共同開発の国産技術を基盤としたサービスを提供開始。AIを活用した脆弱性発見の研究でも成果</li><li>中間決算は会社計画通りの進捗で、通期の業績予想と配当予想は据え置き</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>Kプログラムの利益排除案件の増加、人員増、採用強化コストにより中間期は大幅減益。発表後は株価が続落と報道</li><li>期初の官公庁大口顧客の解約により、官公庁向けのyaraiライセンス数が減少し、構成比も低下</li><li>会社自身がエンジニア人数をボトルネックと認めており、需要の取り込みは採用・育成の進み方に左右される</li><li>政府向け比重が高まっており、政府予算や方針の変化の影響を受けやすい。サービス売上は年度後半への偏りもある</li><li>その他セキュリティ・サービスは前年のスポット案件の反動で減収。合弁会社は人件費増で持分法損失</li><li>10月にはサイバーセキュリティ関連株がテーマ物色で急騰しており、思惑による値動きの大きさに注意</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>令和9年3月期 第2四半期（中間期）決算短信〔日本基準〕（連結）</strong>: 安全保障サービスは伸びたが製品は期初解約で微減。中間期は増収減益で通期予想に変更なし。</li><li><strong>令和9年3月期 第2四半期（中間期）決算短信補足説明資料</strong>: 利益排除案件と採用コストで利益率低下も計画通り。政策の追い風と技術者不足の課題を説明。</li><li><strong>ＦＦＲＩは続落、４～９月期純利益３０％減（株探）</strong>: 増収ながら利益排除案件の増加と人員・採用コストによる減益が売り材料視されたと報道。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>4493.T</h4>
+      <p>サイバー攻撃増加とAIセキュリティは追い風だが、11月に開発環境の情報漏えいのおそれを公表し、通期予想も下方修正。営業遅れと価格改定見直しからの回復、漏えい調査の続報が焦点で、慎重な評価。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>ストック型収益は堅調で、第3四半期累計は前年同期比で増収増益を確保</li><li>金融分野のAIガイドラインを背景とした需要を見込み、CloudFastenerを中核サービスに位置付け</li><li>AI利用の情報管理サービス『AI MONBAN』やAI/LLMアプリ脆弱性診断など、AI向けセキュリティを拡充</li><li>『攻撃遮断くん』の新プランや複数製品の価格改定で、受注率向上・解約抑制・ARR押し上げを狙う</li><li>国内でのサイバー攻撃被害の相次ぐ発生が企業のセキュリティ需要を後押し</li><li>成長戦略としてM&amp;Aを検討し、上期までに自社株買いも完了</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>11月13日に通期予想を下方修正。期初の大幅な組織変更による営業活動の遅れと、価格改定計画の一部見直しが主因</li><li>7〜9月期単独は経常利益が前年同期から大きく減り、利益率も低下と報じられた</li><li>11月12日、GitHub認証情報の流出による不正アクセスで、一部顧客の企業名・氏名・メール等や通信関連情報の漏えいのおそれを公表</li><li>漏えいの件数・流出経路・不正アクセス期間はログの制約もあり未確定。第二報は今回の検索では未確認</li><li>セキュリティ企業自身の事故であり、信用低下による受注・解約への波及が懸念される（リサーチ上の推察）</li><li>通信費・人件費・M&amp;A関連の外注費などのコスト増と、大型案件の有無による売上の変動</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>サイバーセキュリティクラウドの開発環境に不正アクセス（ScanNetSecurity、2026/11/19）</strong>: 外部情報提供でGitHub認証情報の流出が判明。不審アクセスを確認し、個人情報漏えいの可能性。</li><li><strong>CSC、顧客の企業名等が漏えいした可能性（SmartScope、第一報の要約）</strong>: 認証情報の無効化や外部調査を実施中。件数は未公表。サービスへの影響や二次被害は未確認。</li><li><strong>2026年12月期第2四半期決算説明（logmi Finance、2026/8/26）</strong>: 上期は概ね計画通り。AI向けセキュリティ拡充、価格改定、M&amp;A検討を説明（下方修正前）。</li><li><strong>通期予想の下方修正報道（松井証券、検索結果の抜粋）</strong>: 営業活動の一時的遅れと価格改定見直しが要因。対策の効果は第3四半期以降に出始めたと説明。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>8153.T</h4>
+      <p>国内モスは客数・客単価とも伸び、和食BYO買収で通期売上予想は引き上げ。一方、上期は原材料高で減益、海外利益も大幅減。上場来高値圏の株価に見合う利益回復が焦点で、中立評価と整合的。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>国内モスバーガーの上期既存店は売上・客数・客単価がそろって前年を上回り、価格帯を広げるメニュー戦略が客単価を押し上げた</li><li>2026年7月に和食業態のビー・ワイ・オー（BYO）を完全子会社化。出店加速、FC展開、共同調達による収益力向上を狙う</li><li>BYO連結を受け、通期の連結売上高予想を1100億円から1250億円へ引き上げた</li><li>朝食強化による時間帯別売上の平準化、高収益モデル店の出店・改装、家庭用冷凍食品「MOS Deli」での小売市場参入を推進</li><li>客数増とM&amp;Aへの期待を背景に、減益決算後の11月下旬に約36年ぶりの上場来高値を更新したと報じられた</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>原材料費高騰などのコスト増で上期は連結営業減益・純減益。国内モス事業も増収ながらセグメント減益</li><li>海外事業は増収でもセグメント利益が大幅減。既存進出国の事業再整備と店舗改装が続く</li><li>通期の純利益予想は36億円から35億円へ引き下げられ、通期でも減益見通し</li><li>取得額約112億円のBYOは7〜9月のセグメント利益が小幅にとどまり、利益貢献はこれから</li><li>原材料費・人件費・光熱費の上昇を受け2026年7月に定番メニューの約8割を値上げ。今後の客数への影響とコスト吸収が課題</li><li>国内店舗は上期に出店9に対し退店15で純減。減益下の株高には割高感があるとの指摘も</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>モスフード株、36年ぶり上場来高値。客数増・和食M&amp;Aに期待した買い（ハフポスト日本版、2026-11-28）</strong>: 上期は減益でも客数増とBYO買収への期待で高値更新。原材料高の吸収と利益成長の実現が焦点。</li><li><strong>モスフードサービス／4～9月増収減益、原材料高騰が響く（流通ニュース）</strong>: BYO新規連結で増収も原材料高で減益。国内既存店は好調、海外は利益が大幅減。</li><li><strong>モスフードサービス 決算／4～6月営業利益52.9%減、原材料価格高騰が響く（流通ニュース）</strong>: 第1四半期は国内・海外とも増収減益。当時の通期予想は据え置きで減益見通し。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>8766.T</h4>
+      <p>11月19日の中間決算は損保大手で唯一の増益。通期予想の上方修正と自社株買いも好感された。海外事業と国内自動車保険の料率改定が支えだが、欧米市場の軟化、自動車の損害コスト悪化、自然災害、情報管理が注意点。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>損保大手3グループの中間決算で、他の2社が減益となる中、東京海上のみ増益（共同通信、11月19日）</li><li>海外事業と国内事業がともに伸び、国内は自動車保険の料率引き上げと火災・特殊保険の改善が寄与</li><li>通期の修正純利益予想を上方修正。国内自然災害損失の想定引き下げや北米の引受・運用収益の好調が背景で、発表翌日に株価は大幅反発</li><li>新たな自社株買いを決定し、配当予想は据え置き。株主還元の姿勢が明確</li><li>Greensill関連の損失は処理が完了したと経営陣が説明</li><li>2026年3月にBerkshire Hathaway傘下企業が第三者割当で出資。希薄化は自社株買いで相殺する方針で、追加取得には上限の取り決めがある</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>経営陣は米欧市場で保険料率の軟化の兆しがあり、自社も影響を免れないと言及</li><li>国内自動車保険は損害コストが悪化し、料率引き上げの効果を一部打ち消している</li><li>中東の紛争に伴う大口損失が海外事業の重荷。自然災害は国内で支払いが増えたとの報道もあり、今後の発生状況に業績が左右される</li><li>政策保有株の売却に伴い、ROEには当面の下押し圧力がかかるとの説明</li><li>サイバー事案の増加に経営陣が言及。グループの東京海上ダイレクトで不正アクセスが判明し、委託先経由の顧客情報漏洩の可能性も2026年5月に公表された</li><li>東京海上日動は2025年3月に情報管理を巡る業務改善命令を受けており、法令順守体制の改善状況は引き続き注視が必要</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>損保大手、2社減益 9月中間、東京海上は増益（熊本日日新聞・共同通信、2026-11-19）</strong>: 自然災害の支払いは増えたが影響は限定的。自動車保険の値上げで3社とも増収、増益は東京海上のみ。</li><li><strong>東京海上 大幅反発、通期修正純利益上方修正や自社株買い発表で（財経新聞、2026-11-20）</strong>: 国内自然災害損失の減少と北米の好調で通期予想を上方修正。自社株買いも発表し株価は反発。</li><li><strong>Tokio Marine Q2 2027 Earnings Call Transcript（StockAnalysis、2026-11-19）</strong>: 上方修正と還元を説明する一方、米欧市場の軟化、国内自動車の損害コスト悪化、サイバー事案に言及。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>INSW</h4>
+      <p>Q3は過去最高益で高配当・低レバレッジ、VLCC取得で船隊刷新も進む。一方、収益はスポット比率が高くホルムズ情勢依存。11月はVLCC運賃が高値から反落し、新造船増加も重荷でピークアウト警戒が必要。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>2026年Q3は過去最高の純利益。原油タンカー収益も過去最高で、デュアル燃料VLCCの利益分配も寄与した</li><li>四半期配当は過去最高と同水準を維持。直近4四半期は調整後純利益の85%以上を配当し、自社株買い枠も1億ドルに拡大して2028年末まで延長</li><li>手元流動性が厚く、純LTVは極めて低水準で、投資や株主還元の選択余地が大きい</li><li>Bruton買収でVLCC新造船4隻を取得。一部は高水準の定期用船が確定済みで、老齢船の売却とLR1新造による船隊刷新も進む</li><li>経営陣は短期的な運賃の堅調を見込み、紛争が平和的に解決しても世界的な在庫再積み増しがタンカー需要を支えると主張</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>TCE収入の約8割がスポット市場由来で、運賃正常化の局面では利益と配当が急減しやすい</li><li>足元の高収益はホルムズ海峡の混乱や封鎖など地政学要因に大きく依存し、情勢の変化で反転するリスクがある</li><li>11月上中旬は地政学プレミアムの縮小、サウジと米湾岸の積み出し減、中型船との競合でVLCC運賃が高値から反落。運賃先物はピークアウトを示唆するとの報道もある</li><li>原油タンカーの発注残が急増し、2028年末にかけて新造船の供給圧力が高まる懸念がある</li><li>米政府が制裁対象タンカーの正規市場復帰を個別に進めている。対象は少数の見込みだが、船腹供給の増加要因になり得る</li><li>Q3決算は過去最高益にもかかわらず、地政学由来の運賃への依存が意識され株価が下落したと報じられた</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>International Seaways Reports Third Quarter 2026 Results</strong>: 過去最高益と高配当、自社株買い枠拡大、Bruton買収によるVLCC4隻取得を発表。正式な業績ガイダンスはなし。</li><li><strong>VLCC rates retreat from record highs amid geopolitical shifts and fundamental pressures (Kpler)</strong>: 地政学プレミアム縮小と積み出し減でVLCC運賃が過去最高水準から反落したと分析。</li><li><strong>Strait of Hormuz Brief: 19 November, 2026 (Lloyd&#39;s List Intelligence)</strong>: 通航は紛争後で高水準だが攻撃は継続し米の対イラン封鎖も続く。制裁タンカー復帰の動きもある。</li></ul>
+    </div><div class="agent-card" style="border-left-color: #10b981;">
+      <h4>LNG</h4>
+      <p>通期ガイダンス引き上げ、増配・自社株買い、長期契約の積み上げで事業基盤は堅調。一方、カタールの輸出回復による需給緩和、デリバティブ評価損益の振れ、拡張計画がFID・許認可次第である点はリスク。</p>
+      <p><strong>ポジティブ:</strong></p><ul><li>Q3決算で2026年通期の調整後EBITDAと分配可能キャッシュフローのガイダンスを引き上げた。LNG輸出増、操業改善、Corpus Christi Stage 3完工が寄与したと報じられている</li><li>Corpus Christi Stage 3が2026年8月に実質完工し、累計5,000カーゴの出荷を達成した</li><li>QatarEnergy向け（最大年400万トン、2054年まで。うち100万トンはSabine Pass拡張のFIDが条件）やPetrobras向け（年80万トン、22年）など長期契約を積み上げている</li><li>四半期配当を12%超増配し、自社株買いも継続している</li><li>Sabine Pass拡張はFERCの最終環境影響評価書を2026年9月に取得した</li><li>カタールのRas Laffan設備損傷は修復に3〜5年かかるとされ、供給安定性の面で米国産LNGに追い風が続きやすい</li></ul>
+      <p><strong>ネガティブ:</strong></p><ul><li>カタールのLNG出荷が11月に開戦後の最高水準まで回復しており（なお戦前を大きく下回る）、ホルムズ情勢の緩和が進めば需給逼迫とマージンの追い風が薄れる可能性がある</li><li>長期IPM契約に紐づくデリバティブの評価損で、会計上の利益が大きく振れている（2026年1〜9月累計で減益要因）</li><li>二次情報ではQ3のEPSが市場予想を下回ったと報じられている（公式資料では未確認）</li><li>Sabine PassおよびCorpus Christiの追加拡張はFID・許認可・資金調達・販売契約が前提で、確定した能力ではない</li><li>拡張には多額の資本が必要で、11月の社債発行など固定的な債務負担が伴う</li><li>経営陣は、LNG価格の高止まりや不安定化が新興国の需要を冷やし、長期成長を抑えうると指摘している。米国の能力過剰への懸念も報じられている</li></ul>
+      <p><strong>注目記事:</strong></p><ul><li><strong>Cheniere raises 2026 guidance, increases dividend and reports Q3 2026 results</strong>: 通期ガイダンス引き上げと12%超の増配を発表。自社株買いを継続し、拡張はFIDと許認可が前提。</li><li><strong>Cheniere lifts 2026 EBITDA outlook to $9.25bn as $1.2bn bond deal backs LNG expansion</strong>: 輸出増と完工で見通しを上方修正し社債を発行。拡張の実行リスクと債務負担を指摘。</li><li><strong>Qatar LNG exports hit highest level since war began despite disruption in Strait of Hormuz</strong>: 11月のカタール出荷は開戦後最多も戦前を大きく下回る。設備修復には3〜5年との見通し。</li></ul>
+    </div>
+    <hr>
+    <h2>再評価ラウンド結果（WebSearch後）</h2>
+    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">WebSearchリサーチ結果を踏まえて各アナリストがスコアを再評価した結果です。</p>
+    <div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>ファンダメンタルズアナリスト</h4>
+        <ul><li>
+      <strong>INSW</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引き下げ。過去最高益と低LTVは強みだが、TCE約8割がスポットでVLCC運賃は反落。ピーク利益基準の割安感は割り引く</span>
+    </li><li>
+      <strong>4493.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引き下げ。通期下方修正に加え情報漏えいのおそれで受注・解約への波及懸念。50日線-30.2%でも底打ち未確認</span>
+    </li><li>
+      <strong>1419.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#ef4444">2</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引き下げ。不正請求で特別調査と損保の販売停止、影響額は精査中。注文住宅も不振でRSI29.8でも買えない</span>
+    </li><li>
+      <strong>3633.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引き下げ。51万件超の漏えいと平文保存が判明し、解約・対応費用が未開示。調査継続中で安全マージンは乏しい</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>マクロエコノミスト</h4>
+        <ul><li>
+      <strong>INSW</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引下げ。VLCC運賃の高値反落と発注残急増、スポット比率約8割で循環ピークを警戒。50日線下。</span>
+    </li><li>
+      <strong>3633.T</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引下げ。51万件超の漏えいは調査中で業績影響未開示。解約・信用低下リスクが大きく追い風も乏しい。</span>
+    </li><li>
+      <strong>1419.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#ef4444">2</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引下げ。不正請求疑いで調査中、業績影響は精査中。注文住宅受注も低迷。200日線を28.7%下回る。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>リスクマネージャー</h4>
+        <ul><li>
+      <strong>8153.T</strong>:
+      <span style="color:#f59e0b">4</span>
+      → <span style="color:#ef4444">3</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引下げ。原材料高で上期減益、海外利益大幅減、純益予想も下方修正。RSI68.3、50日線+16.1%は過熱。</span>
+    </li><li>
+      <strong>3633.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#ef4444">2</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">引下げ。平文保存や退会者情報の残存が判明し管理体制に疑義。調査中で波及と業績影響は未開示。50日線-4.0%。</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>テクニカルストラテジスト</h4>
+        <ul><li>
+      <strong>INSW</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">VLCC運賃反落で50日線107.78ドル回復の確度が低下。出来高0.34倍。20日線101.0ドル割れに警戒</span>
+    </li><li>
+      <strong>3633.T</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">漏えい公表で反発の信頼性が低下。株価への織込みは未確認。20日線2300円割れで撤退、新規は見送り</span>
+    </li></ul>
+      </div><div class="agent-card" style="border-left-color: #f59e0b;">
+        <h4>テンバガーハンター</h4>
+        <ul><li>
+      <strong>INSW</strong>:
+      <span style="color:#f59e0b">5</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">最高益でもスポット約8割で、VLCC運賃反落と新造船増が重荷。市況のピーク警戒で1点下げ</span>
+    </li><li>
+      <strong>3692.T</strong>:
+      <span style="color:#60a5fa">7</span>
+      → <span style="color:#60a5fa">6</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">国策追い風と通期据え置きは強い。だが中間大幅減益、技術者不足、大口解約で1点下げ。出来高も細い</span>
+    </li><li>
+      <strong>4493.T</strong>:
+      <span style="color:#60a5fa">6</span>
+      → <span style="color:#f59e0b">4</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">下方修正と情報漏えいのおそれで成長筋書きが毀損。50日線-30.2%、打診買いは撤回し回復確認待ち</span>
+    </li><li>
+      <strong>1419.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#ef4444">2</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">不正請求疑いと損保の販売停止、調査は未了で受注も弱い。RSI29.8でも逆張りしないため引き下げ</span>
+    </li><li>
+      <strong>3633.T</strong>:
+      <span style="color:#ef4444">3</span>
+      → <span style="color:#ef4444">2</span>
+      <br><span style="font-size:0.85rem;color:#aaa;">51万件超漏えいに平文保存も判明。波及範囲と業績影響が未確定で信用毀損が重く1点下げ</span>
+    </li></ul>
+      </div>
+    <hr>
+    <h2>リスク警告</h2>
+    <ul><li><span style="color:#ef4444;font-weight:bold;">[高]</span> AI関連の反発が一時的な買い戻しに終わるリスク。XLKは50日線-12.2%の下降トレンドのままで、エヌビディアの統治不安（フアンCEOの辞任と11日後の復帰、政治介入の懸念）とアンソロピックのIPO価格割れは解消していない。リスクマネージャーは、AI関連株が今後4週間で直近安値を割り込む確率を35%程度と見ている。VIXが20日平均（約23.8）を上抜けて28を超えれば、11/20の35.89に向けた二番底を警戒する。</li>
+<li><span style="color:#ef4444;font-weight:bold;">[高]</span> 米国インデックスの保有がそのままAIへの集中投資になっている相関リスク。最悪のシナリオ（発生確率10%前後）では、AIの資金調達懸念・長期金利の上昇・原油の急騰が連鎖し、S&amp;P500は6,500前後（約-11%）、NASDAQは-15%前後、日経平均は53,000円前後（約-10%）まで下落しうる。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> AI投資に伴う社債・国債の増発による長期金利の上昇。予想PER22〜23倍の指数（益回り約4.5%）と高PERのグロース株・小型株は評価倍率が縮小しやすく、金利上振れの局面では公益（XLU）のヘッジ効果も弱まる。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> 中東の地政学リスク。米国による対イラン封鎖が軍事衝突に発展しホルムズ海峡の通航に支障が出る確率は10〜15%とみられ、その場合WTIは83ドル台から95〜100ドルへ跳ね、インフレ再燃と利下げ観測の後退が同時に起きる。逆に情勢が緩和すれば、LNG・INSWなどエネルギー輸送株が同時に下落する。</li>
+<li><span style="color:#f59e0b;font-weight:bold;">[中]</span> サイバー事故の頻発（米空軍Cloud One侵入、GMOペパボ51万件、大丸松坂屋88万件）。データを大量に扱うネット・小売・認証関連の個別株にとっては急落要因になる。一方でセキュリティ小型株はニュース相場になりやすく、流動性が低いため30〜50%の下落も起こりうる。</li>
+<li><span style="color:#10b981;font-weight:bold;">[低]</span> 米個人消費の息切れ。10月の卸売在庫が予想外に積み上がり、実質購買力も低下しているため、年末商戦が期待を下回ればXLYが急反落するリスクがある。中国当局の株価下支え（ナショナルチーム）が途切れた場合のアジア市場への波及にも注意。</li></ul>
+    <hr>
+    <h2>アクションアイテム</h2>
+    <ul><li>東京海上HD（8766.T）を中核の候補とし、52週高値606円付近での一括買いは避けて、50日線558円付近までの押し目で2〜3回に分けて買う（1銘柄はポートフォリオの3%以内）</li>
+<li>シェニエール・エナジー（LNG）は安定枠・地政学ヘッジとして、50日線288ドル付近への押し目で段階的に組み入れる。INSWと同時に厚く持つとイラン要因の相関リスクが重なるため、エネルギー輸送株の合計比率を抑える</li>
+<li>今回のような急反発の局面で、ハイテク比率の高いポジションを5〜10%分利益確定し、短期国債・MMFで現金比率を10〜15%確保する</li>
+<li>タマホーム（1419.T）はRSI29.8の売られ過ぎでも逆張りしない。GMOペパボ（3633.T）は新規の買いを控え、20日線2,300円を割り込んだら弱気に転じる前提で監視する</li>
+<li>サイバーセキュリティ小型株（4493.T・3692.T）は50日線（4493.Tは2,535円、3692.Tは7,594円）を出来高を伴って回復するまで買わずに監視リストにとどめる</li>
+<li>モスフードサービス（8153.T）は高値追いせず、20日線4,586円近辺までの調整と下期の利益率回復を確認してから検討する</li>
+<li>VIXが20を明確に下回るまでは、AI半導体（VRT・CRDO・SMCI・6857.T）の戻りを買い場ではなく戻り売り・ポジション縮小の機会と捉える</li>
+<li>ディフェンシブを補強する場合は、金利上振れに弱い公益（XLU）よりヘルスケア（XLV）を優先する</li></ul>
+    <hr>
+    <h2>週間注目イベント</h2>
+    <table>
+      <tr>
+        <td>日付</td>
+        <td>イベント</td>
+        <td>インパクト</td>
+      </tr>
+      <tr>
+      <td>2026-11-30</td>
+      <td>米サイバーマンデー（ブラックフライデーに続く年末商戦の売上動向）</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-11-30</td>
+      <td>OPECプラス会合（前後の日程を含む。原油の生産方針がWTI83ドル台とエネルギー株を左右）</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+<tr>
+      <td>2026-12-01</td>
+      <td>米11月ISM製造業景況指数</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-12-01</td>
+      <td>日本 法人企業統計（7〜9月期、設備投資の動向）</td>
+      <td style="color:#10b981;font-weight:bold;">低</td>
+    </tr>
+<tr>
+      <td>2026-12-03</td>
+      <td>米11月ISM非製造業景況指数</td>
+      <td style="color:#f59e0b;font-weight:bold;">中</td>
+    </tr>
+<tr>
+      <td>2026-12-04</td>
+      <td>米11月雇用統計（非農業部門雇用者数・失業率・平均時給）</td>
+      <td style="color:#ef4444;font-weight:bold;">高</td>
+    </tr>
+    </table>
+    <hr>
+    <h2>インデックス投資家へのアドバイス</h2>
+    <div class="agent-card">
+      <p>米国インデックス中心（ポートフォリオの約8割）の投資家にとって、本日の最重要論点は、S&amp;P500やNASDAQ連動の指数を保有していること自体がAI・半導体への集中投資になっているという点です。11/27の全面高は薄商いの買い戻しで、XLKは50日線を12.2%下回る下降トレンドのまま、VIXも23.81と20を上回っています。
+
+積立投資は止めずに継続してください。高ボラティリティの局面で定額を買い続けることは、平均取得単価を下げる効果があります。一方、スポットでの追加の一括投資は、VIXが20を明確に下回るまで分割にとどめるのが無難です。
+
+今回のような急反発は、ハイテク比率の高い部分を5〜10%利益確定し、短期国債・MMFで現金比率を10〜15%確保する好機です。ヘッジを加える場合、長期金利の上振れリスクがあるため長期債や公益よりも、ヘルスケア（XLV）や短期国債を優先するのが本日のチームの結論です。オプションを使える方は、S&amp;P500の1〜2カ月先のアウト・オブ・ザ・マネーのプットをポートフォリオ価値の0.5〜1%の予算で検討できます（VIXが11/20の35.89から低下したため、保険料は割安になっています）。
+
+日本株インデックスは日経平均が6万円回復を試す位置にありますが、上昇は半導体主導のため米国と同じAI集中リスクを抱えます。TOPIX型や金融株の比率が高い指数の方が、金利正常化の恩恵を受けやすい分散先になります。</p>
+    </div>
+  </div>
+</body>
+</html>

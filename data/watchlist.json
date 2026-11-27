@@ -1150,5 +1150,12 @@
         "removedDate": "2026-10-25"
       }
     ]
+  },
+  "8766.T": {
+    "ticker": "8766.T",
+    "name": "Tokio Marine Holdings, Inc.",
+    "addedDate": "2026-11-28",
+    "lastVerdictDate": "2026-11-28",
+    "history": []
   }
 }
